@@ -13,4 +13,6 @@ I share my sketches, simulations and videos at my [personal website](http://loga
 
 Feel free to connect with me on [LinkedIn](https://www.linkedin.com/in/loganyang).
 
-I also publish on [Medium](https://medium.com/@loganyang), and share new progresses on [Twitter](https://www.twitter.com/logancyang).
+I also publish on [Medium](https://medium.com/@loganyang), and occasionally share new things on [Twitter](https://www.twitter.com/logancyang).
+
+

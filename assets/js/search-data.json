@@ -29,7 +29,7 @@
   
       ,"page1": {
           "title": "About Me",
-          "content": "This is where you put the contents of your About page. Like all your pages, it’s in Markdown format. . This website is powered by fastpages 1. . a blogging platform that natively supports Jupyter notebooks in addition to other formats. &#8617; . |",
+          "content": "Hi, I’m Logan (Chao) Yang, a machine learning engineer and creative coder. . My main interests are machine learning, physics simulation, math animation and music production. . I share my sketches, simulations and videos at my personal website. .",
           "url": "https://logancyang.github.io/blog-learning-automata/about/",
           "relUrl": "/about/",
           "date": ""

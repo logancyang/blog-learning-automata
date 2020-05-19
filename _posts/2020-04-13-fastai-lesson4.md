@@ -216,7 +216,7 @@ learn.predict(row)
 
 For time series tabular data, you generally don't use RNN for them. Instead, you can time box them into day_of_week, time_of_day, etc. and it will give you state of the art result.
 
-## Collaborative Filtering
+## Collaborative Filtering and Embeddings
 
 When you have data about who-bought-what, who-liked-what, you can have two columns like [userId, productId] in the most basic form. Other metadata can be added, like timestamp, review, etc.
 

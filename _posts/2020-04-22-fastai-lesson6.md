@@ -25,25 +25,35 @@ Don't forget to make the validation set with **the same time range** as the test
 ```py
 procs=[FillMissing, Categorify, Normalize]
 
-cat_vars = ['Store', 'DayOfWeek', 'Year', 'Month', 'Day', 'StateHoliday', 'CompetitionMonthsOpen',
-    'Promo2Weeks', 'StoreType', 'Assortment', 'PromoInterval', 'CompetitionOpenSinceYear', 'Promo2SinceYear',
-    'State', 'Week', 'Events', 'Promo_fw', 'Promo_bw', 'StateHoliday_fw', 'StateHoliday_bw',
+cat_vars = ['Store', 'DayOfWeek', 'Year', 'Month', 'Day',
+    'StateHoliday', 'CompetitionMonthsOpen', 'Promo2Weeks', 'StoreType',
+    'Assortment', 'PromoInterval', 'CompetitionOpenSinceYear',
+    'Promo2SinceYear', 'State', 'Week', 'Events', 'Promo_fw',
+    'Promo_bw', 'StateHoliday_fw', 'StateHoliday_bw',
     'SchoolHoliday_fw', 'SchoolHoliday_bw']
 
-cont_vars = ['CompetitionDistance', 'Max_TemperatureC', 'Mean_TemperatureC', 'Min_TemperatureC',
-   'Max_Humidity', 'Mean_Humidity', 'Min_Humidity', 'Max_Wind_SpeedKm_h',
-   'Mean_Wind_SpeedKm_h', 'CloudCover', 'trend', 'trend_DE',
-   'AfterStateHoliday', 'BeforeStateHoliday', 'Promo', 'SchoolHoliday']
+cont_vars = ['CompetitionDistance', 'Max_TemperatureC',
+    'Mean_TemperatureC', 'Min_TemperatureC',
+    'Max_Humidity', 'Mean_Humidity', 'Min_Humidity',
+    'Max_Wind_SpeedKm_h', 'Mean_Wind_SpeedKm_h', 'CloudCover',
+    'trend', 'trend_DE', 'AfterStateHoliday', 'BeforeStateHoliday',
+    'Promo', 'SchoolHoliday']
 
 dep_var = 'Sales'
 df = train_df[cat_vars + cont_vars + [dep_var,'Date']].copy()
 
-data = (TabularList.from_df(df, path=path, cat_names=cat_vars, cont_names=cont_vars, procs=procs,)
+data = (TabularList.from_df(df, path=path, cat_names=cat_vars,
+            cont_names=cont_vars, procs=procs,)
         .split_by_idx(valid_idx)
-        # NOTE: fastai assumes classification if label_cls is not float, here we need regression, so make it a FloatList!
-        # log=True takes log of y, use this for percent error because it turns ratio into difference, RMSPE -> RMSE
+        # NOTE: fastai assumes classification if label_cls is not float,
+        # here we need regression, so make it a FloatList!
+        # log=True takes log of y, use this for percent error because
+        # it turns ratio into difference, RMSPE -> RMSE
         .label_from_df(cols=dep_var, label_cls=FloatList, log=True)
-        .add_test(TabularList.from_df(test_df, path=path, cat_names=cat_vars, cont_names=cont_vars))
+        .add_test(
+            TabularList.from_df(
+                test_df, path=path, cat_names=cat_vars,
+                cont_names=cont_vars))
         .databunch())
 ```
 

@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Nature of Code Notes Part I: Creating Physics Engine | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Nature of Code Notes Part I: Creating Physics Engine" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Nature of Code note series" />
+<meta property="og:description" content="Nature of Code note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/03/13/nature-of-code-1.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/03/13/nature-of-code-1.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-03-13T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Nature of Code note series","@type":"BlogPosting","headline":"Nature of Code Notes Part I: Creating Physics Engine","dateModified":"2020-03-13T00:00:00-05:00","datePublished":"2020-03-13T00:00:00-05:00","url":"http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/03/13/nature-of-code-1.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/03/13/nature-of-code-1.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Nature of Code Notes Part I: Creating Physics Engine | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Nature of Code Notes Part I: Creating Physics Engine" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Nature of Code note series" />
+<meta property="og:description" content="Nature of Code note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/03/13/nature-of-code-1.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/03/13/nature-of-code-1.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-03-13T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Nature of Code note series","@type":"BlogPosting","headline":"Nature of Code Notes Part I: Creating Physics Engine","dateModified":"2020-03-13T00:00:00-05:00","datePublished":"2020-03-13T00:00:00-05:00","url":"http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/03/13/nature-of-code-1.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/03/13/nature-of-code-1.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Learning Automata</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Nature of Code Notes Part I: Creating Physics Engine</h1><p class="page-description">Nature of Code note series</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-03-13T00:00:00-05:00" itemprop="datePublished">
+        Mar 13, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      9 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#note">note</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#natureofcode">natureofcode</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#simulation">simulation</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#processing">processing</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#p5js">p5js</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#topics-in-nature-of-code">Topics in Nature of Code</a></li>
+<li class="toc-entry toc-h2"><a href="#1-introduction-random-walker-gaussian-custom-distributions-perlin-noise">1. Introduction: Random Walker, Gaussian, Custom Distributions, Perlin Noise</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#perlin-noise">Perlin Noise</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#2-vectors-and-forces">2. Vectors and Forces</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#static-method-for-pvector-in-processing-java">Static method for PVector in Processing (Java)</a></li>
+<li class="toc-entry toc-h3"><a href="#applying-force-with-draw">Applying force with draw()</a></li>
+<li class="toc-entry toc-h3"><a href="#simulate-friction">Simulate friction</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#3-oscillations">3. Oscillations</a></li>
+<li class="toc-entry toc-h2"><a href="#4-particle-systems">4. Particle Systems</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#organize-particles-into-one-particlesystem-class">Organize Particles into one ParticleSystem class</a></li>
+<li class="toc-entry toc-h3"><a href="#inheritance">Inheritance</a></li>
+<li class="toc-entry toc-h3"><a href="#polymorphism">Polymorphism</a></li>
+<li class="toc-entry toc-h3"><a href="#use-image-textures-with-particles">Use Image Textures with Particles</a></li>
+</ul>
+</li>
+</ul><h2 id="topics-in-nature-of-code">
+<a class="anchor" href="#topics-in-nature-of-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Topics in Nature of Code</h2>
+
+<p>Part I: Creating Physics Engine</p>
+
+<ul>
+  <li>Vectors</li>
+  <li>Forces</li>
+  <li>Oscillations</li>
+  <li>Particle Systems
+    <ul>
+      <li>Inheritance</li>
+      <li>Polymorphism</li>
+    </ul>
+  </li>
+  <li>Box2D</li>
+  <li>Steering Forces</li>
+</ul>
+
+<p>Part II: Complexity</p>
+
+<ul>
+  <li>Flocking</li>
+  <li>Cellular Automata</li>
+  <li>Fractals</li>
+</ul>
+
+<p>Part III: Intelligence</p>
+
+<ul>
+  <li>Evolution</li>
+  <li>Neural Networks</li>
+</ul>
+
+<h2 id="1-introduction-random-walker-gaussian-custom-distributions-perlin-noise">
+<a class="anchor" href="#1-introduction-random-walker-gaussian-custom-distributions-perlin-noise" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. Introduction: Random Walker, Gaussian, Custom Distributions, Perlin Noise</h2>
+
+<p>For a function that yields a standard Gaussian distribution (mean = 0, std = 1), we just add our mean and multiply by our stddev to everything the standard Gaussian yields.</p>
+
+<p><code class="highlighter-rouge">random()</code> gives us uniform distribution.</p>
+
+<p>To get a custom distribution, there are 2 main approaches.</p>
+
+<ul>
+  <li>The “bucket” approach</li>
+</ul>
+
+<p>Draw from <code class="highlighter-rouge">[0, 0, 0, 0, 1]</code>, we have 80% chance picking 0.</p>
+
+<ul>
+  <li><strong>2-number approach (Rejection Sampling: a Monte Carlo Method)</strong></li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">vals</span><span class="p">,</span> <span class="nx">norms</span><span class="p">;</span>
+<span class="kd">let</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">;</span>
+<span class="kd">let</span> <span class="nx">drawLoop</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">monteCarlo</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">foundOne</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="kd">let</span> <span class="nx">iter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="kd">let</span> <span class="nx">r1</span><span class="p">,</span> <span class="nx">r2</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="nx">foundOne</span> <span class="o">&amp;&amp;</span> <span class="nx">iter</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">r1</span> <span class="o">=</span> <span class="nx">random</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="nx">r2</span> <span class="o">=</span> <span class="nx">random</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="c1">// target function: y = x^2</span>
+    <span class="nx">target_y</span> <span class="o">=</span> <span class="nx">r1</span> <span class="o">*</span> <span class="nx">r1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">r2</span> <span class="o">&lt;</span> <span class="nx">target_y</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">foundOne</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+      <span class="k">return</span> <span class="nx">r1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">iter</span><span class="o">++</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="c1">// If there's a problem, not found</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">width</span> <span class="o">=</span> <span class="mi">600</span><span class="p">;</span>
+  <span class="nx">height</span> <span class="o">=</span> <span class="mi">600</span><span class="p">;</span>
+  <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">createCanvas</span><span class="p">(</span><span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
+  <span class="nx">canvas</span><span class="p">.</span><span class="nx">position</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+  <span class="nx">canvas</span><span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="dl">"</span><span class="s2">outline</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">black 3px solid</span><span class="dl">"</span><span class="p">);</span>
+
+  <span class="nx">vals</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">width</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  <span class="nx">norms</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">width</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">draw</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">background</span><span class="p">(</span><span class="mi">255</span><span class="p">);</span>
+  <span class="nx">stroke</span><span class="p">(</span><span class="mi">148</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">211</span><span class="p">);</span>
+  <span class="nx">strokeWeight</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+  <span class="c1">// Draw a sample between (0, 1)</span>
+  <span class="nx">sampleNumber</span> <span class="o">=</span> <span class="nx">monteCarlo</span><span class="p">();</span>
+  <span class="nx">bin</span> <span class="o">=</span> <span class="nx">int</span><span class="p">(</span><span class="nx">sampleNumber</span> <span class="o">*</span> <span class="nx">width</span><span class="p">);</span>
+  <span class="nx">vals</span><span class="p">[</span><span class="nx">bin</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">*</span> <span class="mi">10</span><span class="p">;</span>
+
+  <span class="kd">let</span> <span class="nx">normalization</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="nx">maxBinCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">vals</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">line</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">height</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">height</span><span class="o">-</span><span class="nx">norms</span><span class="p">[</span><span class="nx">x</span><span class="p">]);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">vals</span><span class="p">[</span><span class="nx">x</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nx">height</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">normalization</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">vals</span><span class="p">[</span><span class="nx">x</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nx">maxBinCount</span><span class="p">)</span> <span class="nx">maxBinCount</span> <span class="o">=</span> <span class="nx">vals</span><span class="p">[</span><span class="nx">x</span><span class="p">];</span>
+  <span class="p">}</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">vals</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">normalization</span><span class="p">)</span> <span class="nx">norms</span><span class="p">[</span><span class="nx">x</span><span class="p">]</span> <span class="o">=</span> <span class="nx">vals</span><span class="p">[</span><span class="nx">x</span><span class="p">]</span> <span class="o">/</span> <span class="nx">maxBinCount</span> <span class="o">*</span> <span class="nx">height</span><span class="p">;</span>
+    <span class="k">else</span> <span class="nx">norms</span><span class="p">[</span><span class="nx">x</span><span class="p">]</span> <span class="o">=</span> <span class="nx">vals</span><span class="p">[</span><span class="nx">x</span><span class="p">];</span>
+  <span class="p">}</span>
+
+  <span class="nx">textSize</span><span class="p">(</span><span class="mi">24</span><span class="p">);</span>
+  <span class="nx">noStroke</span><span class="p">();</span>
+  <span class="nx">text</span><span class="p">(</span><span class="s2">`Monte Carlo Iteration:  </span><span class="p">${</span><span class="nx">drawLoop</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
+  <span class="nx">drawLoop</span><span class="o">++</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">drawLoop</span> <span class="o">&gt;</span> <span class="mi">5000</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">text</span><span class="p">(</span><span class="dl">"</span><span class="s2">Done!</span><span class="dl">"</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+    <span class="nx">noLoop</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Dan Shiffman called this approach the “2-number approach”. I found on Wikipedia that it is actually one method under the umbrella of Monte Carlo simulations called <a href="https://en.wikipedia.org/wiki/Rejection_sampling">Rejection Sampling</a>. In that article, there is a visual description that is helpful to understand why this works:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>To visualize the motivation behind rejection sampling, imagine graphing
+the density function of a random variable onto a large rectangular board
+and throwing darts at it. Assume that the darts are uniformly distributed
+around the board. Now remove all of the darts that are outside the area
+under the curve. The remaining darts will be distributed uniformly within
+the area under the curve, and the x-positions of these darts will be
+distributed according to the random variable's density. This is because
+there is the most room for the darts to land where the curve is highest and
+thus the probability density is greatest.
+</code></pre></div></div>
+
+<p>This is a method for simulating a custom <em>continuous</em> distribution.</p>
+
+<p>TODO: Make this visualization along side the bar chart distribution in a synchronous way, put it on my website learning-automata.co.</p>
+
+<p>Additional note: in <a href="https://en.wikipedia.org/wiki/Pseudo-random_number_sampling">pseudo-random number sampling</a>, there is a method to generate discrete random variables. The method is to use CDF. For example, r.v. X = 0, 1, 2. P(X) = 0.2, 0.7, 0.1 accordingly. Then divide [0, 1) into</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Uniformly draw from [0, 1), return 0, 1, 2 depending on which interval
+it falls into.
+
+            0.2                          0.9   1
+    |========|============================|====|
+
+return:  0                   1               2
+</code></pre></div></div>
+
+<h3 id="perlin-noise">
+<a class="anchor" href="#perlin-noise" aria-hidden="true"><span class="octicon octicon-link"></span></a>Perlin Noise</h3>
+
+<p>Perlin Noise is developed by Prof. Perlin at NYU in the 80s. On a high level, it is a technique to <em>make smoothness and achieve natural looking motions or textures</em>. Will use it more in the future.</p>
+
+<h2 id="2-vectors-and-forces">
+<a class="anchor" href="#2-vectors-and-forces" aria-hidden="true"><span class="octicon octicon-link"></span></a>2. Vectors and Forces</h2>
+
+<p>In Processing, there is a class <code class="highlighter-rouge">PVector</code>. In P5.js, the class is <code class="highlighter-rouge">p5.Vector</code> and can be created using</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">someVector</span> <span class="o">=</span> <span class="nx">createVector</span><span class="p">(</span><span class="nx">some_x</span><span class="p">,</span> <span class="nx">some_y</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>The class has vector math methods such as <code class="highlighter-rouge">add()</code>, <code class="highlighter-rouge">dot()</code>, <code class="highlighter-rouge">cross()</code>, <code class="highlighter-rouge">mag()</code>, <code class="highlighter-rouge">magSq()</code>, <code class="highlighter-rouge">dist()</code>, <code class="highlighter-rouge">rotate()</code>, <code class="highlighter-rouge">angleBetween()</code>, etc.</p>
+
+<p>The constructor takes 2 or 3 arguments, depending on 2D or 3D.</p>
+
+<h3 id="static-method-for-pvector-in-processing-java">
+<a class="anchor" href="#static-method-for-pvector-in-processing-java" aria-hidden="true"><span class="octicon octicon-link"></span></a>Static method for PVector in Processing (Java)</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">PVector</span> <span class="n">f</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PVector</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+<span class="kt">float</span> <span class="n">mass</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+<span class="c1">// If we want to calculate acceleration, we need A = f/mass</span>
+<span class="c1">// But we can't do it directly passing in the f object, because</span>
+<span class="c1">// it will be updated in-place. We need static function in the</span>
+<span class="c1">// PVector class to make a copy of f</span>
+<span class="nc">PVector</span> <span class="n">a</span> <span class="o">=</span> <span class="nc">PVector</span><span class="o">.</span><span class="na">div</span><span class="o">(</span><span class="n">f</span><span class="o">,</span> <span class="n">mass</span><span class="o">);</span>
+</code></pre></div></div>
+
+<h3 id="applying-force-with-draw">
+<a class="anchor" href="#applying-force-with-draw" aria-hidden="true"><span class="octicon octicon-link"></span></a>Applying force with draw()</h3>
+
+<p>Since it’s sometimes unnecessary to keep track time or # draw loops in a sketch, <em>we can re-apply force every frame</em>. In this case, <strong>DO NOT forget to set acceleration to 0 (mult 0) after every frame udpate!</strong></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Inside the Mover class</span>
+<span class="kt">void</span> <span class="nf">update</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">vel</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">acc</span><span class="o">);</span>
+    <span class="n">location</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">vel</span><span class="o">);</span>
+    <span class="c1">// Note, reset acc</span>
+    <span class="n">acc</span><span class="o">.</span><span class="na">mult</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>If we do choose to apply the force with a parameter time, then we don’t have to do it every frame. But that can be a rare use case.</p>
+
+<p><em>Takeaway, location and velocity are cumulative between frames, but always calculate force fresh every frame!</em></p>
+
+<h3 id="simulate-friction">
+<a class="anchor" href="#simulate-friction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simulate friction</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>friction = - mu * || N || * vel_hat
+</code></pre></div></div>
+
+<p>where <code class="highlighter-rouge">||N||</code> is the magnitude of the normal force from the surface, and vel_hat the unit velocity vector.</p>
+
+<p>Don’t forget when calculating the friction, copy the velocity vector and do not change it in-place.</p>
+
+<h2 id="3-oscillations">
+<a class="anchor" href="#3-oscillations" aria-hidden="true"><span class="octicon octicon-link"></span></a>3. Oscillations</h2>
+
+<p>Rotation in Processing,</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// PI = 180 degrees, this is 45 degrees</span>
+<span class="kt">float</span> <span class="n">angle</span> <span class="o">=</span> <span class="no">PI</span><span class="o">/</span><span class="mi">4</span><span class="o">;</span>
+<span class="kt">float</span> <span class="n">aVelocity</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+<span class="kt">float</span> <span class="n">aAcceleration</span> <span class="o">=</span> <span class="mf">0.0001</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+  <span class="n">size</span><span class="o">(</span><span class="mi">800</span><span class="o">,</span> <span class="mi">200</span><span class="o">);</span>
+  <span class="n">smooth</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">draw</span><span class="o">()</span> <span class="o">{</span>
+  <span class="n">background</span><span class="o">(</span><span class="mi">255</span><span class="o">);</span>
+
+
+  <span class="n">fill</span><span class="o">(</span><span class="mi">127</span><span class="o">);</span>
+  <span class="n">stroke</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+  <span class="c1">// Note that `rotate` has center at origin (0, 0),</span>
+  <span class="c1">// aka top left corner of the canvas, we need translate to</span>
+  <span class="c1">// make it centered</span>
+  <span class="n">translate</span><span class="o">(</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="o">,</span> <span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="o">);</span>
+  <span class="n">rectMode</span><span class="o">(</span><span class="no">CENTER</span><span class="o">);</span>
+  <span class="n">rotate</span><span class="o">();</span>
+  <span class="n">rect</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">64</span><span class="o">,</span> <span class="mi">36</span><span class="o">);</span>
+
+  <span class="n">angle</span> <span class="o">+=</span> <span class="n">aVelocity</span><span class="o">;</span>
+  <span class="n">aVelocity</span> <span class="o">+=</span> <span class="n">aAcceleration</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Polar coordinate</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>x = r * cos(a);
+y = r * sin(a);
+</code></pre></div></div>
+
+<p>Simple harmonic motion</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Say period = 200, it means 200 frames are one period</span>
+<span class="kt">float</span> <span class="n">x</span> <span class="o">=</span> <span class="n">amplitude</span> <span class="o">*</span> <span class="n">sin</span><span class="o">((</span><span class="n">frameCount</span> <span class="o">/</span> <span class="n">period</span><span class="o">)</span> <span class="o">*</span> <span class="no">TWO_PI</span><span class="o">);</span>
+
+<span class="c1">// But really we can just use one "angle" variable in sin()</span>
+<span class="kt">float</span> <span class="n">x</span> <span class="o">=</span> <span class="n">amplitude</span> <span class="o">*</span> <span class="n">sin</span><span class="o">(</span><span class="n">angle</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>Springs</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Bob: Mover class object</span>
+<span class="kd">class</span> <span class="nc">Mover</span> <span class="o">{</span>
+  <span class="nc">PVector</span> <span class="n">position</span><span class="o">;</span>
+  <span class="nc">PVector</span> <span class="n">velocity</span><span class="o">;</span>
+  <span class="nc">PVector</span> <span class="n">acceleration</span><span class="o">;</span>
+
+  <span class="kt">void</span> <span class="nf">applyForce</span><span class="o">()</span> <span class="o">{};</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Spring</span> <span class="o">{</span>
+  <span class="kt">float</span> <span class="n">k</span><span class="o">;</span>
+  <span class="kt">float</span> <span class="n">restLength</span><span class="o">;</span>
+  <span class="c1">// If we need moving anchor, we can have it as a Mover object</span>
+  <span class="nc">PVector</span> <span class="n">anchor</span><span class="o">;</span>
+
+  <span class="c1">// This is powerful, Spring directly modifies Mover object</span>
+  <span class="kt">void</span> <span class="nf">connect</span><span class="o">(</span><span class="nc">Mover</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// Calculates displacement, force</span>
+    <span class="kt">float</span> <span class="n">force</span> <span class="o">=</span> <span class="o">...;</span>
+    <span class="c1">// and then apply the force to m</span>
+    <span class="n">m</span><span class="o">.</span><span class="na">applyForce</span><span class="o">(</span><span class="n">force</span><span class="o">);</span>
+  <span class="o">};</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>It’s good to use physics engine libraries to simulate complex spring systems.</p>
+
+<h2 id="4-particle-systems">
+<a class="anchor" href="#4-particle-systems" aria-hidden="true"><span class="octicon octicon-link"></span></a>4. Particle Systems</h2>
+
+<p>Java ArrayList: <code class="highlighter-rouge">add(), get(), remove(), size()</code></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">Particle</span><span class="o">&gt;</span> <span class="n">particles</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">Particle</span><span class="o">&gt;();</span>
+<span class="n">particles</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">Particle</span><span class="o">());</span>
+<span class="n">particles</span><span class="o">.</span><span class="na">get</span><span class="o">(&lt;</span><span class="n">index</span><span class="o">&gt;);</span>
+<span class="n">particles</span><span class="o">.</span><span class="na">remove</span><span class="o">(&lt;</span><span class="n">index</span><span class="o">&gt;);</span>
+<span class="c1">// Enhanced Java loop</span>
+<span class="c1">// Con: can't modify the arraylist while in the loop</span>
+<span class="k">for</span> <span class="o">(</span><span class="nc">Particle</span> <span class="nl">p:</span> <span class="n">particles</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">p</span><span class="o">.</span><span class="na">update</span><span class="o">();</span>
+  <span class="n">p</span><span class="o">.</span><span class="na">display</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="c1">// PROBLEM MODIFYING ARRAYLIST WHILE LOOPING:</span>
+<span class="c1">// If we want to remove from arraylist in the middle</span>
+<span class="c1">// the indices change, e.g. removing c from a, b, c, d, e</span>
+<span class="c1">// we do remove(2), and it</span>
+<span class="c1">// gives a, b, d, e, with d occupying index 2 now.</span>
+<span class="c1">// The loop goes on to i=3 and d is skipped</span>
+<span class="c1">// SOLUTION:</span>
+<span class="c1">// To avoid this when removing in the loop, LOOP BACKWARD</span>
+<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">particles</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">particle</span><span class="o">.</span><span class="na">isDead</span><span class="o">())</span> <span class="o">{</span>
+    <span class="n">particles</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+  <span class="o">}</span>
+  <span class="n">particles</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">update</span><span class="o">();</span>
+  <span class="n">particles</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">display</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>JavaScript Array: <code class="highlighter-rouge">.push(), [i], .splice(i, numToBeRemoved), .length</code></p>
+
+<p>Note: <code class="highlighter-rouge">.splice()</code> can also add items. <a href="https://www.w3schools.com/jsref/jsref_splice.asp">ref</a></p>
+
+<h3 id="organize-particles-into-one-particlesystem-class">
+<a class="anchor" href="#organize-particles-into-one-particlesystem-class" aria-hidden="true"><span class="octicon octicon-link"></span></a>Organize Particles into one ParticleSystem class</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">ParticleSystem</span> <span class="o">{</span>
+  <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">Particle</span><span class="o">&gt;</span> <span class="n">particles</span><span class="o">;</span>
+
+  <span class="nc">ParticleSystem</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">particles</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">Particle</span><span class="o">&gt;();</span>
+  <span class="o">}</span>
+
+  <span class="kt">void</span> <span class="nf">addParticle</span><span class="o">(</span><span class="nc">Particle</span> <span class="n">p</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">particles</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">p</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">...</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>A <code class="highlighter-rouge">ParticleSystem</code> class is essentially an <code class="highlighter-rouge">ArrayList</code> or <code class="highlighter-rouge">Particle</code>s. Its constructor
+should be initializing that ArrayList. It can also have a <code class="highlighter-rouge">centerPosition</code> where all its
+particles initialize at. It should be able to <code class="highlighter-rouge">addParticle()</code>, display all particles via
+a loop in <code class="highlighter-rouge">run()</code>, and more depending on the use cases.</p>
+
+<p>We can also have a <code class="highlighter-rouge">system of ParticleSystems</code> where it is an ArrayList of <code class="highlighter-rouge">ParticleSystem</code>s. We can assign properties to the system of systems and separate the functionality for each level of system.</p>
+
+<h3 id="inheritance">
+<a class="anchor" href="#inheritance" aria-hidden="true"><span class="octicon octicon-link"></span></a>Inheritance</h3>
+
+<ol>
+  <li>Inherit everything from super class</li>
+  <li>Add data or funtionality</li>
+  <li>Override functions</li>
+  <li>
+<code class="highlighter-rouge">super</code> ! Call its parent’s function</li>
+</ol>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// extends is the keyword for inheritance</span>
+<span class="kd">class</span> <span class="nc">Kitten</span> <span class="kd">extends</span> <span class="nc">Mammal</span> <span class="o">{</span>
+  <span class="kt">int</span> <span class="n">numWhiskers</span><span class="o">;</span>
+
+  <span class="kt">void</span> <span class="nf">sleep</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">println</span><span class="o">(</span><span class="s">"purrrr"</span><span class="o">);</span>
+    <span class="kd">super</span><span class="o">.</span><span class="na">sleep</span><span class="o">();</span>
+  <span class="o">}</span>
+
+  <span class="kt">void</span> <span class="nf">meow</span><span class="o">()</span> <span class="o">{}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Another example</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// extends is the keyword for inheritance</span>
+<span class="kd">class</span> <span class="nc">SquareParticle</span> <span class="kd">extends</span> <span class="nc">Particle</span> <span class="o">{</span>
+  <span class="nc">SquareParticle</span><span class="o">(</span><span class="nc">PVector</span> <span class="n">l</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">(</span><span class="n">l</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="kt">void</span> <span class="nf">display</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">fill</span><span class="o">(</span><span class="mi">127</span><span class="o">);</span>
+    <span class="n">stroke</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+    <span class="n">rectMode</span><span class="o">(</span><span class="no">CENTER</span><span class="o">);</span>
+    <span class="n">rect</span><span class="o">(</span><span class="n">location</span><span class="o">.</span><span class="na">x</span><span class="o">,</span> <span class="n">location</span><span class="o">.</span><span class="na">y</span><span class="o">,</span> <span class="mi">16</span><span class="o">,</span> <span class="mi">16</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="polymorphism">
+<a class="anchor" href="#polymorphism" aria-hidden="true"><span class="octicon octicon-link"></span></a>Polymorphism</h3>
+
+<p>Polymorphism allows us to use child classes as type parent class, e.g.
+put child classes into one array of type parent class.</p>
+
+<p>Suppose we have a class <code class="highlighter-rouge">Animal</code>, and <code class="highlighter-rouge">Dog</code>, <code class="highlighter-rouge">Cat</code> extends it.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Animal</span><span class="o">[]</span> <span class="n">kingdom</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Animal</span><span class="o">[</span><span class="mi">100</span><span class="o">];</span>
+
+<span class="nc">Animal</span> <span class="n">spot</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Dog</span><span class="o">();</span>
+<span class="n">kingdom</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Dog</span><span class="o">();</span>
+<span class="n">kingdom</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Cat</span><span class="o">();</span>
+<span class="o">...</span>
+
+<span class="k">for</span> <span class="o">(</span><span class="nc">Animal</span> <span class="nl">a:</span> <span class="n">kingdom</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// This is powerful! These call their own subclass functions!</span>
+  <span class="n">a</span><span class="o">.</span><span class="na">sleep</span><span class="o">();</span>
+  <span class="n">a</span><span class="o">.</span><span class="na">eat</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>JavaScript ES6 has the same syntax <code class="highlighter-rouge">extends</code> and <code class="highlighter-rouge">super</code> as Java!</p>
+
+<p>Note that JS has differences between ES5 class syntax and ES6 ones.</p>
+
+<p>ES5 has</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">MyClass</span><span class="p">(</span><span class="nx">params</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">params</span> <span class="o">=</span> <span class="nx">params</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>while ES6 has</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">MyClass</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">params</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">params</span> <span class="o">=</span> <span class="nx">params</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Inheritance with overriding constructor (must call super in a child constructor before using <code class="highlighter-rouge">this</code>, or it won’t work)</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">ParentClass</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">params</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">params</span> <span class="o">=</span> <span class="nx">params</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nx">ChildClass</span> <span class="kd">extends</span> <span class="nx">ParentClass</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">childParams</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">(</span><span class="nx">parentParams</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">params</span> <span class="o">=</span> <span class="nx">otherChildParams</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>When overriding another method: We can use <code class="highlighter-rouge">super.method()</code> in a Child method to call Parent method.</p>
+
+<p>Here is a good <a href="https://javascript.info/class-inheritance">reference</a>.</p>
+
+<p>To use code for base classes in different folders, put</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/absolute_path_to_js_file"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>in the header of html files, NOT <code class="highlighter-rouge">import</code> because it is not a module.</p>
+
+<p>TODO: Need to take note here for modules in the future.</p>
+
+<h3 id="use-image-textures-with-particles">
+<a class="anchor" href="#use-image-textures-with-particles" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use Image Textures with Particles</h3>
+
+<p>Processing uses <code class="highlighter-rouge">PImage</code> for images. Preload an image and don’t load it in the constructor. Processing has <code class="highlighter-rouge">P2D</code> mode to render things much faster.</p>
+
+<p>There is this <code class="highlighter-rouge">blendMode</code> concept, with <code class="highlighter-rouge">blendMode(ADD)</code> all the RGB values are added
+on top of each other which creates a brighter effect.</p>
+
+<p><a href="https://www.youtube.com/watch?v=nzDYHa6ursA&amp;list=PLRqwX-V7Uu6Z9hI4mSgx2FlE5w8zvjmEy&amp;index=9">Ref video</a></p>
+
+  </div><a class="u-url" href="/note/natureofcode/simulation/processing/p5js/2020/03/13/nature-of-code-1.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notes, code and essays by Logan Yang.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

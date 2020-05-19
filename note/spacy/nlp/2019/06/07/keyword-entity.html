@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>How to Create Keyword List Entities in spaCy (v2.1) | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="How to Create Keyword List Entities in spaCy (v2.1)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="spaCy named entity recognition note series" />
+<meta property="og:description" content="spaCy named entity recognition note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/spacy/nlp/2019/06/07/keyword-entity.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/spacy/nlp/2019/06/07/keyword-entity.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-07T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"spaCy named entity recognition note series","@type":"BlogPosting","headline":"How to Create Keyword List Entities in spaCy (v2.1)","dateModified":"2019-06-07T00:00:00-05:00","datePublished":"2019-06-07T00:00:00-05:00","url":"http://blog.logancyang.com/note/spacy/nlp/2019/06/07/keyword-entity.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/spacy/nlp/2019/06/07/keyword-entity.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>How to Create Keyword List Entities in spaCy (v2.1) | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="How to Create Keyword List Entities in spaCy (v2.1)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="spaCy named entity recognition note series" />
+<meta property="og:description" content="spaCy named entity recognition note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/spacy/nlp/2019/06/07/keyword-entity.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/spacy/nlp/2019/06/07/keyword-entity.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-07T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"spaCy named entity recognition note series","@type":"BlogPosting","headline":"How to Create Keyword List Entities in spaCy (v2.1)","dateModified":"2019-06-07T00:00:00-05:00","datePublished":"2019-06-07T00:00:00-05:00","url":"http://blog.logancyang.com/note/spacy/nlp/2019/06/07/keyword-entity.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/spacy/nlp/2019/06/07/keyword-entity.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Learning Automata</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">How to Create Keyword List Entities in spaCy (v2.1)</h1><p class="page-description">spaCy named entity recognition note series</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2019-06-07T00:00:00-05:00" itemprop="datePublished">
+        Jun 7, 2019
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      4 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#note">note</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#spacy">spacy</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#nlp">nlp</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#rule-based-matcher">Rule Based Matcher</a></li>
+<li class="toc-entry toc-h2"><a href="#combine-with-model-prediction-use-entity-ruler-and-pattern-file-v21">Combine with Model Prediction: Use Entity Ruler and Pattern File (v2.1)</a></li>
+<li class="toc-entry toc-h2"><a href="#case-study-brand-entity">Case Study: Brand Entity</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#case-1-predicted-entity-is-not-in-the-keyword-list-and-has-no-word-overlap-with-any-item-in-the-list">Case 1: Predicted entity is not in the keyword list and has no word overlap with any item in the list.</a></li>
+<li class="toc-entry toc-h4"><a href="#case-2-predicted-entity-is-not-in-the-keyword-list-but-has-overlap-with-one-or-more-items-in-the-list">Case 2: Predicted entity is not in the keyword list BUT has overlap with one or more items in the list.</a></li>
+<li class="toc-entry toc-h4"><a href="#case-3-predicted-entity-is-in-the-keyword-list">Case 3: Predicted entity is in the keyword list</a></li>
+</ul>
+</li>
+</ul><p>Sometimes there is a need to create keyword entities from a list of known keywords, e.g. country names, species, brands, etc. The list can be large. This note shows how to create such entities in spaCy and make
+it work with a trained NER model.</p>
+
+<h2 id="rule-based-matcher">
+<a class="anchor" href="#rule-based-matcher" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rule Based Matcher</h2>
+
+<p><code class="highlighter-rouge">PhraseMatcher</code> is useful if you already have a large terminology list or gazetteer consisting of single or multi-token phrases that you want to find exact instances of in your data. As of spaCy v2.1.0, you can also match on the LOWER attribute for fast and case-insensitive matching.</p>
+
+<p><code class="highlighter-rouge">Matcher</code> is about individual tokens. For example, you can find a noun, followed by a verb with the lemma “love” or “like”, followed by an optional determiner and another token that’s at least ten characters long.</p>
+
+<p><code class="highlighter-rouge">PhraseMatcher</code> is what we need.</p>
+
+<p>Say we have several brand names,</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[u"Armani", u"Ralph Lauren", u"Monique Lhuillier", u"Norma Kamali"]
+</code></pre></div></div>
+
+<p>Assume we have some text messages in which we find these brand names. We apply the trained NER model on these messages to make predictions.
+To make this case insensitive, use <code class="highlighter-rouge">attr="LOWER"</code>,</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from spacy.lang.en import English
+from spacy.matcher import PhraseMatcher
+
+nlp = English()
+matcher = PhraseMatcher(nlp.vocab, attr="LOWER")
+patterns = [
+    nlp.make_doc(name) for name in
+        [u"Armani", u"Ralph Lauren", u"Monique Lhuillier", u"Norma Kamali"]
+]
+matcher.add("Brands", None, *patterns)
+
+doc = nlp(u"armani and monique Lhuillier are both brands")
+for match_id, start, end in matcher(doc):
+    print("Matched based on lowercase token text:", doc[start:end])
+
+# output:
+# Matched based on lowercase token text: armani
+# Matched based on lowercase token text: monique Lhuillier
+</code></pre></div></div>
+
+<p>It can even match number entities by shape, <code class="highlighter-rouge">attr="SHAPE"</code>, e.g. IP addresses.</p>
+
+<h2 id="combine-with-model-prediction-use-entity-ruler-and-pattern-file-v21">
+<a class="anchor" href="#combine-with-model-prediction-use-entity-ruler-and-pattern-file-v21" aria-hidden="true"><span class="octicon octicon-link"></span></a>Combine with Model Prediction: Use Entity Ruler and Pattern File (v2.1)</h2>
+
+<p><code class="highlighter-rouge">PhraseMatcher</code> doesn’t address the need to combine rules with statistical models. The rules must have influence on the prediction process or they will have conflicts.</p>
+
+<p>Citing the spaCy docs, “The entity ruler is designed to integrate with spaCy’s existing statistical models and enhance the named entity recognizer. <strong>If it’s added before the <code class="highlighter-rouge">"ner"</code> component, the entity recognizer will respect the existing entity spans and adjust its predictions around it.</strong> This can significantly improve accuracy in some cases. If it’s added after the <code class="highlighter-rouge">"ner"</code> component, the entity ruler will only add spans to the <code class="highlighter-rouge">doc.ents</code> if they don’t overlap with existing entities predicted by the model. To overwrite overlapping entities, you can set <code class="highlighter-rouge">overwrite_ents=True</code> on initialization.”</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from spacy.lang.en import English
+from spacy.pipeline import EntityRuler
+
+# Before training
+nlp = English()
+
+"""This is the hard-coded ruler
+ruler = EntityRuler(nlp)
+patterns = [{"label": "ORG", "pattern": "Apple"},
+            {"label": "GPE", "pattern": [{"lower": "san"}, {"lower": "francisco"}]}]
+ruler.to_disk("./patterns.jsonl")
+ruler.add_patterns(patterns)
+"""
+
+# Loading ruler from jsonl file
+ruler = EntityRuler(nlp).from_disk("./patterns.jsonl")
+nlp.add_pipe(ruler)
+
+# Add NER training / transfer learning code here...
+
+# At prediction time
+doc = nlp(u"Apple is opening its first big office in San Francisco.")
+print([(ent.text, ent.label_) for ent in doc.ents])
+</code></pre></div></div>
+
+<p>Question: Since the pattern file is a list of patterns, it must be slow to go through the list every time to check whether something is a brand. What’s the solution?</p>
+
+<h2 id="case-study-brand-entity">
+<a class="anchor" href="#case-study-brand-entity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Case Study: Brand Entity</h2>
+
+<p>Brand is an example where the keyword list / pattern file can be really large. There are already many labeled brand entities in the training data so the model may or may not find correct brand entities at prediction time. In the case of an incorrect prediction, how do we leverage the rule-based method to correct it?</p>
+
+<p>Note that we prefer adding the <code class="highlighter-rouge">EntityRuler</code> before the <code class="highlighter-rouge">"ner"</code> component to let the model respect the keyword list and adjust its predictions.</p>
+
+<h4 id="case-1-predicted-entity-is-not-in-the-keyword-list-and-has-no-word-overlap-with-any-item-in-the-list">
+<a class="anchor" href="#case-1-predicted-entity-is-not-in-the-keyword-list-and-has-no-word-overlap-with-any-item-in-the-list" aria-hidden="true"><span class="octicon octicon-link"></span></a>Case 1: Predicted entity is not in the keyword list and has no word overlap with any item in the list.</h4>
+
+<p>In this case, it is either a wrong prediction or a new brand entity correctly predicted but is not in the training data. These cases need to be logged and checked by a human. If confirmed it IS a correct new brand entity, it should be added to the brand keyword list.</p>
+
+<h4 id="case-2-predicted-entity-is-not-in-the-keyword-list-but-has-overlap-with-one-or-more-items-in-the-list">
+<a class="anchor" href="#case-2-predicted-entity-is-not-in-the-keyword-list-but-has-overlap-with-one-or-more-items-in-the-list" aria-hidden="true"><span class="octicon octicon-link"></span></a>Case 2: Predicted entity is not in the keyword list BUT has overlap with one or more items in the list.</h4>
+
+<p>If <code class="highlighter-rouge">EntityRuler</code> is used, the model prediction should be able to find the complete brand name in the text, so any such overlap should be the case where only part of the brand name is there in the text but no complete name from the brand list is present. This is sometimes OK, people don’t necessarily call out the complete brand name but only refer to it with a short form. In other cases, this is a wrong prediction. Again, human check is preferred.</p>
+
+<h4 id="case-3-predicted-entity-is-in-the-keyword-list">
+<a class="anchor" href="#case-3-predicted-entity-is-in-the-keyword-list" aria-hidden="true"><span class="octicon octicon-link"></span></a>Case 3: Predicted entity is in the keyword list</h4>
+
+<p>This is the trivial case where the model is doing a perfect job.</p>
+
+<p>(For more advanced usages involving dependency parsing, check <a href="https://spacy.io/usage/rule-based-matching#models-rules-pos-dep">here</a> for examples. This is beyond the scope of this post about keyword list entities.)</p>
+
+  </div><a class="u-url" href="/note/spacy/nlp/2019/06/07/keyword-entity.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notes, code and essays by Logan Yang.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -89,15 +89,15 @@ Brand is an example where the keyword list / pattern file can be really large. T
 
 Note that we prefer adding the `EntityRuler` before the `"ner"` component to let the model respect the keyword list and adjust its predictions.
 
-#### Case 1: Predicted entity is not in the keyword list and has no word overlap with any item in the list.
+### Case 1: Predicted entity is not in the keyword list and has no word overlap with any item in the list.
 
 In this case, it is either a wrong prediction or a new brand entity correctly predicted but is not in the training data. These cases need to be logged and checked by a human. If confirmed it IS a correct new brand entity, it should be added to the brand keyword list.
 
-#### Case 2: Predicted entity is not in the keyword list BUT has overlap with one or more items in the list.
+### Case 2: Predicted entity is not in the keyword list BUT has overlap with one or more items in the list.
 
 If `EntityRuler` is used, the model prediction should be able to find the complete brand name in the text, so any such overlap should be the case where only part of the brand name is there in the text but no complete name from the brand list is present. This is sometimes OK, people don't necessarily call out the complete brand name but only refer to it with a short form. In other cases, this is a wrong prediction. Again, human check is preferred.
 
-#### Case 3: Predicted entity is in the keyword list
+### Case 3: Predicted entity is in the keyword list
 
 This is the trivial case where the model is doing a perfect job.
 

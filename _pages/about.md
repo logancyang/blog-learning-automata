@@ -4,10 +4,8 @@ title: About Me
 permalink: /about/
 ---
 
-This is where you put the contents of your *About* page. Like all your pages, it's in [Markdown](https://guides.github.com/features/mastering-markdown/) format.
+Hi, I’m Logan (Chao) Yang, a machine learning engineer and creative coder.
 
-This website is powered by **[fastpages](https://github.com/fastai/fastpages)** [^1].
+My main interests are machine learning, physics simulation, math animation and music production.
 
-
-
-[^1]:a blogging platform that natively supports Jupyter notebooks in addition to other formats.
+I share my sketches, simulations and videos at my [personal website](http://logancyang.com).

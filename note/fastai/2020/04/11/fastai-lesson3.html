@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FastAI Lesson 3: Data blocks; Multi-label classification; Segmentation | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FastAI Lesson 3: Data blocks; Multi-label classification; Segmentation" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="fast.ai note series" />
+<meta property="og:description" content="fast.ai note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/fastai/2020/04/11/fastai-lesson3.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/fastai/2020/04/11/fastai-lesson3.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-11T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"fast.ai note series","@type":"BlogPosting","headline":"FastAI Lesson 3: Data blocks; Multi-label classification; Segmentation","dateModified":"2020-04-11T00:00:00-05:00","datePublished":"2020-04-11T00:00:00-05:00","url":"http://blog.logancyang.com/note/fastai/2020/04/11/fastai-lesson3.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/fastai/2020/04/11/fastai-lesson3.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FastAI Lesson 3: Data blocks; Multi-label classification; Segmentation | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FastAI Lesson 3: Data blocks; Multi-label classification; Segmentation" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="fast.ai note series" />
+<meta property="og:description" content="fast.ai note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/fastai/2020/04/11/fastai-lesson3.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/fastai/2020/04/11/fastai-lesson3.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-11T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"fast.ai note series","@type":"BlogPosting","headline":"FastAI Lesson 3: Data blocks; Multi-label classification; Segmentation","dateModified":"2020-04-11T00:00:00-05:00","datePublished":"2020-04-11T00:00:00-05:00","url":"http://blog.logancyang.com/note/fastai/2020/04/11/fastai-lesson3.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/fastai/2020/04/11/fastai-lesson3.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Learning Automata</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">FastAI Lesson 3: Data blocks; Multi-label classification; Segmentation</h1><p class="page-description">fast.ai note series</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-04-11T00:00:00-05:00" itemprop="datePublished">
+        Apr 11, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      6 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#note">note</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#fastai">fastai</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#new-task-segmentation">New Task: Segmentation</a></li>
+<li class="toc-entry toc-h2"><a href="#head-pose-estimation-a-regression-task">Head Pose Estimation: A Regression Task</a></li>
+<li class="toc-entry toc-h2"><a href="#preview-next-lesson-imdb-review-sentiment-an-nlp-task">Preview next lesson: IMDB Review Sentiment, an NLP Task</a></li>
+<li class="toc-entry toc-h2"><a href="#extra-jeremy-mentioned-activations-and-pointed-to-one-great-resource">Extra: Jeremy mentioned activations and pointed to one great resource</a></li>
+</ul><p>Must know: <code class="highlighter-rouge">Dataset</code> class in PyTorch</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Dataset</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="s">"""An abstract class representing a dataset
+    All other datasets should subclass it and override these methods
+    """</span>
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="s">"""Allow [] indexing"""</span>
+        <span class="k">raise</span> <span class="nb">NotImplementedError</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="nb">NotImplementedError</span>
+</code></pre></div></div>
+
+<div class="Toast">
+   <span class="Toast-icon"><svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>
+   <span class="Toast-content">
+        Note: Pythonistas call special magic methods <code>__xxx__()</code>: "dunder" xxx.
+    </span>
+</div>
+
+<p>PyTorch has another class called the <code class="highlighter-rouge">DataLoader</code> for making minibatches. Then, fastai’s <code class="highlighter-rouge">DataBunch</code> uses <code class="highlighter-rouge">DataLoader</code>s to create a training DataLoader and a validation DataLoader. fastai has the <a href="https://docs.fast.ai/data_block.html">data block API</a> to customize the creation of <code class="highlighter-rouge">DataBunch</code> by isolating the underlying parts of that process in separate blocks, mainly:</p>
+
+<ol>
+  <li>Where are the inputs and how to create them?</li>
+  <li>How to split the data into a training and validation sets?</li>
+  <li>How to label the inputs?</li>
+  <li>What transforms to apply?</li>
+  <li>How to add a test set?</li>
+  <li>How to wrap in dataloaders and create the DataBunch?</li>
+</ol>
+
+<p>Check the fastai docs for function signatures and types.</p>
+
+<p>To find the corresponding notebooks for the docs, go to the fastai repo</p>
+
+<p><a href="https://github.com/fastai/fastai/tree/master/docs_src/">https://github.com/fastai/fastai/tree/master/docs_src/</a></p>
+
+<p>For multi-label image classification such as this one, to put this in a <code class="highlighter-rouge">DataBunch</code> while using the <a href="https://docs.fast.ai/data_block.html">data block API</a>, we need to use <code class="highlighter-rouge">ImageList</code> (and not <code class="highlighter-rouge">ImageDataBunch</code>). This will make sure the model created has the proper loss function to deal with the multiple classes.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># This does image data augmentation by flipping them horizontally by default.
+# Here we enable vertical flipping as well so it rotates every 90 degrees left and right, so 8 possible settings.
+# warp: fastai has fast perspective warping. For satellite image we don't need warping
+</span><span class="n">tfms</span> <span class="o">=</span> <span class="n">get_transforms</span><span class="p">(</span><span class="n">flip_vert</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">max_lighting</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">max_zoom</span><span class="o">=</span><span class="mf">1.05</span><span class="p">,</span> <span class="n">max_warp</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>We often want to call the same function but with different values of a parameter. For example,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># We want to call with different thresh
+</span><span class="k">def</span> <span class="nf">acc_02</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">targ</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">accuracy_thresh</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">targ</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="c1"># Equivalent: a CS concept called "partial" or partial function application,
+# pass in the original function and the param, returns a new wrapper function (py3)
+</span><span class="n">acc_02</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">accuracy_thresh</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This is really common thing to do!</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Question: How to use online feedback to retrain model?
+
+Answer: Add the labeled new data into the training set, load the old model, unfreeze,
+use a slightly larger learning rate and more epochs, train (fine-tune) the model some more.
+</code></pre></div></div>
+
+<p>Before <code class="highlighter-rouge">unfreeze</code>, we train the model’s last layer. The learning rate should look like this.</p>
+
+<p><img src="/images/fastai/lr-before-unfreeze.png" alt="alt text" title="Learning rate before unfreeze"></p>
+
+<p>Note that do not set the learning rate at the bottom, set it at the steepest place.</p>
+
+<p>After <code class="highlighter-rouge">unfreeze</code>, we finetune the full model. The learning rate should look like this.</p>
+
+<p><img src="/images/fastai/lr-after-unfreeze.png" alt="alt text" title="Learning rate after unfreeze"></p>
+
+<p>For this shape, we find where it starts to go up, and set it to be 10x smaller than that point as the left of the lr range, and the old learning rate for the frozen model divided by 5 or 10. Will talk about this (called discriminative learning rate) in the future.</p>
+
+<p>In the notebook example for the planet data challenge, Jeremy first trained a model on size 128 by 128 image. <strong>This is for faster experimentation and can be used as a pretrained model for the actual 256 by 256 image next.</strong></p>
+
+<p>The process is to create the DataBunch with new size</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">learn</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">'stage-2-rn50'</span><span class="p">)</span>
+<span class="c1"># Note, set bs=32 and restart kernel after loading the saved model,
+# or GPU can run out of memory
+</span><span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">tfms</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">databunch</span><span class="p">(</span><span class="n">bs</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">imagenet_stats</span><span class="p">))</span>
+
+<span class="n">learn</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+<span class="n">data</span><span class="o">.</span><span class="n">train_ds</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+<span class="c1"># Output: torch.Size([3, 256, 256])
+</span>
+<span class="c1"># Freeze means we go back to train the last few layers for transfer learning
+</span><span class="n">learn</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
+
+<span class="n">learn</span><span class="o">.</span><span class="n">lr_find</span><span class="p">()</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="c1"># Check the image below for output
+</span><span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="o">/</span><span class="mi">2</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">fit_one_cycle</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="n">lr</span><span class="p">))</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s">'stage-1-256-rn50'</span><span class="p">)</span>
+
+<span class="n">learn</span><span class="o">.</span><span class="n">unfreeze</span><span class="p">()</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">fit_one_cycle</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="nb">slice</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">lr</span><span class="o">/</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">plot_losses</span><span class="p">()</span>
+
+<span class="c1"># Note: save() is used for stages. Data used is also saved
+</span><span class="n">learn</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s">'stage-2-256-rn50'</span><span class="p">)</span>
+<span class="c1"># export() returns a pickle file for inference. It saves all
+# transforms, weights but not data.
+# Check https://docs.fast.ai/tutorial.inference.html
+</span><span class="n">learn</span><span class="o">.</span><span class="n">export</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="/images/fastai/lr-before-unfreeze-256.png" alt="alt text" title="Learning rate after unfreeze"></p>
+
+<h2 id="new-task-segmentation">
+<a class="anchor" href="#new-task-segmentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>New Task: Segmentation</h2>
+
+<p>Example:</p>
+
+<p><img src="/images/fastai/segmentation.png" alt="alt text" title="Learning rate after unfreeze"></p>
+
+<p>In segmentation, every pixel needs to be classified.</p>
+
+<p>The training data needs to have images with all pixels labeled. It’s hard to create such datasets, so usually we download them.</p>
+
+<p>Every time we use the datasets, we should find the citation and credit the creators appropriately.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Question: what to do if training loss &gt; validation loss
+
+Answer: This means underfitting. Try
+1. Train more epochs
+2. Smaller learning rate
+3. Decrease regularization: weight decay, dropout, data augmentation
+</code></pre></div></div>
+
+<p>The model for segmentation used is <a href="https://towardsdatascience.com/understanding-semantic-segmentation-with-unet-6be4f42d4b47">U-Net</a></p>
+
+<div class="Toast">
+   <span class="Toast-icon"><svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>
+   <span class="Toast-content">
+        Note: what does <code>fit_one_cycle()</code> do?
+        <br>
+        <br>
+        <code>fit_one_cycle</code> helps you get "super convergence", i.e. train 10x faster than plain SGD. It has smaller lr and large momentum in the beginning, and then lr increases, momentum decreases. When it's close to optimum, lr decreases again and momentum increases. <a href="https://arxiv.org/pdf/1506.01186.pdf">Paper</a> by Leslie Smith. Towards Data Science article
+        <a href="https://towardsdatascience.com/finding-good-learning-rate-and-the-one-cycle-policy-7159fe1db5d6">here</a>.
+    </span>
+</div>
+
+<p>You pass in the max learning rate, and it uses a range of learning rates as the picture shows below, it goes up first and down after. The downward part is called annealing which is well known, but the upward part is quite new. The motivation is to avoid the optimization being stuck in a local minimum. The loss surface is usually quite bumpy at some areas and flat in other areas.</p>
+
+<p><img src="/images/fastai/fitonecycle.png" alt="alt text" title="Learning rate after unfreeze"></p>
+
+<p>The approach was proposed by Leslie Smith. Read about it more <a href="https://towardsdatascience.com/finding-good-learning-rate-and-the-one-cycle-policy-7159fe1db5d6">here</a>.</p>
+
+<p>The fastai version of unet is better than the state-of-the-art result published which is a model called hundred-layer-tiramisu!</p>
+
+<div class="Toast">
+   <span class="Toast-icon"><svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>
+   <span class="Toast-content">
+        Trick: if GPU memory runs out very frequently, use half-precision (16-bit) rather than single-precision (32-bit) float in training. Just add <code>.to_fp16()</code> to any learner.
+    </span>
+</div>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">learn</span> <span class="o">=</span> <span class="n">unet_learner</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">resnet34</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">metrics</span><span class="p">)</span><span class="o">.</span><span class="n">to_fp16</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Make sure the GPU driver is update-to-date to use this feature.</p>
+
+<h2 id="head-pose-estimation-a-regression-task">
+<a class="anchor" href="#head-pose-estimation-a-regression-task" aria-hidden="true"><span class="octicon octicon-link"></span></a>Head Pose Estimation: A Regression Task</h2>
+
+<p>This is a regression task and the output is a set of (x, y) coordinates. We train a CNN. Instead of using a cross-entropy loss, use MSE.</p>
+
+<h2 id="preview-next-lesson-imdb-review-sentiment-an-nlp-task">
+<a class="anchor" href="#preview-next-lesson-imdb-review-sentiment-an-nlp-task" aria-hidden="true"><span class="octicon octicon-link"></span></a>Preview next lesson: IMDB Review Sentiment, an NLP Task</h2>
+
+<p>For texts, we create <code class="highlighter-rouge">TextDataBunch</code> from csv. Texts need to be tokenized and numericalized.</p>
+
+<p>When we do text classifications, we actually create 2 models: one is a language model (pretrain, for transfer learning later), the other is a classification model.</p>
+
+<p>The SOTA accuracy for this dataset is ~95% and this notebook achieves that level.</p>
+
+<div class="Toast">
+   <span class="Toast-icon"><svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>
+   <span class="Toast-content">
+        Note: in deep learning, we don't care about n-grams, that's for old time NLP's feature engineering.
+    </span>
+</div>
+
+<h2 id="extra-jeremy-mentioned-activations-and-pointed-to-one-great-resource">
+<a class="anchor" href="#extra-jeremy-mentioned-activations-and-pointed-to-one-great-resource" aria-hidden="true"><span class="octicon octicon-link"></span></a>Extra: Jeremy mentioned activations and pointed to one great resource</h2>
+
+<p>A Visual Proof that NN can approximate any shape, or, <a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">universal approximation theorem</a>:</p>
+
+<ul>
+  <li><a href="http://neuralnetworksanddeeplearning.com/chap4.html">http://neuralnetworksanddeeplearning.com/chap4.html</a></li>
+</ul>
+
+<p>(This is an online book, need to check it out!)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>What really is deep learning from a math perspective:
+
+It's a series of matrix multiplications with max(x, 0) (ReLU) in between,
+and we use gradient descent to adjust the weights in these matrices to
+reduce the final error.
+
+The forward pass is something like
+
+E = loss_func(W3.dot( max(W2.dot( max( W1.dot(X), 0)), 0), 0))
+
+The only thing is the matrices are large. That's it.
+</code></pre></div></div>
+
+<p>Usually, the hardest part is to create the DataBunch, the rest is straightforward in fastai.</p>
+
+  </div><a class="u-url" href="/note/fastai/2020/04/11/fastai-lesson3.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notes, code and essays by Logan Yang.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

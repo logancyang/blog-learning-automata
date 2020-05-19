@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FastAI Lesson 6: Regression on Tabular Time Series; Regularization; Convolution; Data Ethics | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FastAI Lesson 6: Regression on Tabular Time Series; Regularization; Convolution; Data Ethics" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="fast.ai note series" />
+<meta property="og:description" content="fast.ai note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/fastai/2020/04/22/fastai-lesson6.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/fastai/2020/04/22/fastai-lesson6.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-22T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"fast.ai note series","@type":"BlogPosting","headline":"FastAI Lesson 6: Regression on Tabular Time Series; Regularization; Convolution; Data Ethics","dateModified":"2020-04-22T00:00:00-05:00","datePublished":"2020-04-22T00:00:00-05:00","url":"http://blog.logancyang.com/note/fastai/2020/04/22/fastai-lesson6.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/fastai/2020/04/22/fastai-lesson6.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FastAI Lesson 6: Regression on Tabular Time Series; Regularization; Convolution; Data Ethics | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FastAI Lesson 6: Regression on Tabular Time Series; Regularization; Convolution; Data Ethics" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="fast.ai note series" />
+<meta property="og:description" content="fast.ai note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/fastai/2020/04/22/fastai-lesson6.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/fastai/2020/04/22/fastai-lesson6.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-22T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"fast.ai note series","@type":"BlogPosting","headline":"FastAI Lesson 6: Regression on Tabular Time Series; Regularization; Convolution; Data Ethics","dateModified":"2020-04-22T00:00:00-05:00","datePublished":"2020-04-22T00:00:00-05:00","url":"http://blog.logancyang.com/note/fastai/2020/04/22/fastai-lesson6.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/fastai/2020/04/22/fastai-lesson6.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Learning Automata</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">FastAI Lesson 6: Regression on Tabular Time Series; Regularization; Convolution; Data Ethics</h1><p class="page-description">fast.ai note series</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-04-22T00:00:00-05:00" itemprop="datePublished">
+        Apr 22, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      10 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#note">note</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#fastai">fastai</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#regression-on-tabular-time-series-regularization-cont">Regression on Tabular Time Series; Regularization cont.</a></li>
+<li class="toc-entry toc-h2"><a href="#cnn-data-augmentation-regularization-cont">CNN, Data Augmentation; Regularization cont.</a></li>
+<li class="toc-entry toc-h2"><a href="#heatmap-for-cnn">Heatmap for CNN</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#how-the-last-layers-work">How the last layers work</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#data-ethics">Data Ethics</a></li>
+</ul><p>Tip: Use <a href="https://platform.ai">platform.ai</a> to find clusters of unlabeled data to label manually. It uses pretrained models so you can pick a middle layer and pick some specific projections from it. It’s a way of clustering similar images for labeling and it helps you build your better model on top of it. There is a <a href="https://forums.fast.ai/t/platform-ai-discussion/31445">thread</a> for more info.</p>
+
+<h2 id="regression-on-tabular-time-series-regularization-cont">
+<a class="anchor" href="#regression-on-tabular-time-series-regularization-cont" aria-hidden="true"><span class="octicon octicon-link"></span></a>Regression on Tabular Time Series; Regularization cont.</h2>
+
+<p>Look at the rossmann dataset from Kaggle. It uses historical sales data to predict a small period in its future.</p>
+
+<p><strong>Most of times, the approach of embeddings and tabular data is more effective than RNNs for time series forecasting because we have useful metadata like day of week, day of month, locations, etc. RNN is better for pure sequences. So, in most business settings, use tabular approach for time series!</strong></p>
+
+<p>Tip: grab a small part of data, say 2000 rows to explore first. Split to training and test.</p>
+
+<p>The two notebooks for rossmann data are great examples of <code class="highlighter-rouge">pandas</code> data preprocessing. There are preprocessors <code class="highlighter-rouge">Categortify</code> (-1 for NaN), <code class="highlighter-rouge">Fillmissing</code> (replace NaN with median), etc. You can apply them by simply assigning them to a list and pass into databunch creation.</p>
+
+<p>Next, identify categorical and continuous variables. Think carefully. For example, <code class="highlighter-rouge">Day</code> may be a number but it’s categorical because in some cases the number of sales for a day is independent of surrounding days.</p>
+
+<p>Don’t forget to make the validation set with <strong>the same time range</strong> as the test set!</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">procs</span><span class="o">=</span><span class="p">[</span><span class="n">FillMissing</span><span class="p">,</span> <span class="n">Categorify</span><span class="p">,</span> <span class="n">Normalize</span><span class="p">]</span>
+
+<span class="n">cat_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s">'Store'</span><span class="p">,</span> <span class="s">'DayOfWeek'</span><span class="p">,</span> <span class="s">'Year'</span><span class="p">,</span> <span class="s">'Month'</span><span class="p">,</span> <span class="s">'Day'</span><span class="p">,</span>
+    <span class="s">'StateHoliday'</span><span class="p">,</span> <span class="s">'CompetitionMonthsOpen'</span><span class="p">,</span> <span class="s">'Promo2Weeks'</span><span class="p">,</span> <span class="s">'StoreType'</span><span class="p">,</span>
+    <span class="s">'Assortment'</span><span class="p">,</span> <span class="s">'PromoInterval'</span><span class="p">,</span> <span class="s">'CompetitionOpenSinceYear'</span><span class="p">,</span>
+    <span class="s">'Promo2SinceYear'</span><span class="p">,</span> <span class="s">'State'</span><span class="p">,</span> <span class="s">'Week'</span><span class="p">,</span> <span class="s">'Events'</span><span class="p">,</span> <span class="s">'Promo_fw'</span><span class="p">,</span>
+    <span class="s">'Promo_bw'</span><span class="p">,</span> <span class="s">'StateHoliday_fw'</span><span class="p">,</span> <span class="s">'StateHoliday_bw'</span><span class="p">,</span>
+    <span class="s">'SchoolHoliday_fw'</span><span class="p">,</span> <span class="s">'SchoolHoliday_bw'</span><span class="p">]</span>
+
+<span class="n">cont_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s">'CompetitionDistance'</span><span class="p">,</span> <span class="s">'Max_TemperatureC'</span><span class="p">,</span>
+    <span class="s">'Mean_TemperatureC'</span><span class="p">,</span> <span class="s">'Min_TemperatureC'</span><span class="p">,</span>
+    <span class="s">'Max_Humidity'</span><span class="p">,</span> <span class="s">'Mean_Humidity'</span><span class="p">,</span> <span class="s">'Min_Humidity'</span><span class="p">,</span>
+    <span class="s">'Max_Wind_SpeedKm_h'</span><span class="p">,</span> <span class="s">'Mean_Wind_SpeedKm_h'</span><span class="p">,</span> <span class="s">'CloudCover'</span><span class="p">,</span>
+    <span class="s">'trend'</span><span class="p">,</span> <span class="s">'trend_DE'</span><span class="p">,</span> <span class="s">'AfterStateHoliday'</span><span class="p">,</span> <span class="s">'BeforeStateHoliday'</span><span class="p">,</span>
+    <span class="s">'Promo'</span><span class="p">,</span> <span class="s">'SchoolHoliday'</span><span class="p">]</span>
+
+<span class="n">dep_var</span> <span class="o">=</span> <span class="s">'Sales'</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="n">cat_vars</span> <span class="o">+</span> <span class="n">cont_vars</span> <span class="o">+</span> <span class="p">[</span><span class="n">dep_var</span><span class="p">,</span><span class="s">'Date'</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">TabularList</span><span class="o">.</span><span class="n">from_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">cat_names</span><span class="o">=</span><span class="n">cat_vars</span><span class="p">,</span>
+            <span class="n">cont_names</span><span class="o">=</span><span class="n">cont_vars</span><span class="p">,</span> <span class="n">procs</span><span class="o">=</span><span class="n">procs</span><span class="p">,)</span>
+        <span class="o">.</span><span class="n">split_by_idx</span><span class="p">(</span><span class="n">valid_idx</span><span class="p">)</span>
+        <span class="c1"># NOTE: fastai assumes classification if label_cls is not float,
+</span>        <span class="c1"># here we need regression, so make it a FloatList!
+</span>        <span class="c1"># log=True takes log of y, use this for percent error because
+</span>        <span class="c1"># it turns ratio into difference, RMSPE -&gt; RMSE
+</span>        <span class="o">.</span><span class="n">label_from_df</span><span class="p">(</span><span class="n">cols</span><span class="o">=</span><span class="n">dep_var</span><span class="p">,</span> <span class="n">label_cls</span><span class="o">=</span><span class="n">FloatList</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">add_test</span><span class="p">(</span>
+            <span class="n">TabularList</span><span class="o">.</span><span class="n">from_df</span><span class="p">(</span>
+                <span class="n">test_df</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">cat_names</span><span class="o">=</span><span class="n">cat_vars</span><span class="p">,</span>
+                <span class="n">cont_names</span><span class="o">=</span><span class="n">cont_vars</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">databunch</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>Tip: for target variable as population, sales etc. where we care more about change rather than absolute differences, we use Root Mean Squared Percent Error (RMSPE) rather than RMSE. Take the log of y with <code class="highlighter-rouge">log=True</code> above to make it RMSE.</p>
+
+<div class="Toast">
+   <span class="Toast-icon"><svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>
+   <span class="Toast-content">
+        Trick: set <code>y_range</code> a bit wider than actual to get better result. In this case <code>1.2 * ymax</code>.
+    </span>
+</div>
+
+<p>For this problem, the architecture is a fully connected NN. This Kaggle competition is 3 years old but there is no significant better model than it.</p>
+
+<p>We use a weight matrix of 1000 by 500, which is <strong>500K parameters on a few 100K dataset. It is going to overfit</strong>. Use regularization to counter overfitting, NOT reducing the parameters manually.</p>
+
+<p><code class="highlighter-rouge">ps=[0.001, 0.01]</code> is DROPOUT. The dropout <a href="https://www.cs.toronto.edu/~hinton/absps/JMLRdropout.pdf">paper</a>.</p>
+
+<p><strong>Dropout is not dropping weights, but dropping activations!</strong></p>
+
+<p><img src="/images/fastai/dropout.png" alt="Dropout" align="middle"></p>
+
+<p>Each minibatch we throw away a difference subset of the activations with probability <code class="highlighter-rouge">p</code>. A common value is 0.5.</p>
+
+<p>Hinton mentioned where this idea came from. He’s a neural scientist by training so he used dropout to imitate the effect of spiking neurons given that we don’t exact know how neurons spike.</p>
+
+<p>“If you have noisy activations, you can afford to use a much bigger model” – Hinton.</p>
+
+<p>These math ideas almost never come from math but from physical intuitions.</p>
+
+<p><em>Jeremy advice for research: the original dropout paper is one of the most influential papers in the last decade but was rejected by NIPS. The research community is poor at recognizing important work. Find what interests you and don’t just follow what most people say.</em></p>
+
+<p><strong>Dropout works really really well!</strong></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">learn</span> <span class="o">=</span> <span class="n">tabular_learner</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">layers</span><span class="o">=</span><span class="p">[</span><span class="mi">1000</span><span class="p">,</span><span class="mi">500</span><span class="p">],</span> <span class="n">ps</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span><span class="mf">0.01</span><span class="p">],</span>
+    <span class="n">emb_drop</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">y_range</span><span class="o">=</span><span class="n">y_range</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">exp_rmspe</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">ps</code> is a list of dropout probabilities. All fastai learners have this parameter.</p>
+
+<p>In PyTorch, dropout is applied at training time and not test time. You don’t need to do anything at test time.</p>
+
+<p><code class="highlighter-rouge">emb_drop</code> is to randomly drop activations in the embedding.</p>
+
+<p>Reminder: what is embeddings in this case? It’s the vector for each feature, e.g. <code class="highlighter-rouge">stores</code>, <code class="highlighter-rouge">DayOfWeek</code>, <code class="highlighter-rouge">Year</code>, etc. The data matrix started with them as columns and each entry in time as row. Do a matrix factorization and we get these embeddings for the features.</p>
+
+<p><img src="/images/fastai/rossmann-model.png" alt="rossmann model" align="middle"></p>
+
+<p><code class="highlighter-rouge">BatchNorm1d</code> is for continuous variables.</p>
+
+<p>Batch normalization <a href="https://arxiv.org/pdf/1502.03167.pdf">paper</a>. Interestingly, the attempt to explain why it helps NN training (by reducing covariate shifts) was wrong in this paper. Usually researchers have intuitions and did the experiment, it worked, and tried to find math explanations post-hoc. Another <a href="https://arxiv.org/pdf/1805.11604.pdf">paper</a> found it is not why it works.</p>
+
+<p><img src="/images/fastai/batch-norm.png" alt="rossmann model" align="middle"></p>
+
+<p><strong>With batch norm, the loss landscape is not as bumpy as without batch norm! You can increase your learning rate!</strong></p>
+
+<p>Explanation: the reason it works is <strong>activation range shift</strong>. people used to think the normalization by mean and std is the important reason why it worked. But it’s actually the two extra parameters. We use <code class="highlighter-rouge">activations * g + b</code> to shift the activations from one range to another, just like when we have output predictions in 0-1 but we need to shift to 1-5 for movie ratings. <code class="highlighter-rouge">g</code> and <code class="highlighter-rouge">b</code> are the biases to directionly shift the range rather than relying on the weights. The weights have nonlinear relationships because of the nonlinear activations in between so they are hard to tune for range shifting (that’s why the loss landscape is bumpy). With 2 more direct controlling parameters, the range shift is much easier.</p>
+
+<p>A much newer method is called Weight Norm and is used by fastai.</p>
+
+<div class="Toast">
+   <span class="Toast-icon"><svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>
+   <span class="Toast-content">
+        Note: for batch norm, we don't actually use the exact mean and std for each minibatch, that will be too bumpy. We use the exponentially weighted moving average of mean and std. That's why there is a <code>momentum=0.1</code> in batch norm layer, it is not the momentum as in optimization, it is for moving average.
+    </span>
+</div>
+
+<hr>
+<p>A <strong>smaller momentum</strong> means less variations from minibatch to minibatch ==&gt; <strong>less regularization</strong></p>
+
+<hr>
+<p>A <strong>larger momentum</strong> means more variations from minibatch to minibatch ==&gt; <strong>more regularization</strong></p>
+
+<hr>
+
+<p>In the regularization techniques, we</p>
+
+<ul>
+  <li>always want batch norm</li>
+  <li>weight decay is more preferable than L2 regularization (are they not the same thing? <a href="https://towardsdatascience.com/weight-decay-l2-regularization-90a9e17713cd">yes and no</a>? )</li>
+  <li>weight decay vs. dropout? No definitive answer. Use a bit of both. Try it out.</li>
+</ul>
+
+<p>The next regularization technique is <strong>data augmentation</strong>. Jeremy is most excited about this approach.</p>
+
+<h2 id="cnn-data-augmentation-regularization-cont">
+<a class="anchor" href="#cnn-data-augmentation-regularization-cont" aria-hidden="true"><span class="octicon octicon-link"></span></a>CNN, Data Augmentation; Regularization cont.</h2>
+
+<p>Now use the pets-more notebook.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># check this list of transformations
+</span><span class="n">doc</span><span class="p">(</span><span class="n">get_transforms</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Tip: for border transform, “reflection” works the best! Better than black borders. And warping works great.</p>
+
+<p>Apply the kind of transform that will match test data.</p>
+
+<p>Research: how to do data augmentation outside CV, e.g. in NLP.</p>
+
+<p>Jeremy goes on explaining convolution and image kernel with visual explanation <a href="https://setosa.io/ev/image-kernels/">here</a>, developed by ex-Uber colleague Victor Powell.</p>
+
+<p><img src="/images/fastai/conv-padding.png" alt="convolution padding" align="middle"></p>
+
+<p>Since 3-by-3 kernels can only reach the second to last rim of the image, we need padding. 0-padding is fine but <strong>reflective padding</strong> is better.</p>
+
+<p>How CNN works:</p>
+
+<ul>
+  <li>
+    <p>We have RGB color image of size <code class="highlighter-rouge">w * h * 3</code>, apply k <code class="highlighter-rouge">3 * 3 * 3</code> kernels to it (without hard definitions such as left right sobel, just randomly init them). Each kernel outputs 1 number, so we end up with a <code class="highlighter-rouge">w * h * k</code> output of the image.</p>
+  </li>
+  <li>
+    <p>We can have stride 2 by 2 so the <code class="highlighter-rouge">w * h</code> gets shrinked by a factor of 2. We also apply 2x more kernels, so <strong>the output gets squashed into a longer stick shape with smaller cross section.</strong>.</p>
+  </li>
+  <li>
+    <p>We repeatedly stack a lot of these conv layers.</p>
+  </li>
+</ul>
+
+<p><img src="/images/fastai/cnn-1.png" alt="convolution 1" align="middle"></p>
+
+<p><img src="/images/fastai/cnn-2.png" alt="convolution 2" align="middle"></p>
+
+<p>One interesting trick is that we use a 7 by 7 kernel (and more padding) for the first layer to handle the input image, then use 3 by 3 ones in hidden layers. Jeremy will talk about why in Course Part II.</p>
+
+<p>Tip: <code class="highlighter-rouge">learn.summary()</code> and <code class="highlighter-rouge">learn.model</code> prints out the info and architecture of the NN.</p>
+
+<h2 id="heatmap-for-cnn">
+<a class="anchor" href="#heatmap-for-cnn" aria-hidden="true"><span class="octicon octicon-link"></span></a>Heatmap for CNN</h2>
+
+<p>Next, <strong>find the heatmap for CNN’s focus in images</strong>.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Make the kernel for 3 channels
+</span><span class="n">k</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">([</span>
+    <span class="p">[</span><span class="mf">0.</span>  <span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">1.</span>  <span class="p">,</span><span class="mi">1</span>   <span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+<span class="p">])</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="mi">6</span>
+</code></pre></div></div>
+
+<p>In PyTorch, the shape of the tensor in the case is <code class="highlighter-rouge">(# kernels, # channels, height, width)</code>.</p>
+
+<div class="Toast">
+   <span class="Toast-icon"><svg class="octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>
+   <span class="Toast-content">
+        Trick: indexing <code>None</code> into a tensor in both pytorch and numpy gives to a new unit axis!! (shown below)
+    </span>
+</div>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">t</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">352</span><span class="p">,</span> <span class="mi">352</span><span class="p">)</span>
+
+<span class="c1"># Very handy trick
+</span><span class="n">t</span><span class="p">[</span><span class="bp">None</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+<span class="c1"># (1, 3, 352, 352)
+</span></code></pre></div></div>
+
+<h3 id="how-the-last-layers-work">
+<a class="anchor" href="#how-the-last-layers-work" aria-hidden="true"><span class="octicon octicon-link"></span></a>How the last layers work</h3>
+
+<p>Say we have a <code class="highlighter-rouge">(w=11, h=11, ch=512)</code> shape layer, that is the <strong>last layer of the conv part of the network</strong>. The output expects a vector of shape <code class="highlighter-rouge">(class=37, 1)</code>, for that we <strong>take the mean of every slice in the 512 slices, each (w, h) slice only outputs 1 number. This is called AVERAGE POOLING</strong>. Now, we have a <code class="highlighter-rouge">(512, 1)</code> vector. We then need a weight matrix of <code class="highlighter-rouge">(37, 512)</code>. This is a linear layer that has input size 512 and output size 37.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    W1
+    --
+    W2
+    --
+    W3       *       (x1 | x2 | x3 | ... | x512)_T
+    --
+    ...
+    --
+    W37
+
+Each weight vector W has length 512, it dots the (512, 1) vector, produces a weighted sum,
+activation A1 for class 1. Same for other Ws. We then have an output of (A1 ... A37).
+
+The different setting of each W, a shape (1, 512) row vector is the deciding factor that maps
+the 512 features from average pooling into the final 37 classes.
+</code></pre></div></div>
+
+<p>This is how the classification is done. Each averaged number from a slice indicates a “feature”, it could be “how fluffy it is”, “does it have pointy ears”, etc. The average is equivalent to a sum of the activations in each slice indicating how activated collectively they are in one slice.</p>
+
+<p>Interestingly, if you squash the 512 channels to 1 and average over all the <code class="highlighter-rouge">(w, h)</code> slices, the output is one <code class="highlighter-rouge">(w, h)</code> matrix. This is the average of all the pixels in the same position in each channel. It then indicates the relevance of “position”, not individual features. With this, we can create a heatmap that shows where it is most relevant to decide whether the cat is a maine coone.</p>
+
+<p>Tip: <code class="highlighter-rouge">fastai</code> has a great advanced feature called a “hook”. It allows you to tap into the pytorch code, e.g. a forward pass and manipulate the values in the middle layers.</p>
+
+<p>Tip: <strong>if you use <code class="highlighter-rouge">hook</code>, don’t forget to remove it after</strong>, because it will store the intermediate values everytime you call the model and it is memory intensive.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># To get the conv part of the network, do this
+</span><span class="n">m</span> <span class="o">=</span> <span class="n">learn</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="nb">eval</span><span class="p">()</span>
+<span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c1"># Then it shows the conv part of the network
+</span>
+<span class="c1"># Create a minibatch with just one image in it
+</span><span class="n">xb</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">one_item</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">xb_im</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">denorm</span><span class="p">(</span><span class="n">xb</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="c1"># Pop it into a GPU
+</span><span class="n">xb</span> <span class="o">=</span> <span class="n">xb</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+
+<span class="c1"># To hook into the output of m[0]
+</span><span class="kn">from</span> <span class="nn">fastai.callbacks.hooks</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">hooked_backward</span><span class="p">(</span><span class="n">cat</span><span class="o">=</span><span class="n">y</span><span class="p">):</span>
+    <span class="c1"># `with` in Python is called context manager,
+</span>    <span class="c1"># at the end of `with` it will remove the hook
+</span>    <span class="k">with</span> <span class="n">hook_output</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">as</span> <span class="n">hook_a</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">hook_output</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">hook_g</span><span class="p">:</span>
+            <span class="c1"># pytorch allows us to use the model as a function m()
+</span>            <span class="n">preds</span> <span class="o">=</span> <span class="n">m</span><span class="p">(</span><span class="n">xb</span><span class="p">)</span>
+            <span class="n">preds</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">cat</span><span class="p">)]</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="c1"># we don't care about pred, we care about the hook
+</span>    <span class="k">return</span> <span class="n">hook_a</span><span class="p">,</span><span class="n">hook_g</span>
+
+<span class="n">hook_a</span><span class="p">,</span> <span class="n">hook_g</span> <span class="o">=</span> <span class="n">hooked_backward</span><span class="p">()</span>
+
+<span class="c1"># fastai hook has .stored for the things you want in the hook
+</span><span class="n">acts</span>  <span class="o">=</span> <span class="n">hook_a</span><span class="o">.</span><span class="n">stored</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
+<span class="n">acts</span><span class="o">.</span><span class="n">shape</span>
+
+<span class="k">def</span> <span class="nf">show_heatmap</span><span class="p">(</span><span class="n">hm</span><span class="p">):</span>
+    <span class="n">_</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+    <span class="n">xb_im</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">hm</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">352</span><span class="p">,</span><span class="mi">352</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>
+              <span class="n">interpolation</span><span class="o">=</span><span class="s">'bilinear'</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s">'magma'</span><span class="p">);</span>
+
+<span class="n">show_heatmap</span><span class="p">(</span><span class="n">avg_acts</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Tip: it’s very important to frequently print out the shapes of the tensors, and think about why, think about the pictures in CNN architecture, the <code class="highlighter-rouge">learn.summary()</code> and <code class="highlighter-rouge">learn.model</code>.</p>
+
+<h2 id="data-ethics">
+<a class="anchor" href="#data-ethics" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data Ethics</h2>
+
+<p>Check out Rachel’s TED talk <a href="https://www.youtube.com/watch?v=LqjP7O9SxOM">here</a>.</p>
+
+<p><img src="/images/fastai/ethics.png" alt="convolution 2" align="middle"></p>
+
+<p><strong>One potential solution: put human in the loop!</strong></p>
+
+<p>Don’t be slaves of algorithm, avoid run-away feedback loops (bad recommendations feed bad behaviors).</p>
+
+  </div><a class="u-url" href="/note/fastai/2020/04/22/fastai-lesson6.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notes, code and essays by Logan Yang.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

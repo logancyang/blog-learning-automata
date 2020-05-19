@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FastAI Lesson 1: Pets | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FastAI Lesson 1: Pets" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="fast.ai note series" />
+<meta property="og:description" content="fast.ai note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/fastai/2020/04/07/fastai-lesson1.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/fastai/2020/04/07/fastai-lesson1.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-07T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"fast.ai note series","@type":"BlogPosting","headline":"FastAI Lesson 1: Pets","dateModified":"2020-04-07T00:00:00-05:00","datePublished":"2020-04-07T00:00:00-05:00","url":"http://blog.logancyang.com/note/fastai/2020/04/07/fastai-lesson1.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/fastai/2020/04/07/fastai-lesson1.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FastAI Lesson 1: Pets | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FastAI Lesson 1: Pets" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="fast.ai note series" />
+<meta property="og:description" content="fast.ai note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/fastai/2020/04/07/fastai-lesson1.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/fastai/2020/04/07/fastai-lesson1.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-07T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"fast.ai note series","@type":"BlogPosting","headline":"FastAI Lesson 1: Pets","dateModified":"2020-04-07T00:00:00-05:00","datePublished":"2020-04-07T00:00:00-05:00","url":"http://blog.logancyang.com/note/fastai/2020/04/07/fastai-lesson1.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/fastai/2020/04/07/fastai-lesson1.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Learning Automata</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">FastAI Lesson 1: Pets</h1><p class="page-description">fast.ai note series</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-04-07T00:00:00-05:00" itemprop="datePublished">
+        Apr 7, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      4 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#note">note</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#fastai">fastai</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#lesson-1">Lesson 1</a></li>
+<li class="toc-entry toc-h2"><a href="#homework-1">Homework 1</a></li>
+</ul><h2 id="lesson-1">
+<a class="anchor" href="#lesson-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Lesson 1</h2>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Shows the module imported from, function signature with types
+# such as url:str, fname:Union[pathlib.Path, str]=None
+# Union[...] means it can be any of the type in this list
+</span><span class="n">help</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+
+<span class="c1"># python3 path object can be used like this
+</span><span class="n">path_img</span> <span class="o">=</span> <span class="n">path</span><span class="o">/</span><span class="s">'image'</span>
+
+<span class="c1"># ImageDataBunch in fastai has a factory method from_name_re() to use regex to get the data and labels
+# Normalize to square image, size 224 is very commonly used
+</span><span class="n">data</span> <span class="o">=</span> <span class="n">ImageDataBunch</span><span class="o">.</span><span class="n">from_name_re</span><span class="p">(</span>
+    <span class="n">path_img</span><span class="p">,</span> <span class="n">fnames</span><span class="p">,</span> <span class="n">pat</span><span class="p">,</span> <span class="n">ds_tfms</span><span class="o">=</span><span class="n">get_transforms</span><span class="p">(),</span> <span class="n">size</span><span class="o">=</span><span class="mi">224</span><span class="p">,</span> <span class="n">bs</span><span class="o">=</span><span class="n">bs</span>
+<span class="p">)</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">imagenet_stats</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>A <code class="highlighter-rouge">DataBunch</code> object in fastai contains everything about data. It has training, validation, test data, all the labels.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># normalize the data in the DataBunch object to 0 mean 1 std
+# in this case, RGB channels with be 0 mean and 1 std
+</span><span class="n">data</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">imagenet_stats</span><span class="p">)</span>
+
+<span class="c1"># Always take a look at the data
+</span><span class="n">data</span><span class="o">.</span><span class="n">show_batch</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">classes</span><span class="p">)</span>
+<span class="c1"># data.c is the number of classes
+</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">classes</span><span class="p">),</span> <span class="n">data</span><span class="o">.</span><span class="n">c</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">Learner</code> in fastai is a model object, it takes in the <code class="highlighter-rouge">DataBunch</code> object and model architecture. It also let you specify the metric to look at for training.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Note that models.resnet34 is pretrained on imagenet
+# error_rate is for validation set, because creating a DataBunch object automatically creates the validation set
+</span><span class="n">learn</span> <span class="o">=</span> <span class="n">cnn_learner</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">resnet34</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">error_rate</span><span class="p">)</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">model</span>
+<span class="c1"># fit_one_cycle() is much better than fit() (paper in 2018), always use it.
+# 4 is the # epoch to run, it's a good place to start
+</span><span class="n">learn</span><span class="o">.</span><span class="n">fit_one_cycle</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="c1"># This can saves the model trained on different DataBunch to different places
+</span><span class="n">learn</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s">'stage-1'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>To interpret the output of a learner,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># ClassificationInterpretation has a factory method from_learner,
+# it takes in a learner object and returns a ClassificationInterpretation object
+</span><span class="n">interp</span> <span class="o">=</span> <span class="n">ClassificationInterpretation</span><span class="o">.</span><span class="n">from_learner</span><span class="p">(</span><span class="n">learn</span><span class="p">)</span>
+
+<span class="n">losses</span><span class="p">,</span><span class="n">idxs</span> <span class="o">=</span> <span class="n">interp</span><span class="o">.</span><span class="n">top_losses</span><span class="p">()</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">valid_ds</span><span class="p">)</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span>
+
+<span class="c1"># This is the most useful tool, it plots the examples the model got wrong
+# with biggest losses, and show titles as
+# `predicted / actual / score for predicted class / score for actual class`
+</span><span class="n">interp</span><span class="o">.</span><span class="n">plot_top_losses</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">11</span><span class="p">))</span>
+
+<span class="c1"># Use doc() to check how to use, click `show in doc` to documentation website for more details and source code
+</span><span class="n">doc</span><span class="p">(</span><span class="n">interp</span><span class="o">.</span><span class="n">plot_top_losses</span><span class="p">)</span>
+
+<span class="c1"># Another useful tool, confusion matrix
+</span><span class="n">interp</span><span class="o">.</span><span class="n">plot_confusion_matrix</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+
+<span class="c1"># Yet another, the most useful, prints the most wrong ones (predicted, actual, # times)
+</span><span class="n">interp</span><span class="o">.</span><span class="n">most_confused</span><span class="p">(</span><span class="n">min_val</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Previously we called <code class="highlighter-rouge">fit_one_cycle(4)</code>, <strong>it only trains the last layer!!</strong> The whole model is frozen by default!</p>
+
+<div class="Toast">
+   <span class="Toast-icon"><svg class="octicon octicon-info octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>
+   <span class="Toast-content">Note: transfer learning is always a two-step process, train the last layer for some epochs first, and then unfreeze the whole model for some more training/fine-tuning</span>
+</div>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># After training the last layer, we unfreeze the whole model
+</span><span class="n">learn</span><span class="o">.</span><span class="n">unfreeze</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>When we unfreeze the whole model and retrain, the error rate is actually worse than before.</p>
+
+<p>Now, load the stage 1 model back on again, we need <code class="highlighter-rouge">lr_find</code> to find a good learning rate. The default learning rate is something like <code class="highlighter-rouge">0.003</code>. We need to change it.</p>
+
+<p>The learning rate is the most important hyperparameter.</p>
+
+<p>Use <code class="highlighter-rouge">learn.recorder.plot()</code> to plot <code class="highlighter-rouge">learning rate vs loss</code> graph and set the learning rate range to the steepest downward slope.</p>
+
+<p>Next, unfreeze the model and use that learning rate</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">learn</span><span class="o">.</span><span class="n">unfreeze</span><span class="p">()</span>
+<span class="c1"># Pass a range of learning rate from 1e-6 to 1e-4
+# means first layers use 1e-6 and last layers use 1e-4
+# Good rule of thumb, set the right side of slice to be 10x smaller
+# than default lr, and left to be at least 10x smaller than the lowest
+# point in the lr vs loss graph
+</span><span class="n">learn</span><span class="o">.</span><span class="n">fit_one_cycle</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_lr</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">,</span><span class="mf">1e-4</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Now it gets better than stage 1!</p>
+
+<p>With these two stages, the model can be already really good. It is at least average Kaggle practitioner level.</p>
+
+<p>Next, we can use a bigger model - resnet50.</p>
+
+<p>If GPU runs out of memory, use smaller batch size. It can be set in the DataBunch creation.</p>
+
+<p>Again, the two-stage workflow</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">data</span> <span class="o">=</span> <span class="n">ImageDataBunch</span><span class="o">.</span><span class="n">from_name_re</span><span class="p">(</span><span class="n">path_img</span><span class="p">,</span> <span class="n">fnames</span><span class="p">,</span> <span class="n">pat</span><span class="p">,</span>
+    <span class="n">ds_tfms</span><span class="o">=</span><span class="n">get_transforms</span><span class="p">(),</span> <span class="n">size</span><span class="o">=</span><span class="mi">299</span><span class="p">,</span> <span class="n">bs</span><span class="o">=</span><span class="n">bs</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">imagenet_stats</span><span class="p">)</span>
+
+<span class="n">learn</span> <span class="o">=</span> <span class="n">cnn_learner</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">resnet50</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">error_rate</span><span class="p">)</span>
+<span class="c1"># Stage 1
+</span><span class="n">learn</span><span class="o">.</span><span class="n">fit_one_cycle</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s">'stage-1-50'</span><span class="p">)</span>
+<span class="c1"># Stage 2
+</span><span class="n">learn</span><span class="o">.</span><span class="n">unfreeze</span><span class="p">()</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">lr_find</span><span class="p">()</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="c1"># Pick learning rate range around the steepest downward slope
+</span><span class="n">learn</span><span class="o">.</span><span class="n">fit_one_cycle</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">max_lr</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">,</span><span class="mf">1e-4</span><span class="p">))</span>
+<span class="c1"># Evaluation
+</span><span class="n">interp</span> <span class="o">=</span> <span class="n">ClassificationInterpretation</span><span class="o">.</span><span class="n">from_learner</span><span class="p">(</span><span class="n">learn</span><span class="p">)</span>
+<span class="n">interp</span><span class="o">.</span><span class="n">most_confused</span><span class="p">(</span><span class="n">min_val</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="Toast">
+   <span class="Toast-icon"><svg class="octicon octicon-info octicon octicon-info octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>
+   <span class="Toast-content">
+        <li>For an imagenet-style dataset, it has data in folders named with the labels. MNIST for example, has images for <code>3</code> in a folder named <code>3</code>. Use <code>ImageDataBunch.from_folder(...)</code>
+</li>
+        <li>For a csv file with columns <code>[filepath, label]</code>, use <code>ImageDataBunch.from_csv(...)</code>
+</li>
+        <li>For data where labels are in the filename, use regex and <code>ImageDataBunch.from_name_re(...)</code>
+</li>
+        <li>For more complex cases, construct any function and pass into <code>ImageDataBunch.from_name_func(...)</code>
+</li>
+    </span>
+</div>
+
+<p>What’s really cool is that the documentation of fastai is actually a collection of Jupyter Notebooks with working example code!</p>
+
+<p>Success story: a fastai alumnus created a security anomaly detection software by using the exact code for this lesson on mouse trajectories.</p>
+
+<p>There are examples where problems can be converted into an image problem and apply CNN. Such as audio to spectral form.</p>
+
+<h2 id="homework-1">
+<a class="anchor" href="#homework-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Homework 1</h2>
+
+<p>Use my own dataset to train an image classifier.</p>
+
+  </div><a class="u-url" href="/note/fastai/2020/04/07/fastai-lesson1.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notes, code and essays by Logan Yang.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

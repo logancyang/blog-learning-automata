@@ -29,7 +29,7 @@
   
       ,"page1": {
           "title": "About Me",
-          "content": "Hi, I’m Logan (Chao) Yang, a machine learning engineer and creative coder. . My main interests are machine learning, physics simulation, math animation and music production. . I share my sketches, simulations and videos at my personal website. .",
+          "content": "Hi, I’m Logan (Chao) Yang, a machine learning engineer and creative coder. . My main interests are machine learning, physics simulation, math animation and music production. This is my fastpages blog for notes, code, Jupyter notebooks, and essays. . I share my sketches, simulations and videos at my personal website. . Feel free to connect with me on LinkedIn. . I also publish on Medium, and share new progresses on Twitter. .",
           "url": "http://blog.logancyang.com/about/",
           "relUrl": "/about/",
           "date": ""

@@ -1,7 +1,7 @@
 ---
 toc: true
 layout: post
-description: Note for fast.ai series
+description: fast.ai note series
 categories: [note, fastai]
 title: How to setup local GPU server for fast.ai
 ---

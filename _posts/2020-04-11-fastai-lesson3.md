@@ -89,7 +89,8 @@ The process is to create the DataBunch with new size
 
 ```py
 learn.load('stage-2-rn50')
-# Note, set bs=32 and restart kernel after loading the saved model, or GPU can run out of memory
+# Note, set bs=32 and restart kernel after loading the saved model,
+# or GPU can run out of memory
 data = (src.transform(tfms, size=256)
         .databunch(bs=32).normalize(imagenet_stats))
 

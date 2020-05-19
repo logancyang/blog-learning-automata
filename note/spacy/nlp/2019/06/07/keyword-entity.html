@@ -146,9 +146,9 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#combine-with-model-prediction-use-entity-ruler-and-pattern-file-v21">Combine with Model Prediction: Use Entity Ruler and Pattern File (v2.1)</a></li>
 <li class="toc-entry toc-h2"><a href="#case-study-brand-entity">Case Study: Brand Entity</a>
 <ul>
-<li class="toc-entry toc-h4"><a href="#case-1-predicted-entity-is-not-in-the-keyword-list-and-has-no-word-overlap-with-any-item-in-the-list">Case 1: Predicted entity is not in the keyword list and has no word overlap with any item in the list.</a></li>
-<li class="toc-entry toc-h4"><a href="#case-2-predicted-entity-is-not-in-the-keyword-list-but-has-overlap-with-one-or-more-items-in-the-list">Case 2: Predicted entity is not in the keyword list BUT has overlap with one or more items in the list.</a></li>
-<li class="toc-entry toc-h4"><a href="#case-3-predicted-entity-is-in-the-keyword-list">Case 3: Predicted entity is in the keyword list</a></li>
+<li class="toc-entry toc-h3"><a href="#case-1-predicted-entity-is-not-in-the-keyword-list-and-has-no-word-overlap-with-any-item-in-the-list">Case 1: Predicted entity is not in the keyword list and has no word overlap with any item in the list.</a></li>
+<li class="toc-entry toc-h3"><a href="#case-2-predicted-entity-is-not-in-the-keyword-list-but-has-overlap-with-one-or-more-items-in-the-list">Case 2: Predicted entity is not in the keyword list BUT has overlap with one or more items in the list.</a></li>
+<li class="toc-entry toc-h3"><a href="#case-3-predicted-entity-is-in-the-keyword-list">Case 3: Predicted entity is in the keyword list</a></li>
 </ul>
 </li>
 </ul><p>Sometimes there is a need to create keyword entities from a list of known keywords, e.g. country names, species, brands, etc. The list can be large. This note shows how to create such entities in spaCy and make
@@ -234,18 +234,18 @@ print([(ent.text, ent.label_) for ent in doc.ents])
 
 <p>Note that we prefer adding the <code class="highlighter-rouge">EntityRuler</code> before the <code class="highlighter-rouge">"ner"</code> component to let the model respect the keyword list and adjust its predictions.</p>
 
-<h4 id="case-1-predicted-entity-is-not-in-the-keyword-list-and-has-no-word-overlap-with-any-item-in-the-list">
-<a class="anchor" href="#case-1-predicted-entity-is-not-in-the-keyword-list-and-has-no-word-overlap-with-any-item-in-the-list" aria-hidden="true"><span class="octicon octicon-link"></span></a>Case 1: Predicted entity is not in the keyword list and has no word overlap with any item in the list.</h4>
+<h3 id="case-1-predicted-entity-is-not-in-the-keyword-list-and-has-no-word-overlap-with-any-item-in-the-list">
+<a class="anchor" href="#case-1-predicted-entity-is-not-in-the-keyword-list-and-has-no-word-overlap-with-any-item-in-the-list" aria-hidden="true"><span class="octicon octicon-link"></span></a>Case 1: Predicted entity is not in the keyword list and has no word overlap with any item in the list.</h3>
 
 <p>In this case, it is either a wrong prediction or a new brand entity correctly predicted but is not in the training data. These cases need to be logged and checked by a human. If confirmed it IS a correct new brand entity, it should be added to the brand keyword list.</p>
 
-<h4 id="case-2-predicted-entity-is-not-in-the-keyword-list-but-has-overlap-with-one-or-more-items-in-the-list">
-<a class="anchor" href="#case-2-predicted-entity-is-not-in-the-keyword-list-but-has-overlap-with-one-or-more-items-in-the-list" aria-hidden="true"><span class="octicon octicon-link"></span></a>Case 2: Predicted entity is not in the keyword list BUT has overlap with one or more items in the list.</h4>
+<h3 id="case-2-predicted-entity-is-not-in-the-keyword-list-but-has-overlap-with-one-or-more-items-in-the-list">
+<a class="anchor" href="#case-2-predicted-entity-is-not-in-the-keyword-list-but-has-overlap-with-one-or-more-items-in-the-list" aria-hidden="true"><span class="octicon octicon-link"></span></a>Case 2: Predicted entity is not in the keyword list BUT has overlap with one or more items in the list.</h3>
 
 <p>If <code class="highlighter-rouge">EntityRuler</code> is used, the model prediction should be able to find the complete brand name in the text, so any such overlap should be the case where only part of the brand name is there in the text but no complete name from the brand list is present. This is sometimes OK, people don’t necessarily call out the complete brand name but only refer to it with a short form. In other cases, this is a wrong prediction. Again, human check is preferred.</p>
 
-<h4 id="case-3-predicted-entity-is-in-the-keyword-list">
-<a class="anchor" href="#case-3-predicted-entity-is-in-the-keyword-list" aria-hidden="true"><span class="octicon octicon-link"></span></a>Case 3: Predicted entity is in the keyword list</h4>
+<h3 id="case-3-predicted-entity-is-in-the-keyword-list">
+<a class="anchor" href="#case-3-predicted-entity-is-in-the-keyword-list" aria-hidden="true"><span class="octicon octicon-link"></span></a>Case 3: Predicted entity is in the keyword list</h3>
 
 <p>This is the trivial case where the model is doing a perfect job.</p>
 

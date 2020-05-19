@@ -1,1 +1,1 @@
-Sitemap: http://blog.logancyang.com/sitemap.xml
+Sitemap: https://logancyang.github.io/blog-learning-automata/sitemap.xml

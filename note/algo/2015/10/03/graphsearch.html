@@ -139,82 +139,93 @@ window.onload = wrap_img;
 
   <div class="post-content e-content" itemprop="articleBody">
     <ul class="section-nav">
-<li class="toc-entry toc-h3"><a href="#traits-for-using-bfs">Traits for using BFS:</a></li>
-<li class="toc-entry toc-h3"><a href="#traits-for-using-dfs">Traits for using DFS:</a></li>
-<li class="toc-entry toc-h3"><a href="#subsets-i--ii-dfs-template">Subsets I &amp; II (DFS template)</a></li>
-<li class="toc-entry toc-h3"><a href="#permutations-i--ii-dfs-template">Permutations I &amp; II (DFS template)</a></li>
-<li class="toc-entry toc-h3"><a href="#summary-for-subsets-and-permutations">Summary for Subsets and Permutations</a>
+<li class="toc-entry toc-h2"><a href="#traits-for-using-bfs">Traits for using BFS:</a></li>
+<li class="toc-entry toc-h2"><a href="#traits-for-using-dfs">Traits for using DFS:</a></li>
+<li class="toc-entry toc-h2"><a href="#subsets-i--ii-dfs-template">Subsets I &amp; II (DFS template)</a></li>
+<li class="toc-entry toc-h2"><a href="#permutations-i--ii-dfs-template">Permutations I &amp; II (DFS template)</a></li>
+<li class="toc-entry toc-h2"><a href="#summary-for-subsets-and-permutations">Summary for Subsets and Permutations</a>
 <ul>
-<li class="toc-entry toc-h4"><a href="#subsets">Subsets</a></li>
-<li class="toc-entry toc-h4"><a href="#permutations">Permutations:</a></li>
-<li class="toc-entry toc-h4"><a href="#palindrome-partitioning">Palindrome Partitioning</a></li>
-<li class="toc-entry toc-h4"><a href="#factor-combinations">Factor Combinations</a></li>
+<li class="toc-entry toc-h3"><a href="#subsets">Subsets</a></li>
+<li class="toc-entry toc-h3"><a href="#permutations">Permutations:</a></li>
+<li class="toc-entry toc-h3"><a href="#palindrome-partitioning">Palindrome Partitioning</a></li>
+<li class="toc-entry toc-h3"><a href="#factor-combinations">Factor Combinations</a></li>
 </ul>
 </li>
-</ul><h3 id="traits-for-using-bfs">
-<a class="anchor" href="#traits-for-using-bfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Traits for using BFS:</h3>
+</ul><h2 id="traits-for-using-bfs">
+<a class="anchor" href="#traits-for-using-bfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Traits for using BFS:</h2>
 
-<ol>
-  <li>Shortest path in a simple graph: given a initial state, a final state, a transition rule between states, ask how many (the least #) transitions from init to final.</li>
-  <li>Graph traversal. Only visit each node once.</li>
-</ol>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Shortest path in a simple graph: given a initial state, a final
+state, a transition rule between states, ask how many (the least #)
+transitions from init to final.
 
-<h3 id="traits-for-using-dfs">
-<a class="anchor" href="#traits-for-using-dfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Traits for using DFS:</h3>
+2. Graph traversal. Only visit each node once.
+</code></pre></div></div>
+
+<h2 id="traits-for-using-dfs">
+<a class="anchor" href="#traits-for-using-dfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Traits for using DFS:</h2>
 
 <p>(DFS method: build search tree, check conditions for recursing down a branch)</p>
 
-<ol>
-  <li>Enumerate subsets, permutations.</li>
-  <li>Find all possible solutions.</li>
-</ol>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Enumerate subsets, permutations.
+
+2. Find all possible solutions.
+</code></pre></div></div>
 
 <p>Generally, when we do a search to enumerate cases using DFS recursion, there are 3 steps we should keep in mind,</p>
 
-<ol>
-  <li>Define the recursion.</li>
-  <li>Think about what to do in the base case. When should we return directly.</li>
-  <li>In general cases (other than base case), how to make the problem smaller and recurse down.</li>
-</ol>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Define the recursion.
 
-<h3 id="subsets-i--ii-dfs-template">
-<a class="anchor" href="#subsets-i--ii-dfs-template" aria-hidden="true"><span class="octicon octicon-link"></span></a>Subsets I &amp; II (DFS template)</h3>
+2. Think about what to do in the base case. When should we return
+directly.
+
+3. In general cases (other than base case), how to make the problem
+smaller and recurse down.
+</code></pre></div></div>
+
+<h2 id="subsets-i--ii-dfs-template">
+<a class="anchor" href="#subsets-i--ii-dfs-template" aria-hidden="true"><span class="octicon octicon-link"></span></a>Subsets I &amp; II (DFS template)</h2>
 
 <p>The thinking is to categorize cases by different head items.
 Enumerate the head item of a case (path) in a for loop in this way:</p>
 
-<ol>
-  <li>Append the item into the path.</li>
-  <li>DFS recurse down onto the next case (generally a smaller case, with advanced index and/or updated reference parameter).</li>
-  <li>Pop the item from the path, to iterate to a different head item on the next iteration.</li>
-</ol>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Append the item into the path.
+
+2. DFS recurse down onto the next case (generally a smaller case,
+with advanced index and/or updated reference parameter).
+
+3. Pop the item from the path, to iterate to a different head item on
+the next iteration.
+</code></pre></div></div>
 
 <p>For this specific Subsets problem, the base case is just adding the current path. For Subsets II, the only difference is that the input can have duplicates and we don’t want the result subsets to be duplicate sets. Since the input is sorted (or we sort it by ourselves before DFS), when we encounter a number which is equal to the previous number in the for loop, we continue. Because the same number is taking the same place as the previous one, the resulting subsets with either of them are the same sets.</p>
 
-<h3 id="permutations-i--ii-dfs-template">
-<a class="anchor" href="#permutations-i--ii-dfs-template" aria-hidden="true"><span class="octicon octicon-link"></span></a>Permutations I &amp; II (DFS template)</h3>
+<h2 id="permutations-i--ii-dfs-template">
+<a class="anchor" href="#permutations-i--ii-dfs-template" aria-hidden="true"><span class="octicon octicon-link"></span></a>Permutations I &amp; II (DFS template)</h2>
 
 <p>It’s quite similar to the Subsets problems. The thinking is also to categorize cases by different head items, and enumerate the head item of a case (path) in a for loop. The difference is that now we don’t want to keep track of the index as a parameter passed into DFS. Our base case is that when the path has the same length as the original input sequence, the current path is added.</p>
 
 <p>The for loop is now as such:</p>
 
-<ol>
-  <li>Append the item into the path.</li>
-  <li>DFS recurse down after appending the new head item. Avoid the same number by checking if it’s already in path, if yes, continue.</li>
-  <li>Pop the item from the path, iterate to a different head item on the next iteration.</li>
-</ol>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Append the item into the path.
+
+2. DFS recurse down after appending the new head item. Avoid the same
+number by checking if it's already in path, if yes, continue.
+
+3. Pop the item from the path, iterate to a different head item on the
+next iteration.
+</code></pre></div></div>
 
 <p>For permutations II where we allow duplicates in the input list, we must sort it first and then do DFS. In the results, duplicate permutations must be avoided, but how? We introduce a new list, visited. We only add continuous same numbers to path, meaning if the previous same number is not visited, we continue. Check the code for details.</p>
 
-<h3 id="summary-for-subsets-and-permutations">
-<a class="anchor" href="#summary-for-subsets-and-permutations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Summary for Subsets and Permutations</h3>
+<h2 id="summary-for-subsets-and-permutations">
+<a class="anchor" href="#summary-for-subsets-and-permutations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Summary for Subsets and Permutations</h2>
 
 <p>This kind of problems is not easy to understand. Recursion tree diagrams can help to clarify, but also keep in mind the code templates: inside the for loop, check condition to recurse down, then append in path, DFS down with path (with appropriate update in some parameter), pop from path.</p>
 
 <p><br></p>
 
-<h4 id="subsets">
-<a class="anchor" href="#subsets" aria-hidden="true"><span class="octicon octicon-link"></span></a>Subsets</h4>
+<h3 id="subsets">
+<a class="anchor" href="#subsets" aria-hidden="true"><span class="octicon octicon-link"></span></a>Subsets</h3>
 
 <p><img src="/images/algo/subsets.png" alt="Drawing" style="width: 1000px;"></p>
 
@@ -246,8 +257,8 @@ Enumerate the head item of a case (path) in a for loop in this way:</p>
 
 <p><br></p>
 
-<h4 id="permutations">
-<a class="anchor" href="#permutations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Permutations:</h4>
+<h3 id="permutations">
+<a class="anchor" href="#permutations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Permutations:</h3>
 
 <p><img src="/images/algo/permutations.png" alt="Drawing" style="width: 1000px;"></p>
 
@@ -286,8 +297,8 @@ Enumerate the head item of a case (path) in a for loop in this way:</p>
 
 <p><br></p>
 
-<h4 id="palindrome-partitioning">
-<a class="anchor" href="#palindrome-partitioning" aria-hidden="true"><span class="octicon octicon-link"></span></a>Palindrome Partitioning</h4>
+<h3 id="palindrome-partitioning">
+<a class="anchor" href="#palindrome-partitioning" aria-hidden="true"><span class="octicon octicon-link"></span></a>Palindrome Partitioning</h3>
 
 <p>We deem the cuts to be the member of a subset, and this problem becomes finding all subsets of valid cuts. If there are N cuts, we can choose whether to include each cut, so there are 2^N ways to cut our string. For O(2^N) problems, it’s usually a Subsets problem.</p>
 
@@ -295,13 +306,14 @@ Enumerate the head item of a case (path) in a for loop in this way:</p>
 
 <p>For a fixed start, we loop through all substrings starting there, check if it satisfies the condition (palindrome in this case), if yes DFS down starting at i (the next char after s[old_start:i]). Again the template of DFS:</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">old_start_ind</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">length</span><span class="p">):</span>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">old_start_ind</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">length</span><span class="p">):</span>
     <span class="n">get</span> <span class="n">next_head</span> <span class="n">item</span>
     <span class="n">check</span> <span class="k">if</span> <span class="n">next_head</span> <span class="n">satisfies</span> <span class="n">our</span> <span class="n">condition</span>
         <span class="k">if</span> <span class="ow">not</span><span class="p">,</span> <span class="k">continue</span>
     <span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_head</span><span class="p">)</span>
     <span class="n">DFS</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">i</span> <span class="ow">or</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>    <span class="c1"># i or i+1 greater than old_start_ind
-</span>    <span class="n">path</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span></code></pre></figure>
+</span>    <span class="n">path</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+</code></pre></div></div>
 
 <p>For <code class="highlighter-rouge">"aab"</code>, we have start = 0: <code class="highlighter-rouge">|a|ab, |aa|b, |aab|</code>; start = 1: <code class="highlighter-rouge">a|a|b, a|ab|</code>; start = 2: <code class="highlighter-rouge">aa|b|</code>; start = 3 == len, <code class="highlighter-rouge">aab|</code>, add one full path and return. start progresses by new recursion, i scans inside each recursion from <code class="highlighter-rouge">start+1</code> to <code class="highlighter-rouge">len+1</code>.</p>
 
@@ -309,8 +321,8 @@ Enumerate the head item of a case (path) in a for loop in this way:</p>
 
 <p><br></p>
 
-<h4 id="factor-combinations">
-<a class="anchor" href="#factor-combinations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Factor Combinations</h4>
+<h3 id="factor-combinations">
+<a class="anchor" href="#factor-combinations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Factor Combinations</h3>
 
 <p>For example, 8 -&gt; <code class="highlighter-rouge">[[2, 2, 2], [2, 4]]</code>. Do not include 1 or n as a factor, and each sublist should be ascending.</p>
 

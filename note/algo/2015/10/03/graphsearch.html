@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Graph Search: Subsets, Permutations | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Graph Search: Subsets, Permutations" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notes for graph search algorithm problems" />
+<meta property="og:description" content="Notes for graph search algorithm problems" />
+<link rel="canonical" href="http://blog.logancyang.com/note/algo/2015/10/03/graphsearch.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/algo/2015/10/03/graphsearch.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-10-03T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Notes for graph search algorithm problems","@type":"BlogPosting","headline":"Graph Search: Subsets, Permutations","dateModified":"2015-10-03T00:00:00-05:00","datePublished":"2015-10-03T00:00:00-05:00","url":"http://blog.logancyang.com/note/algo/2015/10/03/graphsearch.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/algo/2015/10/03/graphsearch.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Graph Search: Subsets, Permutations | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Graph Search: Subsets, Permutations" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Notes for graph search algorithm problems" />
+<meta property="og:description" content="Notes for graph search algorithm problems" />
+<link rel="canonical" href="http://blog.logancyang.com/note/algo/2015/10/03/graphsearch.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/algo/2015/10/03/graphsearch.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-10-03T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Notes for graph search algorithm problems","@type":"BlogPosting","headline":"Graph Search: Subsets, Permutations","dateModified":"2015-10-03T00:00:00-05:00","datePublished":"2015-10-03T00:00:00-05:00","url":"http://blog.logancyang.com/note/algo/2015/10/03/graphsearch.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/algo/2015/10/03/graphsearch.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Learning Automata</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Graph Search: Subsets, Permutations</h1><p class="page-description">Notes for graph search algorithm problems</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2015-10-03T00:00:00-05:00" itemprop="datePublished">
+        Oct 3, 2015
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      7 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#note">note</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#algo">algo</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h3"><a href="#traits-for-using-bfs">Traits for using BFS:</a></li>
+<li class="toc-entry toc-h3"><a href="#traits-for-using-dfs">Traits for using DFS:</a></li>
+<li class="toc-entry toc-h3"><a href="#subsets-i--ii-dfs-template">Subsets I &amp; II (DFS template)</a></li>
+<li class="toc-entry toc-h3"><a href="#permutations-i--ii-dfs-template">Permutations I &amp; II (DFS template)</a></li>
+<li class="toc-entry toc-h3"><a href="#summary-for-subsets-and-permutations">Summary for Subsets and Permutations</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#subsets">Subsets</a></li>
+<li class="toc-entry toc-h4"><a href="#permutations">Permutations:</a></li>
+<li class="toc-entry toc-h4"><a href="#palindrome-partitioning">Palindrome Partitioning</a></li>
+<li class="toc-entry toc-h4"><a href="#factor-combinations">Factor Combinations</a></li>
+</ul>
+</li>
+</ul><h3 id="traits-for-using-bfs">
+<a class="anchor" href="#traits-for-using-bfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Traits for using BFS:</h3>
+
+<ol>
+  <li>Shortest path in a simple graph: given a initial state, a final state, a transition rule between states, ask how many (the least #) transitions from init to final.</li>
+  <li>Graph traversal. Only visit each node once.</li>
+</ol>
+
+<h3 id="traits-for-using-dfs">
+<a class="anchor" href="#traits-for-using-dfs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Traits for using DFS:</h3>
+
+<p>(DFS method: build search tree, check conditions for recursing down a branch)</p>
+
+<ol>
+  <li>Enumerate subsets, permutations.</li>
+  <li>Find all possible solutions.</li>
+</ol>
+
+<p>Generally, when we do a search to enumerate cases using DFS recursion, there are 3 steps we should keep in mind,</p>
+
+<ol>
+  <li>Define the recursion.</li>
+  <li>Think about what to do in the base case. When should we return directly.</li>
+  <li>In general cases (other than base case), how to make the problem smaller and recurse down.</li>
+</ol>
+
+<h3 id="subsets-i--ii-dfs-template">
+<a class="anchor" href="#subsets-i--ii-dfs-template" aria-hidden="true"><span class="octicon octicon-link"></span></a>Subsets I &amp; II (DFS template)</h3>
+
+<p>The thinking is to categorize cases by different head items.
+Enumerate the head item of a case (path) in a for loop in this way:</p>
+
+<ol>
+  <li>Append the item into the path.</li>
+  <li>DFS recurse down onto the next case (generally a smaller case, with advanced index and/or updated reference parameter).</li>
+  <li>Pop the item from the path, to iterate to a different head item on the next iteration.</li>
+</ol>
+
+<p>For this specific Subsets problem, the base case is just adding the current path. For Subsets II, the only difference is that the input can have duplicates and we don’t want the result subsets to be duplicate sets. Since the input is sorted (or we sort it by ourselves before DFS), when we encounter a number which is equal to the previous number in the for loop, we continue. Because the same number is taking the same place as the previous one, the resulting subsets with either of them are the same sets.</p>
+
+<h3 id="permutations-i--ii-dfs-template">
+<a class="anchor" href="#permutations-i--ii-dfs-template" aria-hidden="true"><span class="octicon octicon-link"></span></a>Permutations I &amp; II (DFS template)</h3>
+
+<p>It’s quite similar to the Subsets problems. The thinking is also to categorize cases by different head items, and enumerate the head item of a case (path) in a for loop. The difference is that now we don’t want to keep track of the index as a parameter passed into DFS. Our base case is that when the path has the same length as the original input sequence, the current path is added.</p>
+
+<p>The for loop is now as such:</p>
+
+<ol>
+  <li>Append the item into the path.</li>
+  <li>DFS recurse down after appending the new head item. Avoid the same number by checking if it’s already in path, if yes, continue.</li>
+  <li>Pop the item from the path, iterate to a different head item on the next iteration.</li>
+</ol>
+
+<p>For permutations II where we allow duplicates in the input list, we must sort it first and then do DFS. In the results, duplicate permutations must be avoided, but how? We introduce a new list, visited. We only add continuous same numbers to path, meaning if the previous same number is not visited, we continue. Check the code for details.</p>
+
+<h3 id="summary-for-subsets-and-permutations">
+<a class="anchor" href="#summary-for-subsets-and-permutations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Summary for Subsets and Permutations</h3>
+
+<p>This kind of problems is not easy to understand. Recursion tree diagrams can help to clarify, but also keep in mind the code templates: inside the for loop, check condition to recurse down, then append in path, DFS down with path (with appropriate update in some parameter), pop from path.</p>
+
+<p><br></p>
+
+<h4 id="subsets">
+<a class="anchor" href="#subsets" aria-hidden="true"><span class="octicon octicon-link"></span></a>Subsets</h4>
+
+<p><img src="/images/algo/subsets.png" alt="Drawing" style="width: 1000px;"></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="s">"""
+    @param S: The set of numbers.
+    @return: A list of lists. See example.
+    """</span>
+    <span class="k">def</span> <span class="nf">subsets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">S</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">S</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DFS</span><span class="p">([],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">S</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span>
+
+    <span class="k">def</span> <span class="nf">DFS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span class="n">S</span><span class="p">):</span>
+        <span class="c1"># base case, add each path of each recursion (sorted as required)
+</span>        <span class="c1"># must make new list, list(path). If not,
+</span>        <span class="c1"># res (path) points to the obj passed in, which is empty at the beginning
+</span>        <span class="n">res</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="c1"># i is the first item's index in a path
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="p">)):</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">DFS</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">S</span><span class="p">)</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><br></p>
+
+<h4 id="permutations">
+<a class="anchor" href="#permutations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Permutations:</h4>
+
+<p><img src="/images/algo/permutations.png" alt="Drawing" style="width: 1000px;"></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="s">"""
+    @param nums: A list of Integers.
+    @return: A list of permutations.
+    """</span>
+    <span class="k">def</span> <span class="nf">permute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">nums</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DFS</span><span class="p">([],</span> <span class="n">nums</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span>
+
+    <span class="k">def</span> <span class="nf">DFS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">nums</span><span class="p">):</span>
+        <span class="c1"># base case
+</span>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+            <span class="c1"># must make new list, list(path). If not,
+</span>            <span class="c1"># it points to the obj passed in, which is empty at
+</span>            <span class="c1"># the beginning
+</span>            <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+            <span class="k">return</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+            <span class="c1"># check if the ith number is already in path
+</span>            <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">path</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">DFS</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">nums</span><span class="p">)</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Combination Sum is the Sum version of Subsets, with duplicates allowed.</p>
+
+<p><br></p>
+
+<h4 id="palindrome-partitioning">
+<a class="anchor" href="#palindrome-partitioning" aria-hidden="true"><span class="octicon octicon-link"></span></a>Palindrome Partitioning</h4>
+
+<p>We deem the cuts to be the member of a subset, and this problem becomes finding all subsets of valid cuts. If there are N cuts, we can choose whether to include each cut, so there are 2^N ways to cut our string. For O(2^N) problems, it’s usually a Subsets problem.</p>
+
+<p>The thinking is that, we have a substring from start to i, s[start:i], called prefix. This is the next head item of the new node (path) in the DFS tree, we later append it to path, DFS down, and pop. But before that we should check if it is a valid palindrome.</p>
+
+<p>For a fixed start, we loop through all substrings starting there, check if it satisfies the condition (palindrome in this case), if yes DFS down starting at i (the next char after s[old_start:i]). Again the template of DFS:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">old_start_ind</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">length</span><span class="p">):</span>
+    <span class="n">get</span> <span class="n">next_head</span> <span class="n">item</span>
+    <span class="n">check</span> <span class="k">if</span> <span class="n">next_head</span> <span class="n">satisfies</span> <span class="n">our</span> <span class="n">condition</span>
+        <span class="k">if</span> <span class="ow">not</span><span class="p">,</span> <span class="k">continue</span>
+    <span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_head</span><span class="p">)</span>
+    <span class="n">DFS</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">i</span> <span class="ow">or</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>    <span class="c1"># i or i+1 greater than old_start_ind
+</span>    <span class="n">path</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span></code></pre></figure>
+
+<p>For <code class="highlighter-rouge">"aab"</code>, we have start = 0: <code class="highlighter-rouge">|a|ab, |aa|b, |aab|</code>; start = 1: <code class="highlighter-rouge">a|a|b, a|ab|</code>; start = 2: <code class="highlighter-rouge">aa|b|</code>; start = 3 == len, <code class="highlighter-rouge">aab|</code>, add one full path and return. start progresses by new recursion, i scans inside each recursion from <code class="highlighter-rouge">start+1</code> to <code class="highlighter-rouge">len+1</code>.</p>
+
+<p>This is the method to enumerate all substrings that satisfies some condition.</p>
+
+<p><br></p>
+
+<h4 id="factor-combinations">
+<a class="anchor" href="#factor-combinations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Factor Combinations</h4>
+
+<p>For example, 8 -&gt; <code class="highlighter-rouge">[[2, 2, 2], [2, 4]]</code>. Do not include 1 or n as a factor, and each sublist should be ascending.</p>
+
+<p>This is a typical DFS problem: list all solutions (combinations) or a certain decomposition problem, in this case,
+factorization.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">factors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">dfs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="c1"># base case
+</span>        <span class="c1"># len(path) == 1 is the case [n], which is not included
+</span>        <span class="c1"># in this question
+</span>        <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+            <span class="k">return</span>
+        <span class="c1"># recursion
+</span>        <span class="c1"># factor must include n itself
+</span>        <span class="c1"># or when it's down to the last factor, it's not added
+</span>        <span class="k">for</span> <span class="n">factor</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="c1"># check if it's a factor of not
+</span>            <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="n">factor</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># ensure ascending order
+</span>            <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="p">[]</span> <span class="ow">or</span> <span class="n">path</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">factor</span><span class="p">:</span>
+                <span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">factor</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="n">factor</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+                <span class="n">path</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">return</span>
+</code></pre></div></div>
+
+<p>3 points that need special attention in this particular problem,</p>
+
+<ul>
+  <li>For n &lt;= 3, <code class="highlighter-rouge">result = []</code>
+</li>
+  <li>For the loop from 2 to n, must include n: <code class="highlighter-rouge">for factor in xrange(2, n+1): ...</code>. Because if we don’t include n,
+the factors are not added to <code class="highlighter-rouge">path</code>. For example,</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>If we use xrange(2, n)...
+
+Input: 8
+
+Ex1:
+
+1st level DFS: n = 8, factor = 2, dfs(n/2 = 4, [2])
+2nd level DFS: n = 4, factor = 2, dfs(n/2 = 2, [2, 2])
+3rd level DFS: n = 2, factor is in xrange(2, 2) which is nothing, abort
+Failed to add path [2, 2, 2]
+
+Ex2:
+
+1st level DFS: n = 8, factor = 2, dfs(n/2 = 4, [2])
+2nd level DFS: n = 4, factor is in xrange(2, 4), factor cannot reach 4
+Failed to add path [2, 4]
+</code></pre></div></div>
+
+<ul>
+  <li>To ensure ascending order in <code class="highlighter-rouge">path</code>s, check for <code class="highlighter-rouge">path == [] or path[-1] &lt;= factor</code> before <code class="highlighter-rouge">append(factor)</code>.</li>
+</ul>
+
+<p>(Note that Python has short circuit evaluation in the conditionals. For <code class="highlighter-rouge">or</code> it means that if <code class="highlighter-rouge">path == []</code>, the
+latter part(s) won’t be checked. So there won’t be a case where <code class="highlighter-rouge">path[-1]</code> does not exist in this expression.)</p>
+
+  </div><a class="u-url" href="/note/algo/2015/10/03/graphsearch.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notes, code and essays by Logan Yang.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

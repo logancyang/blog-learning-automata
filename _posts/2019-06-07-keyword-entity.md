@@ -1,4 +1,10 @@
-# How to Create Keyword List Entities in spaCy (v2.1)
+---
+toc: true
+layout: post
+description: spaCy named entity recognition note series
+categories: [note, spacy, nlp]
+title: How to Create Keyword List Entities in spaCy (v2.1)
+---
 
 Sometimes there is a need to create keyword entities from a list of known keywords, e.g. country names, species, brands, etc. The list can be large. This note shows how to create such entities in spaCy and make
 it work with a trained NER model.
@@ -26,7 +32,10 @@ from spacy.matcher import PhraseMatcher
 
 nlp = English()
 matcher = PhraseMatcher(nlp.vocab, attr="LOWER")
-patterns = [nlp.make_doc(name) for name in [u"Armani", u"Ralph Lauren", u"Monique Lhuillier", u"Norma Kamali"]]
+patterns = [
+    nlp.make_doc(name) for name in
+        [u"Armani", u"Ralph Lauren", u"Monique Lhuillier", u"Norma Kamali"]
+]
 matcher.add("Brands", None, *patterns)
 
 doc = nlp(u"armani and monique Lhuillier are both brands")

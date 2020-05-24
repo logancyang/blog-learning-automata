@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FastAI Lesson 8: Backprop from the Foundations | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FastAI Lesson 8: Backprop from the Foundations" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="fast.ai note series" />
+<meta property="og:description" content="fast.ai note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/fastai/2020/05/22/fastai-lesson8.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/fastai/2020/05/22/fastai-lesson8.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-22T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"fast.ai note series","@type":"BlogPosting","headline":"FastAI Lesson 8: Backprop from the Foundations","dateModified":"2020-05-22T00:00:00-05:00","datePublished":"2020-05-22T00:00:00-05:00","url":"http://blog.logancyang.com/note/fastai/2020/05/22/fastai-lesson8.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/fastai/2020/05/22/fastai-lesson8.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FastAI Lesson 8: Backprop from the Foundations | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FastAI Lesson 8: Backprop from the Foundations" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="fast.ai note series" />
+<meta property="og:description" content="fast.ai note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/fastai/2020/05/22/fastai-lesson8.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/fastai/2020/05/22/fastai-lesson8.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-22T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"fast.ai note series","@type":"BlogPosting","headline":"FastAI Lesson 8: Backprop from the Foundations","dateModified":"2020-05-22T00:00:00-05:00","datePublished":"2020-05-22T00:00:00-05:00","url":"http://blog.logancyang.com/note/fastai/2020/05/22/fastai-lesson8.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/fastai/2020/05/22/fastai-lesson8.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Learning Automata</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">FastAI Lesson 8: Backprop from the Foundations</h1><p class="page-description">fast.ai note series</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-05-22T00:00:00-05:00" itemprop="datePublished">
+        May 22, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      14 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#note">note</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#fastai">fastai</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#jeremys-starting-comments">Jeremy’s starting comments</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#swift-for-tensorflow-vs-pytorch">Swift for TensorFlow vs. PyTorch</a></li>
+<li class="toc-entry toc-h3"><a href="#recreate-fastai-library-from-scratch">Recreate fastai Library from Scratch</a></li>
+<li class="toc-entry toc-h3"><a href="#how-to-train-a-good-model">How to Train a Good Model</a></li>
+<li class="toc-entry toc-h3"><a href="#start-reading-papers">Start Reading Papers</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#goal-recreating-a-modern-cnn-model">Goal: Recreating a Modern CNN Model</a></li>
+<li class="toc-entry toc-h2"><a href="#creating-matrix-multiplication">Creating Matrix Multiplication</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#pure-python-with-3-nested-loops-speed-lvl0">Pure Python with 3 nested loops (speed lvl0)</a></li>
+<li class="toc-entry toc-h3"><a href="#elementwise-vector-operations-with-2-nested-loops-speed-lvl1">Elementwise vector operations with 2 nested loops (speed lvl1)</a></li>
+<li class="toc-entry toc-h3"><a href="#broadcasting-with-1-loop-speed-lvl2">Broadcasting with 1 loop (speed lvl2)</a></li>
+<li class="toc-entry toc-h3"><a href="#broadcasting-rule">Broadcasting Rule</a></li>
+<li class="toc-entry toc-h3"><a href="#einstein-summation-with-no-loops-speed-lvl3">Einstein Summation with no loops (speed lvl3)</a></li>
+<li class="toc-entry toc-h3"><a href="#pytorch-op-with-no-loops-speed-lvl4">PyTorch op with no loops (speed lvl4)</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#fully-connected-nets">Fully Connected Nets</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#forward-pass">Forward pass</a></li>
+<li class="toc-entry toc-h3"><a href="#kaiming-init">Kaiming Init</a></li>
+<li class="toc-entry toc-h3"><a href="#backward-pass">Backward pass</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#layers-as-classes">Layers as Classes</a></li>
+<li class="toc-entry toc-h4"><a href="#layers-as-modules">Layers as Modules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#equivalent-code-in-pytorch">Equivalent Code in PyTorch</a></li>
+<li class="toc-entry toc-h2"><a href="#homework">Homework</a></li>
+<li class="toc-entry toc-h2"><a href="#my-random-thoughts">My Random Thoughts</a></li>
+</ul><h2 id="jeremys-starting-comments">
+<a class="anchor" href="#jeremys-starting-comments" aria-hidden="true"><span class="octicon octicon-link"></span></a>Jeremy’s starting comments</h2>
+
+<ul>
+  <li>“cutting-edge deep learning” now is more and more about engineering and not papers.
+It’s about <strong>who can make things in code that work properly</strong>.</li>
+  <li>Part II of fastai is bottom-up learning <strong>with code</strong>. It helps you understand the connections between algorithms,
+and make your own algorithm for your own problem, and debug, profile, maintain it.</li>
+  <li>Swift and Julia are the promising languages for high performance computing.</li>
+</ul>
+
+<h3 id="swift-for-tensorflow-vs-pytorch">
+<a class="anchor" href="#swift-for-tensorflow-vs-pytorch" aria-hidden="true"><span class="octicon octicon-link"></span></a>Swift for TensorFlow vs. PyTorch</h3>
+
+<p><img src="/images/fastai/s4tf.png" alt="S4TF" align="middle"></p>
+
+<p>Swift is a thin layer on top of LLVM. LLVM compiles Swift code to super fast machine code.</p>
+
+<p>Python is the opposite. We write Python as an interface but things usually run in C++. It prevents doing deep dives
+as we shall see in this course.</p>
+
+<p><em>Opportunity: join the Swift for TF community to contribute and be a pioneer in this field!</em></p>
+
+<h3 id="recreate-fastai-library-from-scratch">
+<a class="anchor" href="#recreate-fastai-library-from-scratch" aria-hidden="true"><span class="octicon octicon-link"></span></a>Recreate <code class="highlighter-rouge">fastai</code> Library from Scratch</h3>
+
+<p><img src="/images/fastai/create_fastai.png" alt="fastai" align="middle"></p>
+
+<p>Benefit of doing this</p>
+
+<ul>
+  <li>
+<em>Really</em> experiment</li>
+  <li>Understand it by creating it</li>
+  <li>Tweak everything</li>
+  <li><strong>Contribute</strong></li>
+  <li>Correlate papers with code</li>
+</ul>
+
+<p><em>Opportunities</em></p>
+
+<ul>
+  <li>Make homework at the cutting edge</li>
+  <li>There are few DL practitioners that know what you know now</li>
+  <li>Experiment lots, especially in your area of expertise</li>
+  <li>Much of what you find will have not be written about before</li>
+  <li>Don’t wait to be perfect before you start communicating. Write stuff down for the person you were 6 months ago.</li>
+</ul>
+
+<h3 id="how-to-train-a-good-model">
+<a class="anchor" href="#how-to-train-a-good-model" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to Train a Good Model</h3>
+
+<p><img src="/images/fastai/trainsteps.png" alt="fastai" align="middle"></p>
+
+<p>5 steps of reducing overfitting</p>
+<ul>
+  <li>more data</li>
+  <li>data augmentation</li>
+  <li>generalization architectures</li>
+  <li>regularization</li>
+  <li>reducing architecture complexity <em>(this should be the last step)</em>
+</li>
+</ul>
+
+<h3 id="start-reading-papers">
+<a class="anchor" href="#start-reading-papers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Start Reading Papers</h3>
+
+<p>Get pass the fear of Greek letters! It’s just code.</p>
+
+<p><em>Opportunity: there are blog posts that describing a paper better than the paper does. Write these blog posts!</em></p>
+
+<p>Read blog posts and also the paper itself.</p>
+
+<h2 id="goal-recreating-a-modern-cnn-model">
+<a class="anchor" href="#goal-recreating-a-modern-cnn-model" aria-hidden="true"><span class="octicon octicon-link"></span></a>Goal: Recreating a Modern CNN Model</h2>
+
+<p><img src="/images/fastai/recreatecnn.png" alt="fastai" align="middle"></p>
+
+<p>For development, Jeremy recommends <code class="highlighter-rouge">nbdev</code> for library development in Jupyter notebook.</p>
+
+<p>Tip: Python’s <code class="highlighter-rouge">fire</code> library lets you convert a function into CLI.</p>
+
+<p>notebook: <code class="highlighter-rouge">01_matmul</code></p>
+
+<p>Important: get familiar with PyTorch Tensors. It can do everything like a numpy array and it can run on GPU.</p>
+
+<p><code class="highlighter-rouge">tensor.view()</code> is equivalent to <code class="highlighter-rouge">nparray.reshape()</code>.</p>
+
+<h2 id="creating-matrix-multiplication">
+<a class="anchor" href="#creating-matrix-multiplication" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating Matrix Multiplication</h2>
+
+<h3 id="pure-python-with-3-nested-loops-speed-lvl0">
+<a class="anchor" href="#pure-python-with-3-nested-loops-speed-lvl0" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pure Python with 3 nested loops (speed lvl0)</h3>
+
+<p>Implement matrix multiplaction with 3 loops.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+    <span class="n">ar</span><span class="p">,</span><span class="n">ac</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span> <span class="c1"># n_rows * n_cols
+</span>    <span class="n">br</span><span class="p">,</span><span class="n">bc</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">assert</span> <span class="n">ac</span><span class="o">==</span><span class="n">br</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ar</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">bc</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ac</span><span class="p">):</span> <span class="c1"># or br
+</span>                <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">c</span>
+</code></pre></div></div>
+
+<p>This is super slow because it’s in Python. A <code class="highlighter-rouge">(5, 784) by (784, 10)</code> matrix multiplication took ~1s. MNIST needs ~10K of them, so it will take 10K seconds, that’s unacceptable.</p>
+
+<p>The way to speed this up is to use something other than Python – use PyTorch where it uses <code class="highlighter-rouge">ATen</code> (C++) under the hood.</p>
+
+<p>Tip: to get LaTeX formula, go to Wikipedia and click edit. Or go to Arxiv and do <code class="highlighter-rouge">Download other format</code> on the top right, then <code class="highlighter-rouge">download source</code>.</p>
+
+<h3 id="elementwise-vector-operations-with-2-nested-loops-speed-lvl1">
+<a class="anchor" href="#elementwise-vector-operations-with-2-nested-loops-speed-lvl1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Elementwise vector operations with 2 nested loops (speed lvl1)</h3>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+    <span class="n">ar</span><span class="p">,</span><span class="n">ac</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">br</span><span class="p">,</span><span class="n">bc</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">assert</span> <span class="n">ac</span><span class="o">==</span><span class="n">br</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ar</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">bc</span><span class="p">):</span>
+            <span class="c1"># Any trailing ",:" can be removed
+</span>            <span class="c1"># a[i, :] means the whole ith row
+</span>            <span class="c1"># b[:, j] means the whole jth col
+</span>            <span class="c1"># This is not really Python, it tells Python to call C
+</span>            <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">b</span><span class="p">[:,</span><span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="nb">sum</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">c</span>
+</code></pre></div></div>
+
+<p>This is hundreds of times faster. <em>Next, broadcasting makes it even faster.</em></p>
+
+<p>Tip: to test equal for floats, set a tolerance and use something like <code class="highlighter-rouge">torch.allclose()</code>. Float’s implementation gives
+small numerical errors.</p>
+
+<h3 id="broadcasting-with-1-loop-speed-lvl2">
+<a class="anchor" href="#broadcasting-with-1-loop-speed-lvl2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Broadcasting with 1 loop (speed lvl2)</h3>
+
+<p>Broadcasting is the most powerful tool to speed things up. It gets rid of for loops and does implicit broadcast loops.</p>
+
+<p>Any time we use broadcasting, we are using C speed (on CPU) or CUDA speed (on GPU).</p>
+
+<p>Easiest example is <code class="highlighter-rouge">a + 1</code> where <code class="highlighter-rouge">a</code> is a tensor. <code class="highlighter-rouge">1</code> is automatically turned into a tensor that matches the shape of <code class="highlighter-rouge">a</code>. This is scalar to tensor.</p>
+
+<p>We can also broadcast vector to higher order tensors.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">([</span><span class="mf">10.</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">])</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">7.</span><span class="p">,</span> <span class="mf">8.</span><span class="p">,</span> <span class="mf">9.</span><span class="p">]])</span>
+<span class="n">c</span> <span class="o">+</span> <span class="n">m</span>
+<span class="s">"""
+tensor([[11., 22., 33.],
+        [14., 25., 36.],
+        [17., 28., 39.]])
+
+We don't really copy the rows, the rows are given a *stride* of 1.
+"""</span>
+<span class="c1"># To check what c looks like after broadcasting
+</span><span class="n">t</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">expand_as</span><span class="p">(</span><span class="n">m</span><span class="p">);</span> <span class="n">t</span>
+<span class="s">"""
+tensor([[10., 20., 30.],
+        [10., 20., 30.],
+        [10., 20., 30.]])
+
+Use t.storage() we can check the memory usage!
+It shows we only have one row in memory, not really making a full matrix
+during broadcasting.
+
+Use t.stride() shows
+(0, 1)
+meaning stride is 0 for rows, 1 for columns.
+
+This idea is used in all linear algebra libraries.
+"""</span>
+</code></pre></div></div>
+
+<p><strong>To add a dimension, use <code class="highlighter-rouge">unsqueeze(axis)</code>, or, use <code class="highlighter-rouge">None</code> at that axis when indexing</strong>. Example:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># These are not in-place, c is not updated
+</span><span class="n">c</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># or
+</span><span class="n">c</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="p">:]</span>
+<span class="s">"""
+tensor([[10., 20., 30.]])
+"""</span>
+
+<span class="n">c</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># or
+</span><span class="n">c</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">]</span>
+<span class="s">"""
+tensor([[10.],
+        [20.],
+        [30.]])
+"""</span>
+</code></pre></div></div>
+
+<p>Tip: always use <code class="highlighter-rouge">None</code> over <code class="highlighter-rouge">unsqueeze</code> because it’s more convenient and we can add more than one axis.</p>
+
+<p>Trick:</p>
+<ul>
+  <li>We can omit trailing <code class="highlighter-rouge">,:</code> as in <code class="highlighter-rouge">c[None, :] == c[None]</code>
+</li>
+  <li>We can use <code class="highlighter-rouge">...</code> as in <code class="highlighter-rouge">c[:, None] == c[..., None]</code>. This is helpful especially when we don’t know the rank of the tensor.</li>
+</ul>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+    <span class="n">ar</span><span class="p">,</span><span class="n">ac</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">br</span><span class="p">,</span><span class="n">bc</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">assert</span> <span class="n">ac</span><span class="o">==</span><span class="n">br</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ar</span><span class="p">,</span> <span class="n">bc</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ar</span><span class="p">):</span>
+<span class="c1">#       c[i,j] = (a[i,:]          * b[:,j]).sum() # previous
+</span>        <span class="c1"># Notice we got rid of loop j, that's why it's even faster
+</span>        <span class="c1"># than the elementwise ops previously
+</span>        <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>   <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># Or c[i] = (a[i][:, None] * b).sum(dim=0)
+</span>    <span class="k">return</span> <span class="n">c</span>
+</code></pre></div></div>
+
+<p>Concrete example for the above code:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+<span class="p">])</span>
+
+<span class="n">b</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>
+<span class="p">])</span>
+
+<span class="c1"># For i = 0
+</span><span class="n">a0</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span> <span class="bp">None</span><span class="p">]</span>
+<span class="s">"""
+a0:
+tensor([[1],
+        [2],
+        [3]])
+
+b:
+tensor([[10, 10],
+        [20, 20],
+        [30, 30]])
+
+a0 * b: we rotate a0, a row vector to be a col vector,
+and broadcast into shape of b, and does elementwise *
+
+tensor([[10, 10],
+        [40, 40],
+        [90, 90]])
+
+Then sum over axis=0 (rows)
+
+tensor([140, 140])
+
+This is the result of matmul for a row vector a[0] and matrix b.
+
+Do the same for the 2nd row of a, we have a @ b:
+
+tensor([[140, 140],
+        [320, 320]])
+"""</span>
+</code></pre></div></div>
+
+<p>Now we only have one level of loop for the matrix multiplication, and it’s 1000x times faster than the raw Python version of 3 nested loops.</p>
+
+<h3 id="broadcasting-rule">
+<a class="anchor" href="#broadcasting-rule" aria-hidden="true"><span class="octicon octicon-link"></span></a>Broadcasting Rule</h3>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">([</span><span class="mf">10.</span><span class="p">,</span> <span class="mf">20.</span><span class="p">,</span> <span class="mf">30.</span><span class="p">])</span>
+
+<span class="c1"># Add leading axis 0, row
+</span><span class="n">c</span><span class="p">[</span><span class="bp">None</span><span class="p">,:],</span> <span class="n">c</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span><span class="o">.</span><span class="n">shape</span>
+<span class="s">"""
+tensor([[10., 20., 30.]]), torch.Size([1, 3])
+"""</span>
+
+<span class="c1"># Add trailing axis, col
+</span><span class="n">c</span><span class="p">[:,</span><span class="bp">None</span><span class="p">],</span> <span class="n">c</span><span class="p">[:,</span><span class="bp">None</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+<span class="s">"""
+tensor([[10.],
+        [20.],
+        [30.]])
+torch.Size([3, 1])
+"""</span>
+
+<span class="c1"># How does this do broadcasting?
+# Here is where the BROADCASTING RULE comes in
+# Where there's a missing dimension, np/pytorch fills in a dimension
+# with size 1. A dim of size 1 can be broadcast into any size.
+# E.g. (1, 1, 3) * (256, 256, 3) -&gt; (256, 256, 3)
+</span><span class="n">c</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">c</span><span class="p">[:,</span><span class="bp">None</span><span class="p">]</span>
+<span class="s">"""
+tensor([[100., 200., 300.],
+        [200., 400., 600.],
+        [300., 600., 900.]])
+"""</span>
+
+<span class="c1"># Similarly
+</span><span class="n">c</span><span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">c</span><span class="p">[:,</span><span class="bp">None</span><span class="p">]</span>
+<span class="s">"""
+tensor([[0, 1, 1],
+        [0, 0, 1],
+        [0, 0, 0]], dtype=torch.uint8)
+"""</span>
+</code></pre></div></div>
+
+<p>When operating on two arrays/tensors, Numpy/PyTorch compares their shapes element-wise. It starts with the <strong>trailing dimensions</strong>, and works its way forward. Two dimensions are <strong>compatible</strong> when</p>
+
+<ul>
+  <li>they are equal, or</li>
+  <li>one of them is 1, in which case that dimension is broadcasted to make it the same size</li>
+</ul>
+
+<p>Arrays do not need to have the same number of dimensions. For example, if you have a <code class="highlighter-rouge">256*256*3</code> array of RGB values, and you want to scale each color in the image by a different value, you can multiply the image by a one-dimensional array with 3 values. Lining up the sizes of the trailing axes of these arrays according to the broadcast rules, shows that they are compatible:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Image  (3d array): 256 x 256 x 3
+Scale  (1d array):             3
+Result (3d array): 256 x 256 x 3
+</code></pre></div></div>
+
+<p>The <a href="https://docs.scipy.org/doc/numpy-1.13.0/user/basics.broadcasting.html#general-broadcasting-rules">numpy documentation</a> includes several examples of what dimensions can and can not be broadcast together.</p>
+
+<h3 id="einstein-summation-with-no-loops-speed-lvl3">
+<a class="anchor" href="#einstein-summation-with-no-loops-speed-lvl3" aria-hidden="true"><span class="octicon octicon-link"></span></a>Einstein Summation with no loops (speed lvl3)</h3>
+
+<p>Einstein summation notation: <code class="highlighter-rouge">ik,kj-&gt;ij</code></p>
+
+<p><code class="highlighter-rouge">ik,kj</code>: input</p>
+
+<p><code class="highlighter-rouge">ij</code>: output</p>
+
+<p>Each letter is the size of a dimension. <em>Repeated letters indicate dot product</em>.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># c[i,j] += a[i,k] * b[k,j]
+# c[i,j] = (a[i,:] * b[:,j]).sum()
+</span><span class="k">def</span> <span class="nf">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span> <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">'ik,kj-&gt;ij'</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This is even faster. And we can create new operations easily such as batch matrix multiplication: <code class="highlighter-rouge">bik,bkj-&gt;bij</code>.</p>
+
+<p>But having a string as a language inside of a language is not a good idea, e.g. regex. We should be able to write Swift and Julia operating at this speed in a few years.</p>
+
+<h3 id="pytorch-op-with-no-loops-speed-lvl4">
+<a class="anchor" href="#pytorch-op-with-no-loops-speed-lvl4" aria-hidden="true"><span class="octicon octicon-link"></span></a>PyTorch op with no loops (speed lvl4)</h3>
+
+<p>PyTorch’s <code class="highlighter-rouge">matmul</code> or <code class="highlighter-rouge">@</code> operation is even faster than <code class="highlighter-rouge">einsum</code>, it’s ~50K times faster than raw Python. Because to do really fast matrix multiplication on big matrices, it can’t fit in CPU cache and needs to be chopped down into smaller matrices. <code class="highlighter-rouge">BLAS</code> libraries do that. Examples are NVidia’s <code class="highlighter-rouge">cuBLAS</code>, and Intel’s <code class="highlighter-rouge">mkl</code>.</p>
+
+<h2 id="fully-connected-nets">
+<a class="anchor" href="#fully-connected-nets" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fully Connected Nets</h2>
+
+<h3 id="forward-pass">
+<a class="anchor" href="#forward-pass" aria-hidden="true"><span class="octicon octicon-link"></span></a>Forward pass</h3>
+
+<p>First, load the data and <em>apply normalization</em>.</p>
+
+<p>Note: use the training set’s mean and std to normalize the validation set! Always make sure the validation set and the training set are normalized in the same way.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># num hidden
+</span><span class="n">nh</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="c1"># simplified kaiming init / he init: divide by sqrt(n_inputs). m is # examples
+</span><span class="n">w1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">nh</span><span class="p">)</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">b1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nh</span><span class="p">)</span>
+<span class="n">w2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">nh</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nh</span><span class="p">)</span>
+<span class="n">b2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># This should be ~ (0,1) (mean,std)...
+</span><span class="n">x_valid</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span><span class="n">x_valid</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">lin</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="s">"""Linear layer"""</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">@</span><span class="n">w</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">lin</span><span class="p">(</span><span class="n">x_valid</span><span class="p">,</span> <span class="n">w1</span><span class="p">,</span> <span class="n">b1</span><span class="p">)</span>
+<span class="c1"># The effect of Kaiming init: makes the linear output have
+# ~0 mean and 1 std
+</span><span class="n">t</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span><span class="n">t</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">Kaiming init</code> is a very important factor to train deep networks. Some researchers trained a 10K-layer network without normalization layers just with <em>careful initialization</em>.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">relu</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">clamp_min</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Tip: if there’s a function for some calculation in pytorch, such as <code class="highlighter-rouge">clamp_min</code>, it’s generally written in C and it’s faster than your implementation in Python.</p>
+
+<h3 id="kaiming-init">
+<a class="anchor" href="#kaiming-init" aria-hidden="true"><span class="octicon octicon-link"></span></a>Kaiming Init</h3>
+
+<p>From pytorch docs: <code class="highlighter-rouge">a: the negative slope of the rectifier used after this layer (0 for ReLU by default)</code></p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>std</mtext><mo>=</mo><msqrt><mfrac><mn>2</mn><mrow><mo stretchy="false">(</mo><mn>1</mn><mo>+</mo><msup><mi>a</mi><mn>2</mn></msup><mo stretchy="false">)</mo><mo>×</mo><mtext>fan_in</mtext></mrow></mfrac></msqrt></mrow><annotation encoding="application/x-tex">\text{std} = \sqrt{\frac{2}{(1 + a^2) \times \text{fan\_in}}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord text"><span class="mord">std</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.04em;vertical-align:-1.243405em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.796595em;"><span class="svg-align" style="top:-5em;"><span class="pstrut" style="height:5em;"></span><span class="mord" style="padding-left:1em;"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.740108em;"><span style="top:-2.9890000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord text"><span class="mord">fan_in</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.996em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span><span style="top:-3.756595em;"><span class="pstrut" style="height:5em;"></span><span class="hide-tail" style="min-width:1.02em;height:3.08em;"><svg width="400em" height="3.08em" viewbox="0 0 400000 3240" preserveaspectratio="xMinYMin slice"><path d="M473,2793
+c339.3,-1799.3,509.3,-2700,510,-2702 l0 -0
+c3.3,-7.3,9.3,-11,18,-11 H400000v40H1017.7
+s-90.5,478,-276.2,1466c-185.7,988,-279.5,1483,-281.5,1485c-2,6,-10,9,-24,9
+c-8,0,-12,-0.7,-12,-2c0,-1.3,-5.3,-32,-16,-92c-50.7,-293.3,-119.7,-693.3,-207,-1200
+c0,-1.3,-5.3,8.7,-16,30c-10.7,21.3,-21.3,42.7,-32,64s-16,33,-16,33s-26,-26,-26,-26
+s76,-153,76,-153s77,-151,77,-151c0.7,0.7,35.7,202,105,604c67.3,400.7,102,602.7,104,
+606zM1001 80h400000v40H1017.7z"></path></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.243405em;"><span></span></span></span></span></span></span></span></span></span>
+
+<p>This was introduced in the paper that described the Imagenet-winning approach from <em>He et al</em>: <a href="https://arxiv.org/abs/1502.01852">Delving Deep into Rectifiers</a>, which was also the first paper that claimed “super-human performance” on Imagenet (and, most importantly, it introduced resnets!)</p>
+
+<p>Simply put, <strong>for ReLU, if the inputs are mean 0 and std 1, the numbers below 0 are clipped so we lose half the variance. The way to fix it is to time it by 2, proposed in the paper.</strong></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># kaiming init / he init for relu
+</span><span class="n">w1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">nh</span><span class="p">)</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="n">m</span><span class="p">)</span>
+<span class="n">w1</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span><span class="n">w1</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="c1"># (tensor(0.0001), tensor(0.0508))
+</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">relu</span><span class="p">(</span><span class="n">lin</span><span class="p">(</span><span class="n">x_valid</span><span class="p">,</span> <span class="n">w1</span><span class="p">,</span> <span class="n">b1</span><span class="p">))</span>
+<span class="n">t</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span><span class="n">t</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="c1"># (tensor(0.5678), tensor(0.8491))
+</span></code></pre></div></div>
+
+<p>Conv layers can also be looked at as linear layers with a special weight matrix where there are a lot of 0s for the pixels outside the filter, so this initialization does the same thing for them.</p>
+
+<p>In pytorch,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">init</span><span class="o">.</span><span class="n">kaiming_normal_</span><span class="p">(</span><span class="n">w1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">'fan_out'</span><span class="p">)</span>
+
+<span class="c1"># check doc by `init.kaiming_normal_??`
+</span></code></pre></div></div>
+
+<p>Then we can write the model and the loss function. We use MSE for now for simplicity.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">xb</span><span class="p">):</span>
+    <span class="n">l1</span> <span class="o">=</span> <span class="n">lin</span><span class="p">(</span><span class="n">xb</span><span class="p">,</span> <span class="n">w1</span><span class="p">,</span> <span class="n">b1</span><span class="p">)</span>
+    <span class="n">l2</span> <span class="o">=</span> <span class="n">relu</span><span class="p">(</span><span class="n">l1</span><span class="p">)</span>
+    <span class="n">l3</span> <span class="o">=</span> <span class="n">lin</span><span class="p">(</span><span class="n">l2</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">b2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">l3</span>
+
+<span class="k">def</span> <span class="nf">mse</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">targ</span><span class="p">):</span> <span class="k">return</span> <span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">targ</span><span class="p">)</span><span class="o">.</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">y_train</span><span class="p">,</span><span class="n">y_valid</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="nb">float</span><span class="p">(),</span><span class="n">y_valid</span><span class="o">.</span><span class="nb">float</span><span class="p">()</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x_train</span><span class="p">)</span>
+<span class="n">mse</span><span class="p">(</span><span class="n">preds</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="backward-pass">
+<a class="anchor" href="#backward-pass" aria-hidden="true"><span class="octicon octicon-link"></span></a>Backward pass</h3>
+
+<p>All you need to know about matrix calculus from scratch: <a href="https://explained.ai/matrix-calculus/index.html">https://explained.ai/matrix-calculus/index.html</a></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mse_grad</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">targ</span><span class="p">):</span>
+    <span class="c1"># grad of loss with respect to output of previous layer
+</span>    <span class="n">inp</span><span class="o">.</span><span class="n">grad</span> <span class="o">=</span> <span class="mf">2.</span> <span class="o">*</span> <span class="p">(</span><span class="n">inp</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span> <span class="o">-</span> <span class="n">targ</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">inp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">relu_grad</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+    <span class="c1"># grad of relu with respect to input activations
+</span>    <span class="n">inp</span><span class="o">.</span><span class="n">grad</span> <span class="o">=</span> <span class="p">(</span><span class="n">inp</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="nb">float</span><span class="p">()</span> <span class="o">*</span> <span class="n">out</span><span class="o">.</span><span class="n">grad</span>
+
+<span class="k">def</span> <span class="nf">lin_grad</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="c1"># grad of matmul with respect to input
+</span>    <span class="n">inp</span><span class="o">.</span><span class="n">grad</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">grad</span> <span class="o">@</span> <span class="n">w</span><span class="o">.</span><span class="n">t</span><span class="p">()</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">grad</span> <span class="o">=</span> <span class="p">(</span><span class="n">inp</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">out</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">grad</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">forward_and_backward</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">targ</span><span class="p">):</span>
+    <span class="c1"># forward pass:
+</span>    <span class="n">l1</span> <span class="o">=</span> <span class="n">inp</span> <span class="o">@</span> <span class="n">w1</span> <span class="o">+</span> <span class="n">b1</span>
+    <span class="n">l2</span> <span class="o">=</span> <span class="n">relu</span><span class="p">(</span><span class="n">l1</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">l2</span> <span class="o">@</span> <span class="n">w2</span> <span class="o">+</span> <span class="n">b2</span>
+    <span class="c1"># we don't actually need the loss in backward!
+</span>    <span class="c1"># this is just here if we want to print it out!
+</span>    <span class="n">loss</span> <span class="o">=</span> <span class="n">mse</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">targ</span><span class="p">)</span>
+
+    <span class="c1"># backward pass:
+</span>    <span class="n">mse_grad</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">targ</span><span class="p">)</span>
+    <span class="n">lin_grad</span><span class="p">(</span><span class="n">l2</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">b2</span><span class="p">)</span>
+    <span class="n">relu_grad</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="p">)</span>
+    <span class="n">lin_grad</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">l1</span><span class="p">,</span> <span class="n">w1</span><span class="p">,</span> <span class="n">b1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="layers-as-classes">
+<a class="anchor" href="#layers-as-classes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Layers as Classes</h4>
+
+<p>Observe the above code, we see each function for grad can take in inputs, weight and bias. We can make layer classes to have inputs, weight and bias, and define a <code class="highlighter-rouge">forward()</code> to calculate outputs, and <code class="highlighter-rouge">backward()</code> to calculate the gradients. Refactor the previous code,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Relu</span><span class="p">():</span>
+    <span class="c1"># Notice this Relu() class does not have __init__
+</span>    <span class="c1"># Instantiating an instance is just `Relu()`
+</span>    <span class="c1"># dunder call means we can use the class name as a function!
+</span>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inp</span> <span class="o">=</span> <span class="n">inp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">clamp_min</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span><span class="o">-</span><span class="mf">0.5</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span>
+
+    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">inp</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inp</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="nb">float</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">g</span>
+
+
+<span class="k">class</span> <span class="nc">Lin</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inp</span> <span class="o">=</span> <span class="n">inp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="n">inp</span><span class="o">@</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span>
+
+    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inp</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">g</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">t</span><span class="p">()</span>
+        <span class="c1"># Creating a giant outer product, just to sum it, is inefficient!
+</span>        <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inp</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Mse</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">,</span> <span class="n">targ</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inp</span> <span class="o">=</span> <span class="n">inp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">targ</span> <span class="o">=</span> <span class="n">targ</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="p">(</span><span class="n">inp</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span> <span class="o">-</span> <span class="n">targ</span><span class="p">)</span><span class="o">.</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span>
+
+    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inp</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="mf">2.</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inp</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">targ</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">targ</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">Model</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w1</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">Lin</span><span class="p">(</span><span class="n">w1</span><span class="p">,</span><span class="n">b1</span><span class="p">),</span> <span class="n">Relu</span><span class="p">(),</span> <span class="n">Lin</span><span class="p">(</span><span class="n">w2</span><span class="p">,</span><span class="n">b2</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">Mse</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">targ</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="n">l</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">targ</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">):</span> <span class="n">l</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h4 id="layers-as-modules">
+<a class="anchor" href="#layers-as-modules" aria-hidden="true"><span class="octicon octicon-link"></span></a>Layers as Modules</h4>
+
+<p>We see that all layers have outputs, forward and backward passes. Further refactoring, we introduce the <code class="highlighter-rouge">Module</code> class (similar to pytorch <code class="highlighter-rouge">nn.Module</code>).</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Module</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">raise</span> <span class="nb">Exception</span><span class="p">(</span><span class="s">'not implemented'</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">bwd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Relu</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">):</span> <span class="k">return</span> <span class="n">inp</span><span class="o">.</span><span class="n">clamp_min</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span>
+    <span class="k">def</span> <span class="nf">bwd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">inp</span><span class="p">):</span> <span class="n">inp</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="p">(</span><span class="n">inp</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="nb">float</span><span class="p">()</span> <span class="o">*</span> <span class="n">out</span><span class="o">.</span><span class="n">g</span>
+
+
+<span class="k">class</span> <span class="nc">Lin</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">w</span><span class="p">,</span><span class="n">b</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">):</span> <span class="k">return</span> <span class="n">inp</span><span class="o">@</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
+
+    <span class="k">def</span> <span class="nf">bwd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">inp</span><span class="p">):</span>
+        <span class="n">inp</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">g</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">t</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">t</span><span class="p">()</span> <span class="o">@</span> <span class="n">out</span><span class="o">.</span><span class="n">g</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Mse</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">forward</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">,</span> <span class="n">targ</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">inp</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span> <span class="o">-</span> <span class="n">targ</span><span class="p">)</span><span class="o">.</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">bwd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">inp</span><span class="p">,</span> <span class="n">targ</span><span class="p">):</span>
+        <span class="n">inp</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">inp</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">-</span><span class="n">targ</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">targ</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">Model</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">Lin</span><span class="p">(</span><span class="n">w1</span><span class="p">,</span><span class="n">b1</span><span class="p">),</span> <span class="n">Relu</span><span class="p">(),</span> <span class="n">Lin</span><span class="p">(</span><span class="n">w2</span><span class="p">,</span><span class="n">b2</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">Mse</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">targ</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="n">l</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">targ</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">):</span> <span class="n">l</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h2 id="equivalent-code-in-pytorch">
+<a class="anchor" href="#equivalent-code-in-pytorch" aria-hidden="true"><span class="octicon octicon-link"></span></a>Equivalent Code in PyTorch</h2>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+
+<span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_in</span><span class="p">,</span> <span class="n">nh</span><span class="p">,</span> <span class="n">n_out</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">n_in</span><span class="p">,</span><span class="n">nh</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">nh</span><span class="p">,</span><span class="n">n_out</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">mse</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">targ</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="n">l</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">targ</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">nh</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="o">%</span><span class="n">time</span> <span class="n">loss</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="o">%</span><span class="n">time</span> <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>In the next lesson, we will get the training loop, the optimizer, and other loss functions.</p>
+
+<h2 id="homework">
+<a class="anchor" href="#homework" aria-hidden="true"><span class="octicon octicon-link"></span></a>Homework</h2>
+
+<ul>
+  <li>Read Kaiming’s paper: Delving Deep into Rectifiers. Focus on section 2.2.</li>
+  <li>Xavier init paper is also really readable, we will implement a lot from it.</li>
+</ul>
+
+<h2 id="my-random-thoughts">
+<a class="anchor" href="#my-random-thoughts" aria-hidden="true"><span class="octicon octicon-link"></span></a>My Random Thoughts</h2>
+
+<p>The career path after fast.ai should be something that mixes engineering and research:</p>
+
+<ul>
+  <li>
+<strong>Applied scientist</strong> or <strong>research engineer</strong>. It’s different from the usual “data scientist”, which focuses on analytics, business metrics and non-DL work (lacks in engineering and research in DL); it’s also different from ML engineer, which focuses on productionizing and maintaining models (lacks in research).</li>
+  <li>Open source contribution to key DL projects. Swift for Tensorflow is one advocated by Jeremy.</li>
+</ul>
+
+<p>Some one who can implement DL frameworks from scratch and grasp key DL research shouldn’t be a “data scientist” or “ML engineer” in a non-research organization. There are tons of data scientists and ML engineers out there, but those who can reach high level of fast.ai competence are rare.</p>
+
+<p><strong>Demonstrate the knowledge by blogging and making a great project.</strong></p>
+
+  </div><a class="u-url" href="/note/fastai/2020/05/22/fastai-lesson8.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notes, code and essays by Logan Yang.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -4,6 +4,7 @@ layout: post
 description: fast.ai note series
 categories: [note, fastai]
 title: "FastAI Lesson 6: Regression on Tabular Time Series; Regularization; Convolution; Data Ethics"
+comments: true
 ---
 
 Tip: Use [platform.ai](https://platform.ai) to find clusters of unlabeled data to label manually. It uses pretrained models so you can pick a middle layer and pick some specific projections from it. It's a way of clustering similar images for labeling and it helps you build your better model on top of it. There is a [thread](https://forums.fast.ai/t/platform-ai-discussion/31445) for more info.

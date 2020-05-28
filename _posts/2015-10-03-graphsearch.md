@@ -4,6 +4,7 @@ layout: post
 description: Notes for graph search algorithm problems
 categories: [note, algo]
 title: "Graph Search: Subsets, Permutations"
+comments: true
 ---
 
 

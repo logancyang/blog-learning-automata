@@ -4,6 +4,7 @@ layout: post
 description: Flask full stack note series
 categories: [note, fullstack, flask]
 title: "Flask Full Stack Part 1: Frontend Quick Walkthrough"
+comments: true
 ---
 *This is the note for the Flask course by Jose Portilla on Udemy.*
 

@@ -4,6 +4,7 @@ layout: post
 description: Quick reference for Python tricks
 categories: [note, python]
 title: "Handy Python Notes"
+comments: true
 ---
 
 ### Key Concepts

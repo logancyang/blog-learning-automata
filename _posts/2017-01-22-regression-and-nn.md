@@ -4,6 +4,7 @@ layout: post
 description: Notes for Hinton's Neural Network course
 categories: [note]
 title: "Hinton Neural Network course"
+comments: true
 ---
 
 ## Regression

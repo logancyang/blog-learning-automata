@@ -4,6 +4,7 @@ layout: post
 description: fast.ai note series
 categories: [note, fastai]
 title: "FastAI Lesson 8: Backprop from the Foundations"
+comments: true
 ---
 
 ## Jeremy's starting comments

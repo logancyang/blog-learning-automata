@@ -4,6 +4,7 @@ layout: post
 description: fast.ai note series
 categories: [note, fastai]
 title: How to setup local GPU server for fast.ai
+comments: true
 ---
 Fast.ai is the best coder's guide to practical deep learning. This is a guide to its environment setup on a Linux server with NVIDIA GPU.
 

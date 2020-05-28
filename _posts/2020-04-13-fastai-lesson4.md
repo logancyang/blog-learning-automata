@@ -4,6 +4,7 @@ layout: post
 description: fast.ai note series
 categories: [note, fastai]
 title: "FastAI Lesson 4: NLP; Tabular Data; Collaborative Filtering and Embeddings"
+comments: true
 ---
 
 ## NLP Continued from lesson 3

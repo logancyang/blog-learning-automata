@@ -4,6 +4,7 @@ layout: post
 description: fast.ai note series
 categories: [note, fastai]
 title: "FastAI Lesson 5: Collaborative Filtering cont.; Backpropagation; Accelerated SGD; NN from Scratch"
+comments: true
 ---
 
 ## Discussion on basic NN

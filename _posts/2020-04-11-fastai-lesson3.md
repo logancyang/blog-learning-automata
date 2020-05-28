@@ -4,6 +4,7 @@ layout: post
 description: fast.ai note series
 categories: [note, fastai]
 title: "FastAI Lesson 3: Data blocks; Multi-label classification; Segmentation"
+comments: true
 ---
 Must know: `Dataset` class in PyTorch
 

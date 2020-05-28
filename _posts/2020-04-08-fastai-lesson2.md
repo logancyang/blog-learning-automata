@@ -4,6 +4,7 @@ layout: post
 description: fast.ai note series
 categories: [note, fastai]
 title: "FastAI Lesson 2: Data Cleaning and Production. SGD from Scratch"
+comments: true
 ---
 
 # Lesson 2 Data Cleaning and Production. SGD from Scratch

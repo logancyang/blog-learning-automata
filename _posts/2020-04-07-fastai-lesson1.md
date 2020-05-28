@@ -4,6 +4,7 @@ layout: post
 description: fast.ai note series
 categories: [note, fastai]
 title: "FastAI Lesson 1: Pets"
+comments: true
 ---
 
 ## Lesson 1

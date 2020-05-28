@@ -4,6 +4,7 @@ layout: post
 description: fast.ai note series
 categories: [note, fastai]
 title: "FastAI Lesson 9: How to Train Your Model"
+comments: true
 ---
 
 Tip: always include this following code as the 1st cell of any notebook to avoid restarting kernel for imported module changes.

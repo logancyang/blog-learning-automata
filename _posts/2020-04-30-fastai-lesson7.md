@@ -4,6 +4,7 @@ layout: post
 description: fast.ai note series
 categories: [note, fastai]
 title: "FastAI Lesson 7: Resnets from scratch; U-net; Generative adversarial networks; RNNs"
+comments: true
 ---
 Notebook: `lesson7-resnet-mnist`
 

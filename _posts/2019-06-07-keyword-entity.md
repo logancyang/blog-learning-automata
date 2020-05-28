@@ -4,6 +4,7 @@ layout: post
 description: spaCy named entity recognition note series
 categories: [note, spacy, nlp]
 title: How to Create Keyword List Entities in spaCy (v2.1)
+comments: true
 ---
 
 Sometimes there is a need to create keyword entities from a list of known keywords, e.g. country names, species, brands, etc. The list can be large. This note shows how to create such entities in spaCy and make

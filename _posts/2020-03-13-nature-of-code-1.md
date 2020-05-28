@@ -4,6 +4,7 @@ layout: post
 description: Nature of Code note series
 categories: [note, natureofcode, simulation, processing, p5js]
 title: "Nature of Code Notes Part I: Creating Physics Engine"
+comments: true
 ---
 
 ## Topics in Nature of Code

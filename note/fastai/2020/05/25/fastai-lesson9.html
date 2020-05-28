@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FastAI Lesson 9: How to Train Your Model | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FastAI Lesson 9: How to Train Your Model" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="fast.ai note series" />
+<meta property="og:description" content="fast.ai note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/fastai/2020/05/25/fastai-lesson9.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/fastai/2020/05/25/fastai-lesson9.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-25T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"fast.ai note series","@type":"BlogPosting","headline":"FastAI Lesson 9: How to Train Your Model","dateModified":"2020-05-25T00:00:00-05:00","datePublished":"2020-05-25T00:00:00-05:00","url":"http://blog.logancyang.com/note/fastai/2020/05/25/fastai-lesson9.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/fastai/2020/05/25/fastai-lesson9.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FastAI Lesson 9: How to Train Your Model | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FastAI Lesson 9: How to Train Your Model" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="fast.ai note series" />
+<meta property="og:description" content="fast.ai note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/fastai/2020/05/25/fastai-lesson9.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/fastai/2020/05/25/fastai-lesson9.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-25T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"fast.ai note series","@type":"BlogPosting","headline":"FastAI Lesson 9: How to Train Your Model","dateModified":"2020-05-25T00:00:00-05:00","datePublished":"2020-05-25T00:00:00-05:00","url":"http://blog.logancyang.com/note/fastai/2020/05/25/fastai-lesson9.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/fastai/2020/05/25/fastai-lesson9.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Learning Automata</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">FastAI Lesson 9: How to Train Your Model</h1><p class="page-description">fast.ai note series</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-05-25T00:00:00-05:00" itemprop="datePublished">
+        May 25, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      19 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#note">note</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#fastai">fastai</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#jeremys-starting-comments-how-to-do-research-and-software-development">Jeremy’s starting comments: how to do research and software development</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#fun-fact-1">Fun fact 1</a></li>
+<li class="toc-entry toc-h3"><a href="#fun-fact-2">Fun fact 2</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#recreate-a-modern-cnn-the-training-loop">Recreate a modern CNN: the training loop</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-the-cross-entropy-loss-function">Create the Cross-Entropy Loss Function</a></li>
+<li class="toc-entry toc-h3"><a href="#numerical-stability-considerations">Numerical Stability Considerations</a></li>
+<li class="toc-entry toc-h3"><a href="#implement-the-training-loop">Implement the Training Loop</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#pytorch-nnmodulelist">pytorch nn.ModuleList</a></li>
+<li class="toc-entry toc-h4"><a href="#pytorch-nnsequential">pytorch nn.Sequential</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#implement-the-optimizer-class">Implement the Optimizer Class</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#dataset-and-dataloader">Dataset and Dataloader</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#dataset">Dataset</a></li>
+<li class="toc-entry toc-h3"><a href="#dataloader">Dataloader</a></li>
+<li class="toc-entry toc-h3"><a href="#random-sampling">Random Sampling</a></li>
+<li class="toc-entry toc-h3"><a href="#pytorchs-dataloader">Pytorch’s Dataloader</a></li>
+<li class="toc-entry toc-h3"><a href="#validation">Validation</a></li>
+<li class="toc-entry toc-h3"><a href="#question-why-zero_grad-in-every-iteration">Question: why zero_grad() in every iteration?</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#callbacks">Callbacks</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#refactoring-fit">Refactoring fit()</a></li>
+<li class="toc-entry toc-h3"><a href="#add-callbacks">Add Callbacks</a></li>
+<li class="toc-entry toc-h3"><a href="#callbacks-in-action">Callbacks in Action</a></li>
+<li class="toc-entry toc-h3"><a href="#runner-further-cleaning-it-up">Runner: further cleaning it up</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#annealing">Annealing</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#python-partial-function">Python partial function</a></li>
+<li class="toc-entry toc-h3"><a href="#python-decorators">Python decorators</a></li>
+<li class="toc-entry toc-h3"><a href="#annealer-decorator">Annealer decorator</a></li>
+</ul>
+</li>
+</ul><p>Tip: always include this following code as the 1st cell of any notebook to avoid restarting kernel for imported module changes.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">%</span><span class="n">load_ext</span> <span class="n">autoreload</span>
+<span class="o">%</span><span class="n">autoreload</span> <span class="mi">2</span>
+</code></pre></div></div>
+
+<h2 id="jeremys-starting-comments-how-to-do-research-and-software-development">
+<a class="anchor" href="#jeremys-starting-comments-how-to-do-research-and-software-development" aria-hidden="true"><span class="octicon octicon-link"></span></a>Jeremy’s starting comments: how to do research and software development</h2>
+
+<p>Jeremy shows how he did research into why <code class="highlighter-rouge">sqrt(5)</code> was used in pytorch’s kaiming initialization.</p>
+
+<p><strong>The question is, does this initialization make <code class="highlighter-rouge">nn.Conv2d</code> work well.</strong></p>
+
+<p>Notebook: <code class="highlighter-rouge">02a_why_sqrt5</code></p>
+
+<p>Note: <code class="highlighter-rouge">init.kaiming_normal_(weight, a)</code> is designed to be used after a (leaky) ReLU layer. Here <code class="highlighter-rouge">a</code> is the “leak” of the leaky ReLU, i.e. the <em>gradient for the side inputs &lt; 0</em>.</p>
+
+<p>Glossary: <code class="highlighter-rouge">rec_fs</code>, or <em>receptive field size</em>, is # elements in a convolution kernel. A 5x5 kernel has <code class="highlighter-rouge">rec_fs == 25</code>.</p>
+
+<p>Going through the notebook, the results show that the variance keeps getting smaller as there are more layers added, which is a concerning issue.</p>
+
+<p>Jeremy reached out to the pytorch team and got a response that it was a historical bug from the original torch implementation. Then they created an <a href="https://github.com/pytorch/pytorch/issues/18182">issue</a> to fix it.</p>
+
+<p>The moral of the story is that in deep learning, don’t assume everything in the library is right. It doesn’t take much to go digging up the code and try making sense of it.</p>
+
+<p>If you find a problem, make your research into a gist and share with the community or the team maintaining the library.</p>
+
+<p>Note: notebook <code class="highlighter-rouge">02b_initializing</code> shows that a series of matrix multiplications can explode or diminish quickly if not properly initialized. Training deep networks require good initializations for this reason, because DNN is essentially a series of matmuls.</p>
+
+<p><em>Recommended paper: <a href="https://arxiv.org/abs/1511.06422">All You Need is a Good Init</a></em></p>
+
+<h3 id="fun-fact-1">
+<a class="anchor" href="#fun-fact-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fun fact 1</h3>
+
+<p>A fun fact is that there is a Twitter handle <a href="https://twitter.com/seluappendix?lang=en">@SELUAppendix</a> that mocks the fact that <a href="https://arxiv.org/abs/1706.02515">Self-Normalizing Neural Networks</a> had a 96-page appendix for the math it used to get good inits. If you add dropout or any change to the network you’ll need to go through that math again.</p>
+
+<blockquote>
+  <p>twitter: https://twitter.com/SELUAppendix/status/873882218774528003</p>
+</blockquote>
+
+<h3 id="fun-fact-2">
+<a class="anchor" href="#fun-fact-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fun fact 2</h3>
+
+<p>Another fun fact is that pytorch’s linear layer does a transpose first because of historical reasons. We created a linear layer with input dimension 784 and output dimension 50 (hidden layer dimension), so the shape is <code class="highlighter-rouge">(784, 50)</code>. The pytorch linear layer has shape <code class="highlighter-rouge">(50, 784)</code> because the old Lua couldn’t handle batch matrix multiplication without this transpose.</p>
+
+<p>In this particular case, it doesn’t make things slower so it doesn’t matter. But in a lot of cases, these things do matter.</p>
+
+<h2 id="recreate-a-modern-cnn-the-training-loop">
+<a class="anchor" href="#recreate-a-modern-cnn-the-training-loop" aria-hidden="true"><span class="octicon octicon-link"></span></a>Recreate a modern CNN: the training loop</h2>
+
+<p>Notebook: <code class="highlighter-rouge">03_minibatch_training</code></p>
+
+<h3 id="create-the-cross-entropy-loss-function">
+<a class="anchor" href="#create-the-cross-entropy-loss-function" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create the Cross-Entropy Loss Function</h3>
+
+<p>First we introduce softmax and negative log-likelihood (cross-entropy loss).</p>
+
+<p>The cross entropy loss for some target $y$ and some prediction $\hat{y}$ is given by:</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>NLL</mtext><mo>=</mo><mo>−</mo><munder><mo>∑</mo><mrow><mn>0</mn><mo>≤</mo><mi>i</mi><mo>≤</mo><mi>n</mi><mo>−</mo><mn>1</mn></mrow></munder><msub><mi>y</mi><mi>i</mi></msub><mtext> </mtext><mi>log</mi><mo>⁡</mo><msub><mover accent="true"><mi>y</mi><mo>^</mo></mover><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\text{NLL} = -\sum_{0 \leq i \leq n-1} y_i\, \log \hat{y}_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord text"><span class="mord">NLL</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.422853em;vertical-align:-1.372848em;"></span><span class="mord">−</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8723309999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span><span class="mrel mtight">≤</span><span class="mord mathdefault mtight">i</span><span class="mrel mtight">≤</span><span class="mord mathdefault mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.372848em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>
+
+<p>where</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover accent="true"><mi>y</mi><mo>^</mo></mover><mi>i</mi></msub><mo>=</mo><mtext>softmax</mtext><mo stretchy="false">(</mo><mi mathvariant="bold">x</mi><msub><mo stretchy="false">)</mo><mi>i</mi></msub><mo>=</mo><mfrac><msup><mi>e</mi><msub><mi>x</mi><mi>i</mi></msub></msup><mrow><munder><mo>∑</mo><mrow><mn>0</mn><mo>≤</mo><mi>j</mi><mo>≤</mo><mi>n</mi><mo>−</mo><mn>1</mn></mrow></munder><msup><mi>e</mi><msub><mi>x</mi><mi>j</mi></msub></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">\hat{y}_i = \text{softmax}(\mathbf{x})_i = \frac{e^{x_{i}}}{\sum_{0 \leq j \leq n-1} e^{x_{j}}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">softmax</span></span><span class="mopen">(</span><span class="mord"><span class="mord mathbf">x</span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.46321em;vertical-align:-1.1218180000000002em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.341392em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.16195399999999993em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span><span class="mrel mtight">≤</span><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">≤</span><span class="mord mathdefault mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.43581800000000004em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6064620000000001em;"><span style="top:-3.0050700000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2818857142857143em;"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.1218180000000002em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span>
+
+<p>But since <strong>target $y$s are 1-hot encoded</strong>, this can be rewritten as $-\log(\hat{y})$ where i is the index of the desired target.</p>
+
+<hr>
+<p>In the case of binary classification,</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>NLL</mtext><mo>=</mo><mo>−</mo><mi>y</mi><mi>log</mi><mo>⁡</mo><mo stretchy="false">(</mo><mover accent="true"><mi>y</mi><mo>^</mo></mover><mo stretchy="false">)</mo><mo>−</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo stretchy="false">)</mo><mi>log</mi><mo>⁡</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mover accent="true"><mi>y</mi><mo>^</mo></mover><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\text{NLL} = -y \log(\hat{y}) - (1-y) \log(1 - \hat{y})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord text"><span class="mord">NLL</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">−</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>
+
+<p>The coefficients before logs are just a way of <strong>selection</strong>, i.e. y = 1 then select the 1st term, y = 0 then select the 2nd term.</p>
+
+<hr>
+
+<p><em>Tip: multiplying with a one-hot encoded vector is equivalent to a <strong>selection</strong> where the vector is 1. Don’t do the actual multiplication.</em></p>
+
+<p>Trick:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">nll</span><span class="p">(</span><span class="n">softmax_preds</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+    <span class="s">"""
+    Use array indexing to select the corresponding values for
+    cross entropy loss.
+    """</span>
+    <span class="n">log_sm</span> <span class="o">=</span> <span class="n">softmax_preds</span><span class="o">.</span><span class="n">log</span><span class="p">()</span>
+    <span class="k">return</span> <span class="o">-</span><span class="n">log_sm</span><span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="n">targets</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">targets</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="c1"># Example:
+</span><span class="n">smpred</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([[</span><span class="mf">.01</span><span class="p">,</span> <span class="mf">.98</span><span class="p">,</span> <span class="mf">.01</span><span class="p">],</span> <span class="p">[</span><span class="mf">.001</span><span class="p">,</span> <span class="mf">.001</span><span class="p">,</span> <span class="mf">.998</span><span class="p">]])</span>
+<span class="c1">#                            ----                    ----
+# The negative log of the softmax predictions: very close to 0 at places
+# that were close to 1 in the softmax output
+# tensor([[4.6052, 2.0203e-02, 4.6052],
+#         [6.9078, 6.9078, 2.0020e-03]])
+</span><span class="n">targets</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="c1"># nll picks out the elements from each of row in smpred with the
+# indices in targets
+</span><span class="n">nll</span><span class="p">(</span><span class="n">smpred</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>
+<span class="c1"># This exxample has very good softmax prediction so the overall
+# cross entropy loss is close to 0
+# tensor(0.0111)
+</span></code></pre></div></div>
+
+<h3 id="numerical-stability-considerations">
+<a class="anchor" href="#numerical-stability-considerations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Numerical Stability Considerations</h3>
+
+<p><code class="highlighter-rouge">exp()</code> creates huge numbers, it creates big errors in floating point. <strong>To avoid this numerical stability problem, we use the <a href="https://en.wikipedia.org/wiki/LogSumExp">LogSumExp</a> trick</strong>.</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>log</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msup><mi>e</mi><msub><mi>x</mi><mi>j</mi></msub></msup><mo fence="true">)</mo></mrow><mo>=</mo><mi>log</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><msup><mi>e</mi><mi>a</mi></msup><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msup><mi>e</mi><mrow><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><mi>a</mi></mrow></msup><mo fence="true">)</mo></mrow><mo>=</mo><mi>a</mi><mo>+</mo><mi>log</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msup><mi>e</mi><mrow><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><mi>a</mi></mrow></msup><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\log \left ( \sum_{j=1}^{n} e^{x_{j}} \right ) = \log \left ( e^{a} \sum_{j=1}^{n} e^{x_{j}-a} \right ) = a + \log \left ( \sum_{j=1}^{n} e^{x_{j}-a} \right )</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.1637769999999996em;vertical-align:-1.4137769999999998em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">(</span></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6513970000000007em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.4137769999999998em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2818857142857143em;"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size4">)</span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.1637769999999996em;vertical-align:-1.4137769999999998em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">(</span></span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">a</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6513970000000007em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.4137769999999998em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8213309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2818857142857143em;"><span></span></span></span></span></span></span><span class="mbin mtight">−</span><span class="mord mathdefault mtight">a</span></span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size4">)</span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">a</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:3.1637769999999996em;vertical-align:-1.4137769999999998em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">(</span></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6513970000000007em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.4137769999999998em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8213309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2818857142857143em;"><span></span></span></span></span></span></span><span class="mbin mtight">−</span><span class="mord mathdefault mtight">a</span></span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size4">)</span></span></span></span></span></span></span>
+
+<p>where a is the maximum of the $x_{j}$.</p>
+
+<p>In code,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Avoid overflow caused by huge numbers from exp()
+</span><span class="k">def</span> <span class="nf">logsumexp</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">m</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">m</span><span class="p">[:,</span><span class="bp">None</span><span class="p">])</span><span class="o">.</span><span class="n">exp</span><span class="p">()</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">log</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>pytorch also has <code class="highlighter-rouge">logsumexp()</code>.</p>
+
+<p>Note: in pytorch,</p>
+
+<p><strong><code class="highlighter-rouge">F.nll_loss(F.log_softmax(pred, -1), y_train)</code> is equivalent to <code class="highlighter-rouge">F.cross_entropy(pred, y_train)</code>.</strong></p>
+
+<p>Now, we have implemented cross-entropy loss for multiclass classification from scratch.</p>
+
+<p>For accuracy, do this</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">accuracy</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">yb</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="n">yb</span><span class="p">)</span><span class="o">.</span><span class="nb">float</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Notice that pytorch tensor can only use <code class="highlighter-rouge">mean()</code> on float type.</p>
+
+<h3 id="implement-the-training-loop">
+<a class="anchor" href="#implement-the-training-loop" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implement the Training Loop</h3>
+
+<p>We need to refactor our <code class="highlighter-rouge">Module</code> class to be able to get all the model parameters so that we can update them later.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DummyModule</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_in</span><span class="p">,</span> <span class="n">nh</span><span class="p">,</span> <span class="n">n_out</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_modules</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">n_in</span><span class="p">,</span><span class="n">nh</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">nh</span><span class="p">,</span><span class="n">n_out</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+        <span class="s">"""
+        This is a special Python dunder method. Every time __init__ is
+        called, this is called to do something for the attributes.
+        """</span>
+        <span class="c1"># Methods start with _ are internal. Need this condition to
+</span>        <span class="c1"># avoid infinite recursion
+</span>        <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">"_"</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modules</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="c1"># Set attribute for parent, in this case just the Python object
+</span>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__setattr__</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="n">f</span><span class="s">'{self._modules}'</span>
+
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""Returns a generator"""</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_modules</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">l</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span> <span class="k">yield</span> <span class="n">p</span>
+</code></pre></div></div>
+
+<p>Note that <code class="highlighter-rouge">__setattr__(key, value)</code> is used as a magical method to populate <code class="highlighter-rouge">self._modules</code> dictionary. <code class="highlighter-rouge">key</code> turns the attribute variable names into strings. In this case, keys are <code class="highlighter-rouge">l1</code> and <code class="highlighter-rouge">l2</code>.</p>
+
+<p><strong>This is exactly the same as if we inherit from pytorch’s <code class="highlighter-rouge">nn.Module</code>. Pytorch does the <code class="highlighter-rouge">__setattr__</code> thing to populate the <code class="highlighter-rouge">modules</code> dictionary for us when we call <code class="highlighter-rouge">super().__init__()</code> in our Model class.</strong></p>
+
+<p>Now the training loop is</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fit</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="n">bs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">start_i</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="n">bs</span>
+            <span class="n">end_i</span> <span class="o">=</span> <span class="n">start_i</span><span class="o">+</span><span class="n">bs</span>
+            <span class="n">xb</span> <span class="o">=</span> <span class="n">x_train</span><span class="p">[</span><span class="n">start_i</span><span class="p">:</span><span class="n">end_i</span><span class="p">]</span>
+            <span class="n">yb</span> <span class="o">=</span> <span class="n">y_train</span><span class="p">[</span><span class="n">start_i</span><span class="p">:</span><span class="n">end_i</span><span class="p">]</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_func</span><span class="p">(</span><span class="n">model</span><span class="p">(</span><span class="n">xb</span><span class="p">),</span> <span class="n">yb</span><span class="p">)</span>
+
+            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+            <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span> <span class="n">p</span> <span class="o">-=</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span> <span class="o">*</span> <span class="n">lr</span>
+                <span class="n">model</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h4 id="pytorch-nnmodulelist">
+<a class="anchor" href="#pytorch-nnmodulelist" aria-hidden="true"><span class="octicon octicon-link"></span></a>pytorch nn.ModuleList</h4>
+
+<p>With a list of layers we can init a model like this</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">SequentialModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layers</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
+        <span class="c1"># The line above is equivalent to
+</span>        <span class="c1"># self.layers = layers
+</span>        <span class="c1"># for i,l in enumerate(self.layers): self.add_module(f'layer_{i}', l)
+</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="n">l</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+</code></pre></div></div>
+
+<p>Note that the <code class="highlighter-rouge">layers</code> here are objects with forward and backward defined in the previous lesson, so <code class="highlighter-rouge">nn.ModuleList</code> can work. It doesn’t know how to implement forward and backward passes. But <code class="highlighter-rouge">nn.Sequential</code> does.</p>
+
+<h4 id="pytorch-nnsequential">
+<a class="anchor" href="#pytorch-nnsequential" aria-hidden="true"><span class="octicon octicon-link"></span></a>pytorch nn.Sequential</h4>
+
+<p>An even simpler way to init a model is</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">nh</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">nh</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>It even takes care of the definition of the forward backward passes.</p>
+
+<h3 id="implement-the-optimizer-class">
+<a class="anchor" href="#implement-the-optimizer-class" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implement the Optimizer Class</h3>
+
+<p>To refactor the training loop further to be able to just use</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">opt</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+<span class="n">opt</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>instead of</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span> <span class="n">p</span> <span class="o">-=</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span> <span class="o">*</span> <span class="n">lr</span>
+    <span class="c1"># For the case of Gradual Unfreezing, the user might want to include
+</span>    <span class="c1"># only a subset of parameters, so we should avoid model.zero_grad()
+</span>    <span class="n">model</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>We define the Optimizer class,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Optimizer</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">params</span><span class="p">),</span><span class="n">lr</span>
+
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""
+        This is the purpose of grad computation.
+        The update operations doesn't need grad itself.
+        """</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">:</span> <span class="n">p</span> <span class="o">-=</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span> <span class="o">*</span> <span class="n">lr</span>
+
+    <span class="k">def</span> <span class="nf">zero_grad</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""
+        Only does zero_grad for the parameters passed in, not all model
+        parameters in case the user wants gradual unfreezing.
+        """</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Jeremy recommends using something like <code class="highlighter-rouge">assert accuracy &gt; 0.7</code> to make sure the model is doing what it should do after training. It’s an indicator whether there’s a bug that makes the model wrong.</p>
+
+<p>When developing models, we can embrace randomness by not setting the random seed. We need to see how it works with randomness, which bits are stable and which are not.</p>
+
+<p>For research, in some cases we need reproducibility. We set the seeds in those cases.</p>
+
+<h2 id="dataset-and-dataloader">
+<a class="anchor" href="#dataset-and-dataloader" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dataset and Dataloader</h2>
+
+<h3 id="dataset">
+<a class="anchor" href="#dataset" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dataset</h3>
+
+<p>With a <code class="highlighter-rouge">Dataset</code> class we do minibatches easier.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Dataset</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+
+<span class="n">train_ds</span><span class="p">,</span> <span class="n">valid_ds</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">x_valid</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_ds</span><span class="p">)</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">x_train</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_ds</span><span class="p">)</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">x_valid</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Now our training loop becomes</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="n">bs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="s">"""
+        # before:
+        start_i = i*bs
+        end_i = start_i+bs
+        xb = x_train[start_i:end_i]
+        yb = y_train[start_i:end_i]
+        """</span>
+        <span class="n">xb</span><span class="p">,</span> <span class="n">yb</span> <span class="o">=</span> <span class="n">train_ds</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">bs</span> <span class="p">:</span> <span class="n">i</span><span class="o">*</span><span class="n">bs</span><span class="o">+</span><span class="n">bs</span><span class="p">]</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">xb</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_func</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">yb</span><span class="p">)</span>
+
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">opt</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="n">opt</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h3 id="dataloader">
+<a class="anchor" href="#dataloader" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dataloader</h3>
+
+<p>Previously, our loop iterated over batches (xb, yb) like this:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="n">bs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="n">xb</span><span class="p">,</span> <span class="n">yb</span> <span class="o">=</span> <span class="n">train_ds</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">bs</span> <span class="p">:</span> <span class="n">i</span><span class="o">*</span><span class="n">bs</span><span class="o">+</span><span class="n">bs</span><span class="p">]</span>
+    <span class="o">...</span>
+</code></pre></div></div>
+
+<p>Let’s make our loop much cleaner, using a data loader:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">xb</span><span class="p">,</span> <span class="n">yb</span> <span class="ow">in</span> <span class="n">train_dl</span><span class="p">:</span>
+    <span class="o">...</span>
+</code></pre></div></div>
+
+<p>Define the <code class="highlighter-rouge">Dataloader</code> class that takes a <code class="highlighter-rouge">Dataset</code> and a batch size and produces the batches for us.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DataLoader</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">bs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bs</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">bs</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""
+        When you call a for loop on something, it calls the __iter__
+        behind the scene
+        """</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">bs</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">bs</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Note: <code class="highlighter-rouge">yield</code> is a <em>coroutine</em> in Python.</p>
+
+<p>TODO: Make note on Python coroutines and AsyncIO.</p>
+
+<p>To use it, write <code class="highlighter-rouge">next(iter(...))</code>,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">xb</span><span class="p">,</span> <span class="n">yb</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_dl</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>With data loader, our training loop becomes</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"""
+We now have the cleanest form of a training loop.
+One iteration has 5 steps.
+"""</span>
+<span class="k">def</span> <span class="nf">fit</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">xb</span><span class="p">,</span><span class="n">yb</span> <span class="ow">in</span> <span class="n">train_dl</span><span class="p">:</span>
+            <span class="c1"># 1. Get predictions
+</span>            <span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">xb</span><span class="p">)</span>
+            <span class="c1"># 2. Calculate loss
+</span>            <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_func</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">yb</span><span class="p">)</span>
+            <span class="c1"># 3. Calculate gradients
+</span>            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+            <span class="c1"># 4. Update the parameters
+</span>            <span class="n">opt</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+            <span class="c1"># 5. Reset the gradients
+</span>            <span class="n">opt</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>This is quite neat and beautiful!</p>
+
+<p>One problem that remains is that we are looping through the data in order. We need to do random sampling to let each batch be different.</p>
+
+<h3 id="random-sampling">
+<a class="anchor" href="#random-sampling" aria-hidden="true"><span class="octicon octicon-link"></span></a>Random Sampling</h3>
+
+<p>Define a <code class="highlighter-rouge">Sampler</code> class</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Sampler</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shuffle</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span> <span class="n">bs</span><span class="p">,</span> <span class="n">shuffle</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idxs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randperm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shuffle</span> <span class="k">else</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bs</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">idxs</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">bs</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">collate</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+    <span class="n">xs</span><span class="p">,</span><span class="n">ys</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">b</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">xs</span><span class="p">),</span><span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">DataLoader</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">sampler</span><span class="p">,</span> <span class="n">collate_fn</span><span class="o">=</span><span class="n">collate</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">collate_fn</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">,</span><span class="n">sampler</span><span class="p">,</span> <span class="n">collate_fn</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampler</span><span class="p">:</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">collate_fn</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">s</span><span class="p">])</span>
+
+
+<span class="n">train_samp</span> <span class="o">=</span> <span class="n">Sampler</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">valid_samp</span> <span class="o">=</span> <span class="n">Sampler</span><span class="p">(</span><span class="n">valid_ds</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="n">train_dl</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">sampler</span><span class="o">=</span><span class="n">train_samp</span><span class="p">,</span> <span class="n">collate_fn</span><span class="o">=</span><span class="n">collate</span><span class="p">)</span>
+<span class="n">valid_dl</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">valid_ds</span><span class="p">,</span> <span class="n">sampler</span><span class="o">=</span><span class="n">valid_samp</span><span class="p">,</span> <span class="n">collate_fn</span><span class="o">=</span><span class="n">collate</span><span class="p">)</span>
+<span class="n">xb</span><span class="p">,</span><span class="n">yb</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">valid_dl</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">xb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span><span class="mi">28</span><span class="p">))</span>
+<span class="n">yb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h3 id="pytorchs-dataloader">
+<a class="anchor" href="#pytorchs-dataloader" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pytorch’s Dataloader</h3>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">SequentialSampler</span><span class="p">,</span> <span class="n">RandomSampler</span>
+
+<span class="n">train_dl</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span>
+    <span class="n">train_ds</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">sampler</span><span class="o">=</span><span class="n">RandomSampler</span><span class="p">(</span><span class="n">train_ds</span><span class="p">),</span> <span class="n">collate_fn</span><span class="o">=</span><span class="n">collate</span><span class="p">)</span>
+<span class="n">valid_dl</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span>
+    <span class="n">valid_ds</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">sampler</span><span class="o">=</span><span class="n">SequentialSampler</span><span class="p">(</span><span class="n">valid_ds</span><span class="p">),</span> <span class="n">collate_fn</span><span class="o">=</span><span class="n">collate</span><span class="p">)</span>
+
+<span class="c1"># Or omit the sampler and collate function, the ones we implemented are
+# the default
+</span><span class="n">train_dl</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">drop_last</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">valid_dl</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">valid_ds</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="validation">
+<a class="anchor" href="#validation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Validation</h3>
+
+<p>In pytorch, <code class="highlighter-rouge">model</code> has a <code class="highlighter-rouge">training</code> attribute which is boolean.</p>
+
+<p>Take this fitting loop for example, <code class="highlighter-rouge">model.training</code> is set by <code class="highlighter-rouge">model.train()</code> and <code class="highlighter-rouge">model.eval()</code>.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">loss_func</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">train_dl</span><span class="p">,</span> <span class="n">valid_dl</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+        <span class="c1"># Handle batchnorm / dropout
+</span>        <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+<span class="c1">#         print(model.training) -&gt; True
+</span>        <span class="k">for</span> <span class="n">xb</span><span class="p">,</span><span class="n">yb</span> <span class="ow">in</span> <span class="n">train_dl</span><span class="p">:</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_func</span><span class="p">(</span><span class="n">model</span><span class="p">(</span><span class="n">xb</span><span class="p">),</span> <span class="n">yb</span><span class="p">)</span>
+            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+            <span class="n">opt</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+            <span class="n">opt</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+        <span class="n">model</span><span class="o">.</span><span class="nb">eval</span><span class="p">()</span>
+<span class="c1">#         print(model.training) -&gt; False
+</span>        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">tot_loss</span><span class="p">,</span><span class="n">tot_acc</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span>
+            <span class="k">for</span> <span class="n">xb</span><span class="p">,</span><span class="n">yb</span> <span class="ow">in</span> <span class="n">valid_dl</span><span class="p">:</span>
+                <span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">xb</span><span class="p">)</span>
+                <span class="n">tot_loss</span> <span class="o">+=</span> <span class="n">loss_func</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">yb</span><span class="p">)</span>
+                <span class="n">tot_acc</span>  <span class="o">+=</span> <span class="n">accuracy</span> <span class="p">(</span><span class="n">pred</span><span class="p">,</span><span class="n">yb</span><span class="p">)</span>
+        <span class="n">nv</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_dl</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">tot_loss</span><span class="o">/</span><span class="n">nv</span><span class="p">,</span> <span class="n">tot_acc</span><span class="o">/</span><span class="n">nv</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tot_loss</span><span class="o">/</span><span class="n">nv</span><span class="p">,</span> <span class="n">tot_acc</span><span class="o">/</span><span class="n">nv</span>
+</code></pre></div></div>
+
+<p>This is useful because for some layers such as batch norm and dropout, they should do their thing in training but they are different during evaluation. This makes sure of that.</p>
+
+<p>Also notice that the loss accumulation in the above code only works when batch sizes are equal. With varying batch sizes, we need weighted average.</p>
+
+<h3 id="question-why-zero_grad-in-every-iteration">
+<a class="anchor" href="#question-why-zero_grad-in-every-iteration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Question: why <code class="highlighter-rouge">zero_grad()</code> in every iteration?</h3>
+
+<p>Answer:</p>
+
+<ol>
+  <li>
+    <p>We do batch gradient descent and it works by accumulating gradients in each batch. We would want to be able to stitch different components together for the gradients by not calling <code class="highlighter-rouge">zero_grad()</code> in some cases, so we make it a seperate method.</p>
+  </li>
+  <li>
+    <p>Having a separate <code class="highlighter-rouge">zero_grad()</code> in the Optimizer class, rather than something like the code below where we zero out the gradients after each step, enables us to <em>accumulate gradients</em>.</p>
+  </li>
+</ol>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Optimizer</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">params</span><span class="p">),</span><span class="n">lr</span>
+
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">:</span>
+                <span class="n">p</span> <span class="o">-=</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span> <span class="o">*</span> <span class="n">lr</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>For example, if we have big images to train with and can only fit a smaller number in the GPU, we can do</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="n">bs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">xb</span><span class="p">,</span><span class="n">yb</span> <span class="o">=</span> <span class="n">train_ds</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">bs</span> <span class="p">:</span> <span class="n">i</span><span class="o">*</span><span class="n">bs</span><span class="o">+</span><span class="n">bs</span><span class="p">]</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">xb</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_func</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">yb</span><span class="p">)</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+        <span class="c1"># THIS EFFECTIVELY DOUBLED OUR BATCH SIZE!
+</span>        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">opt</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+            <span class="n">opt</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Of course, we can have better API design by adding <code class="highlighter-rouge">auto_zero</code> into the Optimizer, e.g.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Optimizer</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">auto_zero</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">auto_zero</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">params</span><span class="p">),</span> <span class="n">lr</span><span class="p">,</span> <span class="n">auto_zero</span>
+
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">:</span>
+                <span class="n">p</span> <span class="o">-=</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span> <span class="o">*</span> <span class="n">lr</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">auto_zero</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">zero_grad</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>This removes the need to call <code class="highlighter-rouge">zero_grad()</code> in every batch iteration, which could potentially avoid bugs. But this is not something pytorch has done.</p>
+
+<h2 id="callbacks">
+<a class="anchor" href="#callbacks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Callbacks</h2>
+
+<p>fast.ai docs on <a href="https://docs.fast.ai/callbacks.html">callbacks</a></p>
+
+<p>Notebook: <code class="highlighter-rouge">04_callbacks</code></p>
+
+<p>To recap, the training loop we implemented is</p>
+
+<p><img src="/images/fastai/training_loop.png" alt="train_loop" align="middle"></p>
+
+<p><img src="/images/fastai/train_loop_picture.png" alt="train_loop_picture" align="middle"></p>
+
+<p>Different kinds of models have different training loops. It’s intractable to write each type of training loop and it’s bad code design. A better way is to insert callbacks at the right events.</p>
+
+<p><img src="/images/fastai/train_loop_callback.png" alt="train_loop_callback" align="middle"></p>
+
+<p><img src="/images/fastai/callback_in_code.png" alt="callback_in_code" align="middle"></p>
+
+<p>Here are some other callback examples in fastai.</p>
+
+<p><img src="/images/fastai/fastai_callbacks.png" alt="fastai_callbacks" align="middle"></p>
+
+<p>This is the callbacks for a GAN training loop,</p>
+
+<p><img src="/images/fastai/callback_gan.png" alt="callback_gan" align="middle"></p>
+
+<h3 id="refactoring-fit">
+<a class="anchor" href="#refactoring-fit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Refactoring <code class="highlighter-rouge">fit()</code>
+</h3>
+
+<p>We start by refactoring the <code class="highlighter-rouge">fit()</code> function.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Before
+</span><span class="n">fit</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">loss_func</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">train_dl</span><span class="p">,</span> <span class="n">valid_dl</span><span class="p">)</span>
+
+<span class="c1"># We get nervous when a function takes in too many parameters
+# Need to group relevant ones together.
+# E.g. the data loaders can be grouped together first into `DataBunch`
+</span><span class="k">class</span> <span class="nc">DataBunch</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dl</span><span class="p">,</span> <span class="n">valid_dl</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_dl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_dl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">train_dl</span><span class="p">,</span> <span class="n">valid_dl</span><span class="p">,</span> <span class="n">c</span>
+
+    <span class="o">@</span><span class="nb">property</span>
+    <span class="k">def</span> <span class="nf">train_ds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_dl</span><span class="o">.</span><span class="n">dataset</span>
+
+    <span class="o">@</span><span class="nb">property</span>
+    <span class="k">def</span> <span class="nf">valid_ds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_dl</span><span class="o">.</span><span class="n">dataset</span>
+
+<span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">nh</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">train_ds</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">nh</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">nh</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Learner</span><span class="p">():</span>
+    <span class="c1"># Notice the Learner class has no logic at all
+</span>    <span class="c1"># It's just a useful device for storing things
+</span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">loss_func</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss_func</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> \
+            <span class="n">model</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">loss_func</span><span class="p">,</span> <span class="n">data</span>
+
+
+<span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_valid</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span> <span class="n">get_data</span><span class="p">()</span>
+<span class="n">train_ds</span><span class="p">,</span> <span class="n">valid_ds</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">x_valid</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">)</span>
+<span class="n">nh</span><span class="p">,</span> <span class="n">bs</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">64</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="nb">max</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">loss_func</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">cross_entropy</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">DataBunch</span><span class="p">(</span><span class="o">*</span><span class="n">get_dls</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">valid_ds</span><span class="p">,</span> <span class="n">bs</span><span class="p">),</span> <span class="n">c</span><span class="p">)</span>
+<span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="o">*</span><span class="n">get_model</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">loss_func</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># After
+</span><span class="n">fit</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">learn</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Note: Python <code class="highlighter-rouge">@property</code> decorator helps create a getter method so that the property can be accessed by object dot the function name. For more info about it, check <a href="https://www.freecodecamp.org/news/python-property-decorator/">here</a>.</p>
+
+<p>Inside the <code class="highlighter-rouge">fit()</code> function, <code class="highlighter-rouge">model</code> becomes <code class="highlighter-rouge">learn.model</code>, <code class="highlighter-rouge">data</code> becomes <code class="highlighter-rouge">learn.data</code>.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">learn</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+        <span class="n">learn</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">xb</span><span class="p">,</span><span class="n">yb</span> <span class="ow">in</span> <span class="n">learn</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">train_dl</span><span class="p">:</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">learn</span><span class="o">.</span><span class="n">loss_func</span><span class="p">(</span><span class="n">learn</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">xb</span><span class="p">),</span> <span class="n">yb</span><span class="p">)</span>
+            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+            <span class="n">learn</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+            <span class="n">learn</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+        <span class="n">learn</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="nb">eval</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">tot_loss</span><span class="p">,</span><span class="n">tot_acc</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span>
+            <span class="k">for</span> <span class="n">xb</span><span class="p">,</span><span class="n">yb</span> <span class="ow">in</span> <span class="n">learn</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">valid_dl</span><span class="p">:</span>
+                <span class="n">pred</span> <span class="o">=</span> <span class="n">learn</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">xb</span><span class="p">)</span>
+                <span class="n">tot_loss</span> <span class="o">+=</span> <span class="n">learn</span><span class="o">.</span><span class="n">loss_func</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">yb</span><span class="p">)</span>
+                <span class="n">tot_acc</span>  <span class="o">+=</span> <span class="n">accuracy</span> <span class="p">(</span><span class="n">pred</span><span class="p">,</span><span class="n">yb</span><span class="p">)</span>
+        <span class="n">nv</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">learn</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">valid_dl</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">tot_loss</span><span class="o">/</span><span class="n">nv</span><span class="p">,</span> <span class="n">tot_acc</span><span class="o">/</span><span class="n">nv</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tot_loss</span><span class="o">/</span><span class="n">nv</span><span class="p">,</span> <span class="n">tot_acc</span><span class="o">/</span><span class="n">nv</span>
+
+<span class="n">loss</span><span class="p">,</span> <span class="n">acc</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">learn</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="add-callbacks">
+<a class="anchor" href="#add-callbacks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Add Callbacks</h3>
+
+<p>Implement the <code class="highlighter-rouge">Callback</code> class,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Callback</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">begin_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learn</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learn</span> <span class="o">=</span> <span class="n">learn</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">def</span> <span class="nf">after_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">def</span> <span class="nf">begin_epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="o">=</span><span class="n">epoch</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">def</span> <span class="nf">begin_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">def</span> <span class="nf">after_epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">def</span> <span class="nf">begin_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xb</span><span class="p">,</span> <span class="n">yb</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xb</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">yb</span> <span class="o">=</span> <span class="n">xb</span><span class="p">,</span><span class="n">yb</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">def</span> <span class="nf">after_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">def</span> <span class="nf">after_backward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">def</span> <span class="nf">after_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">True</span>
+</code></pre></div></div>
+
+<p>Then the <code class="highlighter-rouge">CallbackHandler</code> class,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CallbackHandler</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cbs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="c1"># cbs is a list of Callback objects
+</span>        <span class="bp">self</span><span class="o">.</span><span class="n">cbs</span> <span class="o">=</span> <span class="n">cbs</span> <span class="k">if</span> <span class="n">cbs</span> <span class="k">else</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">begin_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learn</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">in_train</span> <span class="o">=</span> <span class="n">learn</span><span class="p">,</span><span class="bp">True</span>
+        <span class="n">learn</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="c1"># Loops through callbacks, `res` means resume
+</span>        <span class="c1"># In the later Runner implementation this is not needed
+</span>        <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbs</span><span class="p">:</span> <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="ow">and</span> <span class="n">cb</span><span class="o">.</span><span class="n">begin_fit</span><span class="p">(</span><span class="n">learn</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">after_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_train</span>
+        <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbs</span><span class="p">:</span> <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="ow">and</span> <span class="n">cb</span><span class="o">.</span><span class="n">after_fit</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">begin_epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_train</span><span class="o">=</span><span class="bp">True</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbs</span><span class="p">:</span> <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="ow">and</span> <span class="n">cb</span><span class="o">.</span><span class="n">begin_epoch</span><span class="p">(</span><span class="n">epoch</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">begin_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="nb">eval</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_train</span><span class="o">=</span><span class="bp">False</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbs</span><span class="p">:</span> <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="ow">and</span> <span class="n">cb</span><span class="o">.</span><span class="n">begin_validate</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">after_epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbs</span><span class="p">:</span> <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="ow">and</span> <span class="n">cb</span><span class="o">.</span><span class="n">after_epoch</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">begin_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xb</span><span class="p">,</span> <span class="n">yb</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbs</span><span class="p">:</span> <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="ow">and</span> <span class="n">cb</span><span class="o">.</span><span class="n">begin_batch</span><span class="p">(</span><span class="n">xb</span><span class="p">,</span> <span class="n">yb</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">after_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_train</span>
+        <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbs</span><span class="p">:</span> <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="ow">and</span> <span class="n">cb</span><span class="o">.</span><span class="n">after_loss</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">after_backward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbs</span><span class="p">:</span> <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="ow">and</span> <span class="n">cb</span><span class="o">.</span><span class="n">after_backward</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">after_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbs</span><span class="p">:</span> <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="ow">and</span> <span class="n">cb</span><span class="o">.</span><span class="n">after_step</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">do_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">stop</span>
+        <span class="k">finally</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="bp">False</span>
+</code></pre></div></div>
+
+<h3 id="callbacks-in-action">
+<a class="anchor" href="#callbacks-in-action" aria-hidden="true"><span class="octicon octicon-link"></span></a>Callbacks in Action</h3>
+
+<p>To demonstrate the ways to use these callbacks, we have</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">one_batch</span><span class="p">(</span><span class="n">xb</span><span class="p">,</span> <span class="n">yb</span><span class="p">,</span> <span class="n">cb</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">cb</span><span class="o">.</span><span class="n">begin_batch</span><span class="p">(</span><span class="n">xb</span><span class="p">,</span><span class="n">yb</span><span class="p">):</span> <span class="k">return</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">cb</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">loss_func</span><span class="p">(</span><span class="n">cb</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">xb</span><span class="p">),</span> <span class="n">yb</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">cb</span><span class="o">.</span><span class="n">after_loss</span><span class="p">(</span><span class="n">loss</span><span class="p">):</span> <span class="k">return</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">cb</span><span class="o">.</span><span class="n">after_backward</span><span class="p">():</span> <span class="n">cb</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">cb</span><span class="o">.</span><span class="n">after_step</span><span class="p">():</span> <span class="n">cb</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">all_batches</span><span class="p">(</span><span class="n">dl</span><span class="p">,</span> <span class="n">cb</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">xb</span><span class="p">,</span><span class="n">yb</span> <span class="ow">in</span> <span class="n">dl</span><span class="p">:</span>
+        <span class="n">one_batch</span><span class="p">(</span><span class="n">xb</span><span class="p">,</span> <span class="n">yb</span><span class="p">,</span> <span class="n">cb</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cb</span><span class="o">.</span><span class="n">do_stop</span><span class="p">():</span> <span class="k">return</span>
+
+<span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">learn</span><span class="p">,</span> <span class="n">cb</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">cb</span><span class="o">.</span><span class="n">begin_fit</span><span class="p">(</span><span class="n">learn</span><span class="p">):</span> <span class="k">return</span>
+    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cb</span><span class="o">.</span><span class="n">begin_epoch</span><span class="p">(</span><span class="n">epoch</span><span class="p">):</span> <span class="k">continue</span>
+        <span class="n">all_batches</span><span class="p">(</span><span class="n">learn</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">train_dl</span><span class="p">,</span> <span class="n">cb</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">cb</span><span class="o">.</span><span class="n">begin_validate</span><span class="p">():</span>
+            <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span> <span class="n">all_batches</span><span class="p">(</span><span class="n">learn</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">valid_dl</span><span class="p">,</span> <span class="n">cb</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cb</span><span class="o">.</span><span class="n">do_stop</span><span class="p">()</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">cb</span><span class="o">.</span><span class="n">after_epoch</span><span class="p">():</span> <span class="k">break</span>
+    <span class="n">cb</span><span class="o">.</span><span class="n">after_fit</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">TestCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">begin_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">learn</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">begin_fit</span><span class="p">(</span><span class="n">learn</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_iters</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">after_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_iters</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_iters</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_iters</span><span class="o">&gt;=</span><span class="mi">10</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+<span class="n">fit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">learn</span><span class="p">,</span> <span class="n">cb</span><span class="o">=</span><span class="n">CallbackHandler</span><span class="p">([</span><span class="n">TestCallback</span><span class="p">()]))</span>
+<span class="s">"""
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+"""</span>
+</code></pre></div></div>
+
+<p>Note: pytorch hooks are a kind a callbacks that can be more granular than these ones, they can be inserted in model forward and backward passes, so we can do something between layers.</p>
+
+<h3 id="runner-further-cleaning-it-up">
+<a class="anchor" href="#runner-further-cleaning-it-up" aria-hidden="true"><span class="octicon octicon-link"></span></a><code class="highlighter-rouge">Runner</code>: further cleaning it up</h3>
+
+<p>We can further refactor this since there are a lot of duplications. Refer to the notebook <code class="highlighter-rouge">04_callbacks</code> <a href="https://github.com/fastai/course-v3/blob/master/nbs/dl2/04_callbacks.ipynb">here</a> and check the <code class="highlighter-rouge">Runner</code> section. It contains some nice Python power user tricks such as enabling something like <code class="highlighter-rouge">self('begin_fit')</code> by</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Runner</span><span class="p">():</span>
+    <span class="o">...</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cb_name</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cbs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">_order</span><span class="p">):</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cb</span><span class="p">,</span> <span class="n">cb_name</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">f</span> <span class="ow">and</span> <span class="n">f</span><span class="p">():</span> <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</code></pre></div></div>
+
+<p>This part of the lecture video is worth revisiting for upleveling Python coding skills.</p>
+
+<h2 id="annealing">
+<a class="anchor" href="#annealing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Annealing</h2>
+
+<p>Notebook: <code class="highlighter-rouge">05_anneal</code>.</p>
+
+<p>Note: Jeremy uses <code class="highlighter-rouge">%debug</code> in cells with pdb to debug. Check shapes, check the things an object contains, etc.</p>
+
+<p>We define two new callbacks: the <code class="highlighter-rouge">Recorder</code> to save track of the loss and our scheduled learning rate, and a <code class="highlighter-rouge">ParamScheduler</code> that can schedule any hyperparameter as long as it’s registered in the state_dict of the optimizer.</p>
+
+<p>It’s good to use <strong>parameter scheduling</strong> for everything.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Recorder</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">begin_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">lrs</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">losses</span> <span class="o">=</span> <span class="p">[],[]</span>
+
+    <span class="k">def</span> <span class="nf">after_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_train</span><span class="p">:</span> <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">param_groups</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s">'lr'</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">plot_lr</span>  <span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lrs</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">plot_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">losses</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">ParamScheduler</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="n">_order</span><span class="o">=</span><span class="mi">1</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pname</span><span class="p">,</span> <span class="n">sched_func</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pname</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sched_func</span> <span class="o">=</span> <span class="n">pname</span><span class="p">,</span><span class="n">sched_func</span>
+
+    <span class="k">def</span> <span class="nf">set_param</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># it's called param_groups in pytorch, and layer_groups in fastai
+</span>        <span class="k">for</span> <span class="n">pg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">param_groups</span><span class="p">:</span>
+            <span class="n">pg</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pname</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sched_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_epochs</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">epochs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">begin_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_train</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_param</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Trick: We use <code class="highlighter-rouge">partial()</code> from <code class="highlighter-rouge">functools</code> and decorators.</p>
+
+<h3 id="python-partial-function">
+<a class="anchor" href="#python-partial-function" aria-hidden="true"><span class="octicon octicon-link"></span></a>Python partial function</h3>
+
+<p>A partial function allows us to call a second function with fixed values in certain arguments. It avoids replicating code.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">power</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">exponent</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">base</span><span class="o">**</span><span class="n">exponent</span>
+
+<span class="k">def</span> <span class="nf">squared</span><span class="p">(</span><span class="n">base</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">base</span> <span class="o">**</span> <span class="mi">2</span>
+
+<span class="c1"># The above is bad
+# Instead do this
+</span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="n">squared</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">power</span><span class="p">,</span> <span class="n">exponent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="python-decorators">
+<a class="anchor" href="#python-decorators" aria-hidden="true"><span class="octicon octicon-link"></span></a>Python decorators</h3>
+
+<p>A decorator is a function that returns another function.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">divide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span><span class="o">/</span><span class="n">b</span>
+
+<span class="c1"># vs.
+</span>
+<span class="k">def</span> <span class="nf">smart_divide</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+   <span class="k">def</span> <span class="nf">inner</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+      <span class="k">print</span><span class="p">(</span><span class="s">"I am going to divide"</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="s">"and"</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+         <span class="k">print</span><span class="p">(</span><span class="s">"Whoops! cannot divide"</span><span class="p">)</span>
+         <span class="k">return</span>
+
+      <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+   <span class="k">return</span> <span class="n">inner</span>
+
+<span class="o">@</span><span class="n">smart_divide</span>
+<span class="k">def</span> <span class="nf">divide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span><span class="o">/</span><span class="n">b</span>
+
+<span class="c1"># this is equivalent to
+</span><span class="n">smart_divide</span><span class="p">(</span><span class="n">divide</span><span class="p">)</span>
+
+<span class="c1"># Or make it work for any number of arguments with *args, **kargs
+</span><span class="k">def</span> <span class="nf">works_for_all</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">inner</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"I can decorate any function"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">inner</span>
+</code></pre></div></div>
+
+<h3 id="annealer-decorator">
+<a class="anchor" href="#annealer-decorator" aria-hidden="true"><span class="octicon octicon-link"></span></a>Annealer decorator</h3>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">annealer</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_inner</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span> <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_inner</span>
+
+<span class="o">@</span><span class="n">annealer</span>
+<span class="k">def</span> <span class="nf">sched_lin</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span> <span class="k">return</span> <span class="n">start</span> <span class="o">+</span> <span class="n">pos</span><span class="o">*</span><span class="p">(</span><span class="n">end</span><span class="o">-</span><span class="n">start</span><span class="p">)</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">sched_lin</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">f</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="c1"># 1.3
+</span></code></pre></div></div>
+
+<p>Jupyter has an advantage over an IDE that when you hit <strong>shift-tab</strong> to check what <code class="highlighter-rouge">sched_lin</code> takes in, it shows <code class="highlighter-rouge">start, end</code> because it runs a Python process and knows it’s decorated.</p>
+
+<p>Now, using this approach we can define different schedulers</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># sched_cos is the default for fastai
+</span><span class="o">@</span><span class="n">annealer</span>
+<span class="k">def</span> <span class="nf">sched_cos</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span> <span class="k">return</span> <span class="n">start</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">pos</span><span class="p">)))</span> <span class="o">*</span> <span class="p">(</span><span class="n">end</span><span class="o">-</span><span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="o">@</span><span class="n">annealer</span>
+<span class="k">def</span> <span class="nf">sched_no</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>  <span class="k">return</span> <span class="n">start</span>
+<span class="o">@</span><span class="n">annealer</span>
+<span class="k">def</span> <span class="nf">sched_exp</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span> <span class="k">return</span> <span class="n">start</span> <span class="o">*</span> <span class="p">(</span><span class="n">end</span><span class="o">/</span><span class="n">start</span><span class="p">)</span> <span class="o">**</span> <span class="n">pos</span>
+
+<span class="k">def</span> <span class="nf">cos_1cycle_anneal</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">sched_cos</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">high</span><span class="p">),</span> <span class="n">sched_cos</span><span class="p">(</span><span class="n">high</span><span class="p">,</span> <span class="n">end</span><span class="p">)]</span>
+</code></pre></div></div>
+
+<p>Trick: pytorch tensors can’t be plotted directly because they don’t have <code class="highlighter-rouge">ndim</code>, but we can add it ourselves with the line below!</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#This monkey-patch is there to be able to plot tensors
+</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="o">.</span><span class="n">ndim</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>In the next lesson, we will look at pytorch hooks and other advanced features.</p>
+
+  </div><a class="u-url" href="/note/fastai/2020/05/25/fastai-lesson9.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notes, code and essays by Logan Yang.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

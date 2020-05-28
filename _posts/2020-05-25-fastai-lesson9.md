@@ -537,6 +537,8 @@ To recap, the training loop we implemented is
 
 Different kinds of models have different training loops. It's intractable to write each type of training loop and it's bad code design. A better way is to insert callbacks at the right events.
 
+<img src="{{ site.baseurl }}/images/fastai/train_loop_callback.png" alt="train_loop_callback" align="middle"/>
+
 <img src="{{ site.baseurl }}/images/fastai/callback_in_code.png" alt="callback_in_code" align="middle"/>
 
 Here are some other callback examples in fastai.

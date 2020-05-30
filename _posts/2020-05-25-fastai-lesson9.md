@@ -66,7 +66,7 @@ where
 
 $$\hat{y}_i = \text{softmax}(\mathbf{x})_i = \frac{e^{x_{i}}}{\sum_{0 \leq j \leq n-1} e^{x_{j}}}$$
 
-But since **target $y$s are 1-hot encoded**, this can be rewritten as $-\log(\hat{y})$ where i is the index of the desired target.
+But since **target $y$s are 1-hot encoded**, this can be rewritten as $-\log(\hat{y}_i)$ where i is the index of the desired target.
 
 ---
 In the case of binary classification,

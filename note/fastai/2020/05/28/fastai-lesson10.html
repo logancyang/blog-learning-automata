@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FastAI Lesson 10: Looking Inside the Model | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FastAI Lesson 10: Looking Inside the Model" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="fast.ai note series" />
+<meta property="og:description" content="fast.ai note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/fastai/2020/05/28/fastai-lesson10.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/fastai/2020/05/28/fastai-lesson10.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-28T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"fast.ai note series","@type":"BlogPosting","headline":"FastAI Lesson 10: Looking Inside the Model","dateModified":"2020-05-28T00:00:00-05:00","datePublished":"2020-05-28T00:00:00-05:00","url":"http://blog.logancyang.com/note/fastai/2020/05/28/fastai-lesson10.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/fastai/2020/05/28/fastai-lesson10.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FastAI Lesson 10: Looking Inside the Model | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FastAI Lesson 10: Looking Inside the Model" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="fast.ai note series" />
+<meta property="og:description" content="fast.ai note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/fastai/2020/05/28/fastai-lesson10.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/fastai/2020/05/28/fastai-lesson10.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-28T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"fast.ai note series","@type":"BlogPosting","headline":"FastAI Lesson 10: Looking Inside the Model","dateModified":"2020-05-28T00:00:00-05:00","datePublished":"2020-05-28T00:00:00-05:00","url":"http://blog.logancyang.com/note/fastai/2020/05/28/fastai-lesson10.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/fastai/2020/05/28/fastai-lesson10.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Learning Automata</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">FastAI Lesson 10: Looking Inside the Model</h1><p class="page-description">fast.ai note series</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-05-28T00:00:00-05:00" itemprop="datePublished">
+        May 28, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      24 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#note">note</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#fastai">fastai</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#jeremys-starting-comments-take-it-easy-and-make-progress-slowly">Jeremy’s starting comments: take it easy and make progress slowly</a></li>
+<li class="toc-entry toc-h2"><a href="#revisiting-callbacks">Revisiting Callbacks</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#what-is-a-callback">What is a callback</a></li>
+<li class="toc-entry toc-h3"><a href="#how-to-create-a-callback">How to create a callback</a></li>
+<li class="toc-entry toc-h3"><a href="#callback-with-more-than-one-argument">Callback with more than one argument</a></li>
+<li class="toc-entry toc-h3"><a href="#partial-function">partial function</a></li>
+<li class="toc-entry toc-h3"><a href="#callbacks-as-callable-classes">Callbacks as callable classes</a></li>
+<li class="toc-entry toc-h3"><a href="#python-args-and-kwargs">Python *args and **kwargs</a></li>
+<li class="toc-entry toc-h3"><a href="#callbacks-modifying-behavior">Callbacks: modifying behavior</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#early-stopping">Early stopping</a></li>
+<li class="toc-entry toc-h4"><a href="#modifying-the-state">Modifying the state</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#revisiting-python-dunder-methods">Revisiting Python Dunder Methods</a></li>
+<li class="toc-entry toc-h2"><a href="#fundamental-ability-of-an-engineer-browsing-source-code">Fundamental ability of an engineer: browsing source code</a></li>
+<li class="toc-entry toc-h2"><a href="#variance-covariance-and-correlation">Variance, covariance, and correlation</a></li>
+<li class="toc-entry toc-h2"><a href="#softmax">Softmax</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#when-to-use-softmax-and-when-not-to">When to use softmax and when not to</a></li>
+<li class="toc-entry toc-h3"><a href="#very-important-remarks-by-jeremy">Very important remarks by Jeremy</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#build-a-learning-rate-finder">Build a Learning Rate Finder</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#using-exceptions-as-control-flow">Using Exceptions as control flow!</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#recreate-cnn-cpu-and-gpu">Recreate CNN (CPU and GPU)</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#move-to-gpu-cuda">Move to GPU: CUDA</a></li>
+<li class="toc-entry toc-h3"><a href="#refactoring-the-model">Refactoring the model</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#hooks">Hooks</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#manual-insertion">Manual insertion</a></li>
+<li class="toc-entry toc-h3"><a href="#pytorch-hooks">Pytorch hooks</a></li>
+<li class="toc-entry toc-h3"><a href="#generalized-relu">Generalized ReLU</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#batch-normalization">Batch Normalization</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#batch-norm-deficiencies">Batch norm deficiencies</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#ablation-study-in-deep-learning-research">Ablation study in deep learning research</a></li>
+<li class="toc-entry toc-h2"><a href="#my-random-thoughts">My Random Thoughts</a></li>
+</ul><h2 id="jeremys-starting-comments-take-it-easy-and-make-progress-slowly">
+<a class="anchor" href="#jeremys-starting-comments-take-it-easy-and-make-progress-slowly" aria-hidden="true"><span class="octicon octicon-link"></span></a>Jeremy’s starting comments: take it easy and make progress slowly</h2>
+
+<p>The amount of material in part II is meant to keep the student busy until the next version of the course. Don’t expect to understand every thing in one go, digest them bit by bit.</p>
+
+<p>It also covers the software engineering side. Jeremy’s opinion is that <strong>data scientists need to be good software engineers</strong> as well.</p>
+
+<p><img src="/images/fastai/from_foundations.png" alt="from_foundations" align="middle"></p>
+
+<p>We will stick to using nothing but the foundation tools in the picture above to recreate the <code class="highlighter-rouge">fastai</code> library.</p>
+
+<p>Next week we will develop a new library called <code class="highlighter-rouge">fastai.audio</code>! <em>(Exactly what I interested in: DL in audio and library development!)</em></p>
+
+<p><img src="/images/fastai/fastai_audio.png" alt="fastai_audio" align="middle"></p>
+
+<p>Then we will get into seq2seq models, transformer, and more advanced vision models that requires setting up a DL box and doing experiments. <code class="highlighter-rouge">fastec2</code> library is useful for running experiments in AWS.</p>
+
+<p><img src="/images/fastai/seq2seq.png" alt="seq2seq" align="middle"></p>
+
+<p><img src="/images/fastai/adv_vision.png" alt="adv_vision" align="middle"></p>
+
+<p>At last we will dive into Swift for DL.</p>
+
+<h2 id="revisiting-callbacks">
+<a class="anchor" href="#revisiting-callbacks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Revisiting Callbacks</h2>
+
+<p>Notebook: <code class="highlighter-rouge">05a_foundations</code></p>
+
+<h3 id="what-is-a-callback">
+<a class="anchor" href="#what-is-a-callback" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is a callback</h3>
+
+<p>Callbacks are functions that get triggered at certain events. We pass the callback function object itself to a method.</p>
+
+<h3 id="how-to-create-a-callback">
+<a class="anchor" href="#how-to-create-a-callback" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to create a callback</h3>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">slow_calculation</span><span class="p">(</span><span class="n">cb</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">+=</span> <span class="n">i</span><span class="o">*</span><span class="n">i</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cb</span><span class="p">:</span> <span class="n">cb</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+<span class="k">def</span> <span class="nf">show_progress</span><span class="p">(</span><span class="n">epoch</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Awesome! We've finished epoch {epoch}!"</span><span class="p">)</span>
+
+
+<span class="n">slow_calculation</span><span class="p">(</span><span class="n">show_progress</span><span class="p">)</span>
+<span class="s">"""
+Awesome! We've finished epoch 0!
+Awesome! We've finished epoch 1!
+Awesome! We've finished epoch 2!
+Awesome! We've finished epoch 3!
+Awesome! We've finished epoch 4!
+"""</span>
+</code></pre></div></div>
+
+<p>This callback <code class="highlighter-rouge">show_progress(epoch)</code> is just a function that’s passed into the target function as an object. The target function has an expectation how to call it, i.e. passing in the # epoch in this case.</p>
+
+<p>Since we are using it once, a better way to do this is to use the lambda function (similar to arrow functions in JavaScript ES6).</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">slow_calculation</span><span class="p">(</span><span class="k">lambda</span> <span class="n">o</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Awesome! We've finished epoch {o}!"</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h3 id="callback-with-more-than-one-argument">
+<a class="anchor" href="#callback-with-more-than-one-argument" aria-hidden="true"><span class="octicon octicon-link"></span></a>Callback with more than one argument</h3>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">make_show_progress</span><span class="p">(</span><span class="n">exclamation</span><span class="p">):</span>
+    <span class="c1"># Leading "_" is generally understood to be "private"
+</span>    <span class="c1"># `exclamation` is a context variable for _inner(epoch)
+</span>    <span class="c1"># this is called closure
+</span>    <span class="k">def</span> <span class="nf">_inner</span><span class="p">(</span><span class="n">epoch</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"{exclamation}! We've finished epoch {epoch}!"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_inner</span>
+
+<span class="n">slow_calculation</span><span class="p">(</span><span class="n">make_show_progress</span><span class="p">(</span><span class="s">"Nice!"</span><span class="p">))</span>
+<span class="s">"""
+Nice!! We've finished epoch 0!
+Nice!! We've finished epoch 1!
+Nice!! We've finished epoch 2!
+Nice!! We've finished epoch 3!
+Nice!! We've finished epoch 4!
+"""</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">exclamation</code> is a context variable outside <code class="highlighter-rouge">_inner(epoch)</code>. This is called <strong>closure</strong>. This concept is prevalent in JS.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">f2</span> <span class="o">=</span> <span class="n">make_show_progress</span><span class="p">(</span><span class="s">"Terrific"</span><span class="p">)</span>
+
+<span class="n">slow_calculation</span><span class="p">(</span><span class="n">f2</span><span class="p">)</span>
+<span class="s">"""
+Terrific! We've finished epoch 0!
+Terrific! We've finished epoch 1!
+Terrific! We've finished epoch 2!
+Terrific! We've finished epoch 3!
+Terrific! We've finished epoch 4!
+"""</span>
+</code></pre></div></div>
+
+<h3 id="partial-function">
+<a class="anchor" href="#partial-function" aria-hidden="true"><span class="octicon octicon-link"></span></a><code class="highlighter-rouge">partial</code> function</h3>
+
+<p>In Python, with <code class="highlighter-rouge">from functools import partial</code> we can make a new function that is the old function with predefined argument(s).</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+<span class="n">slow_calculation</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">show_progress</span><span class="p">,</span> <span class="s">"OK I guess"</span><span class="p">))</span>
+<span class="s">"""
+OK I guess! We've finished epoch 0!
+OK I guess! We've finished epoch 1!
+OK I guess! We've finished epoch 2!
+OK I guess! We've finished epoch 3!
+OK I guess! We've finished epoch 4!
+"""</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">partial(func, arg, arg, ...)</code> takes positional arguments and knows how to set them in order.</p>
+
+<h3 id="callbacks-as-callable-classes">
+<a class="anchor" href="#callbacks-as-callable-classes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Callbacks as callable classes</h3>
+
+<p>Wherever we can use a closure to store a context, we can also use a class.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ProgressShowingCallback</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exclamation</span><span class="o">=</span><span class="s">"Awesome"</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exclamation</span> <span class="o">=</span> <span class="n">exclamation</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">):</span>
+        <span class="s">"""This is the part that makes the class callable as a function!"""</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"{self.exclamation}! We've finished epoch {epoch}!"</span><span class="p">)</span>
+
+<span class="n">cb</span> <span class="o">=</span> <span class="n">ProgressShowingCallback</span><span class="p">(</span><span class="s">"Just super"</span><span class="p">)</span>
+<span class="n">slow_calculation</span><span class="p">(</span><span class="n">cb</span><span class="p">)</span>
+<span class="s">"""
+Just super! We've finished epoch 0!
+Just super! We've finished epoch 1!
+Just super! We've finished epoch 2!
+Just super! We've finished epoch 3!
+Just super! We've finished epoch 4!
+"""</span>
+</code></pre></div></div>
+
+<p><strong>In Python, <code class="highlighter-rouge">obj.__call__()</code> makes the <code class="highlighter-rouge">obj</code> callable as a function when used like <code class="highlighter-rouge">obj()</code>!</strong></p>
+
+<h3 id="python-args-and-kwargs">
+<a class="anchor" href="#python-args-and-kwargs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Python <code class="highlighter-rouge">*args</code> and <code class="highlighter-rouge">**kwargs</code>
+</h3>
+
+<p>A Python function puts the positional arguments into a tuple <code class="highlighter-rouge">args</code>, and the keyword arguments into a dictionary <code class="highlighter-rouge">kwargs</code>.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"args: {args}; kwargs: {kwargs}"</span><span class="p">)</span>
+
+<span class="n">f</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s">'a'</span><span class="p">,</span> <span class="n">thing1</span><span class="o">=</span><span class="s">"hello"</span><span class="p">)</span>
+<span class="s">"""
+args: (3, 'a'); kwargs: {'thing1': 'hello'}
+"""</span>
+</code></pre></div></div>
+
+<p>There are some downsides to using <code class="highlighter-rouge">args</code> and <code class="highlighter-rouge">kwargs</code>, e.g. when you check the signature of a function and you only see this and don’t know what exactly is passed in. For example, if there’s a typo in a parameter name, it’s hard to track down.</p>
+
+<p>Sometimes we do want to use them. For example, here the callback <code class="highlighter-rouge">cb</code> has two methods, one takes 1 argument and the other takes 2.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">slow_calculation</span><span class="p">(</span><span class="n">cb</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">cb</span><span class="p">:</span> <span class="n">cb</span><span class="o">.</span><span class="n">before_calc</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">+=</span> <span class="n">i</span><span class="o">*</span><span class="n">i</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cb</span><span class="p">:</span> <span class="n">cb</span><span class="o">.</span><span class="n">after_calc</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">res</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+
+<span class="k">class</span> <span class="nc">PrintStepCallback</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">before_calc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="s">"""In this case we don't care about what's passed in"""</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"About to start"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">after_calc</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Done step"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>In this case we don’t care about what’s passed into the methods, <code class="highlighter-rouge">args</code> and <code class="highlighter-rouge">kwargs</code> are passed and not used.</p>
+
+<p>If we remove them there will be an error when calling the methods with any arguments. With them, we can pass in whatever arguments at calling.</p>
+
+<p>To make the methods do something with the input,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">PrintStatusCallback</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">before_calc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"About to start: {epoch}"</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">after_calc</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"After {epoch}: {val}"</span><span class="p">)</span>
+
+<span class="n">slow_calculation</span><span class="p">(</span><span class="n">PrintStatusCallback</span><span class="p">())</span>
+<span class="s">"""
+About to start: 0
+After 0: 0
+About to start: 1
+After 1: 1
+About to start: 2
+After 2: 5
+About to start: 3
+After 3: 14
+About to start: 4
+After 4: 30
+"""</span>
+</code></pre></div></div>
+
+<p>Here we put <code class="highlighter-rouge">**kwargs</code> in case we want to add something in the future and make sure it doesn’t break. If we pass in any unexpected positional arguments it <em>should</em> break.</p>
+
+<h3 id="callbacks-modifying-behavior">
+<a class="anchor" href="#callbacks-modifying-behavior" aria-hidden="true"><span class="octicon octicon-link"></span></a>Callbacks: modifying behavior</h3>
+
+<h4 id="early-stopping">
+<a class="anchor" href="#early-stopping" aria-hidden="true"><span class="octicon octicon-link"></span></a>Early stopping</h4>
+
+<p>We can modify the target function with the callback. Here’s an example of early stopping using a callback.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">slow_calculation</span><span class="p">(</span><span class="n">cb</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="c1"># `hasattr` avoids breaking if cb doesn't have the method
+</span>        <span class="k">if</span> <span class="n">cb</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cb</span><span class="p">,</span><span class="s">'before_calc'</span><span class="p">):</span> <span class="n">cb</span><span class="o">.</span><span class="n">before_calc</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">+=</span> <span class="n">i</span><span class="o">*</span><span class="n">i</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cb</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cb</span><span class="p">,</span><span class="s">'after_calc'</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">cb</span><span class="o">.</span><span class="n">after_calc</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">"stopping early"</span><span class="p">)</span>
+                <span class="k">break</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+<span class="k">class</span> <span class="nc">PrintAfterCallback</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">after_calc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"After {epoch}: {val}"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">val</span><span class="o">&gt;</span><span class="mi">10</span><span class="p">:</span> <span class="k">return</span> <span class="bp">True</span>
+
+<span class="n">slow_calculation</span><span class="p">(</span><span class="n">PrintAfterCallback</span><span class="p">())</span>
+<span class="s">"""
+After 0: 0
+After 1: 1
+After 2: 5
+After 3: 14
+stopping early
+"""</span>
+</code></pre></div></div>
+
+<h4 id="modifying-the-state">
+<a class="anchor" href="#modifying-the-state" aria-hidden="true"><span class="octicon octicon-link"></span></a>Modifying the state</h4>
+
+<p>We can also directly modify the state of the object with the callback by passing the object into the callback.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">SlowCalculator</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cb</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cb</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">res</span> <span class="o">=</span> <span class="n">cb</span><span class="p">,</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cb_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">cb</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">cb</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cb</span><span class="p">,</span><span class="n">cb_name</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cb</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">calc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+            <span class="c1"># We can use `__call__()` instead of `callback()` above,
+</span>            <span class="c1"># then here becomes `self('before_calc', i)`
+</span>            <span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s">'before_calc'</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">res</span> <span class="o">+=</span> <span class="n">i</span><span class="o">*</span><span class="n">i</span>
+            <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s">'after_calc'</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">"stopping early"</span><span class="p">)</span>
+                <span class="k">break</span>
+
+
+<span class="k">class</span> <span class="nc">ModifyingCallback</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">after_calc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">calc</span><span class="p">,</span> <span class="n">epoch</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"After {epoch}: {calc.res}"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">calc</span><span class="o">.</span><span class="n">res</span><span class="o">&gt;</span><span class="mi">10</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="c1"># HERE WE MODIFIES `calc` object that is passed in!
+</span>        <span class="k">if</span> <span class="n">calc</span><span class="o">.</span><span class="n">res</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">:</span>
+            <span class="n">calc</span><span class="o">.</span><span class="n">res</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">res</span><span class="o">*</span><span class="mi">2</span>
+
+<span class="c1"># Init the instance with the modifying callback
+</span><span class="n">calculator</span> <span class="o">=</span> <span class="n">SlowCalculator</span><span class="p">(</span><span class="n">ModifyingCallback</span><span class="p">())</span>
+<span class="n">calculator</span><span class="o">.</span><span class="n">calc</span><span class="p">()</span>
+<span class="s">"""
+After 0: 0
+After 1: 1
+After 2: 6
+After 3: 15
+stopping early
+"""</span>
+<span class="n">calculator</span><span class="o">.</span><span class="n">res</span>
+<span class="s">"""
+15
+"""</span>
+</code></pre></div></div>
+
+<h2 id="revisiting-python-dunder-methods">
+<a class="anchor" href="#revisiting-python-dunder-methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Revisiting Python Dunder Methods</h2>
+
+<p>The Python doc for its <a href="https://docs.python.org/3/reference/datamodel.html#object.__init__">data model</a> has all the info about the special dunder methods <code class="highlighter-rouge">__xxx__()</code>.</p>
+
+<p>A toy example,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">SloppyAdder</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">o</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">o</span><span class="o">=</span><span class="n">o</span>
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">):</span> <span class="k">return</span> <span class="n">SloppyAdder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">o</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="n">o</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">o</span><span class="p">)</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">SloppyAdder</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">SloppyAdder</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># `+` is overridden by __add__
+</span><span class="n">a</span><span class="o">+</span><span class="n">b</span>
+<span class="s">"""
+3.01
+"""</span>
+</code></pre></div></div>
+
+<p>Some examples:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">__getitem__</code></li>
+  <li><code class="highlighter-rouge">__getattr__</code></li>
+  <li><code class="highlighter-rouge">__setattr__</code></li>
+  <li><code class="highlighter-rouge">__del__</code></li>
+  <li><code class="highlighter-rouge">__init__</code></li>
+  <li><code class="highlighter-rouge">__new__</code></li>
+  <li><code class="highlighter-rouge">__enter__</code></li>
+  <li><code class="highlighter-rouge">__exit__</code></li>
+  <li><code class="highlighter-rouge">__len__</code></li>
+  <li><code class="highlighter-rouge">__repr__</code></li>
+  <li><code class="highlighter-rouge">__str__</code></li>
+</ul>
+
+<h2 id="fundamental-ability-of-an-engineer-browsing-source-code">
+<a class="anchor" href="#fundamental-ability-of-an-engineer-browsing-source-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fundamental ability of an engineer: browsing source code</h2>
+
+<p>Must know and practice how to do all these in <a href="https://code.visualstudio.com/docs/editor/editingevolved">vscode</a>,</p>
+
+<ul>
+  <li>Jump to tag/symbol</li>
+  <li>Jump to current tag</li>
+  <li>Jump to library tags</li>
+  <li>Go back</li>
+  <li>Search</li>
+  <li>Outlining / folding</li>
+</ul>
+
+<p>Jeremy uses Vim because it’s good for developing on remote machines. Nowadays vscode can use the ssh extension.</p>
+
+<h2 id="variance-covariance-and-correlation">
+<a class="anchor" href="#variance-covariance-and-correlation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Variance, covariance, and correlation</h2>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"""
+VARIANCE
+"""</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="mf">4.</span><span class="p">,</span><span class="mi">18</span><span class="p">])</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">m</span><span class="p">)</span><span class="o">.</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="s">"""
+STANDARD DEVIATION
+"""</span>
+<span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">m</span><span class="p">)</span><span class="o">.</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+
+<span class="s">"""
+MEAN ABSOLUTE DEVIATION
+"""</span>
+<span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">m</span><span class="p">)</span><span class="o">.</span><span class="nb">abs</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Note that <strong>Mean Absolute Deviation should be used more because it’s more robust than the standard deviation for outliers</strong>.</p>
+
+<p>Notice that</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">m</span><span class="p">)</span><span class="o">.</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">==</span> <span class="p">(</span><span class="n">t</span><span class="o">*</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="p">(</span><span class="n">m</span><span class="o">*</span><span class="n">m</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This is equivalent to,</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">var</mi><mo>⁡</mo><mo stretchy="false">[</mo><mi>X</mi><mo stretchy="false">]</mo><mo>=</mo><mi mathvariant="normal">E</mi><mo>⁡</mo><mrow><mo fence="true">[</mo><msup><mi>X</mi><mn>2</mn></msup><mo fence="true">]</mo></mrow><mo>−</mo><mi mathvariant="normal">E</mi><mo>⁡</mo><mo stretchy="false">[</mo><mi>X</mi><msup><mo stretchy="false">]</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\operatorname{var}[X] = \operatorname{E}\left[X^2 \right] - \operatorname{E}[X]^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop"><span class="mord mathrm" style="margin-right:0.01389em;">v</span><span class="mord mathrm">a</span><span class="mord mathrm">r</span></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.2141179999999998em;vertical-align:-0.35001em;"></span><span class="mop"><span class="mord mathrm">E</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">[</span></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">]</span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1141079999999999em;vertical-align:-0.25em;"></span><span class="mop"><span class="mord mathrm">E</span></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mclose"><span class="mclose">]</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span>
+
+<p><strong>When we calculate the variance in code, we should use <code class="highlighter-rouge">(t*t).mean() - (m*m)</code> instead of the definition form because it’s more efficient (doesn’t require multiple passes).</strong></p>
+
+<p>Similarly, we can calculate the covariance of two variables <code class="highlighter-rouge">t</code> and <code class="highlighter-rouge">v</code> by</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cov</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="o">*</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">t</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>because,</p>
+
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">cov</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>X</mi><mo separator="true">,</mo><mi>Y</mi><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="normal">E</mi><mo>⁡</mo><mrow><mo fence="false">[</mo><mo stretchy="false">(</mo><mi>X</mi><mo>−</mo><mi mathvariant="normal">E</mi><mo>⁡</mo><mo stretchy="false">[</mo><mi>X</mi><mo stretchy="false">]</mo><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>Y</mi><mo>−</mo><mi mathvariant="normal">E</mi><mo>⁡</mo><mo stretchy="false">[</mo><mi>Y</mi><mo stretchy="false">]</mo><mo stretchy="false">)</mo><mo fence="false">]</mo></mrow></mrow><annotation encoding="application/x-tex">\operatorname{cov}(X,Y) = \operatorname{E}{\big[(X - \operatorname{E}[X])(Y - \operatorname{E}[Y])\big]}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop"><span class="mord mathrm">c</span><span class="mord mathrm">o</span><span class="mord mathrm" style="margin-right:0.01389em;">v</span></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.20001em;vertical-align:-0.35001em;"></span><span class="mop"><span class="mord mathrm">E</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord"><span class="delimsizing size1">[</span></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mop"><span class="mord mathrm">E</span></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mclose">]</span><span class="mclose">)</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mop"><span class="mord mathrm">E</span></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="mclose">]</span><span class="mclose">)</span><span class="mord"><span class="delimsizing size1">]</span></span></span></span></span></span>
+<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mi mathvariant="normal">E</mi><mo>⁡</mo><mrow><mo fence="true">[</mo><mi>X</mi><mi>Y</mi><mo fence="true">]</mo></mrow><mo>−</mo><mi mathvariant="normal">E</mi><mo>⁡</mo><mrow><mo fence="true">[</mo><mi>X</mi><mo fence="true">]</mo></mrow><mi mathvariant="normal">E</mi><mo>⁡</mo><mrow><mo fence="true">[</mo><mi>Y</mi><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">= \operatorname{E}\left[X Y\right] - \operatorname{E}\left[X\right] \operatorname{E}\left[Y\right]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop"><span class="mord mathrm">E</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">[</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="mclose delimcenter" style="top:0em;">]</span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop"><span class="mord mathrm">E</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">[</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mclose delimcenter" style="top:0em;">]</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop"><span class="mord mathrm">E</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">[</span><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="mclose delimcenter" style="top:0em;">]</span></span></span></span></span></p>
+
+<p><strong>Variance and covariance are the same thing, because variance is just the covariance of X with itself.</strong></p>
+
+<p>Next we have correlation, or Pearson correlation coefficient,</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ρ</mi><mrow><mi>X</mi><mo separator="true">,</mo><mi>Y</mi></mrow></msub><mo>=</mo><mfrac><mrow><mi mathvariant="normal">cov</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>X</mi><mo separator="true">,</mo><mi>Y</mi><mo stretchy="false">)</mo></mrow><mrow><msub><mi>σ</mi><mi>X</mi></msub><msub><mi>σ</mi><mi>Y</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">\rho_{X,Y}= \frac{\operatorname{cov}(X,Y)}{\sigma_X \sigma_Y}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathdefault">ρ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.328331em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.07847em;">X</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight" style="margin-right:0.22222em;">Y</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.263em;vertical-align:-0.8360000000000001em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.3139999999999996em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.07847em;">X</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.22222em;">Y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mord mathrm">c</span><span class="mord mathrm">o</span><span class="mord mathrm" style="margin-right:0.01389em;">v</span></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.22222em;">Y</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8360000000000001em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span>
+
+<p>In code,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">corr</span> <span class="o">=</span> <span class="n">cov</span> <span class="o">/</span> <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">*</span> <span class="n">v</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p><strong>The correlation is just a scaled version of the covariance.</strong></p>
+
+<p><strong>Remember: from now on, always write code for a math equation, not (just) the LaTeX!</strong></p>
+
+<h2 id="softmax">
+<a class="anchor" href="#softmax" aria-hidden="true"><span class="octicon octicon-link"></span></a>Softmax</h2>
+
+<p>A recap of the softmax function and the multiclass cross entropy loss.</p>
+
+<p>In code, log softmax is</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">log_softmax</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">exp</span><span class="p">()</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">log</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Here <code class="highlighter-rouge">x</code> is the activation vector, <code class="highlighter-rouge">log_softmax(x)</code> is a vector with the same shape as <code class="highlighter-rouge">x</code>.</p>
+
+<p>In equation it is (i for the ith element of one prediction vector)</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover accent="true"><mi>y</mi><mo>^</mo></mover><mi>i</mi></msub><mo>=</mo><mtext>softmax</mtext><mo stretchy="false">(</mo><mi mathvariant="bold">x</mi><msub><mo stretchy="false">)</mo><mi>i</mi></msub><mo>=</mo><msup><mi>e</mi><msub><mi>x</mi><mi>i</mi></msub></msup><mi mathvariant="normal">/</mi><munder><mo>∑</mo><mi>j</mi></munder><msup><mi>e</mi><msub><mi>x</mi><mi>j</mi></msub></msup></mrow><annotation encoding="application/x-tex">\hat{y}_i = \text{softmax}(\mathbf{x})_{i} = e^{x_{i}} / \sum_{j} e^{x_{j}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">softmax</span></span><span class="mopen">(</span><span class="mord"><span class="mord mathbf">x</span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.463782em;vertical-align:-1.413777em;"></span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="mord">/</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8723309999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.413777em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2818857142857143em;"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>logsoftmax</mtext><mo stretchy="false">(</mo><mi mathvariant="bold">x</mi><msub><mo stretchy="false">)</mo><mi>i</mi></msub><mo>=</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>log</mi><mo>⁡</mo><munder><mo>∑</mo><mi>j</mi></munder><msup><mi>e</mi><msub><mi>x</mi><mi>j</mi></msub></msup></mrow><annotation encoding="application/x-tex">\text{logsoftmax}(\mathbf{x})_{i} = x_{i} - \log \sum_{j} e^{x_{j}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">logsoftmax</span></span><span class="mopen">(</span><span class="mord"><span class="mord mathbf">x</span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.73333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:2.463782em;vertical-align:-1.413777em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.050005em;"><span style="top:-1.8723309999999997em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.413777em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2818857142857143em;"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
+
+<p>And cross entropy loss (NLL) for $\mathbf{x}$, i.e. the activation vector of <strong>one</strong> prediction is:</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mi>log</mi><mo>⁡</mo><mo stretchy="false">(</mo><msub><mover accent="true"><mi>y</mi><mo>^</mo></mover><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">-\log(\hat{y}_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">−</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mopen">(</span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>
+
+<p>This is because the ground truth <code class="highlighter-rouge">y</code> is one-hot encoded. Refer to lesson 9’s <a href="http://blog.logancyang.com/note/fastai/2020/05/25/fastai-lesson9.html#create-the-cross-entropy-loss-function">note</a> to recall the <strong>selection trick</strong>.</p>
+
+<p>For multiple predictions, recall that the cross entropy loss or NLL is</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">nll</span><span class="p">(</span><span class="n">softmax_preds</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+    <span class="s">"""
+    Use array indexing to select the corresponding values for
+    cross entropy loss.
+    """</span>
+    <span class="n">log_sm</span> <span class="o">=</span> <span class="n">softmax_preds</span><span class="o">.</span><span class="n">log</span><span class="p">()</span>
+    <span class="k">return</span> <span class="o">-</span><span class="n">log_sm</span><span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="n">targets</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">targets</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">mean()</code> is for averaging over multiple rows of log softmax predictions to get an overall batch prediction loss.</p>
+
+<h3 id="when-to-use-softmax-and-when-not-to">
+<a class="anchor" href="#when-to-use-softmax-and-when-not-to" aria-hidden="true"><span class="octicon octicon-link"></span></a>When to use softmax and when not to</h3>
+
+<p><strong>Softmax likes to pick one thing and make it big</strong>, because it’s exponential.</p>
+
+<p><img src="/images/fastai/softmax_excel.png" alt="softmax_excel" align="middle"></p>
+
+<p>In the above Excel example, the activations for these categories in image 1 are larger than in image 2, which means <strong>image 1 is more likely to have these objects in it (Me: this teaches us that the activations before the softmax express confidence of having those things in the image)</strong>.</p>
+
+<p>But, the softmax outputs are the same because after the <code class="highlighter-rouge">exp()</code> and the normalization, each component captures the same percentage.</p>
+
+<p><strong>Yet they are different</strong>.</p>
+
+<h3 id="very-important-remarks-by-jeremy">
+<a class="anchor" href="#very-important-remarks-by-jeremy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Very important remarks by Jeremy</h3>
+
+<hr>
+<p><em>Be careful when softmax is a BAD IDEA:</em></p>
+
+<p><em>To use softmax, make sure that the entries in your dataset all have one or more objects of interests, PREFERRABLY ONE OF EACH TYPE. If none of the images have the objects of interest in them, softmax will still give a high probability of seeing them! If a category has more than one object in an image, softmax finds the most likely ONE. This also applies to audio or tabular data.</em></p>
+
+<p><em>For yes or no (<strong>whether there is</strong> an object of type A or B or C in the image) kind of tasks, <strong>we should use sigmoid instead of softmax</strong>, as shown at the far right in the above Excel example (note that they don’t sum to one anymore).</em></p>
+
+<p><em>Why did we always use softmax in object recognition tasks? Because of ImageNet! The data entries in ImageNet always have ONE of some object of interest in them!!</em></p>
+
+<p><em>A lot of well-regarded academic papers or applications use <code class="highlighter-rouge">Nothing</code> as a category alongside others like <code class="highlighter-rouge">Cat</code>, <code class="highlighter-rouge">Fish</code>, etc. But Jeremy says <strong>it’s terrible idea</strong>! Because there is no feature like “furriness” or “smoothness” or “shininess” that describes “No-Cat”, “No-Fish”, etc. Of course we can hack it by somehow producing another model that captures the “none-cat-ness” features but that is too hard and unnecessary. <strong>Just use a binary model</strong> for predicting whether there’s an object in the scene!</em></p>
+
+<p><strong>Me: Again, this lesson teaches us that the activations before the last classification outout layer is a monotonic function that indicates the confidence of predicting that category.</strong></p>
+
+<p><em>When you see a paper that uses softmax for classifying exist/non-exist tasks, try to use a sigmoid, you may get better result!</em></p>
+
+<p><strong>When is softmax a good idea? Language modeling!</strong> Predicting the next word is the perfect case for using softmax because it’s always one word and no more or less than one word.</p>
+
+<hr>
+
+<h2 id="build-a-learning-rate-finder">
+<a class="anchor" href="#build-a-learning-rate-finder" aria-hidden="true"><span class="octicon octicon-link"></span></a>Build a Learning Rate Finder</h2>
+
+<p>Notebook: <code class="highlighter-rouge">05b_early_stopping</code></p>
+
+<h3 id="using-exceptions-as-control-flow">
+<a class="anchor" href="#using-exceptions-as-control-flow" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using Exceptions as control flow!</h3>
+
+<p>It is not easy to use callbacks and a boolean stop value to do early stopping because we need to check many places. Using Exception is a neat trick.</p>
+
+<p>An exception in Python is just a class that inherits from <code class="highlighter-rouge">Exception</code>. Most of the time you don’t need to give it any behavior, just pass, like this,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CancelTrainException</span><span class="p">(</span><span class="nb">Exception</span><span class="p">):</span> <span class="k">pass</span>
+</code></pre></div></div>
+
+<p>We have the <code class="highlighter-rouge">Runner</code> class and the <code class="highlighter-rouge">Callback</code> class.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Callback</span><span class="p">():</span>
+    <span class="n">_order</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">def</span> <span class="nf">set_runner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">=</span><span class="n">run</span>
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span> <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+
+    <span class="o">@</span><span class="nb">property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">r'Callback$'</span><span class="p">,</span> <span class="s">''</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">camel2snake</span><span class="p">(</span><span class="n">name</span> <span class="ow">or</span> <span class="s">'callback'</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cb_name</span><span class="p">):</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cb_name</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">f</span> <span class="ow">and</span> <span class="n">f</span><span class="p">():</span> <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+<span class="k">class</span> <span class="nc">TrainEvalCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">begin_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">n_epochs</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">n_iter</span><span class="o">=</span><span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">after_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_train</span><span class="p">:</span> <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">n_epochs</span> <span class="o">+=</span> <span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">iters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">n_iter</span>   <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">begin_epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">n_epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epoch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">in_train</span><span class="o">=</span><span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">begin_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="nb">eval</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">in_train</span><span class="o">=</span><span class="bp">False</span>
+
+<span class="k">class</span> <span class="nc">CancelTrainException</span><span class="p">(</span><span class="nb">Exception</span><span class="p">):</span> <span class="k">pass</span>
+<span class="k">class</span> <span class="nc">CancelEpochException</span><span class="p">(</span><span class="nb">Exception</span><span class="p">):</span> <span class="k">pass</span>
+<span class="k">class</span> <span class="nc">CancelBatchException</span><span class="p">(</span><span class="nb">Exception</span><span class="p">):</span> <span class="k">pass</span>
+
+<span class="c1">#########################
+</span>
+<span class="k">class</span> <span class="nc">Runner</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cbs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cb_funcs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">cbs</span> <span class="o">=</span> <span class="n">listify</span><span class="p">(</span><span class="n">cbs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cbf</span> <span class="ow">in</span> <span class="n">listify</span><span class="p">(</span><span class="n">cb_funcs</span><span class="p">):</span>
+            <span class="n">cb</span> <span class="o">=</span> <span class="n">cbf</span><span class="p">()</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cb</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">cb</span><span class="p">)</span>
+            <span class="n">cbs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cb</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cbs</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,[</span><span class="n">TrainEvalCallback</span><span class="p">()]</span><span class="o">+</span><span class="n">cbs</span>
+
+    <span class="o">@</span><span class="nb">property</span>
+    <span class="k">def</span> <span class="nf">opt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>       <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">opt</span>
+    <span class="o">@</span><span class="nb">property</span>
+    <span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">model</span>
+    <span class="o">@</span><span class="nb">property</span>
+    <span class="k">def</span> <span class="nf">loss_func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">loss_func</span>
+    <span class="o">@</span><span class="nb">property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="o">.</span><span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">one_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xb</span><span class="p">,</span> <span class="n">yb</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xb</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">yb</span> <span class="o">=</span> <span class="n">xb</span><span class="p">,</span><span class="n">yb</span>
+            <span class="bp">self</span><span class="p">(</span><span class="s">'begin_batch'</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xb</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">(</span><span class="s">'after_pred'</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pred</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">yb</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">(</span><span class="s">'after_loss'</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_train</span><span class="p">:</span> <span class="k">return</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+            <span class="bp">self</span><span class="p">(</span><span class="s">'after_backward'</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+            <span class="bp">self</span><span class="p">(</span><span class="s">'after_step'</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">CancelBatchException</span><span class="p">:</span> <span class="bp">self</span><span class="p">(</span><span class="s">'after_cancel_batch'</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span> <span class="bp">self</span><span class="p">(</span><span class="s">'after_batch'</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">all_batches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dl</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iters</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dl</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">xb</span><span class="p">,</span><span class="n">yb</span> <span class="ow">in</span> <span class="n">dl</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">one_batch</span><span class="p">(</span><span class="n">xb</span><span class="p">,</span> <span class="n">yb</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">CancelEpochException</span><span class="p">:</span> <span class="bp">self</span><span class="p">(</span><span class="s">'after_cancel_epoch'</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span> <span class="n">learn</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epochs</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">learn</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">epochs</span><span class="p">,</span><span class="n">learn</span><span class="p">,</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbs</span><span class="p">:</span> <span class="n">cb</span><span class="o">.</span><span class="n">set_runner</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">(</span><span class="s">'begin_fit'</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">=</span> <span class="n">epoch</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">(</span><span class="s">'begin_epoch'</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_batches</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">train_dl</span><span class="p">)</span>
+
+                <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">(</span><span class="s">'begin_validate'</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_batches</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">valid_dl</span><span class="p">)</span>
+                <span class="bp">self</span><span class="p">(</span><span class="s">'after_epoch'</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">CancelTrainException</span><span class="p">:</span> <span class="bp">self</span><span class="p">(</span><span class="s">'after_cancel_train'</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">(</span><span class="s">'after_fit'</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">learn</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cb_name</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cbs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">_order</span><span class="p">):</span> <span class="n">res</span> <span class="o">=</span> <span class="n">cb</span><span class="p">(</span><span class="n">cb_name</span><span class="p">)</span> <span class="ow">or</span> <span class="n">res</span>
+        <span class="k">return</span> <span class="n">res</span>
+</code></pre></div></div>
+
+<p>We see that <code class="highlighter-rouge">CancelBatchException</code>, <code class="highlighter-rouge">CancelEpochException</code> and <code class="highlighter-rouge">CancelTrainException</code> are used as control flow to enable graceful skip or stopping, by placing it with <code class="highlighter-rouge">except</code> between <code class="highlighter-rouge">try</code> and <code class="highlighter-rouge">finally</code> blocks.</p>
+
+<p>We can use <code class="highlighter-rouge">CancelTrainException</code> to make a learning rate finder,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">LR_Find</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="n">_order</span><span class="o">=</span><span class="mi">1</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">min_lr</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">max_lr</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">min_lr</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">max_lr</span> <span class="o">=</span> <span class="n">max_iter</span><span class="p">,</span><span class="n">min_lr</span><span class="p">,</span><span class="n">max_lr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_loss</span> <span class="o">=</span> <span class="mf">1e9</span>
+
+    <span class="k">def</span> <span class="nf">begin_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_train</span><span class="p">:</span> <span class="k">return</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_iter</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span>
+        <span class="n">lr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_lr</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_lr</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">min_lr</span><span class="p">)</span> <span class="o">**</span> <span class="n">pos</span>
+        <span class="k">for</span> <span class="n">pg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">param_groups</span><span class="p">:</span> <span class="n">pg</span><span class="p">[</span><span class="s">'lr'</span><span class="p">]</span> <span class="o">=</span> <span class="n">lr</span>
+
+    <span class="k">def</span> <span class="nf">after_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_iter</span><span class="o">&gt;=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="o">&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">best_loss</span><span class="o">*</span><span class="mi">10</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CancelTrainException</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_loss</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss</span>
+</code></pre></div></div>
+
+<p>In <code class="highlighter-rouge">after_step()</code> we check if the loss gets much worse, if yes we stop training.</p>
+
+<h2 id="recreate-cnn-cpu-and-gpu">
+<a class="anchor" href="#recreate-cnn-cpu-and-gpu" aria-hidden="true"><span class="octicon octicon-link"></span></a>Recreate CNN (CPU and GPU)</h2>
+
+<p>Notebook: <code class="highlighter-rouge">06_cuda_cnn_hooks_init</code></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># MNIST
+</span><span class="n">x_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">x_valid</span><span class="p">,</span><span class="n">y_valid</span> <span class="o">=</span> <span class="n">get_data</span><span class="p">()</span>
+
+<span class="c1"># Normalize based on training data
+</span><span class="k">def</span> <span class="nf">normalize_to</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">valid</span><span class="p">):</span>
+    <span class="n">m</span><span class="p">,</span><span class="n">s</span> <span class="o">=</span> <span class="n">train</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span><span class="n">train</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">normalize</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">),</span> <span class="n">normalize</span><span class="p">(</span><span class="n">valid</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+
+<span class="n">x_train</span><span class="p">,</span><span class="n">x_valid</span> <span class="o">=</span> <span class="n">normalize_to</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span><span class="n">x_valid</span><span class="p">)</span>
+<span class="n">train_ds</span><span class="p">,</span><span class="n">valid_ds</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span><span class="n">Dataset</span><span class="p">(</span><span class="n">x_valid</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">)</span>
+
+<span class="n">nh</span><span class="p">,</span><span class="n">bs</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span><span class="mi">512</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="nb">max</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span>
+<span class="n">loss_func</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">cross_entropy</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">DataBunch</span><span class="p">(</span><span class="o">*</span><span class="n">get_dls</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">valid_ds</span><span class="p">,</span> <span class="n">bs</span><span class="p">),</span> <span class="n">c</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Lambda</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="s">"""This is for putting into pytorch nn.Sequential()"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>To refactor layers, it’s useful to have a <code class="highlighter-rouge">Lambda</code> layer that can take a basic function and convert it to a layer you can put in <code class="highlighter-rouge">nn.Sequential</code>.</p>
+
+<p><em>Note: if you use a Lambda layer with a lambda function, your model won’t pickle so you won’t be able to save it with PyTorch. So it’s best to give a name to the function you’re using inside your Lambda (like flatten here).</em></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="s">"""Flatten after nn.AdaptiveAvgPool2d and before the final nn.Linear"""</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">mnist_resize</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="s">"""
+    Resize bs x 784 to batches of 28x28 images. -1 means the batch size
+    remains whatever it is before
+    """</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Create the CNN model,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">get_cnn_model</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+        <span class="c1"># This lambda layer is preprocessing original bs x 784 to
+</span>        <span class="c1"># bs x 1 x 28 x 28
+</span>        <span class="n">Lambda</span><span class="p">(</span><span class="n">mnist_resize</span><span class="p">),</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span> <span class="c1">#14
+</span>        <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span> <span class="mi">8</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span> <span class="c1"># 7
+</span>        <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span> <span class="c1"># 4
+</span>        <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span> <span class="c1"># 2
+</span>        <span class="n">nn</span><span class="o">.</span><span class="n">AdaptiveAvgPool2d</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+        <span class="n">Lambda</span><span class="p">(</span><span class="n">flatten</span><span class="p">),</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></div>
+
+<p>Now run the model on CPU,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model</span> <span class="o">=</span> <span class="n">get_cnn_model</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="c1"># Callbacks from previous notebook
+</span><span class="n">cbfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">Recorder</span><span class="p">,</span> <span class="n">partial</span><span class="p">(</span><span class="n">AvgStatsCallback</span><span class="p">,</span><span class="n">accuracy</span><span class="p">)]</span>
+
+<span class="n">opt</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">loss_func</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="n">run</span> <span class="o">=</span> <span class="n">Runner</span><span class="p">(</span><span class="n">cb_funcs</span><span class="o">=</span><span class="n">cbfs</span><span class="p">)</span>
+
+<span class="o">%</span><span class="n">time</span> <span class="n">run</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">learn</span><span class="p">)</span>
+<span class="s">"""
+train: [1.7832209375, tensor(0.3780)]
+valid: [0.68908681640625, tensor(0.7742)]
+CPU times: user 7.84 s, sys: 5.79 s, total: 13.6 s
+Wall time: 5.87 s
+"""</span>
+</code></pre></div></div>
+
+<p>This is a bit slow, let’s run it on GPU!</p>
+
+<h3 id="move-to-gpu-cuda">
+<a class="anchor" href="#move-to-gpu-cuda" aria-hidden="true"><span class="octicon octicon-link"></span></a>Move to GPU: CUDA</h3>
+
+<p>A somewhat flexible way:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 0 means you have 1 GPU
+</span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s">'cuda'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">CudaCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="s">"""pytorch has .to(device) for model and tensors"""</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">device</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">=</span><span class="n">device</span>
+
+    <span class="k">def</span> <span class="nf">begin_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">begin_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">xb</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">yb</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">xb</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">yb</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>A less flexible but more convenient way if you only have 1 GPU:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># This only needs to be called once, and pytorch defaults to it
+</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">set_device</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">CudaCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="s">"""Now instead of .to(device), just do .cuda()"""</span>
+    <span class="k">def</span> <span class="nf">begin_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">begin_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">xb</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">yb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xb</span><span class="o">.</span><span class="n">cuda</span><span class="p">(),</span><span class="bp">self</span><span class="o">.</span><span class="n">yb</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+
+<span class="n">cbfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CudaCallback</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">get_cnn_model</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">loss_func</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="n">run</span> <span class="o">=</span> <span class="n">Runner</span><span class="p">(</span><span class="n">cb_funcs</span><span class="o">=</span><span class="n">cbfs</span><span class="p">)</span>
+<span class="o">%</span><span class="n">time</span> <span class="n">run</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">learn</span><span class="p">)</span>
+<span class="s">"""
+train: [1.8033628125, tensor(0.3678, device='cuda:0')]
+valid: [0.502658544921875, tensor(0.8599, device='cuda:0')]
+train: [0.3883639453125, tensor(0.8856, device='cuda:0')]
+valid: [0.205377734375, tensor(0.9413, device='cuda:0')]
+train: [0.17645265625, tensor(0.9477, device='cuda:0')]
+valid: [0.15847452392578126, tensor(0.9543, device='cuda:0')]
+CPU times: user 4.36 s, sys: 1.07 s, total: 5.43 s
+Wall time: 5.41 s
+"""</span>
+</code></pre></div></div>
+
+<p>This is much faster than CPU! For a much deeper model, it will be even faster.</p>
+
+<h3 id="refactoring-the-model">
+<a class="anchor" href="#refactoring-the-model" aria-hidden="true"><span class="octicon octicon-link"></span></a>Refactoring the model</h3>
+
+<p>First we can regroup all the conv/relu in a single function:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">conv2d</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span> <span class="n">nf</span><span class="p">,</span> <span class="n">ks</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span> <span class="n">nf</span><span class="p">,</span> <span class="n">ks</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="n">ks</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="n">stride</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>We can do the mnist resize in a batch transform, that we can do with a Callback.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">BatchTransformXCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="n">_order</span><span class="o">=</span><span class="mi">2</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tfm</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">tfm</span> <span class="o">=</span> <span class="n">tfm</span>
+    <span class="k">def</span> <span class="nf">begin_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">xb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tfm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xb</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">view_tfm</span><span class="p">(</span><span class="o">*</span><span class="n">size</span><span class="p">):</span>
+    <span class="s">"""
+    Using closure to create a view or reshape to `size` with any batch size
+    """</span>
+    <span class="k">def</span> <span class="nf">_inner</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">*</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,)</span><span class="o">+</span><span class="n">size</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">_inner</span>
+
+<span class="n">mnist_view</span> <span class="o">=</span> <span class="n">view_tfm</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="mi">28</span><span class="p">)</span>
+<span class="n">cbfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">BatchTransformXCallback</span><span class="p">,</span> <span class="n">mnist_view</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Get familiar with closure and partial with the above code.</p>
+
+<p>This model can now work on any size input,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">nfs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">32</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">get_cnn_layers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">nfs</span><span class="p">):</span>
+    <span class="n">nfs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">nfs</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">conv2d</span><span class="p">(</span><span class="n">nfs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nfs</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="mi">5</span> <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span> <span class="k">else</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nfs</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">AdaptiveAvgPool2d</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">Lambda</span><span class="p">(</span><span class="n">flatten</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">nfs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">c</span><span class="p">)]</span>
+
+<span class="k">def</span> <span class="nf">get_cnn_model</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">nfs</span><span class="p">):</span> <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">get_cnn_layers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">nfs</span><span class="p">))</span>
+
+<span class="c1">#export
+</span><span class="k">def</span> <span class="nf">get_runner</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">cbs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">opt_func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">loss_func</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">cross_entropy</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">opt_func</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">opt_func</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">SGD</span>
+    <span class="n">opt</span> <span class="o">=</span> <span class="n">opt_func</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
+    <span class="n">learn</span> <span class="o">=</span> <span class="n">Learner</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">loss_func</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">learn</span><span class="p">,</span> <span class="n">Runner</span><span class="p">(</span><span class="n">cb_funcs</span><span class="o">=</span><span class="n">listify</span><span class="p">(</span><span class="n">cbs</span><span class="p">))</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">get_cnn_model</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">nfs</span><span class="p">)</span>
+<span class="n">learn</span><span class="p">,</span><span class="n">run</span> <span class="o">=</span> <span class="n">get_runner</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">cbs</span><span class="o">=</span><span class="n">cbfs</span><span class="p">)</span>
+
+<span class="n">model</span>
+<span class="s">"""
+Sequential(
+  (0): Sequential(
+    (0): Conv2d(1, 8, kernel_size=(5, 5), stride=(2, 2), padding=(2, 2))
+    (1): ReLU()
+  )
+  (1): Sequential(
+    (0): Conv2d(8, 16, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+    (1): ReLU()
+  )
+  (2): Sequential(
+    (0): Conv2d(16, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+    (1): ReLU()
+  )
+  (3): Sequential(
+    (0): Conv2d(32, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+    (1): ReLU()
+  )
+  (4): AdaptiveAvgPool2d(output_size=1)
+  (5): Lambda()
+  (6): Linear(in_features=32, out_features=10, bias=True)
+)
+"""</span>
+<span class="n">run</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">learn</span><span class="p">)</span>
+<span class="s">"""
+train: [1.90592640625, tensor(0.3403, device='cuda:0')]
+valid: [0.743217529296875, tensor(0.7483, device='cuda:0')]
+train: [0.4440590625, tensor(0.8594, device='cuda:0')]
+valid: [0.203494482421875, tensor(0.9409, device='cuda:0')]
+train: [0.1977476953125, tensor(0.9397, device='cuda:0')]
+valid: [0.13920831298828126, tensor(0.9606, device='cuda:0')]
+"""</span>
+</code></pre></div></div>
+
+<h2 id="hooks">
+<a class="anchor" href="#hooks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hooks</h2>
+
+<h3 id="manual-insertion">
+<a class="anchor" href="#manual-insertion" aria-hidden="true"><span class="octicon octicon-link"></span></a>Manual insertion</h3>
+
+<p>Having our own Sequential, we can store each layer activations’ mean and standard deviation.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">SequentialModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">layers</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">act_means</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">act_stds</span>  <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">l</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">l</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">act_means</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">act_stds</span> <span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">std</span> <span class="p">())</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span>
+
+
+<span class="n">model</span> <span class="o">=</span>  <span class="n">SequentialModel</span><span class="p">(</span><span class="o">*</span><span class="n">get_cnn_layers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">nfs</span><span class="p">))</span>
+<span class="n">learn</span><span class="p">,</span><span class="n">run</span> <span class="o">=</span> <span class="n">get_runner</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">cbs</span><span class="o">=</span><span class="n">cbfs</span><span class="p">)</span>
+<span class="n">run</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">learn</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>When we plot the means and stds for the layer activations over the training process, we see they explode and drop off a cliff several times. That is really concerning. We don’t know if the parameters are stuck in zero gradient places and never come back, and only a small number of them are training.</p>
+
+<h3 id="pytorch-hooks">
+<a class="anchor" href="#pytorch-hooks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pytorch hooks</h3>
+
+<p>Pytorch call them “hooks”, we have been calling them “callbacks”.</p>
+
+<p><strong>pytorch hooks == callbacks</strong></p>
+
+<p>A minimal example,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model</span> <span class="o">=</span> <span class="n">get_cnn_model</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">nfs</span><span class="p">)</span>
+<span class="n">learn</span><span class="p">,</span><span class="n">run</span> <span class="o">=</span> <span class="n">get_runner</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">cbs</span><span class="o">=</span><span class="n">cbfs</span><span class="p">)</span>
+<span class="c1"># Global vars. We can use a Hook class to avoid this.
+</span><span class="n">act_means</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">model</span><span class="p">]</span>
+<span class="n">act_stds</span>  <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">model</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">append_stats</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="n">inp</span><span class="p">,</span> <span class="n">outp</span><span class="p">):</span>
+    <span class="s">"""
+    A hook is attached to a layer, and needs to have a function that
+    takes three arguments: module, input, output. Here we store the
+    mean and std of the output in the correct position of our list.
+    """</span>
+    <span class="n">act_means</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">outp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+    <span class="n">act_stds</span> <span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">outp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+    <span class="c1"># Check the pytorch doc for register_forward_hook() for more details
+</span>    <span class="n">m</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">append_stats</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+
+
+<span class="n">run</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">learn</span><span class="p">)</span>
+<span class="s">"""
+train: [2.2561553125, tensor(0.1835, device='cuda:0')]
+valid: [2.00057578125, tensor(0.3186, device='cuda:0')]
+
+(now act_means, act_stds are populated)
+"""</span>
+</code></pre></div></div>
+
+<p>Check the notebook’s section for the <code class="highlighter-rouge">Hook</code> class and <code class="highlighter-rouge">Hooks</code> class for better implementation.</p>
+
+<p><em>Tip: When registered hooks, don’t forget to remove them when not needed, or you will run out of memory.</em></p>
+
+<p>Use the hook with the <code class="highlighter-rouge">with</code> block like this:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">):</span>
+        <span class="n">init</span><span class="o">.</span><span class="n">kaiming_normal_</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
+        <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="n">Hooks</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">append_stats</span><span class="p">)</span> <span class="k">as</span> <span class="n">hooks</span><span class="p">:</span>
+    <span class="n">run</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">learn</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,(</span><span class="n">ax0</span><span class="p">,</span><span class="n">ax1</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">hooks</span><span class="p">:</span>
+        <span class="n">ms</span><span class="p">,</span><span class="n">ss</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">stats</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ms</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ss</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">));</span>
+
+    <span class="n">fig</span><span class="p">,(</span><span class="n">ax0</span><span class="p">,</span><span class="n">ax1</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">hooks</span><span class="p">:</span>
+        <span class="n">ms</span><span class="p">,</span><span class="n">ss</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">stats</span>
+        <span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ms</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">));</span>
+</code></pre></div></div>
+
+<p><strong>Python tip: What the <code class="highlighter-rouge">with</code> block does is that, it calls the <code class="highlighter-rouge">__exit__()</code> method on the object, in this case <code class="highlighter-rouge">hooks</code>, after the block</strong>.</p>
+
+<p>After using <code class="highlighter-rouge">kaiming_normal_</code>, we see that the rise and drop problem is fixed. But what we are really interested in is that, did many activations get super small? Were they nicely activated?</p>
+
+<p>For that, we can add some more statistics into the hooks.</p>
+
+<p>It turns out that after adding histograms and percentage of small activations, we see that over 90% of our activations are wasted (dead ReLU). This is really concerning.</p>
+
+<h3 id="generalized-relu">
+<a class="anchor" href="#generalized-relu" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generalized ReLU</h3>
+
+<p>To avoid wasting most our activations, we can generalize the ReLU by</p>
+
+<ul>
+  <li>leaky ReLU</li>
+  <li>subtract by a number and move it into the negatives a bit</li>
+  <li>cap it with some max value</li>
+</ul>
+
+<p>Note: <code class="highlighter-rouge">kaiming_normal_</code> and <code class="highlighter-rouge">kaiming_uniform_</code> perform similarly for this model. Some people think uniform does better because it has less around 0, but not rigorously studied yet.</p>
+
+<h2 id="batch-normalization">
+<a class="anchor" href="#batch-normalization" aria-hidden="true"><span class="octicon octicon-link"></span></a>Batch Normalization</h2>
+
+<p>Notebook: <code class="highlighter-rouge">07_batchnorm</code></p>
+
+<p>Here is the code for batch norm:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">BatchNorm</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nf</span><span class="p">,</span> <span class="n">mom</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="c1"># NB: pytorch bn mom is opposite of what you'd expect
+</span>        <span class="bp">self</span><span class="o">.</span><span class="n">mom</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">=</span> <span class="n">mom</span><span class="p">,</span><span class="n">eps</span>
+        <span class="c1"># mults and adds are like weights and biases, they are the
+</span>        <span class="c1"># parameters of the model that we need to learn.
+</span>        <span class="c1"># They are the beta and gamma in the batch norm paper
+</span>        <span class="bp">self</span><span class="o">.</span><span class="n">mults</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span> <span class="p">(</span><span class="n">nf</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adds</span>  <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nf</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># nn.Module.register_buffer(var, tensor) is the same as
+</span>        <span class="c1"># var = tensor, but it does more. It automatically moves
+</span>        <span class="c1"># things to GPU, and it saves them in the model for future use
+</span>        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s">'vars'</span><span class="p">,</span>  <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nf</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s">'means'</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nf</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">update_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1"># mean and var over dim 0, 2, 3, meaning over batch, width,
+</span>        <span class="c1"># and height of the images. The result is that each channel/filter
+</span>        <span class="c1"># has one number for the mean and for the variance
+</span>        <span class="n">m</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">var</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="c1"># lerp means linear interpolation
+</span>        <span class="bp">self</span><span class="o">.</span><span class="n">means</span><span class="o">.</span><span class="n">lerp_</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mom</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="nb">vars</span><span class="o">.</span><span class="n">lerp_</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mom</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">m</span><span class="p">,</span><span class="n">v</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span> <span class="n">m</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_stats</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span> <span class="n">m</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">means</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="nb">vars</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">m</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">v</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">mults</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">adds</span>
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">lerp</code> part is the exponentially weighted moving average. We define a momentum <code class="highlighter-rouge">mom = 0.9</code>, say we have a sequence <code class="highlighter-rouge">[3, 5, 4, ...]</code>, the moving average is</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mu1</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">mu2</span> <span class="o">=</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">mu1</span> <span class="o">+</span> <span class="mi">5</span> <span class="o">*</span> <span class="mf">0.1</span>
+<span class="n">mu3</span> <span class="o">=</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">mu2</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">+</span> <span class="mf">0.1</span>
+<span class="o">...</span>
+
+<span class="s">"""
+This is the way of calculating the moving average:
+
+        mu_n = mom * mu_{n-1} + new_val * (1 - mom)
+
+This is a way of linear interpolation (lerp)
+
+        a * beta + b * (1-beta)
+
+So the moving average is equivalent to
+
+        m.lerp(new_val, mom)
+"""</span>
+</code></pre></div></div>
+
+<p>Refer to the above for the definition of the moving average and lerp.</p>
+
+<p>Note: pytorch’s <code class="highlighter-rouge">lerp</code>’s momentum is the exact opposite of the momentum we just defined, so it’s a momentum of 0.1 for the case above where we have 0.9. Hence, pytorch’s batchnorm has momentum opposite to the momentum normally defined in the optimizers. (Refer to the note <a href="https://pytorch.org/docs/stable/nn.html#batchnorm1d">here</a>)</p>
+
+<p><strong>After applying batch norm, we have gotten rid of the rise and crash in the means and stds during training entirely!</strong></p>
+
+<p><img src="/images/fastai/batch_norm_training.png" alt="batch_norm_training" align="middle"></p>
+
+<h3 id="batch-norm-deficiencies">
+<a class="anchor" href="#batch-norm-deficiencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Batch norm deficiencies</h3>
+
+<p><strong>Note: We cannot use batch norm for ONLINE LEARNING and SEGMENTATION because of small batch size, the variance is infinity or unstable, and we can’t use it for RNNs.</strong></p>
+
+<p>The <a href="https://arxiv.org/abs/1607.06450">layer norm paper</a> proposed the solution to this. The entire paper is essentially this:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">LayerNorm</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="n">__constants__</span> <span class="o">=</span> <span class="p">[</span><span class="s">'eps'</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">=</span> <span class="n">eps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mult</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add</span>  <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1"># The only change compared to batchnorm is
+</span>        <span class="c1"># instead of (0, 2, 3), we have mean and var over dim (1,2,3)
+</span>        <span class="c1"># and we don't have moving averages. That's it!
+</span>        <span class="n">m</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">var</span> <span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">m</span><span class="p">)</span> <span class="o">/</span> <span class="p">((</span><span class="n">v</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">mult</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">add</span>
+</code></pre></div></div>
+
+<p>Layer norm helps, but it’s not as useful as batch norm. But for RNNs, layer norm is the only thing to use.</p>
+
+<p>There are other attempts to work around this, such as instance norm (for style transfer) and group norm. Check out the <a href="https://arxiv.org/pdf/1803.08494.pdf">group norm paper</a> for details.</p>
+
+<p><img src="/images/fastai/all_norms.png" alt="all_norms" align="middle"></p>
+
+<p>However, none of them are as good as batch norm. Jeremy says he doesn’t know how to fix it for RNNs, but for small batch size, he has some idea: use <code class="highlighter-rouge">eps</code>!</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">BatchNorm</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nf</span><span class="p">,</span> <span class="n">mom</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+        <span class="o">...</span>
+</code></pre></div></div>
+
+<p>It prevents the numbers to blow up.</p>
+
+<p>A better idea: new algorithm for running batch norm! Visit the notebook section 4 and watch the <a href="https://course.fast.ai/videos/?lesson=10&amp;t=8068">video</a> for more details. The keyword is <em>debiasing</em>.</p>
+
+<h2 id="ablation-study-in-deep-learning-research">
+<a class="anchor" href="#ablation-study-in-deep-learning-research" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ablation study in deep learning research</h2>
+
+<p>Jeremy mentioned ablation study briefly. It is good to know</p>
+
+<p><a href="https://stats.stackexchange.com/questions/380040/what-is-an-ablation-study-and-is-there-a-systematic-way-to-perform-it">https://stats.stackexchange.com/questions/380040/what-is-an-ablation-study-and-is-there-a-systematic-way-to-perform-it</a></p>
+
+<h2 id="my-random-thoughts">
+<a class="anchor" href="#my-random-thoughts" aria-hidden="true"><span class="octicon octicon-link"></span></a>My Random Thoughts</h2>
+
+<p>It is getting really hardcore in part II lessons! The material has great quality and quatity, extremely rare to find even in top universities. Jeremy is really doing great work for DL learners around the world!</p>
+
+<p>The lessons are great practical lessons to learn</p>
+
+<ul>
+  <li>Advanced Python</li>
+  <li>Pytorch fundamentals</li>
+  <li>Software engineering</li>
+  <li>Turning paper into code</li>
+  <li>Code-first research methodology</li>
+</ul>
+
+<p>My goal is to be able to <strong>use</strong> the <code class="highlighter-rouge">fastai</code> library effectively, and <strong>implement</strong> things in its style effectively. Then I can even become a fastai contributor.</p>
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="logancyang/blog-learning-automata"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/note/fastai/2020/05/28/fastai-lesson10.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notes, code and essays by Logan Yang.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

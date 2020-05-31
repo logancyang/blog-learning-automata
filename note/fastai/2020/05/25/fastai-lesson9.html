@@ -238,7 +238,7 @@ window.onload = wrap_img;
 <h3 id="create-the-cross-entropy-loss-function">
 <a class="anchor" href="#create-the-cross-entropy-loss-function" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create the Cross-Entropy Loss Function</h3>
 
-<p>First we introduce softmax and negative log-likelihood (cross-entropy loss).</p>
+<p>First we introduce <strong>softmax, log softmax, and negative log-likelihood (i.e. cross-entropy loss)</strong>.</p>
 
 <p>The cross entropy loss for some target $y$ and some prediction $\hat{y}$ is given by:</p>
 
@@ -248,7 +248,7 @@ window.onload = wrap_img;
 
 <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover accent="true"><mi>y</mi><mo>^</mo></mover><mi>i</mi></msub><mo>=</mo><mtext>softmax</mtext><mo stretchy="false">(</mo><mi mathvariant="bold">x</mi><msub><mo stretchy="false">)</mo><mi>i</mi></msub><mo>=</mo><mfrac><msup><mi>e</mi><msub><mi>x</mi><mi>i</mi></msub></msup><mrow><munder><mo>∑</mo><mrow><mn>0</mn><mo>≤</mo><mi>j</mi><mo>≤</mo><mi>n</mi><mo>−</mo><mn>1</mn></mrow></munder><msup><mi>e</mi><msub><mi>x</mi><mi>j</mi></msub></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">\hat{y}_i = \text{softmax}(\mathbf{x})_i = \frac{e^{x_{i}}}{\sum_{0 \leq j \leq n-1} e^{x_{j}}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">softmax</span></span><span class="mopen">(</span><span class="mord"><span class="mord mathbf">x</span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.46321em;vertical-align:-1.1218180000000002em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.341392em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.16195399999999993em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span><span class="mrel mtight">≤</span><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">≤</span><span class="mord mathdefault mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.43581800000000004em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6064620000000001em;"><span style="top:-3.0050700000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2818857142857143em;"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.1218180000000002em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span>
 
-<p>But since <strong>target $y$s are 1-hot encoded</strong>, this can be rewritten as $-\log(\hat{y})$ where i is the index of the desired target.</p>
+<p>But since <strong>target $y$s are 1-hot encoded</strong>, this can be rewritten as $-\log(\hat{y}_i)$ where i is the index of the desired target.</p>
 
 <hr>
 <p>In the case of binary classification,</p>
@@ -274,18 +274,24 @@ window.onload = wrap_img;
 <span class="c1"># Example:
 </span><span class="n">smpred</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([[</span><span class="mf">.01</span><span class="p">,</span> <span class="mf">.98</span><span class="p">,</span> <span class="mf">.01</span><span class="p">],</span> <span class="p">[</span><span class="mf">.001</span><span class="p">,</span> <span class="mf">.001</span><span class="p">,</span> <span class="mf">.998</span><span class="p">]])</span>
 <span class="c1">#                            ----                    ----
-# The negative log of the softmax predictions: very close to 0 at places
-# that were close to 1 in the softmax output
-# tensor([[4.6052, 2.0203e-02, 4.6052],
-#         [6.9078, 6.9078, 2.0020e-03]])
-</span><span class="n">targets</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
-<span class="c1"># nll picks out the elements from each of row in smpred with the
-# indices in targets
-</span><span class="n">nll</span><span class="p">(</span><span class="n">smpred</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>
-<span class="c1"># This exxample has very good softmax prediction so the overall
-# cross entropy loss is close to 0
-# tensor(0.0111)
-</span></code></pre></div></div>
+</span><span class="s">"""
+The negative log of the softmax predictions: very close to 0 at places
+that were close to 1 in the softmax output
+tensor([[4.6052, 2.0203e-02, 4.6052],
+        [6.9078, 6.9078, 2.0020e-03]])
+"""</span>
+<span class="n">targets</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="s">"""
+nll picks out the elements from each of row in smpred with the
+indices in targets
+"""</span>
+<span class="n">nll</span><span class="p">(</span><span class="n">smpred</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>
+<span class="s">"""
+This example has very good softmax prediction so the overall
+cross entropy loss is close to 0
+tensor(0.0111)
+"""</span>
+</code></pre></div></div>
 
 <h3 id="numerical-stability-considerations">
 <a class="anchor" href="#numerical-stability-considerations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Numerical Stability Considerations</h3>
@@ -306,9 +312,12 @@ window.onload = wrap_img;
 
 <p>pytorch also has <code class="highlighter-rouge">logsumexp()</code>.</p>
 
+<hr>
 <p>Note: in pytorch,</p>
 
 <p><strong><code class="highlighter-rouge">F.nll_loss(F.log_softmax(pred, -1), y_train)</code> is equivalent to <code class="highlighter-rouge">F.cross_entropy(pred, y_train)</code>.</strong></p>
+
+<hr>
 
 <p>Now, we have implemented cross-entropy loss for multiclass classification from scratch.</p>
 

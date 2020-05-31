@@ -56,7 +56,7 @@ Notebook: `03_minibatch_training`
 
 ### Create the Cross-Entropy Loss Function
 
-First we introduce softmax and negative log-likelihood (cross-entropy loss).
+First we introduce **softmax, log softmax, and negative log-likelihood (i.e. cross-entropy loss)**.
 
 The cross entropy loss for some target $y$ and some prediction $\hat{y}$ is given by:
 
@@ -94,17 +94,23 @@ def nll(softmax_preds, targets):
 # Example:
 smpred = torch.Tensor([[.01, .98, .01], [.001, .001, .998]])
 #                            ----                    ----
-# The negative log of the softmax predictions: very close to 0 at places
-# that were close to 1 in the softmax output
-# tensor([[4.6052, 2.0203e-02, 4.6052],
-#         [6.9078, 6.9078, 2.0020e-03]])
+"""
+The negative log of the softmax predictions: very close to 0 at places
+that were close to 1 in the softmax output
+tensor([[4.6052, 2.0203e-02, 4.6052],
+        [6.9078, 6.9078, 2.0020e-03]])
+"""
 targets = torch.LongTensor([1, 2])
-# nll picks out the elements from each of row in smpred with the
-# indices in targets
+"""
+nll picks out the elements from each of row in smpred with the
+indices in targets
+"""
 nll(smpred, targets)
-# This exxample has very good softmax prediction so the overall
-# cross entropy loss is close to 0
-# tensor(0.0111)
+"""
+This example has very good softmax prediction so the overall
+cross entropy loss is close to 0
+tensor(0.0111)
+"""
 ```
 
 ### Numerical Stability Considerations
@@ -126,9 +132,12 @@ def logsumexp(x):
 
 pytorch also has `logsumexp()`.
 
+---
 Note: in pytorch,
 
 **`F.nll_loss(F.log_softmax(pred, -1), y_train)` is equivalent to `F.cross_entropy(pred, y_train)`.**
+
+---
 
 Now, we have implemented cross-entropy loss for multiclass classification from scratch.
 

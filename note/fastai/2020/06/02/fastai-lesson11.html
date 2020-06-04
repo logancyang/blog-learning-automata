@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FastAI Lesson 11: Data Block API, and generic optimizer | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FastAI Lesson 11: Data Block API, and generic optimizer" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="fast.ai note series" />
+<meta property="og:description" content="fast.ai note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/fastai/2020/06/02/fastai-lesson11.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/fastai/2020/06/02/fastai-lesson11.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-02T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"fast.ai note series","@type":"BlogPosting","headline":"FastAI Lesson 11: Data Block API, and generic optimizer","dateModified":"2020-06-02T00:00:00-05:00","datePublished":"2020-06-02T00:00:00-05:00","url":"http://blog.logancyang.com/note/fastai/2020/06/02/fastai-lesson11.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/fastai/2020/06/02/fastai-lesson11.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>FastAI Lesson 11: Data Block API, and generic optimizer | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="FastAI Lesson 11: Data Block API, and generic optimizer" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="fast.ai note series" />
+<meta property="og:description" content="fast.ai note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/fastai/2020/06/02/fastai-lesson11.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/fastai/2020/06/02/fastai-lesson11.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-02T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"fast.ai note series","@type":"BlogPosting","headline":"FastAI Lesson 11: Data Block API, and generic optimizer","dateModified":"2020-06-02T00:00:00-05:00","datePublished":"2020-06-02T00:00:00-05:00","url":"http://blog.logancyang.com/note/fastai/2020/06/02/fastai-lesson11.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/fastai/2020/06/02/fastai-lesson11.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Learning Automata</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">FastAI Lesson 11: Data Block API, and generic optimizer</h1><p class="page-description">fast.ai note series</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-06-02T00:00:00-05:00" itemprop="datePublished">
+        Jun 2, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      14 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#note">note</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#fastai">fastai</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#layer-wise-sequential-unit-variance-a-smart-and-simple-init">Layer-wise Sequential Unit Variance: a smart and simple init</a></li>
+<li class="toc-entry toc-h2"><a href="#data-block-api">Data Block API</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#prepare-for-modeling">Prepare for modeling</a></li>
+<li class="toc-entry toc-h3"><a href="#labeling">Labeling</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#modeling">Modeling</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#data-bunch">Data Bunch</a></li>
+<li class="toc-entry toc-h3"><a href="#model">Model</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#optimizers">Optimizers</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#add-momentum">Add momentum</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#refactor-remove-runner-just-have-learner">Refactor: remove Runner, just have Learner</a></li>
+<li class="toc-entry toc-h2"><a href="#add-a-progress-bar">Add a progress bar</a></li>
+<li class="toc-entry toc-h2"><a href="#data-augmentation">Data augmentation</a></li>
+<li class="toc-entry toc-h2"><a href="#papers-to-read">Papers to read</a></li>
+</ul><h2 id="layer-wise-sequential-unit-variance-a-smart-and-simple-init">
+<a class="anchor" href="#layer-wise-sequential-unit-variance-a-smart-and-simple-init" aria-hidden="true"><span class="octicon octicon-link"></span></a>Layer-wise Sequential Unit Variance: a smart and simple init</h2>
+
+<p>Paper: <a href="https://arxiv.org/pdf/1511.06422.pdf">All You Need is a Good Init</a></p>
+
+<p>Notebook: <code class="highlighter-rouge">07a_lsuv</code></p>
+
+<p>Trick: in deep learning, <code class="highlighter-rouge">Module</code>s are like a tree, so recursion for finding modules is needed. To concatenate the list of modules in the <em>recursion</em>, we can use <code class="highlighter-rouge">sum(list, [])</code>, beginning with an empty list.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">find_modules</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">cond</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">cond</span><span class="p">(</span><span class="n">m</span><span class="p">):</span> <span class="k">return</span> <span class="p">[</span><span class="n">m</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">find_modules</span><span class="p">(</span><span class="n">o</span><span class="p">,</span><span class="n">cond</span><span class="p">)</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">children</span><span class="p">()],</span> <span class="p">[])</span>
+
+<span class="n">mods</span> <span class="o">=</span> <span class="n">find_modules</span><span class="p">(</span><span class="n">learn</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">o</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span><span class="n">ConvLayer</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>The code for LSUV</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">append_stat</span><span class="p">(</span><span class="n">hook</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="n">inp</span><span class="p">,</span> <span class="n">outp</span><span class="p">):</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">outp</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">hook</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span><span class="n">hook</span><span class="o">.</span><span class="n">std</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span><span class="n">d</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+<span class="n">mdl</span> <span class="o">=</span> <span class="n">learn</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="n">Hooks</span><span class="p">(</span><span class="n">mods</span><span class="p">,</span> <span class="n">append_stat</span><span class="p">)</span> <span class="k">as</span> <span class="n">hooks</span><span class="p">:</span>
+    <span class="n">mdl</span><span class="p">(</span><span class="n">xb</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">hook</span> <span class="ow">in</span> <span class="n">hooks</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">hook</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span><span class="n">hook</span><span class="o">.</span><span class="n">std</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">lsuv_module</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">xb</span><span class="p">):</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">Hook</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">append_stat</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="n">mdl</span><span class="p">(</span><span class="n">xb</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>  <span class="o">&gt;</span> <span class="mf">1e-3</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">bias</span> <span class="o">-=</span> <span class="n">h</span><span class="o">.</span><span class="n">mean</span>
+    <span class="k">while</span> <span class="n">mdl</span><span class="p">(</span><span class="n">xb</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">std</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-3</span><span class="p">:</span> <span class="n">m</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span> <span class="o">/=</span> <span class="n">h</span><span class="o">.</span><span class="n">std</span>
+
+    <span class="n">h</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span><span class="n">h</span><span class="o">.</span><span class="n">std</span>
+
+<span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mods</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">lsuv_module</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">xb</span><span class="p">))</span>
+
+<span class="o">%</span><span class="n">time</span> <span class="n">run</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">learn</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>While the mean is not near zero: keep subtracting the bias with it.</p>
+
+<p>While the std is not 1, keep dividing the weight by it.</p>
+
+<p>This is the fastai way of initialization, just a loop, no math!</p>
+
+<p><em>Note: LSUV is run once at the beginning before training. If you have a small batch size, run it for 5 batches and take the mean.</em></p>
+
+<h2 id="data-block-api">
+<a class="anchor" href="#data-block-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data Block API</h2>
+
+<p>MNIST is a toy problem and it is too easy for serious research. CIFAR-10’s problem is that it’s 32x32, and it has very different characteristics from large images. Once the images are smaller than 96x96, things are quite different. Yet ImageNet is too large to experiment on.</p>
+
+<p>So Jeremy created new datasets: <a href="https://github.com/fastai/imagenette">Imagenette and Imagewoof</a>. Imagenette (with French pronunciation) is designed to be easier. It has 10 very different classes. Imagewoof has only dog breeds.</p>
+
+<p><em>Note: a big part of making deep learning useful in any domain is to make small workable datasets.</em></p>
+
+<p>The Data Block API enables us to load huge datasets bit by bit because we can’t fit the whole dataset in our RAM.</p>
+
+<p>Trick: add a custom function to any standard library. Just take the class and define a new method (this is the advantage of using a dynamic language)</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">PIL</span><span class="p">,</span><span class="n">os</span><span class="p">,</span><span class="n">mimetypes</span>
+<span class="n">Path</span><span class="o">.</span><span class="n">ls</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">iterdir</span><span class="p">())</span>
+<span class="n">path</span><span class="o">.</span><span class="n">ls</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Joke: If a person says they are a deep learning practioner they must know tenches. Tench is the 1st class in ImageNet.</p>
+
+<p>When we load an image it’s size is <code class="highlighter-rouge">(160, 239, 3)</code> (h, w, ch). The pixels are <code class="highlighter-rouge">uint8</code>.</p>
+
+<p>Notice it’s not square, and the images in this dataset have different sizes. We need to <code class="highlighter-rouge">resize</code> them in order to put them in the same batch.</p>
+
+<p><em>Tip: Python’s <code class="highlighter-rouge">os.scandir(path)</code> is a super fast way to check the directory for content, it’s written in C. <code class="highlighter-rouge">os.walk(path)</code> is similar but it’s able to recursively walk the directory. It is faster than <code class="highlighter-rouge">glob</code> and is lower-level. <code class="highlighter-rouge">glob</code> has more functionality and should be using <code class="highlighter-rouge">scandir</code> under the hood.</em></p>
+
+<p>For 13394 files, it took ~70ms, extremely fast. The original ImageNet is 100x bigger, it will take just a few seconds.</p>
+
+<p><em>Note: Jeremy spent a lot of time of these notebooks in part II, they are his research journal. Much of the code is already in fastai v1.</em></p>
+
+<h3 id="prepare-for-modeling">
+<a class="anchor" href="#prepare-for-modeling" aria-hidden="true"><span class="octicon octicon-link"></span></a>Prepare for modeling</h3>
+
+<p>What we need to do:</p>
+
+<ul>
+  <li>Get files</li>
+  <li>Split validation set
+    <ul>
+      <li>random%, folder name, csv, …</li>
+    </ul>
+  </li>
+  <li>Label:
+    <ul>
+      <li>folder name, file name/re, csv, …</li>
+    </ul>
+  </li>
+  <li>Transform per image (optional)</li>
+  <li>Transform to tensor</li>
+  <li>DataLoader</li>
+  <li>Transform per batch (optional)</li>
+  <li>DataBunch</li>
+  <li>Add test set (optional)</li>
+</ul>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">compose</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">funcs</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">order_key</span><span class="o">=</span><span class="s">'_order'</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">o</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">order_key</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">listify</span><span class="p">(</span><span class="n">funcs</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">):</span> <span class="n">x</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+<span class="k">class</span> <span class="nc">ItemList</span><span class="p">(</span><span class="n">ListContainer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s">'.'</span><span class="p">,</span> <span class="n">tfms</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">tfms</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">),</span><span class="n">tfms</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="n">f</span><span class="s">'{super().__repr__()}</span><span class="se">\n</span><span class="s">Path: {self.path}'</span>
+
+    <span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">cls</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">cls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span>
+        <span class="s">"""cls , or self.__class__, becomes the constructor"""</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">tfms</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tfms</span><span class="p">)</span>
+
+    <span class="k">def</span>  <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span> <span class="k">return</span> <span class="n">i</span>
+    <span class="k">def</span> <span class="nf">_get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span> <span class="k">return</span> <span class="n">compose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">tfms</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span> <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">ImageList</span><span class="p">(</span><span class="n">ItemList</span><span class="p">):</span>
+    <span class="o">@</span><span class="nb">classmethod</span>
+    <span class="k">def</span> <span class="nf">from_files</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">extensions</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">extensions</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="n">extensions</span> <span class="o">=</span> <span class="n">image_extensions</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">get_files</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">extensions</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="n">recurse</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="n">include</span><span class="p">),</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span> <span class="k">return</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Tip: <code class="highlighter-rouge">compose</code> is a very useful concept in functional programming, it has a list of functions, calls the current function, get the result, and plug the result into the next function.</p>
+
+<h3 id="labeling">
+<a class="anchor" href="#labeling" aria-hidden="true"><span class="octicon octicon-link"></span></a>Labeling</h3>
+
+<p>We need some kind of <code class="highlighter-rouge">Processor</code> to do things on the training set and be able to do the same to the validation/test sets later, things such as</p>
+
+<ul>
+  <li>processing texts to tokenize and numericalize them</li>
+  <li>filling in missing values with median computed from training set for tabular data, storing the statistics in the <code class="highlighter-rouge">Processor</code>
+</li>
+  <li>converting label strings to numbers in a consistent and reproducible way</li>
+</ul>
+
+<p>In the image classification case, we create a list of possible labels in the training set, and then convert our labels to numbers based on this <em>vocab</em>.</p>
+
+<p>Note: when a trained model is no better than random, the most common issue is that the validation set and the training set have different processing/mapping. Validation set should use the same processing with the same <em>vocab</em> and statistics as the training set!</p>
+
+<p>Tip: whatever framework you use, have something like the <code class="highlighter-rouge">fastai</code> Labeler and Processor classes to help you remember the right things to do.</p>
+
+<hr>
+<p>Question: How to make the model handle unseen categories at inference time?</p>
+
+<p>Answer: Great question especially for tasks with unlimited classes. In that case, find some rare classes in your data and label them as “other”, train with some examples in the “other” category. That way, the model should be able to hanlde unseen categories better.</p>
+
+<hr>
+
+<p>Note: learn Python <code class="highlighter-rouge">@classmethod</code>, what they are, when and why to use them. Refer to the post <a href="">here</a>.</p>
+
+<p>Then we resize and turn the images into tensors.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tfms</span> <span class="o">=</span> <span class="p">[</span><span class="n">make_rgb</span><span class="p">,</span> <span class="n">ResizeFixed</span><span class="p">(</span><span class="mi">128</span><span class="p">),</span> <span class="n">to_byte_tensor</span><span class="p">,</span> <span class="n">to_float_tensor</span><span class="p">]</span>
+
+<span class="n">il</span> <span class="o">=</span> <span class="n">ImageList</span><span class="o">.</span><span class="n">from_files</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">tfms</span><span class="o">=</span><span class="n">tfms</span><span class="p">)</span>
+<span class="n">sd</span> <span class="o">=</span> <span class="n">SplitData</span><span class="o">.</span><span class="n">split_by_func</span><span class="p">(</span><span class="n">il</span><span class="p">,</span> <span class="n">splitter</span><span class="p">)</span>
+<span class="n">ll</span> <span class="o">=</span> <span class="n">label_by_func</span><span class="p">(</span><span class="n">sd</span><span class="p">,</span> <span class="n">parent_labeler</span><span class="p">,</span> <span class="n">proc_y</span><span class="o">=</span><span class="n">CategoryProcessor</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h2 id="modeling">
+<a class="anchor" href="#modeling" aria-hidden="true"><span class="octicon octicon-link"></span></a>Modeling</h2>
+
+<h3 id="data-bunch">
+<a class="anchor" href="#data-bunch" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data Bunch</h3>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DataBunch</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dl</span><span class="p">,</span> <span class="n">valid_dl</span><span class="p">,</span> <span class="n">c_in</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">c_out</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_dl</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">valid_dl</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">c_in</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">c_out</span> <span class="o">=</span> \
+            <span class="n">train_dl</span><span class="p">,</span><span class="n">valid_dl</span><span class="p">,</span><span class="n">c_in</span><span class="p">,</span><span class="n">c_out</span>
+
+    <span class="o">@</span><span class="nb">property</span>
+    <span class="k">def</span> <span class="nf">train_ds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_dl</span><span class="o">.</span><span class="n">dataset</span>
+
+    <span class="o">@</span><span class="nb">property</span>
+    <span class="k">def</span> <span class="nf">valid_ds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_dl</span><span class="o">.</span><span class="n">dataset</span>
+
+<span class="k">def</span> <span class="nf">databunchify</span><span class="p">(</span><span class="n">sd</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">c_in</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">c_out</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">dls</span> <span class="o">=</span> <span class="n">get_dls</span><span class="p">(</span><span class="n">sd</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="n">sd</span><span class="o">.</span><span class="n">valid</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">DataBunch</span><span class="p">(</span><span class="o">*</span><span class="n">dls</span><span class="p">,</span> <span class="n">c_in</span><span class="o">=</span><span class="n">c_in</span><span class="p">,</span> <span class="n">c_out</span><span class="o">=</span><span class="n">c_out</span><span class="p">)</span>
+
+<span class="n">SplitData</span><span class="o">.</span><span class="n">to_databunch</span> <span class="o">=</span> <span class="n">databunchify</span>
+
+<span class="s">"""
+Summarize all the steps from the start
+"""</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">untar_data</span><span class="p">(</span><span class="n">datasets</span><span class="o">.</span><span class="n">URLs</span><span class="o">.</span><span class="n">IMAGENETTE_160</span><span class="p">)</span>
+<span class="n">tfms</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">make_rgb</span><span class="p">,</span> <span class="n">ResizeFixed</span><span class="p">(</span><span class="mi">128</span><span class="p">),</span> <span class="n">to_byte_tensor</span><span class="p">,</span> <span class="n">to_float_tensor</span>
+<span class="p">]</span>
+
+<span class="n">il</span> <span class="o">=</span> <span class="n">ImageList</span><span class="o">.</span><span class="n">from_files</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">tfms</span><span class="o">=</span><span class="n">tfms</span><span class="p">)</span>
+<span class="n">sd</span> <span class="o">=</span> <span class="n">SplitData</span><span class="o">.</span><span class="n">split_by_func</span><span class="p">(</span>
+    <span class="n">il</span><span class="p">,</span> <span class="n">partial</span><span class="p">(</span><span class="n">grandparent_splitter</span><span class="p">,</span> <span class="n">valid_name</span><span class="o">=</span><span class="s">'val'</span><span class="p">))</span>
+<span class="n">ll</span> <span class="o">=</span> <span class="n">label_by_func</span><span class="p">(</span><span class="n">sd</span><span class="p">,</span> <span class="n">parent_labeler</span><span class="p">,</span> <span class="n">proc_y</span><span class="o">=</span><span class="n">CategoryProcessor</span><span class="p">())</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">ll</span><span class="o">.</span><span class="n">to_databunch</span><span class="p">(</span><span class="n">bs</span><span class="p">,</span> <span class="n">c_in</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">c_out</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="model">
+<a class="anchor" href="#model" aria-hidden="true"><span class="octicon octicon-link"></span></a>Model</h3>
+
+<p>In CNN, 3x3 kernels are the best bang for your buck. Papers:</p>
+
+<ul>
+  <li><a href="https://arxiv.org/abs/1311.2901">Visualizing and understanding convolution networks</a></li>
+  <li><a href="https://arxiv.org/abs/1812.01187">Bag of tricks for image classification with convolutional neural networks</a></li>
+</ul>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cbfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">partial</span><span class="p">(</span><span class="n">AvgStatsCallback</span><span class="p">,</span><span class="n">accuracy</span><span class="p">),</span>
+        <span class="n">CudaCallback</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">normalize_chan</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">mean</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">])</span> <span class="o">/</span> <span class="n">std</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">]</span>
+
+<span class="n">_m</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">([</span><span class="mf">0.47</span><span class="p">,</span> <span class="mf">0.48</span><span class="p">,</span> <span class="mf">0.45</span><span class="p">])</span>
+<span class="n">_s</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">([</span><span class="mf">0.29</span><span class="p">,</span> <span class="mf">0.28</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">])</span>
+<span class="n">norm_imagenette</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">normalize_chan</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="n">_m</span><span class="o">.</span><span class="n">cuda</span><span class="p">(),</span> <span class="n">std</span><span class="o">=</span><span class="n">_s</span><span class="o">.</span><span class="n">cuda</span><span class="p">())</span>
+
+<span class="n">cbfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">BatchTransformXCallback</span><span class="p">,</span> <span class="n">norm_imagenette</span><span class="p">))</span>
+<span class="n">nfs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">256</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">prev_pow_2</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="mi">2</span><span class="o">**</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">get_cnn_layers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">nfs</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span> <span class="n">nf</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span> <span class="k">return</span> <span class="n">layer</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span> <span class="n">nf</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="n">stride</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">l1</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">c_in</span>
+    <span class="n">l2</span> <span class="o">=</span> <span class="n">prev_pow_2</span><span class="p">(</span><span class="n">l1</span><span class="o">*</span><span class="mi">3</span><span class="o">*</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">layers</span> <span class="o">=</span>  <span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">l1</span>  <span class="p">,</span> <span class="n">l2</span>  <span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+               <span class="n">f</span><span class="p">(</span><span class="n">l2</span>  <span class="p">,</span> <span class="n">l2</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+               <span class="n">f</span><span class="p">(</span><span class="n">l2</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">l2</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">)]</span>
+    <span class="n">nfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">l2</span><span class="o">*</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="n">nfs</span>
+    <span class="n">layers</span> <span class="o">+=</span> <span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">nfs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nfs</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nfs</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="n">layers</span> <span class="o">+=</span> <span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">AdaptiveAvgPool2d</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">Lambda</span><span class="p">(</span><span class="n">flatten</span><span class="p">),</span>
+               <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">nfs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">c_out</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">layers</span>
+
+<span class="k">def</span> <span class="nf">get_cnn_model</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">nfs</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">get_cnn_layers</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">nfs</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">get_learn_run</span><span class="p">(</span><span class="n">nfs</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">cbs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">opt_func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">get_cnn_model</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">nfs</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">init_cnn</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">get_runner</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span> <span class="n">cbs</span><span class="o">=</span><span class="n">cbs</span><span class="p">,</span> <span class="n">opt_func</span><span class="o">=</span><span class="n">opt_func</span><span class="p">)</span>
+
+<span class="n">sched</span> <span class="o">=</span> <span class="n">combine_scheds</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.7</span><span class="p">],</span> <span class="n">cos_1cycle_anneal</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.05</span><span class="p">))</span>
+<span class="n">learn</span><span class="p">,</span><span class="n">run</span> <span class="o">=</span> <span class="n">get_learn_run</span><span class="p">(</span><span class="n">nfs</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">conv_layer</span><span class="p">,</span> <span class="n">cbs</span><span class="o">=</span><span class="n">cbfs</span><span class="o">+</span><span class="p">[</span>
+    <span class="n">partial</span><span class="p">(</span><span class="n">ParamScheduler</span><span class="p">,</span> <span class="s">'lr'</span><span class="p">,</span> <span class="n">sched</span><span class="p">)</span>
+<span class="p">])</span>
+</code></pre></div></div>
+
+<p>Create <code class="highlighter-rouge">model_summary()</code></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">model_summary</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">learn</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">find_all</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="n">xb</span><span class="p">,</span><span class="n">yb</span> <span class="o">=</span> <span class="n">get_batch</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">valid_dl</span><span class="p">,</span> <span class="n">run</span><span class="p">)</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">learn</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span><span class="o">.</span><span class="n">device</span><span class="c1">#Model may not be on the GPU yet
+</span>    <span class="n">xb</span><span class="p">,</span><span class="n">yb</span> <span class="o">=</span> <span class="n">xb</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span><span class="n">yb</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">mods</span> <span class="o">=</span> <span class="n">find_modules</span><span class="p">(</span><span class="n">learn</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">is_lin_layer</span><span class="p">)</span> <span class="k">if</span> <span class="n">find_all</span> <span class="k">else</span> <span class="n">learn</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">children</span><span class="p">()</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">hook</span><span class="p">,</span><span class="n">mod</span><span class="p">,</span><span class="n">inp</span><span class="p">,</span><span class="n">out</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"{mod}</span><span class="se">\n</span><span class="s">{out.shape}</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">Hooks</span><span class="p">(</span><span class="n">mods</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">as</span> <span class="n">hooks</span><span class="p">:</span> <span class="n">learn</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">xb</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Training the model,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">%</span><span class="n">time</span> <span class="n">run</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">learn</span><span class="p">)</span>
+<span class="s">"""
+train: [1.7975745138242594, tensor(0.3771, device='cuda:0')]
+valid: [1.950084228515625, tensor(0.3640, device='cuda:0')]
+train: [1.331341733558244, tensor(0.5549, device='cuda:0')]
+valid: [1.182614013671875, tensor(0.6160, device='cuda:0')]
+train: [1.0004353405653792, tensor(0.6729, device='cuda:0')]
+valid: [0.9452028198242187, tensor(0.6740, device='cuda:0')]
+train: [0.744675257750698, tensor(0.7583, device='cuda:0')]
+valid: [0.8292762451171874, tensor(0.7360, device='cuda:0')]
+train: [0.5341721137253761, tensor(0.8359, device='cuda:0')]
+valid: [0.798895751953125, tensor(0.7360, device='cuda:0')]
+CPU times: user 25.6 s, sys: 10.7 s, total: 36.4 s
+Wall time: 1min 7s
+"""</span>
+</code></pre></div></div>
+
+<p>This is the most basic CNN, and its performance is not bad!</p>
+
+<h2 id="optimizers">
+<a class="anchor" href="#optimizers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Optimizers</h2>
+
+<p>Notebook: <code class="highlighter-rouge">09_optimizers</code></p>
+
+<p>Jeremy: we don’t need to re-implement the optimizer every time a new one comes out. <strong>There is only ONE generic optimizer, and we can change it to get every optimizer.</strong></p>
+
+<p>In pytorch, the optimizer is just a dictionary.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Optimizer</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">steppers</span><span class="p">,</span> <span class="o">**</span><span class="n">defaults</span><span class="p">):</span>
+        <span class="s">"""params is a list of lists of parameter tensors"""</span>
+        <span class="c1"># might be a generator
+</span>        <span class="bp">self</span><span class="o">.</span><span class="n">param_groups</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="c1"># ensure params is a list of lists
+</span>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_groups</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">param_groups</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">param_groups</span><span class="p">]</span>
+        <span class="s">"""
+        One dict of hyperparameters for each parameter group.
+        This line below copies the defaults dict rather than
+        pointing to the same reference.
+        Hyperparameters include lr, eps, etc.
+        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hypers</span> <span class="o">=</span> <span class="p">[{</span><span class="o">**</span><span class="n">defaults</span><span class="p">}</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_groups</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">steppers</span> <span class="o">=</span> <span class="n">listify</span><span class="p">(</span><span class="n">steppers</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">grad_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">hyper</span><span class="p">)</span> <span class="k">for</span> <span class="n">pg</span><span class="p">,</span><span class="n">hyper</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">param_groups</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">hypers</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pg</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">zero_grad</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">p</span><span class="p">,</span><span class="n">hyper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grad_params</span><span class="p">():</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">detach_</span><span class="p">()</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">p</span><span class="p">,</span><span class="n">hyper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grad_params</span><span class="p">():</span>
+            <span class="n">compose</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">steppers</span><span class="p">,</span> <span class="o">**</span><span class="n">hyper</span><span class="p">)</span>
+
+<span class="s">"""Stepper"""</span>
+<span class="k">def</span> <span class="nf">sgd_step</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="o">-</span><span class="n">lr</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">p</span>
+
+<span class="n">opt_func</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">,</span> <span class="n">steppers</span><span class="o">=</span><span class="p">[</span><span class="n">sgd_step</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p>We can also add weight decay. We can do it in one of two ways:</p>
+
+<ul>
+  <li>Add L2 regularization to the loss, or</li>
+  <li>Add weight decay to the gradient <code class="highlighter-rouge">weight.grad += wd * weight</code>. For a vanilla SGD the update is</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>weight = weight - lr*(weight.grad + wd*weight)
+</code></pre></div></div>
+
+<p>These two ways are only equivalent for vanilla SGD. For RMSprop and Adam, the second way is better. It is mentioned in the paper <a href="https://arxiv.org/pdf/1711.05101.pdf">DECOUPLED WEIGHT DECAY REGULARIZATION</a>. <code class="highlighter-rouge">fastai</code> made the second way the default.</p>
+
+<p>We can implement <code class="highlighter-rouge">stepper</code> for weight decay.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">weight_decay</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">wd</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">lr</span><span class="o">*</span><span class="n">wd</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">p</span>
+
+<span class="n">weight_decay</span><span class="o">.</span><span class="n">_defaults</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">wd</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
+
+<span class="c1"># Or
+</span><span class="k">def</span> <span class="nf">l2_reg</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">wd</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># Tip: Pytorch add_ can take two parameters a, b,
+</span>    <span class="c1"># it does a mult of a and b first and then add
+</span>    <span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="n">wd</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">p</span>
+
+<span class="n">l2_reg</span><span class="o">.</span><span class="n">_defaults</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">wd</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><em>Tip: Pytorch <code class="highlighter-rouge">add_</code> can take two parameters a, b, it does a mult of a and b first and then add the result to the tensor.</em></p>
+
+<h3 id="add-momentum">
+<a class="anchor" href="#add-momentum" aria-hidden="true"><span class="octicon octicon-link"></span></a>Add momentum</h3>
+
+<p>Momentum needs the previous state of all parameters to work. We store it in a dict <code class="highlighter-rouge">state</code>.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">StatefulOptimizer</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">steppers</span><span class="p">,</span> <span class="n">stats</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">defaults</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span> <span class="o">=</span> <span class="n">listify</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
+        <span class="n">maybe_update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">,</span> <span class="n">defaults</span><span class="p">,</span> <span class="n">get_defaults</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">steppers</span><span class="p">,</span> <span class="o">**</span><span class="n">defaults</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">p</span><span class="p">,</span><span class="n">hyper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grad_params</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">:</span>
+                <span class="c1"># Create a state for p and call all the
+</span>                <span class="c1"># statistics to initialize it.
+</span>                <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">maybe_update</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">p</span><span class="p">],</span>
+                    <span class="k">lambda</span> <span class="n">o</span><span class="p">:</span> <span class="n">o</span><span class="o">.</span><span class="n">init_state</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">:</span>
+                <span class="n">state</span> <span class="o">=</span> <span class="n">stat</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="o">**</span><span class="n">hyper</span><span class="p">)</span>
+            <span class="n">compose</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">steppers</span><span class="p">,</span> <span class="o">**</span><span class="n">state</span><span class="p">,</span> <span class="o">**</span><span class="n">hyper</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">state</span>
+
+<span class="k">class</span> <span class="nc">AverageGrad</span><span class="p">(</span><span class="n">Stat</span><span class="p">):</span>
+    <span class="n">_defaults</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mom</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">init_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">'grad_avg'</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span><span class="p">)}</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">mom</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">state</span><span class="p">[</span><span class="s">'grad_avg'</span><span class="p">]</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">mom</span><span class="p">)</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">state</span>
+
+<span class="k">def</span> <span class="nf">momentum_step</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="n">grad_avg</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="o">-</span><span class="n">lr</span><span class="p">,</span> <span class="n">grad_avg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">p</span>
+
+<span class="n">sgd_mom_opt</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
+    <span class="n">StatefulOptimizer</span><span class="p">,</span> <span class="n">steppers</span><span class="o">=</span><span class="p">[</span><span class="n">momentum_step</span><span class="p">,</span><span class="n">weight_decay</span><span class="p">],</span>
+    <span class="n">stats</span><span class="o">=</span><span class="n">AverageGrad</span><span class="p">(),</span> <span class="n">wd</span><span class="o">=</span><span class="mf">0.01</span>
+<span class="p">)</span>
+
+<span class="n">learn</span><span class="p">,</span><span class="n">run</span> <span class="o">=</span> <span class="n">get_learn_run</span><span class="p">(</span>
+    <span class="n">nfs</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">conv_layer</span><span class="p">,</span> <span class="n">cbs</span><span class="o">=</span><span class="n">cbfs</span><span class="p">,</span> <span class="n">opt_func</span><span class="o">=</span><span class="n">sgd_mom_opt</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>!!NOTE!! Batch norm mults makes L2 regularization not work the way we expected!</strong></p>
+
+<p>Everybody has been doing it wrong! This paper <a href="https://arxiv.org/abs/1706.05350">L2 regularization vs batch and weight normalization</a> pointed it out. But this paper also isn’t completely correct. L2 regularization DOES DO SOMETHING. There are some more recent papers that tried to explain what L2 regularization does along with batch norm, but the current state is that <em>no one understands it completely</em>.</p>
+
+<p>Jeremy: The theory people who did this kind of research don’t know how to train models. The practioners forget about theories. If you can combine the two, you can find interesting results!</p>
+
+<ul>
+  <li>Jane street blog <a href="https://blog.janestreet.com/l2-regularization-and-batch-norm/">post</a>
+</li>
+  <li>Paper: <a href="https://arxiv.org/abs/1810.12281">Three Mechanisms of Weight Decay Regularization</a>
+</li>
+</ul>
+
+<p>Momentum is also interesting. We use Exponentially Weighted Moving Average (ewma) or <code class="highlighter-rouge">lerp</code> in pytorch.</p>
+
+<p>Next, the notebook describes the implementation of Adam and LAMB (<a href="https://arxiv.org/abs/1904.00962">paper</a>) with the generic optimizer structure. Refer to the <a href="https://github.com/fastai/course-v3/blob/master/nbs/dl2/09_optimizers.ipynb">notebook</a> for more details.</p>
+
+<p>Jeremy implemented the LAMB approach a week before the paper came out. The paper is highly recommended.</p>
+
+<h2 id="refactor-remove-runner-just-have-learner">
+<a class="anchor" href="#refactor-remove-runner-just-have-learner" aria-hidden="true"><span class="octicon octicon-link"></span></a>Refactor: remove Runner, just have Learner</h2>
+
+<p>Notebook: <code class="highlighter-rouge">09b_learner</code></p>
+
+<p><a href="https://github.com/fastai/course-v3/blob/master/nbs/dl2/09b_learner.ipynb">https://github.com/fastai/course-v3/blob/master/nbs/dl2/09b_learner.ipynb</a></p>
+
+<p>Jeremy realized the <code class="highlighter-rouge">Runner</code> class just stores 3 things and it’s much better to just put it in <code class="highlighter-rouge">Learner</code>. This makes the code much easier to use.</p>
+
+<h2 id="add-a-progress-bar">
+<a class="anchor" href="#add-a-progress-bar" aria-hidden="true"><span class="octicon octicon-link"></span></a>Add a progress bar</h2>
+
+<p>Notebook: <code class="highlighter-rouge">09c_add_progress_bar</code></p>
+
+<p><a href="https://github.com/fastai/course-v3/blob/master/nbs/dl2/09c_add_progress_bar.ipynb">https://github.com/fastai/course-v3/blob/master/nbs/dl2/09c_add_progress_bar.ipynb</a></p>
+
+<p>The components used are</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">fastprogress</span> <span class="kn">import</span> <span class="n">master_bar</span><span class="p">,</span> <span class="n">progress_bar</span>
+</code></pre></div></div>
+
+<p>And we create the callback</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">AvgStatsCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metrics</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_stats</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">valid_stats</span> <span class="o">=</span> \
+            <span class="n">AvgStats</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span><span class="bp">True</span><span class="p">),</span><span class="n">AvgStats</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">begin_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">met_names</span> <span class="o">=</span> <span class="p">[</span><span class="s">'loss'</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">__name__</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_stats</span><span class="o">.</span><span class="n">metrics</span><span class="p">]</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s">'epoch'</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">f</span><span class="s">'train_{n}'</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">met_names</span><span class="p">]</span> <span class="o">+</span> \
+            <span class="p">[</span><span class="n">f</span><span class="s">'valid_{n}'</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">met_names</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s">'time'</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">begin_epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_stats</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valid_stats</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">after_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_stats</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_train</span> <span class="k">else</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">valid_stats</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span> <span class="n">stats</span><span class="o">.</span><span class="n">accumulate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">after_epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">train_stats</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_stats</span><span class="p">]:</span>
+            <span class="n">stats</span> <span class="o">+=</span> <span class="p">[</span><span class="n">f</span><span class="s">'{v:.6f}'</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">o</span><span class="o">.</span><span class="n">avg_stats</span><span class="p">]</span>
+        <span class="n">stats</span> <span class="o">+=</span> <span class="p">[</span><span class="n">format_time</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Then we add the progress bars… with a Callback of course! <code class="highlighter-rouge">master_bar</code> handles the count over the epochs while its child <code class="highlighter-rouge">progress_bar</code> is looping over all the batches. We just create one at the beginning or each epoch/validation phase, and update it at the end of each batch. By changing the logger of the <code class="highlighter-rouge">Learner</code> to the <code class="highlighter-rouge">write</code> function of the master bar, everything is automatically written there.</p>
+
+<p>Note: this requires fastprogress v0.1.21 or later.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># export
+</span><span class="k">class</span> <span class="nc">ProgressCallback</span><span class="p">(</span><span class="n">Callback</span><span class="p">):</span>
+    <span class="n">_order</span><span class="o">=-</span><span class="mi">1</span>
+    <span class="k">def</span> <span class="nf">begin_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mbar</span> <span class="o">=</span> <span class="n">master_bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epochs</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mbar</span><span class="o">.</span><span class="n">on_iter_begin</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mbar</span><span class="o">.</span><span class="n">write</span><span class="p">,</span> <span class="n">table</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">after_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">mbar</span><span class="o">.</span><span class="n">on_iter_end</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">after_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="nb">iter</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">begin_epoch</span>   <span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_pb</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">begin_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_pb</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">set_pb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb</span> <span class="o">=</span> <span class="n">progress_bar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dl</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mbar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epoch</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Then use it like this</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cbfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">partial</span><span class="p">(</span><span class="n">AvgStatsCallback</span><span class="p">,</span><span class="n">accuracy</span><span class="p">),</span>
+        <span class="n">CudaCallback</span><span class="p">,</span>
+        <span class="n">ProgressCallback</span><span class="p">,</span>
+        <span class="n">partial</span><span class="p">(</span><span class="n">BatchTransformXCallback</span><span class="p">,</span> <span class="n">norm_imagenette</span><span class="p">)]</span>
+
+<span class="n">learn</span> <span class="o">=</span> <span class="n">get_learner</span><span class="p">(</span><span class="n">nfs</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="n">conv_layer</span><span class="p">,</span> <span class="n">cb_funcs</span><span class="o">=</span><span class="n">cbfs</span><span class="p">)</span>
+<span class="n">learn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="data-augmentation">
+<a class="anchor" href="#data-augmentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data augmentation</h2>
+
+<p>Notebook: <code class="highlighter-rouge">10_augmentation</code></p>
+
+<p>To further improve our Imagenette model, we need data augmentation.</p>
+
+<p>The key takeaway is that there is no “best transform” for data augmentation. Try things out and take a close look at the results.</p>
+
+<p>Some transform examples:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">img</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">),</span> <span class="n">resample</span><span class="o">=</span><span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">ANTIALIAS</span><span class="p">)</span>
+
+<span class="n">img</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">),</span> <span class="n">resample</span><span class="o">=</span><span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">BILINEAR</span><span class="p">)</span>
+
+<span class="n">img</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">),</span> <span class="n">resample</span><span class="o">=</span><span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">NEAREST</span><span class="p">)</span>
+
+<span class="n">img</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">256</span><span class="p">,</span><span class="mi">256</span><span class="p">),</span> <span class="n">resample</span><span class="o">=</span><span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">BICUBIC</span><span class="p">)</span>\
+   <span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">),</span> <span class="n">resample</span><span class="o">=</span><span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">NEAREST</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><em>Tip: doing transforms on bytes (i.e. uint8) is much faster than on floats. Converting bytes to floats is much slower than something as complex as a warp!</em></p>
+
+<p>Some useful transforms that are particularly useful:</p>
+
+<ul>
+  <li>zooming in. It works great for image, for text and audio.</li>
+  <li>perspective warping for image. It needs to solve a system of linear equations. Pytorch has this solver!</li>
+</ul>
+
+<p>One comment from Jeremy is that for zooming in, if the object of interest - the tench - is cropped out by the zoom-in effect, it’s OK! It’s still the ImageNet winning strategy. Ultimately it creates noisy labels where some labels are just wrong. All the research showed that noisy labels are okay - because the model learns to link other things in that image with the label.</p>
+
+<p>For music data augmentation, for example, you can do pitch shifting, volume changes, cutting, etc. Ultimately it depends on the domain and what you need.</p>
+
+<p>In the next lesson, we will introduce <em>MixUp</em>, a data augmentation technique that dramatically improves results no matter the domain, and can be run on GPU. It will make some of the techniques here irrelevant.</p>
+
+<h2 id="papers-to-read">
+<a class="anchor" href="#papers-to-read" aria-hidden="true"><span class="octicon octicon-link"></span></a>Papers to read</h2>
+
+<ul>
+  <li>L2 Regularization versus Batch and Weight Normalization</li>
+  <li>Norm matters: efficient and accurate normalization schemes in deep networks</li>
+  <li>Three Mechanisms of Weight Decay Regularization</li>
+  <li>Nesterov’s Accelerated Gradient and Momentum as approximations to Regularised Update Descent</li>
+  <li>Adam: A Method for Stochastic Optimization</li>
+  <li>Reducing BERT Pre-Training Time from 3 Days to 76 Minutes</li>
+  <li>Blog post: <a href="https://blog.janestreet.com/l2-regularization-and-batch-norm/">https://blog.janestreet.com/l2-regularization-and-batch-norm/</a>
+</li>
+</ul>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="logancyang/blog-learning-automata"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/note/fastai/2020/06/02/fastai-lesson11.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notes, code and essays by Logan Yang.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

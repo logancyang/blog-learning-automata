@@ -119,7 +119,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      14 min read
+      15 min read
     
 </span></p>
 
@@ -161,7 +161,22 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h2"><a href="#add-a-progress-bar">Add a progress bar</a></li>
 <li class="toc-entry toc-h2"><a href="#data-augmentation">Data augmentation</a></li>
 <li class="toc-entry toc-h2"><a href="#papers-to-read">Papers to read</a></li>
-</ul><h2 id="layer-wise-sequential-unit-variance-a-smart-and-simple-init">
+</ul><p>We start lesson 11 with a brief look at a smart and simple initialization technique called Layer-wise Sequential Unit Variance (LSUV). We implement it from scratch, and then use the methods introduced in the previous lesson to investigate the impact of this technique on our model training. It looks pretty good!</p>
+
+<p>Then we look at one of the jewels of fastai: the Data Block API. We already saw how to use this API in part 1 of the course; but now we learn how to create it from scratch, and in the process we also will learn a lot about how to better use it and customize it. We’ll look closely at each step:</p>
+
+<ul>
+  <li>Get files: we’ll learn how <code class="highlighter-rouge">os.scandir</code> provides a highly optimized way to access the filesystem, and <code class="highlighter-rouge">os.walk</code> provides a powerful recursive tree walking abstraction on top of that</li>
+  <li>Transformations: we create a simple but powerful <code class="highlighter-rouge">list</code> and function composition to transform data on-the-fly</li>
+  <li>Split and label: we create flexible functions for each</li>
+  <li>DataBunch: we’ll see that <code class="highlighter-rouge">DataBunch</code> is a very simple container for our <code class="highlighter-rouge">DataLoader</code>s</li>
+</ul>
+
+<p>Next up, we build a new <code class="highlighter-rouge">StatefulOptimizer</code> class, and show that nearly all optimizers used in modern deep learning training are just special cases of this one class. We use it to add weight decay, momentum, Adam, and LAMB optimizers, and take a look a detailed look at how momentum changes training.</p>
+
+<p>Finally, we look at data augmentation, and benchmark various data augmentation techniques. We develop a new GPU-based data augmentation approach which we find speeds things up quite dramatically, and allows us to then add more sophisticated warp-based transformations.</p>
+
+<h2 id="layer-wise-sequential-unit-variance-a-smart-and-simple-init">
 <a class="anchor" href="#layer-wise-sequential-unit-variance-a-smart-and-simple-init" aria-hidden="true"><span class="octicon octicon-link"></span></a>Layer-wise Sequential Unit Variance: a smart and simple init</h2>
 
 <p>Paper: <a href="https://arxiv.org/pdf/1511.06422.pdf">All You Need is a Good Init</a></p>
@@ -739,14 +754,15 @@ Wall time: 1min 7s
 <a class="anchor" href="#papers-to-read" aria-hidden="true"><span class="octicon octicon-link"></span></a>Papers to read</h2>
 
 <ul>
-  <li>L2 Regularization versus Batch and Weight Normalization</li>
-  <li>Norm matters: efficient and accurate normalization schemes in deep networks</li>
-  <li>Three Mechanisms of Weight Decay Regularization</li>
-  <li>Nesterov’s Accelerated Gradient and Momentum as approximations to Regularised Update Descent</li>
-  <li>Adam: A Method for Stochastic Optimization</li>
-  <li>Reducing BERT Pre-Training Time from 3 Days to 76 Minutes</li>
-  <li>Blog post: <a href="https://blog.janestreet.com/l2-regularization-and-batch-norm/">https://blog.janestreet.com/l2-regularization-and-batch-norm/</a>
-</li>
+  <li><a href="https://arxiv.org/abs/1311.2901">Visualizing and understanding convolution networks</a></li>
+  <li><a href="https://arxiv.org/abs/1812.01187">Bag of tricks for image classification with convolutional neural networks</a></li>
+  <li><a href="https://arxiv.org/abs/1706.05350">L2 Regularization versus Batch and Weight Normalization</a></li>
+  <li><a href="https://arxiv.org/abs/1803.01814">Norm matters: efficient and accurate normalization schemes in deep networks</a></li>
+  <li><a href="https://arxiv.org/abs/1810.12281">Three Mechanisms of Weight Decay Regularization</a></li>
+  <li><a href="https://arxiv.org/abs/1607.01981">Nesterov’s Accelerated Gradient and Momentum as approximations to Regularised Update Descent</a></li>
+  <li><a href="https://arxiv.org/abs/1412.6980">Adam: A Method for Stochastic Optimization</a></li>
+  <li><a href="https://arxiv.org/abs/1904.00962">Reducing BERT Pre-Training Time from 3 Days to 76 Minutes</a></li>
+  <li><a href="https://blog.janestreet.com/l2-regularization-and-batch-norm/">Blog post on the interaction between L2 Regularization and Batchnorm, including experiments</a></li>
 </ul>
 
   </div><!-- from https://github.com/utterance/utterances -->

@@ -119,7 +119,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      24 min read
+      25 min read
     
 </span></p>
 
@@ -189,8 +189,26 @@ window.onload = wrap_img;
 </ul>
 </li>
 <li class="toc-entry toc-h2"><a href="#ablation-study-in-deep-learning-research">Ablation study in deep learning research</a></li>
+<li class="toc-entry toc-h2"><a href="#papers-to-read">Papers to read</a></li>
 <li class="toc-entry toc-h2"><a href="#my-random-thoughts">My Random Thoughts</a></li>
-</ul><h2 id="jeremys-starting-comments-take-it-easy-and-make-progress-slowly">
+</ul><p>In lesson 10 we start with a deeper dive into the underlying idea of callbacks and event handlers. We look at many different ways to implement callbacks in Python, and discuss their pros and cons. Then we do a quick review of some other important foundations:</p>
+
+<ul>
+  <li>
+<code class="highlighter-rouge">__dunder__</code> special symbols in Python</li>
+  <li>How to navigate source code using your editor</li>
+  <li>Variance, standard deviation, covariance, and correlation</li>
+  <li>Softmax</li>
+  <li>Exceptions as control flow</li>
+</ul>
+
+<p>Next up, we use the callback system we’ve created to set up CNN training on the GPU.</p>
+
+<p>Then we move on to the main topic of this lesson: looking inside the model to see how it behaves during training. To do so, we first need to learn about <em>hooks</em> in PyTorch, which allow us to add callbacks to the forward and backward passes. We will use hooks to track the changing distribution of our activations in each layer during training. By plotting this distributions, we can try to identify  problems with our training.</p>
+
+<p>In order to fix the problems we see, we try changing our activation function, and introducing batchnorm. We study the pros and cons of batchnorm, and note some areas where it performs poorly. Finally, we develop a new kind of normalization layer to overcome these problems, and compare it to previously published approaches, and see some very encouraging results.</p>
+
+<h2 id="jeremys-starting-comments-take-it-easy-and-make-progress-slowly">
 <a class="anchor" href="#jeremys-starting-comments-take-it-easy-and-make-progress-slowly" aria-hidden="true"><span class="octicon octicon-link"></span></a>Jeremy’s starting comments: take it easy and make progress slowly</h2>
 
 <p>The amount of material in part II is meant to keep the student busy until the next version of the course. Don’t expect to understand every thing in one go, digest them bit by bit.</p>
@@ -1289,6 +1307,17 @@ So the moving average is equivalent to
 <p>Jeremy mentioned ablation study briefly. It is good to know</p>
 
 <p><a href="https://stats.stackexchange.com/questions/380040/what-is-an-ablation-study-and-is-there-a-systematic-way-to-perform-it">https://stats.stackexchange.com/questions/380040/what-is-an-ablation-study-and-is-there-a-systematic-way-to-perform-it</a></p>
+
+<h2 id="papers-to-read">
+<a class="anchor" href="#papers-to-read" aria-hidden="true"><span class="octicon octicon-link"></span></a>Papers to read</h2>
+
+<ul>
+  <li><a href="https://arxiv.org/abs/1502.03167">Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift</a></li>
+  <li><a href="https://arxiv.org/abs/1607.06450">Layer Normalization</a></li>
+  <li><a href="https://arxiv.org/abs/1607.08022">Instance Normalization: The Missing Ingredient for Fast Stylization</a></li>
+  <li><a href="https://arxiv.org/abs/1803.08494">Group Normalization</a></li>
+  <li><a href="https://arxiv.org/abs/1804.07612">Revisiting Small Batch Training for Deep Neural Networks</a></li>
+</ul>
 
 <h2 id="my-random-thoughts">
 <a class="anchor" href="#my-random-thoughts" aria-hidden="true"><span class="octicon octicon-link"></span></a>My Random Thoughts</h2>

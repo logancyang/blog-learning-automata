@@ -40,6 +40,36 @@ def one_batch(self, i, xb, yb):
 
 The goal of formatting is to make the code more readable, and debugging ML code is very difficult. This kind of formatting can help.
 
+## Jeremy's answer to some in-class questions
+
+### Jeremy on cross validation
+
+Cross validation is a good idea when the data is very small. Once the data has over 1k rows, it is not needed. In general, if the valid accuracy varies too much from run to run, consider cross validation. Otherwise, a good validation set is enough.
+
+### Best tips for debugging deep learning
+
+- **Don't make mistakes in the first place: make the code as simple as possible.**
+- A horror story from Jeremy: he forgot to write `.opt` somewhere and it took countless hours and $5k of AWS credit to find that bug.
+- Testing for DL is different from standard software engineering, it needs to work for randomness. Working for one random seed doesn't mean it works for another. You need non-reproducible tests, you need to be warned if something looks off statistically.
+- Once you realize there's a specific bug, you write a test that fails on it **everytime**.
+- DL debugging is really hard, again, need to **make sure you don't make a mistake in the first place**.
+
+### Scientific journal: all scientists should have one
+
+A note that has all the scientific experiment settings and their results. It should be easy to search through if we need some old records.
+
+For example, noble gases and penicillin are discovered by good practice of scientific journaling.
+
+Jeremy tried changing batch norm in different ways in Keras. His journal helped him keep track of all the things that didn't work and what worked.
+
+Git commit ID or dataset versions can be recorded in the journal if needed. Or just keep the dates and make sure you push every day.
+
+### Comments on stopword removal, stemming, lemmatization
+
+Jeremy says it's a terrible idea. The rule of thumb is to leave the raw text alone and do not do the stopwords removal, stemming, etc. These are for traditional NLP before deep learning. We don't want to lose information.
+
+(Me: some of these processing may still be useful for certain tasks. Jeremy's answer here works for text classification in general.)
+
 ## MixUp and label smoothing
 
 In the last lesson we can run data augmentation on GPUs.
@@ -328,21 +358,217 @@ learn.fit(1, disc_lr_sched + [DebugCallback(cb_types.after_batch, _print_det)])
 
 Refer to the notebook and the lecture at around 1:07:00 for more details.
 
-### Jeremy on his stance against cross validation
-
-Cross validation is a good idea when the data is very small. Once the data has over 1k rows, it is not needed. In general, if the valid accuracy varies too much from run to run, consider cross validation. Otherwise, a good validation set is enough.
-
-### Best tips for debugging deep learning
-
-- **Don't make mistakes in the first place: make the code as simple as possible.**
-- A horror story from Jeremy: he forgot to write `.opt` somewhere and it took countless hours and $5k of AWS credit to find that bug.
-- Testing for DL is different from standard software engineering, it needs to work for randomness. Working for one random seed doesn't mean it works for another. You need non-reproducible tests, you need to be warned if something looks off statistically.
-- Once you realize there's a specific bug, you write a test that fails on it **everytime**.
-- DL debugging is really hard, again, need to **make sure you don't make a mistake in the first place**.
-
 ## ULMFiT is transfer learning applied to AWD-LSTM
 
-tbd
+Jeremy: LSTMs and RNNs are **not** inferior to transformer models such as GPT-2 and BERT, and they should not be a thing in the past.
+
+- Transformers and CNNs for texts don't have state. For example, for speech recognition, you need to do analyses for all the samples around one sample again and again, so they are super wasteful.
+- They are fiddly, so they are not extensively used in industry-grade NLP yet. At the moment, Jeremy's go-to choice for real world NLP tasks is still ULMFiT and RNNs.
+
+A language modeling is generic, it could be predicting the next sample of a piece of music or speech, or next genome in a sequence, etc.
+
+### Text preprocessing
+
+Notebook: `12_text`
+
+#### 1. Make TextList
+
+Adapt `ItemList` to `TextList`,
+
+```py
+#export
+def read_file(fn):
+    with open(fn, 'r', encoding = 'utf8') as f: return f.read()
+
+class TextList(ItemList):
+    @classmethod
+    def from_files(cls, path, extensions='.txt', recurse=True, include=None, **kwargs):
+        return cls(get_files(path, extensions, recurse=recurse, include=include), path, **kwargs)
+
+    def get(self, i):
+        if isinstance(i, Path): return read_file(i)
+        return i
+```
+
+For any other custom task and files, just implement the `read_file` function, and override `get` in `ItemList`.
+
+#### 2. Tokenization
+
+Next, we use `spacy` for tokenization.
+
+Before tokenization, we can write a list of preprocessing functions such as
+
+- replace `<br />` with `\n`
+- remove excessive spaces
+- add space around `#` and `/`
+
+or any custom behavior you want.
+
+Then we define some symbols/tokens:
+
+```py
+UNK, PAD, BOS, EOS, TK_REP, TK_WREP, TK_UP, TK_MAJ = \
+    "xxunk xxpad xxbos xxeos xxrep xxwrep xxup xxmaj".split()
+```
+
+Do custom things for them in text, and add the functions to a list and call it the `pre_rules`
+
+```py
+default_pre_rules = [
+    fixup_text, replace_rep, replace_wrep, spec_add_spaces,
+    rm_useless_spaces, sub_br
+]
+default_spec_tok = [UNK, PAD, BOS, EOS, TK_REP, TK_WREP, TK_UP, TK_MAJ]
+```
+
+Jeremy finds `spacy`'s tokenizer complex but essential to produce good models. But it's slow. Use Python's `ProcessPoolExecutor` to speed it up.
+
+```py
+from spacy.symbols import ORTH
+from concurrent.futures import ProcessPoolExecutor
+
+
+def parallel(func, arr, max_workers=4):
+    """Wrap ProcessPoolExecutor"""
+    if max_workers<2: results = list(progress_bar(map(func, enumerate(arr)), total=len(arr)))
+    else:
+        with ProcessPoolExecutor(max_workers=max_workers) as ex:
+            return list(progress_bar(ex.map(func, enumerate(arr)), total=len(arr)))
+    if any([o is not None for o in results]): return results
+
+
+class TokenizeProcessor(Processor):
+    def __init__(self, lang="en", chunksize=2000, pre_rules=None, post_rules=None, max_workers=4):
+        self.chunksize,self.max_workers = chunksize,max_workers
+        self.tokenizer = spacy.blank(lang).tokenizer
+        for w in default_spec_tok:
+            self.tokenizer.add_special_case(w, [{ORTH: w}])
+        self.pre_rules  = default_pre_rules  if pre_rules  is None else pre_rules
+        self.post_rules = default_post_rules if post_rules is None else post_rules
+
+    def proc_chunk(self, args):
+        i,chunk = args
+        # Notice the use of `compose` to apply the pre_rules functions
+        # in a functional programming way
+        chunk = [compose(t, self.pre_rules) for t in chunk]
+        docs = [[d.text for d in doc] for doc in self.tokenizer.pipe(chunk)]
+        docs = [compose(t, self.post_rules) for t in docs]
+        return docs
+
+    def __call__(self, items):
+        toks = []
+        if isinstance(items[0], Path): items = [read_file(i) for i in items]
+        chunks = [items[i: i+self.chunksize] for i in (range(0, len(items), self.chunksize))]
+        # Use `parallel` to speed up the tokenizer
+        toks = parallel(self.proc_chunk, chunks, max_workers=self.max_workers)
+        return sum(toks, [])
+
+    def proc1(self, item): return self.proc_chunk([item])[0]
+
+    def deprocess(self, toks): return [self.deproc1(tok) for tok in toks]
+    def deproc1(self, tok):    return " ".join(tok)
+```
+
+#### 3. Numericalize tokens to vocab
+
+Once we have tokenized our texts, we replace each token by an individual number, this is called numericalizing. Again, we do this with a processor (not so different from the `CategoryProcessor`).
+
+```py
+import collections
+
+class NumericalizeProcessor(Processor):
+    def __init__(self, vocab=None, max_vocab=60000, min_freq=2):
+        self.vocab,self.max_vocab,self.min_freq = vocab,max_vocab,min_freq
+
+    def __call__(self, items):
+        #The vocab is defined on the first use.
+        if self.vocab is None:
+            freq = Counter(p for o in items for p in o)
+            self.vocab = [o for o,c in freq.most_common(self.max_vocab) if c >= self.min_freq]
+            for o in reversed(default_spec_tok):
+                if o in self.vocab: self.vocab.remove(o)
+                self.vocab.insert(0, o)
+        if getattr(self, 'otoi', None) is None:
+            self.otoi = collections.defaultdict(int,{v:k for k,v in enumerate(self.vocab)})
+        return [self.proc1(o) for o in items]
+    def proc1(self, item):  return [self.otoi[o] for o in item]
+
+    def deprocess(self, idxs):
+        assert self.vocab is not None
+        return [self.deproc1(idx) for idx in idxs]
+    def deproc1(self, idx): return [self.vocab[i] for i in idx]
+```
+
+#### 4. Batching
+
+The way to do batch is to let each batch have different sequences of the same documents, because the RNN will have a state for each batch.
+
+Each batch has size `(bs, bptt)`. This is really important.
+
+Question: how to set `bs, bptt` combination? Jeremy says he doesn't know the answer, it's a good thing to experiment with.
+
+To get rectangular tensor for texts of varying lengths, use padding tokens. This also works for rectangular images. Refer to the `pad_collate()` function.
+
+### Build the RNN: AWD-LSTM
+
+Notebook: `12a_awd_lstm`
+
+Recall from part I, an RNN is just a regular neural network with as many layers as the number of tokens in the sequence to learn. For a long sequence we need so many layers, we use a for loop. Note that we use the same weight matrix for these layers (yellow in the diagram below).
+
+<img src="{{ site.baseurl }}/images/fastai/basic-rnnn.png" alt="rnn" align="middle"/>
+
+<img src="{{ site.baseurl }}/images/fastai/rnn.png" alt="rnn1" align="middle"/>
+
+With say 2000 layers, we have problems like vanishing gradients and exploding gradients. To make things worse, we can have stacked RNNs with more thousands of layers.
+
+To make the RNN easier to train, we use something called an LSTM cell.
+
+<img src="{{ site.baseurl }}/images/fastai/lstm.png" alt="lstm" align="middle"/>
+
+Conceptually this is a lot. The code is actually not much:
+
+```py
+class LSTMCell(nn.Module):
+    def __init__(self, ni, nh):
+        super().__init__()
+        self.ih = nn.Linear(ni,4*nh)
+        self.hh = nn.Linear(nh,4*nh)
+
+    def forward(self, input, state):
+        h,c = state
+        #One big multiplication for all the gates is better than 4 smaller ones
+        gates = (self.ih(input) + self.hh(h)).chunk(4, 1)
+        ingate,forgetgate,outgate = map(torch.sigmoid, gates[:3])
+        cellgate = gates[3].tanh()
+
+        c = (forgetgate*c) + (ingate*cellgate)
+        h = outgate * c.tanh()
+        return h, (h,c)
+```
+
+There is another type of cell called GRU. They are both ways to forget things.
+
+The fast option is to use pytorch cuda. There is also something called `jit` and it translates Python into C++ in the background. However it doesn't always work.
+
+#### Dropout
+
+Do dropout for an entire sequence at a time. Keywords: RNN dropout, weight dropout, and embedding dropout.
+
+#### Gradient clipping
+
+AWD-LSTM also uses gradient clipping to avoid exproding gradients. It allows us to use bigger learning rate.
+
+### Train the language model
+
+Notebook: `12b_lm_pretrain`, `12c_ulmfit`
+
+Just use the code implemented in the previous two notebooks. It trains for ~5hrs to get the language model.
+
+If a word is in the task dataset (e.g. IMDB) and isn't in the LM dataset (Wikitext103), we just use the mean weight and mean bias. If the word exists in both dataset, we directly use the embedding from the LM dataset.
+
+Next, we create layer groups just as before, and train the model some more (~1hr), then we get a finetuned language model.
+
+Tip: concat pooling is helpful for text as well as images.
 
 ## Papers
 

@@ -570,6 +570,16 @@ Next, we create layer groups just as before, and train the model some more (~1hr
 
 Tip: concat pooling is helpful for text as well as images.
 
+## Swift for TensorFlow
+
+Swift and/or Julia is the future for deep learning. The days for Python is numbered.
+
+Learning Swift is going to make me a better developer.
+
+Swift resources: the official documentation book, Swift playground.
+
+Chris Lattner
+
 ## Papers
 
 - [mixup: Beyond Empirical Risk Minimization](https://arxiv.org/abs/1710.09412)

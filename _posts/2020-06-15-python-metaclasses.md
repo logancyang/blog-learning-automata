@@ -2,7 +2,7 @@
 toc: true
 layout: post
 description: Stepping up Python skills
-categories: [note, python-essentials]
+categories: [note, python]
 title: "Python Essentials: Mental Models of Expert Level Features"
 comments: true
 ---

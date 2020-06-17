@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Python Essentials: Digging into Package and Environment Management to Find the Best Approach | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Python Essentials: Digging into Package and Environment Management to Find the Best Approach" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Stepping up Python skills" />
+<meta property="og:description" content="Stepping up Python skills" />
+<link rel="canonical" href="http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-17T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Stepping up Python skills","@type":"BlogPosting","headline":"Python Essentials: Digging into Package and Environment Management to Find the Best Approach","dateModified":"2020-06-17T00:00:00-05:00","datePublished":"2020-06-17T00:00:00-05:00","url":"http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Python Essentials: Digging into Package and Environment Management to Find the Best Approach | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Python Essentials: Digging into Package and Environment Management to Find the Best Approach" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Stepping up Python skills" />
+<meta property="og:description" content="Stepping up Python skills" />
+<link rel="canonical" href="http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-17T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Stepping up Python skills","@type":"BlogPosting","headline":"Python Essentials: Digging into Package and Environment Management to Find the Best Approach","dateModified":"2020-06-17T00:00:00-05:00","datePublished":"2020-06-17T00:00:00-05:00","url":"http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Learning Automata</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Python Essentials: Digging into Package and Environment Management to Find the Best Approach</h1><p class="page-description">Stepping up Python skills</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-06-17T00:00:00-05:00" itemprop="datePublished">
+        Jun 17, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      11 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#note">note</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#python">python</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#pip-vs-conda">pip vs. conda</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#difference-1">Difference 1</a></li>
+<li class="toc-entry toc-h3"><a href="#difference-2">Difference 2</a></li>
+<li class="toc-entry toc-h3"><a href="#difference-3">Difference 3</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#where-does-python-install-packages-mac-system-python-dont-do-this">Where does Python install packages (mac system Python, DON’T DO THIS)</a></li>
+<li class="toc-entry toc-h2"><a href="#pip-install-vs-conda-install-where-do-they-install-the-packages">pip install vs. conda install: where do they install the packages</a></li>
+<li class="toc-entry toc-h2"><a href="#virtualenv-vs-conda-env">virtualenv vs conda env</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#always-use-a-virtual-environment">Always use a virtual environment!</a></li>
+<li class="toc-entry toc-h3"><a href="#how-does-virtualenv-achieve-isolation">How does virtualenv achieve isolation</a></li>
+<li class="toc-entry toc-h3"><a href="#considerations-for-picking-virtualenv-or-conda-env">Considerations for picking virtualenv or conda env</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#where-do-the-envs-live-central-vs-per-project">Where do the envs live: central vs. per-project</a></li>
+<li class="toc-entry toc-h4"><a href="#environment-size-favors-virtualenv">Environment size (favors virtualenv)</a></li>
+<li class="toc-entry toc-h4"><a href="#prefix-for-shell-display-favors-virtualenv">Prefix for shell display (favors virtualenv)</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#weird-question-of-mine-what-if-virtualenv-and-conda-env-are-both-activated">Weird question of mine: what if virtualenv and conda env are both activated?</a></li>
+<li class="toc-entry toc-h3"><a href="#some-tips">Some tips</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#pyenv">pyenv</a></li>
+<li class="toc-entry toc-h2"><a href="#my-setup-2020">My setup 2020</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#quick-intro-to-poetry">Quick intro to poetry</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#references">References</a></li>
+</ul><p>This post is for clarifying several points about Python package and environment management.</p>
+
+<ul>
+  <li>
+<code class="highlighter-rouge">pip</code> vs. <code class="highlighter-rouge">conda</code>?</li>
+  <li>
+<code class="highlighter-rouge">virtualenv</code> vs. <code class="highlighter-rouge">conda</code> env?</li>
+  <li>How to choose the package and environment tools for Python development?</li>
+</ul>
+
+<h2 id="pip-vs-conda">
+<a class="anchor" href="#pip-vs-conda" aria-hidden="true"><span class="octicon octicon-link"></span></a><code class="highlighter-rouge">pip</code> vs. <code class="highlighter-rouge">conda</code>
+</h2>
+
+<h3 id="difference-1">
+<a class="anchor" href="#difference-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Difference 1</h3>
+
+<p><code class="highlighter-rouge">pip</code> is a <strong><em>Python</em> package manager</strong>.</p>
+
+<p><code class="highlighter-rouge">conda</code> is a <strong>language-agnostic</strong> cross-platform <strong><em>environment</em> manager</strong>.</p>
+
+<p>Package management and environment management are two different things. So <code class="highlighter-rouge">pip</code> and <code class="highlighter-rouge">conda</code> are different things and do not compete with each other.</p>
+
+<p>Pip installs Python software packaged as <strong>wheels or source distributions</strong>. Source distributions may require that the system have compatible compilers, and possibly libraries, installed before invoking pip to succeed.</p>
+
+<p>Conda packages are binaries. There is never a need to have compilers available to install them. Additionally conda packages are not limited to Python software. They may also contain C or C++ libraries, R packages or any other software.</p>
+
+<p>Before using pip, a Python interpreter must be installed via a system package manager or by downloading and running an installer. Conda on the other hand can install Python packages as well as the Python interpreter directly.</p>
+
+<h3 id="difference-2">
+<a class="anchor" href="#difference-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Difference 2</h3>
+
+<p><code class="highlighter-rouge">conda</code> has the ability to create isolated environments, <code class="highlighter-rouge">pip</code> needs <code class="highlighter-rouge">virtualenv</code> or <code class="highlighter-rouge">venv</code> to create a virtual environment.</p>
+
+<p>(<code class="highlighter-rouge">poetry</code> is a tool that wraps <code class="highlighter-rouge">pip</code> and <code class="highlighter-rouge">virtualenv</code> together and is recommended for application development. Will discuss in later sections.)</p>
+
+<h3 id="difference-3">
+<a class="anchor" href="#difference-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>Difference 3</h3>
+
+<p>When installing packages, pip installs dependencies in a recursive, serial loop. No effort is made to ensure that the dependencies of all packages are fulfilled simultaneously. This can lead to environments that are broken in subtle ways, if packages installed earlier in the order have incompatible dependency versions relative to packages installed later in the order. In contrast, conda uses a satisfiability (SAT) solver to verify that all requirements of all packages installed in an environment are met. This check can take extra time but helps prevent the creation of broken environments. As long as package metadata about dependencies is correct, conda will predictably produce working environments.</p>
+
+<p><img src="/images/misc/pipvconda.png" alt="pipvconda" align="middle"></p>
+
+<p>Now we know the difference between <code class="highlighter-rouge">pip</code> and <code class="highlighter-rouge">conda</code>, but choosing which to use also depends on the way they work with virtual environments. I will discuss that in later sections. Now let’s understand some basics how Python installs pacakges, and check the resulting package locations after <code class="highlighter-rouge">pip install</code> and <code class="highlighter-rouge">conda install</code>.</p>
+
+<h2 id="where-does-python-install-packages-mac-system-python-dont-do-this">
+<a class="anchor" href="#where-does-python-install-packages-mac-system-python-dont-do-this" aria-hidden="true"><span class="octicon octicon-link"></span></a>Where does Python install packages (mac system Python, DON’T DO THIS)</h2>
+
+<p>By default, without a virtual environment, all <code class="highlighter-rouge">python</code> and <code class="highlighter-rouge">pip</code> commands will use the default executables, usually your <strong>system Python install</strong>.</p>
+
+<p><strong><em>It is strongly recommended to keep your system Python clean of unnecessary site packages by using virtual environments</em></strong>.</p>
+
+<p>Otherwise, over time, you will add lots of things to your system packages and things might conflict and cause problems. Using an isolated environment for each project ensures easy reproducability and reduced conflict.</p>
+
+<blockquote>
+  <p>DO NOT install into your global Python interpreter! ALWAYS use an environment when developing locally!</p>
+</blockquote>
+
+<p>To see what directories are being used to search for packages, invoke the <code class="highlighter-rouge">site</code> module directly by running <code class="highlighter-rouge">python -m site</code> outside virtual environments:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python <span class="nt">-m</span> site
+
+sys.path <span class="o">=</span> <span class="o">[</span>
+    <span class="s1">'&lt;current_dir&gt;'</span>,
+    <span class="s1">'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python27.zip'</span>,
+    <span class="s1">'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7'</span>,
+    <span class="s1">'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin'</span>,
+    <span class="s1">'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac'</span>,
+    <span class="s1">'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages'</span>,
+    <span class="s1">'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk'</span>,
+    <span class="s1">'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old'</span>,
+    <span class="s1">'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload'</span>,
+    <span class="s1">'/Library/Python/2.7/site-packages'</span>,
+    <span class="s1">'/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python'</span>,
+    <span class="s1">'/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC'</span>,
+<span class="o">]</span>
+USER_BASE: <span class="s1">'/Users/&lt;username&gt;/Library/Python/2.7'</span> <span class="o">(</span>doesn<span class="s1">'t exist)
+USER_SITE: '</span>/Users/&lt;username&gt;/Library/Python/2.7/lib/python/site-packages<span class="s1">' (doesn'</span>t exist<span class="o">)</span>
+ENABLE_USER_SITE: True
+</code></pre></div></div>
+
+<p>The Python at <code class="highlighter-rouge">/System/Library/Frameworks/...</code> is MacOS’s pre-installed Python.</p>
+
+<p>Run <code class="highlighter-rouge">pip show &lt;package_name&gt;</code> to see where it’s installed. For system Python, it’s something like:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pip show setuptools
+
+Name: setuptools
+Version: 41.0.1
+Summary: Easily download, build, <span class="nb">install</span>, upgrade, and uninstall Python packages
+Home-page: https://github.com/pypa/setuptools
+Author: Python Packaging Authority
+Author-email: distutils-sig@python.org
+License: UNKNOWN
+Location: /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python
+Requires:
+Required-by:
+</code></pre></div></div>
+
+<p>You can also run <code class="highlighter-rouge">pip list -v</code> to check install locations.</p>
+
+<h2 id="pip-install-vs-conda-install-where-do-they-install-the-packages">
+<a class="anchor" href="#pip-install-vs-conda-install-where-do-they-install-the-packages" aria-hidden="true"><span class="octicon octicon-link"></span></a><code class="highlighter-rouge">pip install</code> vs. <code class="highlighter-rouge">conda install</code>: where do they install the packages</h2>
+
+<p>If you run <code class="highlighter-rouge">pip install</code> in a virtual environment, by default it will install into</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;project_root&gt;/&lt;virtualenv_name&gt;/lib/&lt;python_ver&gt;/site-packages/
+</code></pre></div></div>
+
+<p>For <code class="highlighter-rouge">conda</code>, it always installs packages into a conda environment. Without an activated conda environment, <code class="highlighter-rouge">conda install</code> will install into the <code class="highlighter-rouge">base</code> conda environment. With a conda environment, e.g. <code class="highlighter-rouge">testenv</code> activated, <em>by default</em> it installs to</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/home/&lt;user&gt;/anaconda3/envs/testenv/
+</code></pre></div></div>
+
+<p>(<strong><code class="highlighter-rouge">conda</code> envs are located in a centralized path by default</strong>. Later I will mention the pros and cons of this approach.)</p>
+
+<p>We can use <code class="highlighter-rouge">conda list</code> to check the path of the current environment and the packages installed in it.</p>
+
+<p>Later I will compare the two and choose my preferred way to manage packages and environments.</p>
+
+<h2 id="virtualenv-vs-conda-env">
+<a class="anchor" href="#virtualenv-vs-conda-env" aria-hidden="true"><span class="octicon octicon-link"></span></a><code class="highlighter-rouge">virtualenv</code> vs conda env</h2>
+
+<p>With <code class="highlighter-rouge">pip</code> vs. <code class="highlighter-rouge">conda</code> out of the way, a more valid comparison is <code class="highlighter-rouge">virtualenv</code> vs. conda environments. When to use which? To answer that, we need to really understand what virtual environment is and how they achieve isolation.</p>
+
+<h3 id="always-use-a-virtual-environment">
+<a class="anchor" href="#always-use-a-virtual-environment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Always use a virtual environment!</h3>
+
+<p>A virtual environment is <strong>a directory that contains its own installation of Python and its own set of libraries (site packages)</strong>. It solves problems such as conflicting requirements for two applications by having an isolated environment for each application.</p>
+
+<h3 id="how-does-virtualenv-achieve-isolation">
+<a class="anchor" href="#how-does-virtualenv-achieve-isolation" aria-hidden="true"><span class="octicon octicon-link"></span></a>How does <code class="highlighter-rouge">virtualenv</code> achieve isolation</h3>
+
+<p>Notice the difference between the first path in <code class="highlighter-rouge">$PATH</code> before and after the activation:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$PATH</span>
+/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:
+
+<span class="nv">$ </span><span class="nb">source env</span>/bin/activate
+<span class="o">(</span><span class="nb">env</span><span class="o">)</span> <span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$PATH</span>
+/Users/&lt;username&gt;/&lt;project&gt;/venv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:
+</code></pre></div></div>
+
+<p>This raises the following questions:</p>
+
+<ul>
+  <li>What’s the difference between these two executables anyway?</li>
+  <li>How is the virtual environment’s Python executable able to use something other than the system’s site-packages?</li>
+</ul>
+
+<p>This can be explained by how Python starts up and where it is located on the system. There actually isn’t any difference between these two Python executables. <strong>It’s their directory locations that matter</strong>.</p>
+
+<p>When Python is starting up, it looks at the <strong>path of its binary</strong>. In a virtual environment, it is actually just a copy of, or symlink to, your system’s Python binary. It then sets the location of <code class="highlighter-rouge">sys.prefix</code> and <code class="highlighter-rouge">sys.exec_prefix</code> based on this location, omitting the bin portion of the path.</p>
+
+<p>The path located in <code class="highlighter-rouge">sys.prefix</code> is then used for locating the <code class="highlighter-rouge">site-packages</code> directory by searching the relative path <code class="highlighter-rouge">lib/pythonX.X/site-packages/</code>, where X.X is the version of Python you’re using.</p>
+
+<p>In our example, the binary is located at</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/Users/&lt;username&gt;/&lt;project&gt;/venv/bin
+</code></pre></div></div>
+
+<p>which means <code class="highlighter-rouge">sys.prefix</code> would be</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/Users/&lt;username&gt;/&lt;project&gt;/venv/
+</code></pre></div></div>
+
+<p>and therefore the site-packages directory used would be</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/Users/&lt;username&gt;/&lt;project&gt;/venv/lib/pythonX.X/site-packages
+</code></pre></div></div>
+
+<p>Finally, this path is stored in the <code class="highlighter-rouge">sys.path</code> array, which contains all of the locations where a package can reside.</p>
+
+<h3 id="considerations-for-picking-virtualenv-or-conda-env">
+<a class="anchor" href="#considerations-for-picking-virtualenv-or-conda-env" aria-hidden="true"><span class="octicon octicon-link"></span></a>Considerations for picking <code class="highlighter-rouge">virtualenv</code> or <code class="highlighter-rouge">conda</code> env</h3>
+
+<p><code class="highlighter-rouge">conda</code> env <em>can</em> replace <code class="highlighter-rouge">virtualenv</code>, but there are some differences. There is a <a href="https://stackoverflow.com/a/59755292/2280673">great answer</a> from stackoverflow, I quote and arrange into the points below.</p>
+
+<h4 id="where-do-the-envs-live-central-vs-per-project">
+<a class="anchor" href="#where-do-the-envs-live-central-vs-per-project" aria-hidden="true"><span class="octicon octicon-link"></span></a>Where do the envs live: central vs. per-project</h4>
+
+<p>By default <code class="highlighter-rouge">conda</code> prefers to manage a list of environments for you in a central location, i.e.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/home/&lt;user&gt;/anaconda3/envs/
+</code></pre></div></div>
+
+<p>whereas <code class="highlighter-rouge">virtualenv</code> makes a folder in the current directory.</p>
+
+<ul>
+  <li>
+<code class="highlighter-rouge">conda</code> (centralized) makes sense if you are e.g. doing machine learning and just have a couple of broad environments that you use across many projects and want to jump into them from anywhere.</li>
+  <li>
+<code class="highlighter-rouge">virtualenv</code> (per project folder) makes sense if you are doing projects that have completely different sets of lib requirements that really belong more to the project itself.</li>
+</ul>
+
+<h4 id="environment-size-favors-virtualenv">
+<a class="anchor" href="#environment-size-favors-virtualenv" aria-hidden="true"><span class="octicon octicon-link"></span></a>Environment size (favors <code class="highlighter-rouge">virtualenv</code>)</h4>
+
+<p>The empty environment that Conda creates is about 122MB whereas the virtualenv’s is about 12MB, so that’s another reason you may prefer not to scatter Conda environments around everywhere.</p>
+
+<h4 id="prefix-for-shell-display-favors-virtualenv">
+<a class="anchor" href="#prefix-for-shell-display-favors-virtualenv" aria-hidden="true"><span class="octicon octicon-link"></span></a>Prefix for shell display (favors <code class="highlighter-rouge">virtualenv</code>)</h4>
+
+<p>Finally, another superficial indication that <code class="highlighter-rouge">conda</code> prefers its centralized envs is that (again, by default) if you do create a <code class="highlighter-rouge">conda</code> env in your own project folder and activate it the name prefix that appears in your shell is the (way too long) absolute path to the folder. You can fix that by giving it a name, but <code class="highlighter-rouge">virtualenv</code> does the right thing by default.</p>
+
+<h3 id="weird-question-of-mine-what-if-virtualenv-and-conda-env-are-both-activated">
+<a class="anchor" href="#weird-question-of-mine-what-if-virtualenv-and-conda-env-are-both-activated" aria-hidden="true"><span class="octicon octicon-link"></span></a>Weird question of mine: what if <code class="highlighter-rouge">virtualenv</code> and conda env are both activated?</h3>
+
+<p>I did this experiment by activating one before the other and check <code class="highlighter-rouge">which python</code>, and guess what, the result is that the active environment is whichever environment <strong>activated last</strong>!</p>
+
+<h3 id="some-tips">
+<a class="anchor" href="#some-tips" aria-hidden="true"><span class="octicon octicon-link"></span></a>Some tips</h3>
+
+<ul>
+  <li>Avoid using <code class="highlighter-rouge">pip</code> by itself. Using <code class="highlighter-rouge">python -m pip</code> will always guarantee you are using the pip associated with that specific python being called, instead of potentially calling a pip associated with a different python.</li>
+  <li>Sometimes there is a pip3 to go with python3 to differentiate python 2 executables python/pip.</li>
+  <li>Sometimes Linux distributions require you to install virtualenv as a separate package. For example <code class="highlighter-rouge">sudo apt install python3-virtualenv</code>.</li>
+  <li>You should never copy or move around virtual environments. Always create new ones.
+Ignore the virtual environment directories from repositories. For example, <code class="highlighter-rouge">.gitignore</code> them.</li>
+</ul>
+
+<h2 id="pyenv">
+<a class="anchor" href="#pyenv" aria-hidden="true"><span class="octicon octicon-link"></span></a>pyenv</h2>
+
+<p><code class="highlighter-rouge">pyenv</code> is a mature tool for installing and managing multiple Python versions on macOS. You can install it with <code class="highlighter-rouge">brew</code>. If you’re using Windows, you can use <code class="highlighter-rouge">pyenv-win</code>. After you’ve got <code class="highlighter-rouge">pyenv</code> installed, you can install multiple versions of Python into your Python environment with a few short commands:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pyenv versions
+<span class="k">*</span> system
+<span class="nv">$ </span>python <span class="nt">--version</span>
+Python 2.7.10
+<span class="nv">$ </span>pyenv <span class="nb">install </span>3.7.3  <span class="c"># This may take some time</span>
+<span class="nv">$ </span>pyenv versions
+<span class="k">*</span> system
+  3.7.3
+</code></pre></div></div>
+
+<p>You can manage which Python you’d like to use in your current session, globally, or on a per-project basis as well. pyenv will make the python command point to whichever Python you specify. Note that none of these overrides the default system Python for other applications, so you’re safe to use them however they work best for you within your Python environment:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pyenv global 3.7.3
+<span class="nv">$ </span>pyenv versions
+  system
+<span class="k">*</span> 3.7.3 <span class="o">(</span><span class="nb">set </span>by /Users/&lt;username&gt;/.pyenv/version<span class="o">)</span>
+
+<span class="nv">$ </span>pyenv <span class="nb">local </span>3.7.3
+<span class="nv">$ </span>pyenv versions
+  system
+<span class="k">*</span> 3.7.3 <span class="o">(</span><span class="nb">set </span>by /Users/&lt;username&gt;/myproj/.python-version<span class="o">)</span>
+
+<span class="nv">$ </span>pyenv shell 3.7.3
+<span class="nv">$ </span>pyenv versions
+  system
+<span class="k">*</span> 3.7.3 <span class="o">(</span><span class="nb">set </span>by PYENV_VERSION environment variable<span class="o">)</span>
+
+<span class="nv">$ </span>python <span class="nt">--version</span>
+Python 3.7.3
+</code></pre></div></div>
+
+<p><strong>There is something called <code class="highlighter-rouge">pyenv virtualenv</code>.</strong> Install it with <code class="highlighter-rouge">brew install pyenv-virtualenv</code> and use it with <code class="highlighter-rouge">pyenv virtualenv &lt;python version&gt; &lt;project name&gt;</code>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Create virtual environment
+<span class="nv">$ </span>pyenv virtualenv 3.7.3 my-env
+
+// Activate virtual environment
+<span class="nv">$ </span>pyenv activate my-env
+
+// Exit virtual environment
+<span class="o">(</span>my-env<span class="o">)</span><span class="nv">$ </span>pyenv deactivate
+
+<span class="nv">$ </span>pyenv virtualenv 3.7.3 proj1
+<span class="nv">$ </span>pyenv virtualenv 3.7.3 proj2
+<span class="nv">$ </span><span class="nb">cd</span> /Users/&lt;username&gt;/proj1
+<span class="nv">$ </span>pyenv <span class="nb">local </span>proj1
+<span class="o">(</span>proj1<span class="o">)</span><span class="nv">$ </span><span class="nb">cd</span> ../proj2
+<span class="nv">$ </span>pyenv <span class="nb">local </span>proj2
+<span class="o">(</span>proj2<span class="o">)</span><span class="nv">$ </span>pyenv versions
+  system
+  3.7.3
+  3.7.3/envs/proj1
+  3.7.3/envs/proj2
+  proj1
+<span class="k">*</span> proj2 <span class="o">(</span><span class="nb">set </span>by /Users/&lt;username&gt;/proj2/.python-version<span class="o">)</span>
+</code></pre></div></div>
+
+<p><strong>It can set the default environment for a directory! This way you don’t have to remember which environment to use.</strong> But the caveat is that it has conda-like centralized envs. You can find them by the command <code class="highlighter-rouge">pyenv virtualenvs</code>.</p>
+
+<p>For more details, check out <a href="https://realpython.com/intro-to-pyenv/">https://realpython.com/intro-to-pyenv/</a> and <a href="https://github.com/pyenv/pyenv-virtualenv">https://github.com/pyenv/pyenv-virtualenv</a>.</p>
+
+<h2 id="my-setup-2020">
+<a class="anchor" href="#my-setup-2020" aria-hidden="true"><span class="octicon octicon-link"></span></a>My setup 2020</h2>
+
+<p>Tools:</p>
+<ul>
+  <li>
+<code class="highlighter-rouge">pyenv</code>, <code class="highlighter-rouge">virtualenv</code> for <strong>library</strong> development.</li>
+  <li>
+<code class="highlighter-rouge">poetry</code> for <strong>application</strong> development. <code class="highlighter-rouge">poetry</code> wraps <code class="highlighter-rouge">pip</code> and <code class="highlighter-rouge">virtualenv</code> to provide a unified method for working with these environments.</li>
+</ul>
+
+<p>I use <code class="highlighter-rouge">virtualenv</code> instead of <code class="highlighter-rouge">pyenv-virtualenv</code> to explicitly have a folder for the virtual environment in the project directory because it is the clearest way for me to manage virtual environments for different projects.</p>
+
+<p><code class="highlighter-rouge">conda</code> can be used for <strong>one-off experiments</strong> with broad machine learning environments.</p>
+
+<p>For a comparison of library vs. application development and more Python packaging considerations, check out this great article: <a href="https://sedimental.org/the_packaging_gradient.html">The Packaging Gradient</a>.</p>
+
+<blockquote>
+  <p>Application packaging must not be confused with library packaging. Python is for both, but pip is for libraries.</p>
+</blockquote>
+
+<h3 id="quick-intro-to-poetry">
+<a class="anchor" href="#quick-intro-to-poetry" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quick intro to <code class="highlighter-rouge">poetry</code>
+</h3>
+
+<p>Use <code class="highlighter-rouge">poetry</code> instead of <code class="highlighter-rouge">pipenv</code> for Python application development. <code class="highlighter-rouge">pipenv</code> is <a href="https://packaging.python.org/tutorials/managing-dependencies/#recommendation-caveats-as-of-april-2020">not actively issuing updates as of 2020</a>.</p>
+
+<p><code class="highlighter-rouge">poetry</code> addresses additional facets of package management, including creating and publishing your own packages. After installing <code class="highlighter-rouge">poetry</code>, you can use it to create a new project:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>poetry new myproj
+Created package myproj <span class="k">in </span>myproj
+<span class="nv">$ </span><span class="nb">ls </span>myproj/
+README.rst    myproj    pyproject.toml    tests
+</code></pre></div></div>
+
+<p>Similarly to how pipenv creates the Pipfile, poetry creates a pyproject.toml file. This recent standard contains metadata about the project as well as dependency versions:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Config file
+[tool.poetry]
+name = "myproj"
+version = "0.1.0"
+description = ""
+authors = ["Logan Yang &lt;logancyang@gmail.com&gt;"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.0"
+
+[build-system]
+requires = ["poetry&gt;=0.12"]
+build-backend = "poetry.masonry.api"
+</code></pre></div></div>
+
+<p>You can install packages with poetry add (or as development dependencies with poetry add –dev):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>poetry add requests
+Using version ^2.22 <span class="k">for </span>requests
+
+Updating dependencies
+Resolving dependencies... <span class="o">(</span>0.2s<span class="o">)</span>
+
+Writing lock file
+
+
+Package operations: 5 installs, 0 updates, 0 removals
+
+  - Installing certifi <span class="o">(</span>2019.6.16<span class="o">)</span>
+  - Installing chardet <span class="o">(</span>3.0.4<span class="o">)</span>
+  - Installing idna <span class="o">(</span>2.8<span class="o">)</span>
+  - Installing urllib3 <span class="o">(</span>1.25.3<span class="o">)</span>
+  - Installing requests <span class="o">(</span>2.22.0<span class="o">)</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">poetry</code> also maintains a lock file, and it has a benefit over <code class="highlighter-rouge">pipenv</code> because it keeps track of which packages are subdependencies. As a result, you can uninstall <code class="highlighter-rouge">requests</code> and its dependencies with <code class="highlighter-rouge">poetry remove requests</code>.</p>
+
+<h2 id="references">
+<a class="anchor" href="#references" aria-hidden="true"><span class="octicon octicon-link"></span></a>References</h2>
+
+<ul>
+  <li><a href="https://www.anaconda.com/blog/understanding-conda-and-pip">https://www.anaconda.com/blog/understanding-conda-and-pip</a></li>
+  <li><a href="https://jakevdp.github.io/blog/2016/08/25/conda-myths-and-misconceptions/">https://jakevdp.github.io/blog/2016/08/25/conda-myths-and-misconceptions/</a></li>
+  <li><a href="https://stackoverflow.com/questions/54834579/specific-reasons-to-favor-pip-vs-conda-when-installing-python-packages">https://stackoverflow.com/questions/54834579/specific-reasons-to-favor-pip-vs-conda-when-installing-python-packages</a></li>
+  <li><a href="https://stackoverflow.com/a/59755292/2280673">https://stackoverflow.com/a/59755292/2280673</a></li>
+  <li><a href="https://realpython.com/effective-python-environment/">https://realpython.com/effective-python-environment/</a></li>
+  <li><a href="https://realpython.com/python-virtual-environments-a-primer/">https://realpython.com/python-virtual-environments-a-primer/</a></li>
+  <li><a href="https://packaging.python.org/tutorials/managing-dependencies/">https://packaging.python.org/tutorials/managing-dependencies/</a></li>
+  <li><a href="https://sedimental.org/the_packaging_gradient.html">https://sedimental.org/the_packaging_gradient.html</a></li>
+  <li><a href="https://youtu.be/3J02sec99RM">https://youtu.be/3J02sec99RM</a></li>
+  <li><a href="https://youtu.be/o1Vue9CWRxU">https://youtu.be/o1Vue9CWRxU</a></li>
+</ul>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="logancyang/blog-learning-automata"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/note/python/2020/06/17/pip-vs-conda.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notes, code and essays by Logan Yang.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

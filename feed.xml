@@ -1,4 +1,355 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-06-16T15:17:41-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">Python Essentials: Mental Models of Expert Level Features</title><link href="http://blog.logancyang.com/note/python/2020/06/15/python-metaclasses.html" rel="alternate" type="text/html" title="Python Essentials: Mental Models of Expert Level Features" /><published>2020-06-15T00:00:00-05:00</published><updated>2020-06-15T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/06/15/python-metaclasses</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/06/15/python-metaclasses.html">&lt;h2 id=&quot;metaclass-problem&quot;&gt;Metaclass: problem&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-06-17T18:51:30-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">Python Essentials: Digging into Package and Environment Management to Find the Best Approach</title><link href="http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html" rel="alternate" type="text/html" title="Python Essentials: Digging into Package and Environment Management to Find the Best Approach" /><published>2020-06-17T00:00:00-05:00</published><updated>2020-06-17T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html">&lt;p&gt;This post is for clarifying several points about Python package and environment management.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; vs. &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt;?&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; vs. &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; env?&lt;/li&gt;
+  &lt;li&gt;How to choose the package and environment tools for Python development?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;pip-vs-conda&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; vs. &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;difference-1&quot;&gt;Difference 1&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; is a &lt;strong&gt;&lt;em&gt;Python&lt;/em&gt; package manager&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; is a &lt;strong&gt;language-agnostic&lt;/strong&gt; cross-platform &lt;strong&gt;&lt;em&gt;environment&lt;/em&gt; manager&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Package management and environment management are two different things. So &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; are different things and do not compete with each other.&lt;/p&gt;
+
+&lt;p&gt;Pip installs Python software packaged as &lt;strong&gt;wheels or source distributions&lt;/strong&gt;. Source distributions may require that the system have compatible compilers, and possibly libraries, installed before invoking pip to succeed.&lt;/p&gt;
+
+&lt;p&gt;Conda packages are binaries. There is never a need to have compilers available to install them. Additionally conda packages are not limited to Python software. They may also contain C or C++ libraries, R packages or any other software.&lt;/p&gt;
+
+&lt;p&gt;Before using pip, a Python interpreter must be installed via a system package manager or by downloading and running an installer. Conda on the other hand can install Python packages as well as the Python interpreter directly.&lt;/p&gt;
+
+&lt;h3 id=&quot;difference-2&quot;&gt;Difference 2&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; has the ability to create isolated environments, &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; needs &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;venv&lt;/code&gt; to create a virtual environment.&lt;/p&gt;
+
+&lt;p&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt; is a tool that wraps &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; together and is recommended for application development. Will discuss in later sections.)&lt;/p&gt;
+
+&lt;h3 id=&quot;difference-3&quot;&gt;Difference 3&lt;/h3&gt;
+
+&lt;p&gt;When installing packages, pip installs dependencies in a recursive, serial loop. No effort is made to ensure that the dependencies of all packages are fulfilled simultaneously. This can lead to environments that are broken in subtle ways, if packages installed earlier in the order have incompatible dependency versions relative to packages installed later in the order. In contrast, conda uses a satisfiability (SAT) solver to verify that all requirements of all packages installed in an environment are met. This check can take extra time but helps prevent the creation of broken environments. As long as package metadata about dependencies is correct, conda will predictably produce working environments.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/misc/pipvconda.png&quot; alt=&quot;pipvconda&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now we know the difference between &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt;, but choosing which to use also depends on the way they work with virtual environments. I will discuss that in later sections. Now let’s understand some basics how Python installs pacakges, and check the resulting package locations after &lt;code class=&quot;highlighter-rouge&quot;&gt;pip install&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;conda install&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;where-does-python-install-packages-mac-system-python-dont-do-this&quot;&gt;Where does Python install packages (mac system Python, DON’T DO THIS)&lt;/h2&gt;
+
+&lt;p&gt;By default, without a virtual environment, all &lt;code class=&quot;highlighter-rouge&quot;&gt;python&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; commands will use the default executables, usually your &lt;strong&gt;system Python install&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;It is strongly recommended to keep your system Python clean of unnecessary site packages by using virtual environments&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Otherwise, over time, you will add lots of things to your system packages and things might conflict and cause problems. Using an isolated environment for each project ensures easy reproducability and reduced conflict.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;DO NOT install into your global Python interpreter! ALWAYS use an environment when developing locally!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;To see what directories are being used to search for packages, invoke the &lt;code class=&quot;highlighter-rouge&quot;&gt;site&lt;/code&gt; module directly by running &lt;code class=&quot;highlighter-rouge&quot;&gt;python -m site&lt;/code&gt; outside virtual environments:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;python &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; site
+
+sys.path &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;'&amp;lt;current_dir&amp;gt;'&lt;/span&gt;,
+    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python27.zip'&lt;/span&gt;,
+    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7'&lt;/span&gt;,
+    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin'&lt;/span&gt;,
+    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac'&lt;/span&gt;,
+    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages'&lt;/span&gt;,
+    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk'&lt;/span&gt;,
+    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old'&lt;/span&gt;,
+    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload'&lt;/span&gt;,
+    &lt;span class=&quot;s1&quot;&gt;'/Library/Python/2.7/site-packages'&lt;/span&gt;,
+    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python'&lt;/span&gt;,
+    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC'&lt;/span&gt;,
+&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+USER_BASE: &lt;span class=&quot;s1&quot;&gt;'/Users/&amp;lt;username&amp;gt;/Library/Python/2.7'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;doesn&lt;span class=&quot;s1&quot;&gt;'t exist)
+USER_SITE: '&lt;/span&gt;/Users/&amp;lt;username&amp;gt;/Library/Python/2.7/lib/python/site-packages&lt;span class=&quot;s1&quot;&gt;' (doesn'&lt;/span&gt;t exist&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+ENABLE_USER_SITE: True
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The Python at &lt;code class=&quot;highlighter-rouge&quot;&gt;/System/Library/Frameworks/...&lt;/code&gt; is MacOS’s pre-installed Python.&lt;/p&gt;
+
+&lt;p&gt;Run &lt;code class=&quot;highlighter-rouge&quot;&gt;pip show &amp;lt;package_name&amp;gt;&lt;/code&gt; to see where it’s installed. For system Python, it’s something like:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pip show setuptools
+
+Name: setuptools
+Version: 41.0.1
+Summary: Easily download, build, &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;, upgrade, and uninstall Python packages
+Home-page: https://github.com/pypa/setuptools
+Author: Python Packaging Authority
+Author-email: distutils-sig@python.org
+License: UNKNOWN
+Location: /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python
+Requires:
+Required-by:
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You can also run &lt;code class=&quot;highlighter-rouge&quot;&gt;pip list -v&lt;/code&gt; to check install locations.&lt;/p&gt;
+
+&lt;h2 id=&quot;pip-install-vs-conda-install-where-do-they-install-the-packages&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pip install&lt;/code&gt; vs. &lt;code class=&quot;highlighter-rouge&quot;&gt;conda install&lt;/code&gt;: where do they install the packages&lt;/h2&gt;
+
+&lt;p&gt;If you run &lt;code class=&quot;highlighter-rouge&quot;&gt;pip install&lt;/code&gt; in a virtual environment, by default it will install into&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;project_root&amp;gt;/&amp;lt;virtualenv_name&amp;gt;/lib/&amp;lt;python_ver&amp;gt;/site-packages/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;For &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt;, it always installs packages into a conda environment. Without an activated conda environment, &lt;code class=&quot;highlighter-rouge&quot;&gt;conda install&lt;/code&gt; will install into the &lt;code class=&quot;highlighter-rouge&quot;&gt;base&lt;/code&gt; conda environment. With a conda environment, e.g. &lt;code class=&quot;highlighter-rouge&quot;&gt;testenv&lt;/code&gt; activated, &lt;em&gt;by default&lt;/em&gt; it installs to&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/home/&amp;lt;user&amp;gt;/anaconda3/envs/testenv/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;(&lt;strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; envs are located in a centralized path by default&lt;/strong&gt;. Later I will mention the pros and cons of this approach.)&lt;/p&gt;
+
+&lt;p&gt;We can use &lt;code class=&quot;highlighter-rouge&quot;&gt;conda list&lt;/code&gt; to check the path of the current environment and the packages installed in it.&lt;/p&gt;
+
+&lt;p&gt;Later I will compare the two and choose my preferred way to manage packages and environments.&lt;/p&gt;
+
+&lt;h2 id=&quot;virtualenv-vs-conda-env&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; vs conda env&lt;/h2&gt;
+
+&lt;p&gt;With &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; vs. &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; out of the way, a more valid comparison is &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; vs. conda environments. When to use which? To answer that, we need to really understand what virtual environment is and how they achieve isolation.&lt;/p&gt;
+
+&lt;h3 id=&quot;always-use-a-virtual-environment&quot;&gt;Always use a virtual environment!&lt;/h3&gt;
+
+&lt;p&gt;A virtual environment is &lt;strong&gt;a directory that contains its own installation of Python and its own set of libraries (site packages)&lt;/strong&gt;. It solves problems such as conflicting requirements for two applications by having an isolated environment for each application.&lt;/p&gt;
+
+&lt;h3 id=&quot;how-does-virtualenv-achieve-isolation&quot;&gt;How does &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; achieve isolation&lt;/h3&gt;
+
+&lt;p&gt;Notice the difference between the first path in &lt;code class=&quot;highlighter-rouge&quot;&gt;$PATH&lt;/code&gt; before and after the activation:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$PATH&lt;/span&gt;
+/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;source env&lt;/span&gt;/bin/activate
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$PATH&lt;/span&gt;
+/Users/&amp;lt;username&amp;gt;/&amp;lt;project&amp;gt;/venv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This raises the following questions:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;What’s the difference between these two executables anyway?&lt;/li&gt;
+  &lt;li&gt;How is the virtual environment’s Python executable able to use something other than the system’s site-packages?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This can be explained by how Python starts up and where it is located on the system. There actually isn’t any difference between these two Python executables. &lt;strong&gt;It’s their directory locations that matter&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;When Python is starting up, it looks at the &lt;strong&gt;path of its binary&lt;/strong&gt;. In a virtual environment, it is actually just a copy of, or symlink to, your system’s Python binary. It then sets the location of &lt;code class=&quot;highlighter-rouge&quot;&gt;sys.prefix&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;sys.exec_prefix&lt;/code&gt; based on this location, omitting the bin portion of the path.&lt;/p&gt;
+
+&lt;p&gt;The path located in &lt;code class=&quot;highlighter-rouge&quot;&gt;sys.prefix&lt;/code&gt; is then used for locating the &lt;code class=&quot;highlighter-rouge&quot;&gt;site-packages&lt;/code&gt; directory by searching the relative path &lt;code class=&quot;highlighter-rouge&quot;&gt;lib/pythonX.X/site-packages/&lt;/code&gt;, where X.X is the version of Python you’re using.&lt;/p&gt;
+
+&lt;p&gt;In our example, the binary is located at&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/Users/&amp;lt;username&amp;gt;/&amp;lt;project&amp;gt;/venv/bin
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;which means &lt;code class=&quot;highlighter-rouge&quot;&gt;sys.prefix&lt;/code&gt; would be&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/Users/&amp;lt;username&amp;gt;/&amp;lt;project&amp;gt;/venv/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;and therefore the site-packages directory used would be&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/Users/&amp;lt;username&amp;gt;/&amp;lt;project&amp;gt;/venv/lib/pythonX.X/site-packages
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, this path is stored in the &lt;code class=&quot;highlighter-rouge&quot;&gt;sys.path&lt;/code&gt; array, which contains all of the locations where a package can reside.&lt;/p&gt;
+
+&lt;h3 id=&quot;considerations-for-picking-virtualenv-or-conda-env&quot;&gt;Considerations for picking &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; env&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; env &lt;em&gt;can&lt;/em&gt; replace &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt;, but there are some differences. There is a &lt;a href=&quot;https://stackoverflow.com/a/59755292/2280673&quot;&gt;great answer&lt;/a&gt; from stackoverflow, I quote and arrange into the points below.&lt;/p&gt;
+
+&lt;h4 id=&quot;where-do-the-envs-live-central-vs-per-project&quot;&gt;Where do the envs live: central vs. per-project&lt;/h4&gt;
+
+&lt;p&gt;By default &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; prefers to manage a list of environments for you in a central location, i.e.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/home/&amp;lt;user&amp;gt;/anaconda3/envs/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;whereas &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; makes a folder in the current directory.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; (centralized) makes sense if you are e.g. doing machine learning and just have a couple of broad environments that you use across many projects and want to jump into them from anywhere.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; (per project folder) makes sense if you are doing projects that have completely different sets of lib requirements that really belong more to the project itself.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;environment-size-favors-virtualenv&quot;&gt;Environment size (favors &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt;)&lt;/h4&gt;
+
+&lt;p&gt;The empty environment that Conda creates is about 122MB whereas the virtualenv’s is about 12MB, so that’s another reason you may prefer not to scatter Conda environments around everywhere.&lt;/p&gt;
+
+&lt;h4 id=&quot;prefix-for-shell-display-favors-virtualenv&quot;&gt;Prefix for shell display (favors &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt;)&lt;/h4&gt;
+
+&lt;p&gt;Finally, another superficial indication that &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; prefers its centralized envs is that (again, by default) if you do create a &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; env in your own project folder and activate it the name prefix that appears in your shell is the (way too long) absolute path to the folder. You can fix that by giving it a name, but &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; does the right thing by default.&lt;/p&gt;
+
+&lt;h3 id=&quot;weird-question-of-mine-what-if-virtualenv-and-conda-env-are-both-activated&quot;&gt;Weird question of mine: what if &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; and conda env are both activated?&lt;/h3&gt;
+
+&lt;p&gt;I did this experiment by activating one before the other and check &lt;code class=&quot;highlighter-rouge&quot;&gt;which python&lt;/code&gt;, and guess what, the result is that the active environment is whichever environment &lt;strong&gt;activated last&lt;/strong&gt;!&lt;/p&gt;
+
+&lt;h3 id=&quot;some-tips&quot;&gt;Some tips&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Avoid using &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; by itself. Using &lt;code class=&quot;highlighter-rouge&quot;&gt;python -m pip&lt;/code&gt; will always guarantee you are using the pip associated with that specific python being called, instead of potentially calling a pip associated with a different python.&lt;/li&gt;
+  &lt;li&gt;Sometimes there is a pip3 to go with python3 to differentiate python 2 executables python/pip.&lt;/li&gt;
+  &lt;li&gt;Sometimes Linux distributions require you to install virtualenv as a separate package. For example &lt;code class=&quot;highlighter-rouge&quot;&gt;sudo apt install python3-virtualenv&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;You should never copy or move around virtual environments. Always create new ones.
+Ignore the virtual environment directories from repositories. For example, &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt; them.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;pyenv&quot;&gt;pyenv&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv&lt;/code&gt; is a mature tool for installing and managing multiple Python versions on macOS. You can install it with &lt;code class=&quot;highlighter-rouge&quot;&gt;brew&lt;/code&gt;. If you’re using Windows, you can use &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv-win&lt;/code&gt;. After you’ve got &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv&lt;/code&gt; installed, you can install multiple versions of Python into your Python environment with a few short commands:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv versions
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; system
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;python &lt;span class=&quot;nt&quot;&gt;--version&lt;/span&gt;
+Python 2.7.10
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;3.7.3  &lt;span class=&quot;c&quot;&gt;# This may take some time&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv versions
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; system
+  3.7.3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You can manage which Python you’d like to use in your current session, globally, or on a per-project basis as well. pyenv will make the python command point to whichever Python you specify. Note that none of these overrides the default system Python for other applications, so you’re safe to use them however they work best for you within your Python environment:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv global 3.7.3
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv versions
+  system
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; 3.7.3 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;by /Users/&amp;lt;username&amp;gt;/.pyenv/version&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv &lt;span class=&quot;nb&quot;&gt;local &lt;/span&gt;3.7.3
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv versions
+  system
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; 3.7.3 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;by /Users/&amp;lt;username&amp;gt;/myproj/.python-version&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv shell 3.7.3
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv versions
+  system
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; 3.7.3 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;by PYENV_VERSION environment variable&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;python &lt;span class=&quot;nt&quot;&gt;--version&lt;/span&gt;
+Python 3.7.3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;There is something called &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv virtualenv&lt;/code&gt;.&lt;/strong&gt; Install it with &lt;code class=&quot;highlighter-rouge&quot;&gt;brew install pyenv-virtualenv&lt;/code&gt; and use it with &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv virtualenv &amp;lt;python version&amp;gt; &amp;lt;project name&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Create virtual environment
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv virtualenv 3.7.3 my-env
+
+// Activate virtual environment
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv activate my-env
+
+// Exit virtual environment
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;my-env&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv deactivate
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv virtualenv 3.7.3 proj1
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv virtualenv 3.7.3 proj2
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /Users/&amp;lt;username&amp;gt;/proj1
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv &lt;span class=&quot;nb&quot;&gt;local &lt;/span&gt;proj1
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;proj1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ../proj2
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv &lt;span class=&quot;nb&quot;&gt;local &lt;/span&gt;proj2
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;proj2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv versions
+  system
+  3.7.3
+  3.7.3/envs/proj1
+  3.7.3/envs/proj2
+  proj1
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; proj2 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;by /Users/&amp;lt;username&amp;gt;/proj2/.python-version&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;It can set the default environment for a directory! This way you don’t have to remember which environment to use.&lt;/strong&gt; But the caveat is that it has conda-like centralized envs. You can find them by the command &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv virtualenvs&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;For more details, check out &lt;a href=&quot;https://realpython.com/intro-to-pyenv/&quot;&gt;https://realpython.com/intro-to-pyenv/&lt;/a&gt; and &lt;a href=&quot;https://github.com/pyenv/pyenv-virtualenv&quot;&gt;https://github.com/pyenv/pyenv-virtualenv&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;my-setup-2020&quot;&gt;My setup 2020&lt;/h2&gt;
+
+&lt;p&gt;Tools:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; for &lt;strong&gt;library&lt;/strong&gt; development.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt; for &lt;strong&gt;application&lt;/strong&gt; development. &lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt; wraps &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; to provide a unified method for working with these environments.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I use &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; instead of &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv-virtualenv&lt;/code&gt; to explicitly have a folder for the virtual environment in the project directory because it is the clearest way for me to manage virtual environments for different projects.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; can be used for &lt;strong&gt;one-off experiments&lt;/strong&gt; with broad machine learning environments.&lt;/p&gt;
+
+&lt;p&gt;For a comparison of library vs. application development and more Python packaging considerations, check out this great article: &lt;a href=&quot;https://sedimental.org/the_packaging_gradient.html&quot;&gt;The Packaging Gradient&lt;/a&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Application packaging must not be confused with library packaging. Python is for both, but pip is for libraries.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;quick-intro-to-poetry&quot;&gt;Quick intro to &lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;Use &lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt; instead of &lt;code class=&quot;highlighter-rouge&quot;&gt;pipenv&lt;/code&gt; for Python application development. &lt;code class=&quot;highlighter-rouge&quot;&gt;pipenv&lt;/code&gt; is &lt;a href=&quot;https://packaging.python.org/tutorials/managing-dependencies/#recommendation-caveats-as-of-april-2020&quot;&gt;not actively issuing updates as of 2020&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt; addresses additional facets of package management, including creating and publishing your own packages. After installing &lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt;, you can use it to create a new project:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;poetry new myproj
+Created package myproj &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;myproj
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;ls &lt;/span&gt;myproj/
+README.rst    myproj    pyproject.toml    tests
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Similarly to how pipenv creates the Pipfile, poetry creates a pyproject.toml file. This recent standard contains metadata about the project as well as dependency versions:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Config file
+[tool.poetry]
+name = &quot;myproj&quot;
+version = &quot;0.1.0&quot;
+description = &quot;&quot;
+authors = [&quot;Logan Yang &amp;lt;logancyang@gmail.com&amp;gt;&quot;]
+
+[tool.poetry.dependencies]
+python = &quot;^3.7&quot;
+
+[tool.poetry.dev-dependencies]
+pytest = &quot;^3.0&quot;
+
+[build-system]
+requires = [&quot;poetry&amp;gt;=0.12&quot;]
+build-backend = &quot;poetry.masonry.api&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You can install packages with poetry add (or as development dependencies with poetry add –dev):&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;poetry add requests
+Using version ^2.22 &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;requests
+
+Updating dependencies
+Resolving dependencies... &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.2s&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+Writing lock file
+
+
+Package operations: 5 installs, 0 updates, 0 removals
+
+  - Installing certifi &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2019.6.16&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  - Installing chardet &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3.0.4&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  - Installing idna &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.8&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  - Installing urllib3 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.25.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  - Installing requests &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.22.0&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt; also maintains a lock file, and it has a benefit over &lt;code class=&quot;highlighter-rouge&quot;&gt;pipenv&lt;/code&gt; because it keeps track of which packages are subdependencies. As a result, you can uninstall &lt;code class=&quot;highlighter-rouge&quot;&gt;requests&lt;/code&gt; and its dependencies with &lt;code class=&quot;highlighter-rouge&quot;&gt;poetry remove requests&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.anaconda.com/blog/understanding-conda-and-pip&quot;&gt;https://www.anaconda.com/blog/understanding-conda-and-pip&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://jakevdp.github.io/blog/2016/08/25/conda-myths-and-misconceptions/&quot;&gt;https://jakevdp.github.io/blog/2016/08/25/conda-myths-and-misconceptions/&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://stackoverflow.com/questions/54834579/specific-reasons-to-favor-pip-vs-conda-when-installing-python-packages&quot;&gt;https://stackoverflow.com/questions/54834579/specific-reasons-to-favor-pip-vs-conda-when-installing-python-packages&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://stackoverflow.com/a/59755292/2280673&quot;&gt;https://stackoverflow.com/a/59755292/2280673&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://realpython.com/effective-python-environment/&quot;&gt;https://realpython.com/effective-python-environment/&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://realpython.com/python-virtual-environments-a-primer/&quot;&gt;https://realpython.com/python-virtual-environments-a-primer/&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://packaging.python.org/tutorials/managing-dependencies/&quot;&gt;https://packaging.python.org/tutorials/managing-dependencies/&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://sedimental.org/the_packaging_gradient.html&quot;&gt;https://sedimental.org/the_packaging_gradient.html&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://youtu.be/3J02sec99RM&quot;&gt;https://youtu.be/3J02sec99RM&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://youtu.be/o1Vue9CWRxU&quot;&gt;https://youtu.be/o1Vue9CWRxU&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">This post is for clarifying several points about Python package and environment management.</summary></entry><entry><title type="html">Python Essentials: Mental Models of Expert Level Features</title><link href="http://blog.logancyang.com/note/python/2020/06/15/python-metaclasses.html" rel="alternate" type="text/html" title="Python Essentials: Mental Models of Expert Level Features" /><published>2020-06-15T00:00:00-05:00</published><updated>2020-06-15T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/06/15/python-metaclasses</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/06/15/python-metaclasses.html">&lt;h2 id=&quot;metaclass-problem&quot;&gt;Metaclass: problem&lt;/h2&gt;
 
 &lt;p&gt;Suppose there is an infra team that writes library code for other developers to use, and there is user code for business logics.&lt;/p&gt;
 
@@ -5249,248 +5600,4 @@ the 512 features from average pooling into the final 37 classes.
    &lt;span class=&quot;Toast-content&quot;&gt;
         Note: Regularization include &lt;b&gt;weight decay, batch norm, dropout&lt;/b&gt;
     &lt;/span&gt;
-&lt;/div&gt;</content><author><name></name></author><summary type="html">Discussion on basic NN</summary></entry><entry><title type="html">FastAI Lesson 4: NLP; Tabular Data; Collaborative Filtering and Embeddings</title><link href="http://blog.logancyang.com/note/fastai/2020/04/13/fastai-lesson4.html" rel="alternate" type="text/html" title="FastAI Lesson 4: NLP; Tabular Data; Collaborative Filtering and Embeddings" /><published>2020-04-13T00:00:00-05:00</published><updated>2020-04-13T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/fastai/2020/04/13/fastai-lesson4</id><content type="html" xml:base="http://blog.logancyang.com/note/fastai/2020/04/13/fastai-lesson4.html">&lt;h2 id=&quot;nlp-continued-from-lesson-3&quot;&gt;NLP Continued from lesson 3&lt;/h2&gt;
-
-&lt;p&gt;2018 was the year that &lt;strong&gt;transfer learning&lt;/strong&gt; started working well with NLP. You train a language model on a very large dataset to “learn to speak English”, and then do transfer learning for other purposes such as text classification, NER, etc.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Language model on all of Wikipedia (Wikitext 103, ~1B tokens)
-    ==&amp;gt;
-    Fine-tune this language model using your target corpus
-    (in this case, IMDb movie reviews)
-        ==&amp;gt;
-        Extract the encoder from this fine tuned language model, and
-        pair it with a classifier. Then fine-tune this model for the
-        final classification task (in this case, sentiment analysis)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;We would think that an LM trained on Wikipedia wouldn’t work well for slangs and informal language, but actually when it gets finetuned with your target corpus, it works.&lt;/p&gt;
-
-&lt;p&gt;For the imdb notebook, the sample data has columns &lt;code class=&quot;highlighter-rouge&quot;&gt;label, text, is_valid (in validation set)&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;For tokenization, most often a token is a word, sometimes it can be &lt;code class=&quot;highlighter-rouge&quot;&gt;'s&lt;/code&gt; or a punctuation or symbol.&lt;/p&gt;
-
-&lt;p&gt;The full unique set of tokens is &lt;code class=&quot;highlighter-rouge&quot;&gt;vocabulary&lt;/code&gt;. Here a limit of 60K tokens and a frequency threshold of 2 are applied to the vocab.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;xxunk&lt;/code&gt; means unknown token, it means that word was not common enough to be in the vocab.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Using the data block API is the better way to create the DataBunch
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TextList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;from_csv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'texts.csv'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cols&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'text'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;c1&quot;&gt;# how to split out validation set based on bool column
-&lt;/span&gt;                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split_from_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;col&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;c1&quot;&gt;# which column is the label
-&lt;/span&gt;                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;label_from_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cols&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;databunch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The reviews are in a training and test set following an imagenet structure. The only difference is that there is an &lt;code class=&quot;highlighter-rouge&quot;&gt;unsup&lt;/code&gt; folder on top of &lt;code class=&quot;highlighter-rouge&quot;&gt;train&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;test&lt;/code&gt; that contains the unlabelled data.&lt;/p&gt;
-
-&lt;p&gt;Training an LM on Wiki data takes 2-3 days on a decent GPU, no need to do that, just download the pretrained model.&lt;/p&gt;
-
-&lt;p&gt;Even if we have a large target corpus, we still prefer to start from the pretrained model on &lt;a href=&quot;https://einstein.ai/research/blog/the-wikitext-long-term-dependency-language-modeling-dataset&quot;&gt;wikitext-103&lt;/a&gt;, there is no reason to start from random.&lt;/p&gt;
-
-&lt;p&gt;We are going to use that ‘knowledge’ of the English language to build our classifier, but first, like for computer vision, we need to fine-tune the pretrained model to our particular dataset. Because the English of the reviews left by people on IMDB isn’t the same as the English of wikipedia, we’ll need to adjust the parameters of our model by a little bit. Plus there might be some words that would be extremely common in the reviews dataset but would be barely present in wikipedia, and therefore might not be part of the vocabulary the model was trained on.&lt;/p&gt;
-
-&lt;p&gt;This is where the unlabelled data is going to be useful to us, as we can use it to fine-tune our model. Let’s create our data object with the data block API (next line takes a few minutes).&lt;/p&gt;
-
-&lt;div class=&quot;Toast&quot;&gt;
-   &lt;span class=&quot;Toast-icon&quot;&gt;&lt;svg class=&quot;octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/span&gt;
-   &lt;span class=&quot;Toast-content&quot;&gt;
-        Trick: make sure to train the LM on &lt;b&gt;all of the data&lt;/b&gt; including the test set, because it doesn't matter, there is no label for LM.
-    &lt;/span&gt;
-&lt;/div&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;           &lt;span class=&quot;c1&quot;&gt;#Inputs: all the text files in path
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data_lm&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TextList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;from_folder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-           &lt;span class=&quot;c1&quot;&gt;#We may have other temp folders that contain text files so
-&lt;/span&gt;           &lt;span class=&quot;c1&quot;&gt;# we only keep what's in train and test
-&lt;/span&gt;            &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filter_by_folder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;include&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'train'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'test'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'unsup'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-           &lt;span class=&quot;c1&quot;&gt;#We randomly split and keep 10% (10,000 reviews) for validation
-&lt;/span&gt;            &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split_by_rand_pct&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-           &lt;span class=&quot;c1&quot;&gt;#We want to do a language model so we label accordingly
-&lt;/span&gt;            &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;label_for_lm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;databunch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;data_lm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'data_lm.pkl'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;data_lm&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;load_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'data_lm.pkl'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;data_lm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show_batch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# This is an RNN
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;language_model_learner&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data_lm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AWD_LSTM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;drop_mult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#Downloading https://s3.amazonaws.com/fast-ai-modelzoo/wt103-fwd
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;It takes very long to even train one epoch on an average GPU. Mine took ~20min for 1 epoch before &lt;code class=&quot;highlighter-rouge&quot;&gt;unfreeze&lt;/code&gt;. It can easily take overnight to train a good model.&lt;/p&gt;
-
-&lt;p&gt;For LM on Wikipedia, ~30% accuracy is quite good. For more specific documents like medical or legal, it can be higher.&lt;/p&gt;
-
-&lt;p&gt;After training the LM on the target corpus, we save the encoder&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save_encoder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'fine_tuned_enc'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Next, we can build the classifier.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;            &lt;span class=&quot;c1&quot;&gt;#grab all the text files in path, MUST use the same vocab and order
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data_clas&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TextList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;from_folder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vocab&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data_lm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vocab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-             &lt;span class=&quot;c1&quot;&gt;#split by train and valid folder (that only keeps 'train' and
-&lt;/span&gt;             &lt;span class=&quot;c1&quot;&gt;#'test' so no need to filter)
-&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split_by_folder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;valid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'test'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-             &lt;span class=&quot;c1&quot;&gt;#label them all with their folders
-&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;label_from_folder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;classes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'neg'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'pos'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-             &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;databunch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;data_clas&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'data_clas.pkl'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text_classifier_learner&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data_clas&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AWD_LSTM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;drop_mult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;load_encoder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'fine_tuned_enc'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lr_find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;recorder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# moms is the momentum for the optimizer
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit_one_cycle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;2e-2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;moms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'first'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;load&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'first'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# NOTE: This only unfreezes the last 2 layers
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;freeze_to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# NOTE: The 2.6**4 stuff is called discriminative learning rate
-# the range controls the lr for different layers since they learn
-# best at different rate
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit_one_cycle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;slice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;2.6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;moms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'second'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;load&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'second'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# Unfreeze last 3 layers
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;freeze_to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit_one_cycle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;slice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;5e-3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;2.6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;5e-3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;moms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'third'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;load&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'third'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# Unfreeze whole model to finetune
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unfreeze&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit_one_cycle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;slice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;2.6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;moms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;predict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;I really loved that movie, it was awesome!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;NOTE: When creating the classifier learner, we MUST have the same &lt;code class=&quot;highlighter-rouge&quot;&gt;vocab&lt;/code&gt; as the pretrained language model. The line&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;data_clas&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TextList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;from_folder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vocab&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data_lm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vocab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;is very important. Have the right &lt;code class=&quot;highlighter-rouge&quot;&gt;data_lm&lt;/code&gt; in memory and create &lt;code class=&quot;highlighter-rouge&quot;&gt;data_clas&lt;/code&gt; with its &lt;code class=&quot;highlighter-rouge&quot;&gt;vocab&lt;/code&gt;, or there will be an error when loading the pretrained model via &lt;code class=&quot;highlighter-rouge&quot;&gt;learn.load_encoder('fine_tuned_enc')&lt;/code&gt; and it will say&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Error(s) in loading state_dict for AWD_LSTM: size mismatch...
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;Toast&quot;&gt;
-   &lt;span class=&quot;Toast-icon&quot;&gt;&lt;svg class=&quot;octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/span&gt;
-   &lt;span class=&quot;Toast-content&quot;&gt;
-        Trick: for text classification, &lt;b&gt;unfreezing one layer at a time and train some more&lt;/b&gt; is an effective strategy.
-    &lt;/span&gt;
-&lt;/div&gt;
-
-&lt;div class=&quot;Toast&quot;&gt;
-   &lt;span class=&quot;Toast-icon&quot;&gt;&lt;svg class=&quot;octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info octicon octicon-info&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/span&gt;
-   &lt;span class=&quot;Toast-content&quot;&gt;
-        Trick: Jeremy created a random forest to find best hyperparameter setting. The best number for discriminative learning rate is 2.6^4. This is similar to AutoML for hyperparam search.
-    &lt;/span&gt;
-&lt;/div&gt;
-
-&lt;p&gt;For training Chinese language models, search the forum for more info.&lt;/p&gt;
-
-&lt;h2 id=&quot;tabular-data-using-deep-learning-embeddings-for-categorical-variables&quot;&gt;Tabular Data using Deep Learning, Embeddings for Categorical Variables&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/fastai/tabular_data_usecases.png&quot; alt=&quot;alt text&quot; title=&quot;Tabular Data Use Cases&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;People were skeptical about using neural nets on tabular data, they often use logistic regression, random forest, gradient boosting machines to do it. In fact, NN is extremely useful for tabular data.&lt;/p&gt;
-
-&lt;p&gt;With NN, you don’t need to hand engineer features as much as before. It’s more accurate and requires less maintenance. Jemery used to use Random Forest 99% of the time for tabular data, now he uses NN 90% of the time.&lt;/p&gt;
-
-&lt;p&gt;Nobody else created a library for NN on tabular data, fastai has &lt;code class=&quot;highlighter-rouge&quot;&gt;fastai.tabular&lt;/code&gt;. In the notebook &lt;code class=&quot;highlighter-rouge&quot;&gt;lesson4-tabular&lt;/code&gt; there is a detailed example.&lt;/p&gt;
-
-&lt;p&gt;It assumes the data is in a pandas dataframe. Pandas can read from csv, relational db, Spark and Hadoop.&lt;/p&gt;
-
-&lt;p&gt;The independent variables (features) can be continuous or categorical. With NN, we use &lt;strong&gt;embeddings&lt;/strong&gt; for categorical variables.&lt;/p&gt;
-
-&lt;p&gt;Instead of having “transform”s as in CV such as brightening, flipping, normalization etc., we have “processor”s for tabular data. The difference is that transforms are for data augmentation and are different each time, but processors are run once ahead of time.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;dep_var&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'salary'&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;cat_names&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;'workclass'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'education'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'marital-status'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'occupation'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;'relationship'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'race'&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;cont_names&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'age'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'fnlwgt'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'education-num'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# 1. Deal with missing values in some way
-# 2. Use pandas categorical variables
-# 3. Normalize continuous variables by mean 0 and std 1
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;procs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FillMissing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Categorify&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Normalize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TabularList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;from_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cat_names&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cat_names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cont_names&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cont_names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;procs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;procs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# when split validation set, must have contiguous indices
-&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;# think time periods, video frames, or other structure in data
-&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split_by_idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;800&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;label_from_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cols&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dep_var&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;databunch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show_batch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rows&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tabular_learner&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;layers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;metrics&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;accuracy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1e-2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# Inference
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;row&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;iloc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;predict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;For time series tabular data, you generally don’t use RNN for them. Instead, you can time box them into day_of_week, time_of_day, etc. and it will give you state of the art result.&lt;/p&gt;
-
-&lt;h2 id=&quot;collaborative-filtering-and-embeddings&quot;&gt;Collaborative Filtering and Embeddings&lt;/h2&gt;
-
-&lt;p&gt;When you have data about who-bought-what, who-liked-what, you can have two columns like [userId, productId] in the most basic form. Other metadata can be added, like timestamp, review, etc.&lt;/p&gt;
-
-&lt;p&gt;This matrix is very sparse because most users didn’t buy most products / watched most movies.&lt;/p&gt;
-
-&lt;p&gt;In this example our data has &lt;code class=&quot;highlighter-rouge&quot;&gt;userId, movieId, rating, timestamp&lt;/code&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;ratings&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read_csv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'ratings.csv'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CollabDataBunch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;from_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ratings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;seed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;42&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;y_range&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;5.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;learn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;collab_learner&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n_factors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_range&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y_range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;For recommender systems, a big challenge is the Cold Start problem&lt;/strong&gt;. It means that we particularly care about recommending &lt;strong&gt;new movies&lt;/strong&gt; or recommend relevant movies to &lt;strong&gt;new users&lt;/strong&gt; which we don’t have any data for. The solution is to have a second model on user or movie metadata to quatify the similarities.&lt;/p&gt;
-
-&lt;p&gt;Netflix fixed the cold start problem by UX. It asks a new user whether they like the movies they show as a survey. For new movies, they just need to let some hundreds of people watch it and rate them. It wasn’t quite a cold start problem for Netflix.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;But for selling products, you might not want people to look at your range of products. You could for example find the metadata of the users such as what geography they are from, their age, gender, and other features to predict whether they would like something.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Collaborative filtering is specifically for when you already have some data about the preferences of the users.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;A user has an embedding vector. A movie has an embedding vector.&lt;/strong&gt; A bias term needs to be added in the user embedding and can be interpretted as &lt;em&gt;the user’s tendency to like movies in general regardless of what movie&lt;/em&gt;. Similarly, a bias term in the movie embedding is like &lt;em&gt;the likeability of a movie regardless of users&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;The target value is the rating in the range 0 to 5. We dot the user embedding and the movie (item) embedding along with the weights, and &lt;em&gt;pass it through a sigmoid&lt;/em&gt; (and times 5) to get a numbder between 0 - 5. &lt;em&gt;Notice that this is actually a “logistic regression” (linear layer on inputs and a sigmoid) but with MSE loss and target variables as numbers between 0 - 5.&lt;/em&gt;&lt;/p&gt;
-
-&lt;div class=&quot;Toast Toast--warning googoo&quot;&gt;
-   &lt;span class=&quot;Toast-icon&quot;&gt;&lt;svg class=&quot;octicon octicon-alert&quot; viewBox=&quot;0 0 16 16&quot; version=&quot;1.1&quot; width=&quot;16&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 000 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 00.01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/span&gt;
-   &lt;span class=&quot;Toast-content&quot;&gt;Question: Sigmoid with MSE is interesting, is there a maximum likelihood explanation for this?&lt;/span&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Note that this mapping from the product of embeddings to the range [0, 5] is still regression and not classification, so the loss used is MSE and not cross entropy.&lt;/p&gt;
-
-&lt;p&gt;Why pass through the sigmoid? It makes the model learn easier and let the weights converge to relevant results. It is very common to use sigmoid or softmax as the last layer to produce the output.&lt;/p&gt;
-
-&lt;div class=&quot;Toast Toast--warning googoo&quot;&gt;
-   &lt;span class=&quot;Toast-icon&quot;&gt;&lt;svg class=&quot;octicon octicon-alert octicon octicon-alert&quot; viewBox=&quot;0 0 16 16&quot; version=&quot;1.1&quot; width=&quot;16&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 000 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 00.01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/span&gt;
-   &lt;span class=&quot;Toast-content&quot;&gt;Question: it seems this is a sigmoid(linear model) with MSE, the optimization is nonconvex. How is it done?&lt;/span&gt;
-&lt;/div&gt;</content><author><name></name></author><summary type="html">NLP Continued from lesson 3</summary></entry></feed>
+&lt;/div&gt;</content><author><name></name></author><summary type="html">Discussion on basic NN</summary></entry></feed>

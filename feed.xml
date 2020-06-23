@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-06-23T18:19:14-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">Neural Networks (CS231n)</title><link href="http://blog.logancyang.com/note/theory/2020/06/23/cs231n-note.html" rel="alternate" type="text/html" title="Neural Networks (CS231n)" /><published>2020-06-23T00:00:00-05:00</published><updated>2020-06-23T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/theory/2020/06/23/cs231n-note</id><content type="html" xml:base="http://blog.logancyang.com/note/theory/2020/06/23/cs231n-note.html">&lt;h2 id=&quot;what-is-a-neural-network-mathematically&quot;&gt;What is a neural network mathematically&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-06-23T18:20:59-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">Neural Networks (CS231n)</title><link href="http://blog.logancyang.com/note/theory/2020/06/23/cs231n-note.html" rel="alternate" type="text/html" title="Neural Networks (CS231n)" /><published>2020-06-23T00:00:00-05:00</published><updated>2020-06-23T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/theory/2020/06/23/cs231n-note</id><content type="html" xml:base="http://blog.logancyang.com/note/theory/2020/06/23/cs231n-note.html">&lt;h2 id=&quot;what-is-a-neural-network-mathematically&quot;&gt;What is a neural network mathematically&lt;/h2&gt;
 
 &lt;p&gt;Linear model&lt;/p&gt;
 
@@ -74,7 +74,7 @@
 
 &lt;p&gt;&lt;img src=&quot;/images/deeplearning/tanh.jpeg&quot; alt=&quot;tanh.jpeg&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
 
-&lt;h3 id=&quot;sigmoid&quot;&gt;&lt;strong&gt;Sigmoid&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;sigmoid&quot;&gt;Sigmoid&lt;/h3&gt;
 
 &lt;span class=&quot;katex-display&quot;&gt;&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;σ&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mfrac&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mrow&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;msup&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mrow&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;/mrow&gt;&lt;/msup&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;\sigma(x) = \frac{1}{1 + e^{-x}}&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathdefault&quot; style=&quot;margin-right:0.03588em;&quot;&gt;σ&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathdefault&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mrel&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:2.09077em;vertical-align:-0.7693300000000001em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mopen nulldelimiter&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mfrac&quot;&gt;&lt;span class=&quot;vlist-t vlist-t2&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:1.32144em;&quot;&gt;&lt;span style=&quot;top:-2.314em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:3em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord mathdefault&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.697331em;&quot;&gt;&lt;span style=&quot;top:-2.989em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mtight&quot;&gt;&lt;span class=&quot;mord mtight&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mord mathdefault mtight&quot;&gt;x&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;top:-3.23em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:3em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;frac-line&quot; style=&quot;border-bottom-width:0.04em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;top:-3.677em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:3em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord&quot;&gt;1&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-s&quot;&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.7693300000000001em;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mclose nulldelimiter&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
 
@@ -95,7 +95,7 @@
   &lt;p&gt;&lt;strong&gt;&lt;em&gt;Sigmoids saturate and kill gradients&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id=&quot;tanh&quot;&gt;&lt;strong&gt;Tanh&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;tanh&quot;&gt;Tanh&lt;/h3&gt;
 
 &lt;p&gt;It squashes a real-valued number to the range [-1, 1]. Like the sigmoid neuron, &lt;strong&gt;its activations saturate&lt;/strong&gt;, &lt;strong&gt;but unlike the sigmoid neuron its output is zero-centered&lt;/strong&gt;. Therefore, &lt;strong&gt;in practice the &lt;em&gt;tanh non-linearity is always preferred to the sigmoid nonlinearity**.&lt;/em&gt; Also note that the **tanh neuron is simply a scaled sigmoid neuron&lt;/strong&gt;, in particular the following holds:&lt;/p&gt;
 
@@ -113,7 +113,7 @@
 
 &lt;p&gt;&lt;img src=&quot;/images/deeplearning/alexplot.jpeg&quot; alt=&quot;alexplot.jpeg&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;ReLU&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&quot;relu&quot;&gt;ReLU&lt;/h3&gt;
 
 &lt;p&gt;It computes the function&lt;/p&gt;
 
@@ -142,6 +142,8 @@
 &lt;blockquote&gt;
   &lt;p&gt;👎 &lt;strong&gt;&lt;em&gt;Dying ReLU&lt;/em&gt; caused by big learning rate during training, the neuron won’t ever activate again&lt;/strong&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
+
+&lt;h3 id=&quot;some-other-activation-functions&quot;&gt;Some other activation functions&lt;/h3&gt;
 
 &lt;p&gt;&lt;strong&gt;Leaky ReLU.&lt;/strong&gt; Leaky ReLUs are one attempt to fix the “dying ReLU” problem. Instead of the function being zero when x &amp;lt; 0, a leaky ReLU will instead have a small negative slope (of 0.01, or so). That is, the function computes&lt;/p&gt;
 

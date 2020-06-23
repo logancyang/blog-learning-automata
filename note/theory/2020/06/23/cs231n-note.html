@@ -145,6 +145,8 @@ window.onload = wrap_img;
 <ul>
 <li class="toc-entry toc-h3"><a href="#sigmoid">Sigmoid</a></li>
 <li class="toc-entry toc-h3"><a href="#tanh">Tanh</a></li>
+<li class="toc-entry toc-h3"><a href="#relu">ReLU</a></li>
+<li class="toc-entry toc-h3"><a href="#some-other-activation-functions">Some other activation functions</a></li>
 </ul>
 </li>
 <li class="toc-entry toc-h2"><a href="#data-preprocessing">Data preprocessing</a>
@@ -241,8 +243,7 @@ window.onload = wrap_img;
 <p><img src="/images/deeplearning/tanh.jpeg" alt="tanh.jpeg" align="middle"></p>
 
 <h3 id="sigmoid">
-<a class="anchor" href="#sigmoid" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Sigmoid</strong>
-</h3>
+<a class="anchor" href="#sigmoid" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sigmoid</h3>
 
 <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mo>−</mo><mi>x</mi></mrow></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">\sigma(x) = \frac{1}{1 + e^{-x}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">σ</span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.09077em;vertical-align:-0.7693300000000001em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.697331em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mathdefault mtight">x</span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7693300000000001em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span>
 
@@ -265,8 +266,7 @@ window.onload = wrap_img;
 </blockquote>
 
 <h3 id="tanh">
-<a class="anchor" href="#tanh" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>Tanh</strong>
-</h3>
+<a class="anchor" href="#tanh" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tanh</h3>
 
 <p>It squashes a real-valued number to the range [-1, 1]. Like the sigmoid neuron, <strong>its activations saturate</strong>, <strong>but unlike the sigmoid neuron its output is zero-centered</strong>. Therefore, <strong>in practice the <em>tanh non-linearity is always preferred to the sigmoid nonlinearity**.</em> Also note that the **tanh neuron is simply a scaled sigmoid neuron</strong>, in particular the following holds:</p>
 
@@ -284,7 +284,8 @@ window.onload = wrap_img;
 
 <p><img src="/images/deeplearning/alexplot.jpeg" alt="alexplot.jpeg" align="middle"></p>
 
-<p><strong>ReLU</strong></p>
+<h3 id="relu">
+<a class="anchor" href="#relu" aria-hidden="true"><span class="octicon octicon-link"></span></a>ReLU</h3>
 
 <p>It computes the function</p>
 
@@ -313,6 +314,9 @@ window.onload = wrap_img;
 <blockquote>
   <p>👎 <strong><em>Dying ReLU</em> caused by big learning rate during training, the neuron won’t ever activate again</strong></p>
 </blockquote>
+
+<h3 id="some-other-activation-functions">
+<a class="anchor" href="#some-other-activation-functions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Some other activation functions</h3>
 
 <p><strong>Leaky ReLU.</strong> Leaky ReLUs are one attempt to fix the “dying ReLU” problem. Instead of the function being zero when x &lt; 0, a leaky ReLU will instead have a small negative slope (of 0.01, or so). That is, the function computes</p>
 

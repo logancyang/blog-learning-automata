@@ -2,7 +2,7 @@
 toc: true
 layout: post
 description: fast.ai note series
-categories: [note, fastai]
+categories: [note, fastai, ml]
 title: "FastAI Lesson 8: Backprop from the Foundations"
 comments: true
 ---

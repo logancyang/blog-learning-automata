@@ -3,7 +3,7 @@ toc: true
 layout: post
 description: Stepping up Python skills
 categories: [note, python]
-title: "Python Essentials: Reviewing The Basics"
+title: "[Python Overview] Part I: The Basics"
 comments: true
 ---
 
@@ -399,5 +399,423 @@ Failed!
 
 ## Program organization
 
+### Function best practices
 
+Define functions at the top of a script, put all of the code related to a single task all in one function.
 
+Functions need to be modular and predictable.
+
+Write docstring, describe what the function does in one sentence, and add information per argument.
+
+Add optional **type hints** to function definitions.
+
+```py
+def read_prices(filename: str) -> dict:
+    '''
+    Read prices from a CSV file of name,price data
+    '''
+    prices = {}
+    with open(filename) as f:
+        f_csv = csv.reader(f)
+        for row in f_csv:
+            prices[row[0]] = float(row[1])
+    return prices
+```
+
+These type hints do nothing operationally. Yet IDEs can use them to give hints.
+
+When calling a function with optional arguments, use keywords instead of just True or False.
+
+```py
+parse_data(data, False, True) # ????? NO
+
+parse_data(data, ignore_errors=True)
+parse_data(data, debug=True)
+parse_data(data, debug=True, ignore_errors=True)
+```
+
+Always give short but meaningful names.
+
+Regarding variable scope, **remember: All assignments in functions are local.**
+
+If you must update a global variable, use the `global` keyword.
+
+```py
+name = 'Dave'
+
+def spam():
+    global name
+    name = 'Guido' # Changes the global name above
+```
+
+**Actually, avoid global variable entirely if you can. If you want to modify a state outside of a function, use a class instead.**
+
+Arguments passed into functions are references. **If a mutable object get passed in and you use its method to modify it, it will be modified in-place**.
+
+But keep in mind, reassignment to an old variable name inside a function only modifies the name in the local scope, it doesn't change the original object:
+
+```py
+def foo(items):
+    items.append(42)    # Modifies the input object in-place because .append()
+
+a = [1, 2, 3]
+foo(a)
+print(a)                # [1, 2, 3, 42]
+
+# VS
+def bar(items):
+    items = [4,5,6]    # Changes local `items` variable to point to a different object
+
+b = [1, 2, 3]
+bar(b)
+print(b)                # [1, 2, 3]
+```
+
+### Error handling
+
+Python doesn't check data type or values, if there's any error, it will appear at run time as an exception.
+
+```py
+# raise
+def authenticate(name):
+    if name not in authorized:
+        raise RuntimeError(f'{name} not authorized')
+
+# try - except
+try:
+    authenticate(username)
+except RuntimeError as e: # error msg f'{name} not authorized' is in `e`
+    print(e) # HANDLE THE EXCEPTION HERE!!!
+    ...
+statements        # Resumes execution here after handling exception
+statements        # And continues here
+...
+```
+
+Some Python builtin exceptions for indicating what is wrong:
+
+```py
+ArithmeticError
+AssertionError
+EnvironmentError
+EOFError
+ImportError
+IndexError
+KeyboardInterrupt
+KeyError
+MemoryError
+NameError
+ReferenceError
+RuntimeError
+SyntaxError
+SystemError
+TypeError
+ValueError
+...
+```
+
+Handling multiple errors in different ways:
+
+```py
+try:
+  ...
+except LookupError as e:
+  ...
+except RuntimeError as e:
+  ...
+except IOError as e:
+  ...
+except KeyboardInterrupt as e:
+  ...
+```
+
+Grouping them and handle the same way:
+
+```py
+try:
+  ...
+except (IOError,LookupError,RuntimeError) as e:
+  ...
+```
+
+To catch all errors:
+
+```py
+try:
+    ...
+except Exception:       # DANGER. See below
+    print('An error occurred')
+```
+
+**This is a bad idea because you’ll have no idea why it failed.**
+
+Recommended approach: `as e`
+
+```py
+try:
+    go_do_something()
+except SomeSpecificException as e:
+    print('Computer says no. Reason :', e)
+    raise
+```
+
+Using `raise` allows you to take action (e.g. logging) and pass the exception to the caller.
+
+The finally clause:
+
+```py
+lock = Lock()
+...
+lock.acquire()
+
+try:
+    ...
+finally:
+    lock.release() # this will ALWAYS be executed. With and w/o exception.
+```
+
+Finally is commonly used to safely manage resources (especially locks, files, etc.).
+
+However, the best practice is to use `with` and avoid this approach.
+
+```py
+lock = Lock()
+with lock:
+    # lock acquired
+    ...
+# lock released
+```
+
+### Modules
+
+Any `.py` file is a module. The `import` statement loads and executes a module.
+
+A module is a collection of named values and is sometimes said to be a **namespace**. The names are all of the **global variables** and **functions** defined in the source file. After importing, the module name is used as a prefix. Hence the namespace.
+
+```py
+import foo
+
+a = foo.grok(2)
+b = foo.spam('Hello')
+...
+```
+
+**The module name is directly tied to the file name (foo -> foo.py).**
+
+Modules are isolated. `foo.x` and `bar.x` are different:
+
+```py
+# foo.py
+x = 42
+# bar.py
+x = 37
+```
+
+Global variables are always bound to the enclosing module (same file). Each source file is its own little universe.
+
+#### Module execution
+
+When a module is imported, **all of the statements in the module execute one after another until the end of the file is reached**. The contents of the module namespace are all of the global names that are still defined at the end of the execution process. **If there are scripting statements that carry out tasks in the global scope (printing, creating files, etc.) you will see them run on import.**
+
+#### Module Loading
+
+Each module loads and executes **only once**. Note: **Repeated imports just return a reference to the previously loaded module**.
+
+`sys.modules` is a `dict` of all loaded modules.
+
+```py
+>>> import sys
+>>> sys.modules.keys()
+['copy_reg', '__main__', 'site', '__builtin__', 'encodings', 'encodings.encodings', 'posixpath', ...]
+```
+
+**Caution**: A common confusion arises if you repeat an import statement after changing the source code for a module. **Because of the module cache sys.modules, repeated imports always return the previously loaded module – *even if a change was made*! The safest way to load modified code into Python is to quit and restart the interpreter/kernel!!**
+
+#### Locating modules
+
+Python consults a path list (sys.path) when looking for modules. The current working directory is usually first.
+
+```py
+>>> import sys
+>>> sys.path
+[
+  '',
+  '/usr/local/lib/python36/python36.zip',
+  '/usr/local/lib/python36',
+  ...
+]
+```
+
+`sys.path` contains the **search paths**. You can manually adjust if you need to:
+
+```py
+import sys
+sys.path.append('/project/foo/pyfiles')
+```
+
+Paths can also be added via environment variables.
+
+```py
+% env PYTHONPATH=/project/foo/pyfiles python3
+Python 3.6.0 (default, Feb 3 2017, 05:53:21)
+[GCC 4.2.1 Compatible Apple LLVM 8.0.0 (clang-800.0.38)]
+>>> import sys
+>>> sys.path
+['','/project/foo/pyfiles', ...]
+```
+
+As a general rule, it should not be necessary to manually adjust the module search path. However, it sometimes arises if you’re trying to import Python code that’s in an unusual location or not readily accessible from the current working directory.
+
+#### Main module
+
+In many programming languages, there is a concept of a `main` function or method. This is the first function that executes when an application is launched.
+
+Python has no main function or method. Instead, there is a **main module**. **The main module is the source file that runs first**. Whatever file you give to the interpreter at startup becomes main. It doesn’t matter the name.
+
+Any Python file can either run as main or as a library import:
+
+```py
+bash % python3 prog.py # Running as main
+
+import prog   # Running as library import
+```
+
+In both cases, `__name__` is the name of the module. However, it will only be set to `__main__` if running as main.
+
+**Usually, you don’t want statements that are part of the main program to execute on a library import**. So, it’s common to have an `if`-check in code that might be used either way.
+
+```py
+# prog.py
+...
+if __name__ == '__main__':
+    # Running as the main program ...
+    statements
+    ...
+```
+
+Here is common Python program template:
+
+```py
+# prog.py
+# Import statements (libraries)
+import modules
+
+# Functions
+def spam():
+    ...
+
+def blah():
+    ...
+
+# Main function
+def main():
+    ...
+
+if __name__ == '__main__':
+    main()
+```
+
+When used as a CLI tool, like `bash % python report.py portfolio.csv prices.csv`, the list of arguments is in `sys.argv`:
+
+```py
+# In the previous bash command
+sys.argv # ['report.py, 'portfolio.csv', 'prices.csv']
+```
+
+`sys.stdout`, `sys.stderr` and `sys.stdin` are files that work the same way as normal files. By default, print is directed to `sys.stdout`. Input is read from `sys.stdin`. Tracebacks and errors are directed to `sys.stderr`.
+
+`stdio` could be connected to terminals, files, pipes, etc.
+
+```
+bash % python3 prog.py > results.txt
+# or
+bash % cmd1 | python3 prog.py | cmd2
+```
+
+#### Environment variables
+
+Environment variables are set in the shell.
+
+```
+bash % setenv NAME dave
+bash % setenv RSH ssh
+bash % python prog.py
+```
+
+`os.environ` is a dictionary that contains these values.
+
+```py
+import os
+
+name = os.environ['NAME'] # 'dave'
+```
+
+#### Program Exit
+
+Program exit is handled through exceptions. A non-zero exit code indicates an error.
+
+```py
+raise SystemExit
+raise SystemExit(exitcode)
+raise SystemExit('Informative message')
+# Or
+import sys
+sys.exit(exitcode)
+```
+
+#### The `!#` line
+
+On Unix, the `#!` line can launch a script as Python. Add the following to the first line of your script file.
+
+```
+#!/usr/bin/env python3
+```
+
+It requires the executable permission.
+
+```
+bash % chmod +x prog.py
+# Then you can execute
+bash % prog.py
+... output ...
+```
+
+*Note: The Python Launcher on Windows also looks for the #! line to indicate language version.*
+
+### Design generic and flexible functions
+
+Comparing the following two versions of a function
+
+```py
+# VERSION 1
+# Provide a filename
+def read_data(filename):
+    records = []
+    with open(filename) as f:
+        for line in f:
+            ...
+            records.append(r)
+    return records
+
+d = read_data('file.csv')
+
+# VERSION 2
+# Provide lines
+def read_data(lines):
+    records = []
+    for line in lines:
+        ...
+        records.append(r)
+    return records
+
+with open('file.csv') as f:
+    d = read_data(f)
+```
+
+Version 2 is better because it's more generic, it takes in any iterable.
+
+[Duck Typing](https://en.wikipedia.org/wiki/Duck_typing) is a computer programming concept to determine whether an object can be used for a particular purpose. It is an application of the duck test.
+
+> If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck.
+
+Code libraries are often better served by embracing flexibility. Don’t restrict your options. With great flexibility comes great power.

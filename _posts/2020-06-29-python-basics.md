@@ -784,7 +784,7 @@ bash % prog.py
 
 ### Design generic and flexible functions
 
-Comparing the following two versions of a function
+Compare the following two versions of a function
 
 ```py
 # VERSION 1

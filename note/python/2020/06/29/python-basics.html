@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>[Python Overview] Part I: The Basics | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="[Python Overview] Part I: The Basics" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Stepping up Python skills" />
+<meta property="og:description" content="Stepping up Python skills" />
+<link rel="canonical" href="http://blog.logancyang.com/note/python/2020/06/29/python-basics.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/python/2020/06/29/python-basics.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-29T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Stepping up Python skills","@type":"BlogPosting","headline":"[Python Overview] Part I: The Basics","dateModified":"2020-06-29T00:00:00-05:00","datePublished":"2020-06-29T00:00:00-05:00","url":"http://blog.logancyang.com/note/python/2020/06/29/python-basics.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/python/2020/06/29/python-basics.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>[Python Overview] Part I: The Basics | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="[Python Overview] Part I: The Basics" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Stepping up Python skills" />
+<meta property="og:description" content="Stepping up Python skills" />
+<link rel="canonical" href="http://blog.logancyang.com/note/python/2020/06/29/python-basics.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/python/2020/06/29/python-basics.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-29T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Stepping up Python skills","@type":"BlogPosting","headline":"[Python Overview] Part I: The Basics","dateModified":"2020-06-29T00:00:00-05:00","datePublished":"2020-06-29T00:00:00-05:00","url":"http://blog.logancyang.com/note/python/2020/06/29/python-basics.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/python/2020/06/29/python-basics.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Learning Automata</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">[Python Overview] Part I: The Basics</h1><p class="page-description">Stepping up Python skills</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-06-29T00:00:00-05:00" itemprop="datePublished">
+        Jun 29, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      16 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#note">note</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#python">python</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#string-methods">String methods</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#byte-strings">Byte strings</a></li>
+<li class="toc-entry toc-h3"><a href="#raw-strings">Raw strings</a></li>
+<li class="toc-entry toc-h3"><a href="#f-strings-python36-or-newer">f-Strings (python3.6 or newer)</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#some-tips-on-lists">Some tips on lists</a></li>
+<li class="toc-entry toc-h2"><a href="#files-common-idioms">Files: common idioms</a></li>
+<li class="toc-entry toc-h2"><a href="#catching-and-handling-exceptions">Catching and handling exceptions</a></li>
+<li class="toc-entry toc-h2"><a href="#data-structures">Data structures</a></li>
+<li class="toc-entry toc-h2"><a href="#collections">collections</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#counter-counting-into-buckets">Counter: Counting into buckets</a></li>
+<li class="toc-entry toc-h3"><a href="#one-many-mapping-defaultdict">One-many mapping: defaultdict</a></li>
+<li class="toc-entry toc-h3"><a href="#deque-queue-and-stack">deque: queue and stack</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#zip-function">zip function</a></li>
+<li class="toc-entry toc-h2"><a href="#object-model">Object model</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#identity-and-references">Identity and References</a></li>
+<li class="toc-entry toc-h3"><a href="#shallow-copies-beware">Shallow copies: beware!</a></li>
+<li class="toc-entry toc-h3"><a href="#deep-copies">Deep copies</a></li>
+<li class="toc-entry toc-h3"><a href="#type-checking">Type checking</a></li>
+<li class="toc-entry toc-h3"><a href="#everything-is-an-object">Everything is an object</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#program-organization">Program organization</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#function-best-practices">Function best practices</a></li>
+<li class="toc-entry toc-h3"><a href="#error-handling">Error handling</a></li>
+<li class="toc-entry toc-h3"><a href="#modules">Modules</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#module-execution">Module execution</a></li>
+<li class="toc-entry toc-h4"><a href="#module-loading">Module Loading</a></li>
+<li class="toc-entry toc-h4"><a href="#locating-modules">Locating modules</a></li>
+<li class="toc-entry toc-h4"><a href="#main-module">Main module</a></li>
+<li class="toc-entry toc-h4"><a href="#environment-variables">Environment variables</a></li>
+<li class="toc-entry toc-h4"><a href="#program-exit">Program Exit</a></li>
+<li class="toc-entry toc-h4"><a href="#the--line">The !# line</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#design-generic-and-flexible-functions">Design generic and flexible functions</a></li>
+</ul>
+</li>
+</ul><h2 id="string-methods">
+<a class="anchor" href="#string-methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>String methods</h2>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">suffix</span><span class="p">)</span>     <span class="c1"># Check if string ends with suffix
+</span><span class="n">s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>              <span class="c1"># First occurrence of t in s
+</span><span class="n">s</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>             <span class="c1"># First occurrence of t in s
+</span><span class="n">s</span><span class="o">.</span><span class="n">isalpha</span><span class="p">()</span>            <span class="c1"># Check if characters are alphabetic
+</span><span class="n">s</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span>            <span class="c1"># Check if characters are numeric
+</span><span class="n">s</span><span class="o">.</span><span class="n">islower</span><span class="p">()</span>            <span class="c1"># Check if characters are lower-case
+</span><span class="n">s</span><span class="o">.</span><span class="n">isupper</span><span class="p">()</span>            <span class="c1"># Check if characters are upper-case
+</span><span class="n">s</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">slist</span><span class="p">)</span>          <span class="c1"># Join a list of strings using s as delimiter
+</span><span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>              <span class="c1"># Convert to lower case
+</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">old</span><span class="p">,</span><span class="n">new</span><span class="p">)</span>     <span class="c1"># Replace text
+</span><span class="n">s</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>             <span class="c1"># Search for t from end of string
+</span><span class="n">s</span><span class="o">.</span><span class="n">rindex</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>            <span class="c1"># Search for t from end of string
+</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">([</span><span class="n">delim</span><span class="p">])</span>       <span class="c1"># Split string into list of substrings
+</span><span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>   <span class="c1"># Check if string starts with prefix
+</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>              <span class="c1"># Strip leading/trailing space
+</span><span class="n">s</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>              <span class="c1"># Convert to upper case
+</span></code></pre></div></div>
+
+<p>Strings are immutable. <strong>All operations and methods that manipulate string data, always create new strings.</strong></p>
+
+<h3 id="byte-strings">
+<a class="anchor" href="#byte-strings" aria-hidden="true"><span class="octicon octicon-link"></span></a>Byte strings</h3>
+
+<p>A string of 8-bit bytes, commonly encountered with low-level I/O:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">data</span> <span class="o">=</span> <span class="n">b</span><span class="s">'Hello World</span><span class="se">\r\n</span><span class="s">'</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>                         <span class="c1"># 13
+</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>                         <span class="c1"># b'Hello'
+</span><span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">b</span><span class="s">'Hello'</span><span class="p">,</span> <span class="n">b</span><span class="s">'Cruel'</span><span class="p">)</span>  <span class="c1"># b'Cruel World\r\n'
+</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>   <span class="c1"># 72 (ASCII code for 'H')
+</span><span class="n">text</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span> <span class="c1"># bytes -&gt; text
+</span><span class="n">data</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span> <span class="c1"># text -&gt; bytes
+</span></code></pre></div></div>
+
+<p>The ‘utf-8’ argument specifies a character encoding. Other common values include ‘ascii’ and ‘latin1’.</p>
+
+<h3 id="raw-strings">
+<a class="anchor" href="#raw-strings" aria-hidden="true"><span class="octicon octicon-link"></span></a>Raw strings</h3>
+
+<p>Raw strings are string literals with an uninterpreted backslash.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">rs</span> <span class="o">=</span> <span class="s">r'c:\newdata\test'</span> <span class="c1"># Raw (uninterpreted backslash)
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">rs</span>
+<span class="s">'c:</span><span class="se">\\</span><span class="s">newdata</span><span class="se">\\</span><span class="s">test'</span>
+</code></pre></div></div>
+
+<p>The string is the literal text enclosed inside, exactly as typed. This is useful in situations where the backslash has special significance. Example: filename, regular expressions, etc.</p>
+
+<h3 id="f-strings-python36-or-newer">
+<a class="anchor" href="#f-strings-python36-or-newer" aria-hidden="true"><span class="octicon octicon-link"></span></a>f-Strings (python3.6 or newer)</h3>
+
+<p>A string with formatted expression substitution.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">name</span> <span class="o">=</span> <span class="s">'IBM'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">shares</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">price</span> <span class="o">=</span> <span class="mf">91.1</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="s">'{name:&gt;10s} {shares:10d} {price:10.2f}'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a</span>
+<span class="s">'       IBM        100      91.10'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">f</span><span class="s">'Cost = ${shares*price:0.2f}'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span>
+<span class="s">'Cost = $9110.00'</span>
+<span class="o">&gt;&gt;&gt;</span>
+</code></pre></div></div>
+
+<p>Formatting</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>d       Decimal integer
+b       Binary integer
+x       Hexadecimal integer
+f       Float as [-]m.dddddd
+e       Float as [-]m.dddddde+-xx
+g       Float, but selective use of E notation s String
+c       Character (from integer)
+</code></pre></div></div>
+
+<p>Common modifiers</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:&gt;10d   Integer right aligned in 10-character field
+:&lt;10d   Integer left aligned in 10-character field
+:^10d   Integer centered in 10-character field
+:0.2f   Float with 2 digit precision
+</code></pre></div></div>
+
+<h2 id="some-tips-on-lists">
+<a class="anchor" href="#some-tips-on-lists" aria-hidden="true"><span class="octicon octicon-link"></span></a>Some tips on lists</h2>
+
+<p><code class="highlighter-rouge">l.sort()</code> sorts <code class="highlighter-rouge">l</code> in-place and doesn’t return anything. <code class="highlighter-rouge">sorted(l)</code> keeps <code class="highlighter-rouge">l</code> unchanged and returns a new list.</p>
+
+<p>Sort by descending order: <code class="highlighter-rouge">l.sort(reverse=True)</code>.</p>
+
+<p>Lists have builtin method <code class="highlighter-rouge">l.count()</code>.</p>
+
+<p>Caution: Be cautious whenever doing something like <code class="highlighter-rouge">l = [obj] * 5</code>. This means this list has 5 of the same object. Once <code class="highlighter-rouge">obj</code> is updated, all the elements in the list are updated.</p>
+
+<p><code class="highlighter-rouge">enumerate</code>: use <code class="highlighter-rouge">enumerate</code> more in loops, it gets the index and the item.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s">'Elwood'</span><span class="p">,</span> <span class="s">'Jake'</span><span class="p">,</span> <span class="s">'Curtis'</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">names</span><span class="p">):</span>
+    <span class="c1"># Loops with i = 0, name = 'Elwood'
+</span>    <span class="c1"># i = 1, name = 'Jake'
+</span>    <span class="c1"># i = 2, name = 'Curtis'
+</span></code></pre></div></div>
+
+<p><code class="highlighter-rouge">enumerate(sequence [, start = 0])</code>, <code class="highlighter-rouge">start</code> is optional. Example: <code class="highlighter-rouge">for lineno, line in enumerate(f, start=1):...</code>.</p>
+
+<h2 id="files-common-idioms">
+<a class="anchor" href="#files-common-idioms" aria-hidden="true"><span class="octicon octicon-link"></span></a>Files: common idioms</h2>
+
+<p>Read an entire file all at once as a string.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'foo.txt'</span><span class="p">,</span> <span class="s">'rt'</span><span class="p">)</span> <span class="k">as</span> <span class="nb">file</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="nb">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="c1"># `data` is a string with all the text in `foo.txt`
+</span></code></pre></div></div>
+
+<p>Read a file line-by-line by iterating.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">'rt'</span><span class="p">)</span> <span class="k">as</span> <span class="nb">file</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">file</span><span class="p">:</span>
+        <span class="c1"># Process the line
+</span></code></pre></div></div>
+
+<p>Write a file,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'outfile'</span><span class="p">,</span> <span class="s">'wt'</span><span class="p">)</span> <span class="k">as</span> <span class="n">out</span><span class="p">:</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">'Hello World</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+    <span class="o">...</span>
+</code></pre></div></div>
+
+<p>Redirect the print function,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'outfile'</span><span class="p">,</span> <span class="s">'wt'</span><span class="p">)</span> <span class="k">as</span> <span class="n">out</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'Hello World'</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+    <span class="o">...</span>
+</code></pre></div></div>
+
+<h2 id="catching-and-handling-exceptions">
+<a class="anchor" href="#catching-and-handling-exceptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Catching and handling exceptions</h2>
+
+<p>Exceptions can be caught and handled.</p>
+
+<p>To catch, use the <code class="highlighter-rouge">try - except</code> statement.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">shares</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"Couldn't parse"</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+    <span class="o">...</span>
+</code></pre></div></div>
+
+<p>It is often difficult to know exactly what kinds of errors might occur in advance depending on the operation being performed. For better or for worse, exception handling often gets added after a program has unexpectedly crashed (i.e., “oh, we forgot to catch that error. We should handle that!”).</p>
+
+<p>To raise an exception, use the <code class="highlighter-rouge">raise</code> statement.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">raise</span> <span class="nb">RuntimeError</span><span class="p">(</span><span class="s">'What a kerfuffle'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This will cause the program to abort with an exception traceback. Unless caught by a try-except block.</p>
+
+<h2 id="data-structures">
+<a class="anchor" href="#data-structures" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data structures</h2>
+
+<p>Tuples look like read-only lists. However, tuples are most often used for a single item consisting of multiple parts. Lists are usually a collection of distinct items, usually all of the same type.</p>
+
+<p>A dictionary is mapping of keys to values. It’s also sometimes called a hash table or associative array.</p>
+
+<p>To delete a value in a dictionary, use the <code class="highlighter-rouge">del</code> statement. <code class="highlighter-rouge">del s['date']</code>.</p>
+
+<p>Set default value if key doesn’t exist.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">name</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Dict and set are both unordered.</p>
+
+<h2 id="collections">
+<a class="anchor" href="#collections" aria-hidden="true"><span class="octicon octicon-link"></span></a><code class="highlighter-rouge">collections</code>
+</h2>
+
+<p>There’s <a href="https://docs.python.org/3/library/collections.html">collections</a> which has</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ChainMap, namedtuple, deque, Counter,
+OrderedDict, defaultdict, UserDict, UserList, UserString
+</code></pre></div></div>
+
+<h3 id="counter-counting-into-buckets">
+<a class="anchor" href="#counter-counting-into-buckets" aria-hidden="true"><span class="octicon octicon-link"></span></a><code class="highlighter-rouge">Counter</code>: Counting into buckets</h3>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">portfolio</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s">'GOOG'</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">490.1</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">'IBM'</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mf">91.1</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">'CAT'</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mf">83.44</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">'IBM'</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">45.23</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">'GOOG'</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mf">572.45</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">'AA'</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mf">23.15</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="n">total_shares</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">shares</span><span class="p">,</span> <span class="n">price</span> <span class="ow">in</span> <span class="n">portfolio</span><span class="p">:</span>
+    <span class="n">total_shares</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">+=</span> <span class="n">shares</span>
+
+<span class="n">total_shares</span><span class="p">[</span><span class="s">'IBM'</span><span class="p">]</span>     <span class="c1"># 150
+</span></code></pre></div></div>
+
+<h3 id="one-many-mapping-defaultdict">
+<a class="anchor" href="#one-many-mapping-defaultdict" aria-hidden="true"><span class="octicon octicon-link"></span></a>One-many mapping: <code class="highlighter-rouge">defaultdict</code>
+</h3>
+
+<p><code class="highlighter-rouge">defaultdict</code> ensures that every time you access a key you get a default value.</p>
+
+<p>If we want to group the following list of tuples into key value pairs where key is <code class="highlighter-rouge">name</code> and value is a list of <code class="highlighter-rouge">(share, price)</code> tuples and default to an empty list, we do the following.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">portfolio</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s">'GOOG'</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">490.1</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">'IBM'</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mf">91.1</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">'CAT'</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mf">83.44</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">'IBM'</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">45.23</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">'GOOG'</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mf">572.45</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">'AA'</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mf">23.15</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="n">holdings</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">shares</span><span class="p">,</span> <span class="n">price</span> <span class="ow">in</span> <span class="n">portfolio</span><span class="p">:</span>
+    <span class="n">holdings</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">shares</span><span class="p">,</span> <span class="n">price</span><span class="p">))</span>
+<span class="n">holdings</span><span class="p">[</span><span class="s">'IBM'</span><span class="p">]</span> <span class="c1"># [ (50, 91.1), (100, 45.23) ]
+</span></code></pre></div></div>
+
+<h3 id="deque-queue-and-stack">
+<a class="anchor" href="#deque-queue-and-stack" aria-hidden="true"><span class="octicon octicon-link"></span></a><code class="highlighter-rouge">deque</code>: queue and stack</h3>
+
+<p>Problem: keep the last N elements.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
+
+<span class="n">history</span> <span class="o">=</span> <span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="o">...</span>
+</code></pre></div></div>
+
+<h2 id="zip-function">
+<a class="anchor" href="#zip-function" aria-hidden="true"><span class="octicon octicon-link"></span></a><code class="highlighter-rouge">zip</code> function</h2>
+
+<p>The <code class="highlighter-rouge">zip</code> function takes <strong>multiple sequences</strong> and makes an iterator that combines them.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s">'name'</span><span class="p">,</span> <span class="s">'shares'</span><span class="p">,</span> <span class="s">'price'</span><span class="p">]</span>
+<span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="s">'GOOG'</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">490.1</span> <span class="p">]</span>
+<span class="n">pairs</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+<span class="c1"># ('name','GOOG'), ('shares',100), ('price',490.1)
+</span></code></pre></div></div>
+
+<p>To get the result you must iterate. You can use multiple variables to unpack the tuples as shown earlier.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">column</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
+    <span class="o">...</span>
+</code></pre></div></div>
+
+<p>A common use of zip is to create key/value pairs for constructing dictionaries.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="n">values</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h2 id="object-model">
+<a class="anchor" href="#object-model" aria-hidden="true"><span class="octicon octicon-link"></span></a>Object model</h2>
+
+<p>In Python, everything is an object. There’s danger dealing with mutable objects.</p>
+
+<p><strong>Assignment operations never make a copy of the value being assigned. All assignments are merely reference copies (or pointer copies if you prefer).</strong></p>
+
+<p>Remember: <strong>Variables are names, not memory locations</strong>.</p>
+
+<h3 id="identity-and-references">
+<a class="anchor" href="#identity-and-references" aria-hidden="true"><span class="octicon octicon-link"></span></a>Identity and References</h3>
+
+<p>Use the <code class="highlighter-rouge">is</code> operator to check if two values are exactly the same object.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="ow">is</span> <span class="n">b</span>
+<span class="bp">True</span>
+</code></pre></div></div>
+
+<p><strong><code class="highlighter-rouge">is</code> compares the object identity (an integer). The identity can be obtained using <code class="highlighter-rouge">id()</code>.</strong></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="nb">id</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="mi">3588944</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">id</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="mi">3588944</span>
+</code></pre></div></div>
+
+<h3 id="shallow-copies-beware">
+<a class="anchor" href="#shallow-copies-beware" aria-hidden="true"><span class="octicon octicon-link"></span></a>Shallow copies: beware!</h3>
+
+<p>Lists and dicts have methods for copying.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,[</span><span class="mi">100</span><span class="p">,</span><span class="mi">101</span><span class="p">],</span><span class="mi">4</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="c1"># Make a copy
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="ow">is</span> <span class="n">b</span>
+<span class="bp">False</span>
+</code></pre></div></div>
+
+<p>It’s a new list, but the list <strong>items are shared</strong>!!</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">102</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">100</span><span class="p">,</span><span class="mi">101</span><span class="p">,</span><span class="mi">102</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">is</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="bp">True</span>
+</code></pre></div></div>
+
+<p><img src="/images/misc/pyshallowcopy.png" alt="" align="middle"></p>
+
+<h3 id="deep-copies">
+<a class="anchor" href="#deep-copies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Deep copies</h3>
+
+<p>Sometimes you need to <strong>make a copy of an object and all the objects contained within it</strong>.</p>
+
+<p>You can use the <code class="highlighter-rouge">copy</code> module for this: <code class="highlighter-rouge">copy.deepcopy()</code></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,[</span><span class="mi">100</span><span class="p">,</span><span class="mi">101</span><span class="p">],</span><span class="mi">4</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">copy</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">102</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">100</span><span class="p">,</span><span class="mi">101</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">is</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="bp">False</span>
+</code></pre></div></div>
+
+<h3 id="type-checking">
+<a class="anchor" href="#type-checking" aria-hidden="true"><span class="octicon octicon-link"></span></a>Type checking</h3>
+
+<p>How to tell if an object is a specific type.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'a is a list'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Checking for one of many possible types.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span><span class="nb">tuple</span><span class="p">)):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'a is a list or tuple'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><em>Caution: Don’t go overboard with type checking. It can lead to excessive code complexity. Usually you’d only do it if doing so would prevent common mistakes made by others using your code.</em></p>
+
+<h3 id="everything-is-an-object">
+<a class="anchor" href="#everything-is-an-object" aria-hidden="true"><span class="octicon octicon-link"></span></a>Everything is an object</h3>
+
+<p>Numbers, strings, lists, functions, exceptions, classes, instances, etc. are all objects.</p>
+
+<p>It means that all objects that can be named can be passed around as data, placed in containers, etc., without any restrictions.</p>
+
+<p>There are no special kinds of objects. Sometimes it is said that all objects are “first-class”.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">math</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">,</span> <span class="n">math</span><span class="p">,</span> <span class="nb">ValueError</span> <span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">items</span>
+<span class="p">[</span><span class="o">&lt;</span><span class="n">built</span><span class="o">-</span><span class="ow">in</span> <span class="n">function</span> <span class="nb">abs</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="o">&lt;</span><span class="n">module</span> <span class="s">'math'</span> <span class="p">(</span><span class="n">builtin</span><span class="p">)</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="o">&lt;</span><span class="nb">type</span> <span class="s">'exceptions.ValueError'</span><span class="o">&gt;</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="o">-</span><span class="mi">45</span><span class="p">)</span>
+<span class="mi">45</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">items</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="mf">1.4142135623730951</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">try</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="s">'not a number'</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">items</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'Failed!'</span><span class="p">)</span>
+<span class="n">Failed</span><span class="err">!</span>
+</code></pre></div></div>
+
+<h2 id="program-organization">
+<a class="anchor" href="#program-organization" aria-hidden="true"><span class="octicon octicon-link"></span></a>Program organization</h2>
+
+<h3 id="function-best-practices">
+<a class="anchor" href="#function-best-practices" aria-hidden="true"><span class="octicon octicon-link"></span></a>Function best practices</h3>
+
+<p>Define functions at the top of a script, put all of the code related to a single task all in one function.</p>
+
+<p>Functions need to be modular and predictable.</p>
+
+<p>Write docstring, describe what the function does in one sentence, and add information per argument.</p>
+
+<p>Add optional <strong>type hints</strong> to function definitions.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_prices</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="s">'''
+    Read prices from a CSV file of name,price data
+    '''</span>
+    <span class="n">prices</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f_csv</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">f_csv</span><span class="p">:</span>
+            <span class="n">prices</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">prices</span>
+</code></pre></div></div>
+
+<p>These type hints do nothing operationally. Yet IDEs can use them to give hints.</p>
+
+<p>When calling a function with optional arguments, use keywords instead of just True or False.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">parse_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span> <span class="c1"># ????? NO
+</span>
+<span class="n">parse_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">parse_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">parse_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Always give short but meaningful names.</p>
+
+<p>Regarding variable scope, <strong>remember: All assignments in functions are local.</strong></p>
+
+<p>If you must update a global variable, use the <code class="highlighter-rouge">global</code> keyword.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">name</span> <span class="o">=</span> <span class="s">'Dave'</span>
+
+<span class="k">def</span> <span class="nf">spam</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">name</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">'Guido'</span> <span class="c1"># Changes the global name above
+</span></code></pre></div></div>
+
+<p><strong>Actually, avoid global variable entirely if you can. If you want to modify a state outside of a function, use a class instead.</strong></p>
+
+<p>Arguments passed into functions are references. <strong>If a mutable object get passed in and you use its method to modify it, it will be modified in-place</strong>.</p>
+
+<p>But keep in mind, reassignment to an old variable name inside a function only modifies the name in the local scope, it doesn’t change the original object:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>    <span class="c1"># Modifies the input object in-place because .append()
+</span>
+<span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">foo</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>                <span class="c1"># [1, 2, 3, 42]
+</span>
+<span class="c1"># VS
+</span><span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>    <span class="c1"># Changes local `items` variable to point to a different object
+</span>
+<span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">bar</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>                <span class="c1"># [1, 2, 3]
+</span></code></pre></div></div>
+
+<h3 id="error-handling">
+<a class="anchor" href="#error-handling" aria-hidden="true"><span class="octicon octicon-link"></span></a>Error handling</h3>
+
+<p>Python doesn’t check data type or values, if there’s any error, it will appear at run time as an exception.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># raise
+</span><span class="k">def</span> <span class="nf">authenticate</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">authorized</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nb">RuntimeError</span><span class="p">(</span><span class="n">f</span><span class="s">'{name} not authorized'</span><span class="p">)</span>
+
+<span class="c1"># try - except
+</span><span class="k">try</span><span class="p">:</span>
+    <span class="n">authenticate</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+<span class="k">except</span> <span class="nb">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span> <span class="c1"># error msg f'{name} not authorized' is in `e`
+</span>    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="c1"># HANDLE THE EXCEPTION HERE!!!
+</span>    <span class="o">...</span>
+<span class="n">statements</span>        <span class="c1"># Resumes execution here after handling exception
+</span><span class="n">statements</span>        <span class="c1"># And continues here
+</span><span class="o">...</span>
+</code></pre></div></div>
+
+<p>Some Python builtin exceptions for indicating what is wrong:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ArithmeticError</span>
+<span class="nb">AssertionError</span>
+<span class="nb">EnvironmentError</span>
+<span class="nb">EOFError</span>
+<span class="nb">ImportError</span>
+<span class="nb">IndexError</span>
+<span class="nb">KeyboardInterrupt</span>
+<span class="nb">KeyError</span>
+<span class="nb">MemoryError</span>
+<span class="nb">NameError</span>
+<span class="nb">ReferenceError</span>
+<span class="nb">RuntimeError</span>
+<span class="nb">SyntaxError</span>
+<span class="nb">SystemError</span>
+<span class="nb">TypeError</span>
+<span class="nb">ValueError</span>
+<span class="o">...</span>
+</code></pre></div></div>
+
+<p>Handling multiple errors in different ways:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span><span class="p">:</span>
+  <span class="o">...</span>
+<span class="k">except</span> <span class="nb">LookupError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="o">...</span>
+<span class="k">except</span> <span class="nb">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="o">...</span>
+<span class="k">except</span> <span class="nb">IOError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="o">...</span>
+<span class="k">except</span> <span class="nb">KeyboardInterrupt</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="o">...</span>
+</code></pre></div></div>
+
+<p>Grouping them and handle the same way:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span><span class="p">:</span>
+  <span class="o">...</span>
+<span class="k">except</span> <span class="p">(</span><span class="nb">IOError</span><span class="p">,</span><span class="nb">LookupError</span><span class="p">,</span><span class="nb">RuntimeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="o">...</span>
+</code></pre></div></div>
+
+<p>To catch all errors:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span><span class="p">:</span>
+    <span class="o">...</span>
+<span class="k">except</span> <span class="nb">Exception</span><span class="p">:</span>       <span class="c1"># DANGER. See below
+</span>    <span class="k">print</span><span class="p">(</span><span class="s">'An error occurred'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>This is a bad idea because you’ll have no idea why it failed.</strong></p>
+
+<p>Recommended approach: <code class="highlighter-rouge">as e</code></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span><span class="p">:</span>
+    <span class="n">go_do_something</span><span class="p">()</span>
+<span class="k">except</span> <span class="n">SomeSpecificException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'Computer says no. Reason :'</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+    <span class="k">raise</span>
+</code></pre></div></div>
+
+<p>Using <code class="highlighter-rouge">raise</code> allows you to take action (e.g. logging) and pass the exception to the caller.</p>
+
+<p>The finally clause:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+<span class="o">...</span>
+<span class="n">lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="o">...</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span> <span class="c1"># this will ALWAYS be executed. With and w/o exception.
+</span></code></pre></div></div>
+
+<p>Finally is commonly used to safely manage resources (especially locks, files, etc.).</p>
+
+<p>However, the best practice is to use <code class="highlighter-rouge">with</code> and avoid this approach.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+    <span class="c1"># lock acquired
+</span>    <span class="o">...</span>
+<span class="c1"># lock released
+</span></code></pre></div></div>
+
+<h3 id="modules">
+<a class="anchor" href="#modules" aria-hidden="true"><span class="octicon octicon-link"></span></a>Modules</h3>
+
+<p>Any <code class="highlighter-rouge">.py</code> file is a module. The <code class="highlighter-rouge">import</code> statement loads and executes a module.</p>
+
+<p>A module is a collection of named values and is sometimes said to be a <strong>namespace</strong>. The names are all of the <strong>global variables</strong> and <strong>functions</strong> defined in the source file. After importing, the module name is used as a prefix. Hence the namespace.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">foo</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">foo</span><span class="o">.</span><span class="n">grok</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">foo</span><span class="o">.</span><span class="n">spam</span><span class="p">(</span><span class="s">'Hello'</span><span class="p">)</span>
+<span class="o">...</span>
+</code></pre></div></div>
+
+<p><strong>The module name is directly tied to the file name (foo -&gt; foo.py).</strong></p>
+
+<p>Modules are isolated. <code class="highlighter-rouge">foo.x</code> and <code class="highlighter-rouge">bar.x</code> are different:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># foo.py
+</span><span class="n">x</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="c1"># bar.py
+</span><span class="n">x</span> <span class="o">=</span> <span class="mi">37</span>
+</code></pre></div></div>
+
+<p>Global variables are always bound to the enclosing module (same file). Each source file is its own little universe.</p>
+
+<h4 id="module-execution">
+<a class="anchor" href="#module-execution" aria-hidden="true"><span class="octicon octicon-link"></span></a>Module execution</h4>
+
+<p>When a module is imported, <strong>all of the statements in the module execute one after another until the end of the file is reached</strong>. The contents of the module namespace are all of the global names that are still defined at the end of the execution process. <strong>If there are scripting statements that carry out tasks in the global scope (printing, creating files, etc.) you will see them run on import.</strong></p>
+
+<h4 id="module-loading">
+<a class="anchor" href="#module-loading" aria-hidden="true"><span class="octicon octicon-link"></span></a>Module Loading</h4>
+
+<p>Each module loads and executes <strong>only once</strong>. Note: <strong>Repeated imports just return a reference to the previously loaded module</strong>.</p>
+
+<p><code class="highlighter-rouge">sys.modules</code> is a <code class="highlighter-rouge">dict</code> of all loaded modules.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">sys</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="p">[</span><span class="s">'copy_reg'</span><span class="p">,</span> <span class="s">'__main__'</span><span class="p">,</span> <span class="s">'site'</span><span class="p">,</span> <span class="s">'__builtin__'</span><span class="p">,</span> <span class="s">'encodings'</span><span class="p">,</span> <span class="s">'encodings.encodings'</span><span class="p">,</span> <span class="s">'posixpath'</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p><strong>Caution</strong>: A common confusion arises if you repeat an import statement after changing the source code for a module. <strong>Because of the module cache sys.modules, repeated imports always return the previously loaded module – <em>even if a change was made</em>! The safest way to load modified code into Python is to quit and restart the interpreter/kernel!!</strong></p>
+
+<h4 id="locating-modules">
+<a class="anchor" href="#locating-modules" aria-hidden="true"><span class="octicon octicon-link"></span></a>Locating modules</h4>
+
+<p>Python consults a path list (sys.path) when looking for modules. The current working directory is usually first.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">sys</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span>
+<span class="p">[</span>
+  <span class="s">''</span><span class="p">,</span>
+  <span class="s">'/usr/local/lib/python36/python36.zip'</span><span class="p">,</span>
+  <span class="s">'/usr/local/lib/python36'</span><span class="p">,</span>
+  <span class="o">...</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">sys.path</code> contains the <strong>search paths</strong>. You can manually adjust if you need to:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">'/project/foo/pyfiles'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Paths can also be added via environment variables.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">%</span> <span class="n">env</span> <span class="n">PYTHONPATH</span><span class="o">=/</span><span class="n">project</span><span class="o">/</span><span class="n">foo</span><span class="o">/</span><span class="n">pyfiles</span> <span class="n">python3</span>
+<span class="n">Python</span> <span class="mf">3.6.0</span> <span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="n">Feb</span> <span class="mi">3</span> <span class="mi">2017</span><span class="p">,</span> <span class="mi">05</span><span class="p">:</span><span class="mi">53</span><span class="p">:</span><span class="mi">21</span><span class="p">)</span>
+<span class="p">[</span><span class="n">GCC</span> <span class="mf">4.2.1</span> <span class="n">Compatible</span> <span class="n">Apple</span> <span class="n">LLVM</span> <span class="mf">8.0.0</span> <span class="p">(</span><span class="n">clang</span><span class="o">-</span><span class="mf">800.0.38</span><span class="p">)]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">sys</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span>
+<span class="p">[</span><span class="s">''</span><span class="p">,</span><span class="s">'/project/foo/pyfiles'</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>As a general rule, it should not be necessary to manually adjust the module search path. However, it sometimes arises if you’re trying to import Python code that’s in an unusual location or not readily accessible from the current working directory.</p>
+
+<h4 id="main-module">
+<a class="anchor" href="#main-module" aria-hidden="true"><span class="octicon octicon-link"></span></a>Main module</h4>
+
+<p>In many programming languages, there is a concept of a <code class="highlighter-rouge">main</code> function or method. This is the first function that executes when an application is launched.</p>
+
+<p>Python has no main function or method. Instead, there is a <strong>main module</strong>. <strong>The main module is the source file that runs first</strong>. Whatever file you give to the interpreter at startup becomes main. It doesn’t matter the name.</p>
+
+<p>Any Python file can either run as main or as a library import:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">bash</span> <span class="o">%</span> <span class="n">python3</span> <span class="n">prog</span><span class="o">.</span><span class="n">py</span> <span class="c1"># Running as main
+</span>
+<span class="kn">import</span> <span class="nn">prog</span>   <span class="c1"># Running as library import
+</span></code></pre></div></div>
+
+<p>In both cases, <code class="highlighter-rouge">__name__</code> is the name of the module. However, it will only be set to <code class="highlighter-rouge">__main__</code> if running as main.</p>
+
+<p><strong>Usually, you don’t want statements that are part of the main program to execute on a library import</strong>. So, it’s common to have an <code class="highlighter-rouge">if</code>-check in code that might be used either way.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># prog.py
+</span><span class="o">...</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="c1"># Running as the main program ...
+</span>    <span class="n">statements</span>
+    <span class="o">...</span>
+</code></pre></div></div>
+
+<p>Here is common Python program template:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># prog.py
+# Import statements (libraries)
+</span><span class="kn">import</span> <span class="nn">modules</span>
+
+<span class="c1"># Functions
+</span><span class="k">def</span> <span class="nf">spam</span><span class="p">():</span>
+    <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">blah</span><span class="p">():</span>
+    <span class="o">...</span>
+
+<span class="c1"># Main function
+</span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="o">...</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>When used as a CLI tool, like <code class="highlighter-rouge">bash % python report.py portfolio.csv prices.csv</code>, the list of arguments is in <code class="highlighter-rouge">sys.argv</code>:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># In the previous bash command
+</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="c1"># ['report.py, 'portfolio.csv', 'prices.csv']
+</span></code></pre></div></div>
+
+<p><code class="highlighter-rouge">sys.stdout</code>, <code class="highlighter-rouge">sys.stderr</code> and <code class="highlighter-rouge">sys.stdin</code> are files that work the same way as normal files. By default, print is directed to <code class="highlighter-rouge">sys.stdout</code>. Input is read from <code class="highlighter-rouge">sys.stdin</code>. Tracebacks and errors are directed to <code class="highlighter-rouge">sys.stderr</code>.</p>
+
+<p><code class="highlighter-rouge">stdio</code> could be connected to terminals, files, pipes, etc.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash % python3 prog.py &gt; results.txt
+# or
+bash % cmd1 | python3 prog.py | cmd2
+</code></pre></div></div>
+
+<h4 id="environment-variables">
+<a class="anchor" href="#environment-variables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Environment variables</h4>
+
+<p>Environment variables are set in the shell.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash % setenv NAME dave
+bash % setenv RSH ssh
+bash % python prog.py
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">os.environ</code> is a dictionary that contains these values.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'NAME'</span><span class="p">]</span> <span class="c1"># 'dave'
+</span></code></pre></div></div>
+
+<h4 id="program-exit">
+<a class="anchor" href="#program-exit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Program Exit</h4>
+
+<p>Program exit is handled through exceptions. A non-zero exit code indicates an error.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">raise</span> <span class="nb">SystemExit</span>
+<span class="k">raise</span> <span class="nb">SystemExit</span><span class="p">(</span><span class="n">exitcode</span><span class="p">)</span>
+<span class="k">raise</span> <span class="nb">SystemExit</span><span class="p">(</span><span class="s">'Informative message'</span><span class="p">)</span>
+<span class="c1"># Or
+</span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="nb">exit</span><span class="p">(</span><span class="n">exitcode</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="the--line">
+<a class="anchor" href="#the--line" aria-hidden="true"><span class="octicon octicon-link"></span></a>The <code class="highlighter-rouge">!#</code> line</h4>
+
+<p>On Unix, the <code class="highlighter-rouge">#!</code> line can launch a script as Python. Add the following to the first line of your script file.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span></code></pre></div></div>
+
+<p>It requires the executable permission.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash % chmod +x prog.py
+# Then you can execute
+bash % prog.py
+... output ...
+</code></pre></div></div>
+
+<p><em>Note: The Python Launcher on Windows also looks for the #! line to indicate language version.</em></p>
+
+<h3 id="design-generic-and-flexible-functions">
+<a class="anchor" href="#design-generic-and-flexible-functions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Design generic and flexible functions</h3>
+
+<p>Compare the following two versions of a function</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># VERSION 1
+# Provide a filename
+</span><span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+            <span class="o">...</span>
+            <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">records</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">(</span><span class="s">'file.csv'</span><span class="p">)</span>
+
+<span class="c1"># VERSION 2
+# Provide lines
+</span><span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+        <span class="o">...</span>
+        <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">records</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'file.csv'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Version 2 is better because it’s more generic, it takes in any iterable.</p>
+
+<p><a href="https://en.wikipedia.org/wiki/Duck_typing">Duck Typing</a> is a computer programming concept to determine whether an object can be used for a particular purpose. It is an application of the duck test.</p>
+
+<blockquote>
+  <p>If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck.</p>
+</blockquote>
+
+<p>Code libraries are often better served by embracing flexibility. Don’t restrict your options. With great flexibility comes great power.</p>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="logancyang/blog-learning-automata"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/note/python/2020/06/29/python-basics.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notes, code and essays by Logan Yang.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -105,7 +105,7 @@ A concrete example of an application using `mux` and `dmux` is a single communic
 
 <img src="{{ site.baseurl }}/images/cs4ds/muxdemux.png" alt="" align="middle"/>
 
-## Level 2. Boolean arithmetic and Arithmatic Logic Unit (ALU)
+## Level 2. Boolean arithmetic and Arithmetic Logic Unit (ALU)
 
 Doing binary addition is similar to decimal addition except that we carry over 1 to the next digit one position reaches 2 and not 10.
 
@@ -161,7 +161,7 @@ We use it for these reasons:
 
 <img src="{{ site.baseurl }}/images/cs4ds/negsub.png" alt="" align="middle"/>
 
-### Arithmatic Logic Unit (ALU)
+### Arithmetic Logic Unit (ALU)
 
 The famous Von Neumann architecture
 

@@ -351,7 +351,7 @@ class E(D): pass
 
 With single inheritance, there is single path to the top. You stop with the first match.
 
-#### Method Resolution Order or MRO
+#### Method Resolution Order (MRO)
 
 Python precomputes an inheritance chain and stores it in the MRO attribute on the class. You can view it.
 
@@ -364,9 +364,264 @@ Python precomputes an inheritance chain and stores it in the MRO attribute on th
 
 This chain is called the **Method Resolution Order**. To find an attribute, Python walks the MRO in order. The first match wins.
 
+#### MRO in Multiple Inheritance
+
+With multiple inheritance, there is no single path to the top. Let’s take a look at an example.
+
+```py
+class A: pass
+class B: pass
+class C(A, B): pass
+class D(B): pass
+class E(C, D): pass
+```
+
+What happens when you access an attribute? An attribute search process is carried out, but what is the order? That’s a problem.
+
+Python uses cooperative multiple inheritance which obeys some rules about class ordering.
+
+- Children are always checked before parents
+- Parents (if multiple) are always checked in the order listed.
+
+The MRO is computed by sorting all of the classes in a hierarchy according to those rules.
+
+```py
+>>> E.__mro__
+(
+  <class 'E'>,
+  <class 'C'>,
+  <class 'A'>,
+  <class 'D'>,
+  <class 'B'>,
+  <class 'object'>)
+```
+
+The underlying algorithm is called the [C3 Linearization Algorithm](https://en.wikipedia.org/wiki/C3_linearization). **The gist of the order is: children first, followed by parents.**
+
+#### Why use multiple inheritance: the "Mixin" pattern
+
+Consider two completely unrelated objects:
+
+```py
+class Dog:
+    def noise(self):
+        return 'Bark'
+
+    def chase(self):
+        return 'Chasing!'
+
+class LoudDog(Dog):
+    def noise(self):
+        # Code commonality with LoudBike (below)
+        return super().noise().upper()
+
+# And
+
+class Bike:
+    def noise(self):
+        return 'On Your Left'
+
+    def pedal(self):
+        return 'Pedaling!'
+
+class LoudBike(Bike):
+    def noise(self):
+        # Code commonality with LoudDog (above)
+        return super().noise().upper()
+```
+
+There is a code commonality in the implementation of `LoudDog.noise()` and `LoudBike.noise()`. In fact, the code is exactly the same. *Naturally, code like that is bound to attract software engineers.*
+
+The **Mixin pattern** is a class with a fragment of code.
+
+```py
+class Loud:
+    def noise(self):
+        return super().noise().upper()
+```
+
+This class is not usable in isolation. It mixes with other classes via inheritance.
+
+```py
+class LoudDog(Loud, Dog):
+    pass
+
+class LoudBike(Loud, Bike):
+    pass
+```
+
+Miraculously, loudness was now implemented just once and reused in two completely unrelated classes. **This sort of trick is one of the primary uses of multiple inheritance in Python.**
+
+#### Why `super()`
+
+Always use `super()` when overriding methods. `super()` delegates to the next class on the MRO.
+
+The tricky bit is that you don’t know what it is. You especially don’t know what it is if multiple inheritance is being used.
+
+**Caution: Multiple inheritance is a powerful tool. Remember that with power comes responsibility. Frameworks / libraries sometimes use it for advanced features involving composition of components.**
+
 ### Encapsulation techniques
 
-Note: `__init__` vs `__call__` for a class: https://stackoverflow.com/questions/9663562/what-is-the-difference-between-init-and-call
+When writing classes, it is common to try and encapsulate internal details. This section introduces a few Python programming idioms for this including private variables and properties.
+
+#### Public vs. private
+
+One of the primary roles of a class is to **encapsulate data and internal implementation details of an object**. However, a class also **defines a public interface that the outside world is supposed to use to manipulate the object**. This distinction between implementation details and the public interface is important.
+
+However, in Python, almost everything about classes and objects is open.
+
+- You can easily inspect object internals.
+- You can change things at will.
+- There is no strong notion of access-control (i.e., private class members)
+
+That is an issue when you are trying to isolate details of the internal implementation.
+
+Python relies on **programming conventions** to indicate the intended use of something. These conventions are based on **naming**. There is a general attitude that it is up to the programmer to observe the rules as opposed to having the language enforce them.
+
+Any attribute name with leading `_` is considered to be **private**.
+
+```py
+class Person(object):
+    def __init__(self, name):
+        self._name = 0
+```
+
+You *can* still modify it, it's just a naming style. If you find yourself using such names directly, you’re probably doing something wrong. Look for higher level functionality.
+
+#### `@property`: applying property checks
+
+If you want to enforce some checks on the properties:
+
+```py
+s.shares = '50'     # Raise a TypeError, this is a string
+```
+
+Use the `@property` decorator.
+
+```py
+class Stock:
+    def __init__(self, name, shares, price):
+        self.name = name
+        self.shares = shares
+        self.price = price
+
+    @property
+    def shares(self):
+        return self._shares
+
+    @shares.setter
+    def shares(self, value):
+        if not isinstance(value, int):
+            raise TypeError('Expected int')
+        self._shares = value
+
+"""
+Normal attribute access now triggers the getter and setter methods
+under @property and @shares.setter.
+"""
+>>> s = Stock('IBM', 50, 91.1)
+>>> s.shares         # Triggers @property
+50
+>>> s.shares = 75    # Triggers @shares.setter
+```
+
+With this pattern, there are no changes needed to the source code. The new setter is also called when there is an assignment within the class, including inside the `__init__()` method.
+
+```py
+class Stock:
+    def __init__(self, name, shares, price):
+        ...
+        # This assignment calls the setter below
+        self.shares = shares
+        ...
+
+    ...
+    @shares.setter
+    def shares(self, value):
+        if not isinstance(value, int):
+            raise TypeError('Expected int')
+        self._shares = value
+```
+
+**There is often a confusion between a property and the use of private names. Although a property internally uses a private name like `_shares`, the rest of the class (not the property) can continue to use a name like `shares`.**
+
+#### `@property`: uniform access
+
+Properties are also useful for computed data attributes.
+
+```py
+class Stock:
+    def __init__(self, name, shares, price):
+        self.name = name
+        self.shares = shares
+        self.price = price
+
+    @property
+    def cost(self):
+        return self.shares * self.price
+    ...
+
+>>> s = Stock('GOOG', 100, 490.1)
+>>> s.shares # Instance variable
+100
+
+"""
+Notice, s.cost does not need ()
+"""
+>>> s.cost   # Computed Value
+49010.0
+```
+
+**`@property` on a method allows you to *drop the parentheses*, hiding the fact that it’s actually a method!**
+
+It makes things look more uniform for methods that look like data attributes. It is called "uniform access".
+
+```py
+>>> s = Stock('GOOG', 100, 490.1)
+>>> a = s.cost() # Method
+49010.0
+>>> b = s.shares # Data attribute
+100
+```
+
+#### `__slot__` attribute
+
+You can restrict the set of attributes names. It will raise an error for other attributes.
+
+```py
+class Stock:
+    __slots__ = ('name','_shares','price')
+    def __init__(self, name, shares, price):
+        self.name = name
+        ...
+
+>>> s.price = 385.15
+>>> s.prices = 410.2
+Traceback (most recent call last):
+File "<stdin>", line 1, in ?
+AttributeError: 'Stock' object has no attribute 'prices'
+```
+
+Although this prevents errors and restricts usage of objects, **it’s actually used for performance and makes Python use memory more efficiently.**
+
+It should be noted that __slots__ is most commonly used as an optimization on classes that serve as data structures. Using slots will make such programs use far-less memory and run a bit faster. You should probably avoid __slots__ on most other classes however.
+
+#### A comment
+
+Don’t go overboard with private attributes, properties, slots, etc. They serve a specific purpose and you may see them when reading other Python code. However, they are not necessary for most day-to-day coding.
+
+### `__init__` vs `__call__`
+
+`__init__` vs `__call__` for a class: https://stackoverflow.com/questions/9663562/what-is-the-difference-between-init-and-call
+
+`__init__` uses the class name and creates an instance.
+
+`__call__` is for an instance to be called as a function.
+
+```py
+inst = MyClass()  # MyClass.__init__
+s = inst()  # MyClass.__call__
+```
 
 ## Reference
 

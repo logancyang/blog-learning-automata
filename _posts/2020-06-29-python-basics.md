@@ -782,7 +782,7 @@ bash % prog.py
 
 *Note: The Python Launcher on Windows also looks for the #! line to indicate language version.*
 
-### Design generic and flexible functions
+### Design generic and flexible functions: Duck Typing
 
 Compare the following two versions of a function
 

@@ -3,7 +3,7 @@ toc: true
 layout: post
 description: Stepping up Python skills
 categories: [note, python]
-title: "[Python Overview] Part I: The Basics"
+title: "[Python Review] Part I: The Basics"
 comments: true
 ---
 
@@ -765,7 +765,7 @@ sys.exit(exitcode)
 
 #### The `!#` line
 
-On Unix, the `#!` line can launch a script as Python. Add the following to the first line of your script file.
+On Unix, the `#!` shebang line can launch a script as Python. Add the following to the first line of your script file.
 
 ```
 #!/usr/bin/env python3
@@ -819,3 +819,7 @@ Version 2 is better because it's more generic, it takes in any iterable.
 > If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck.
 
 Code libraries are often better served by embracing flexibility. Don’t restrict your options. With great flexibility comes great power.
+
+## Reference
+
+<https://dabeaz-course.github.io/practical-python/Notes>

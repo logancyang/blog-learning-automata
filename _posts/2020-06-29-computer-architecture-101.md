@@ -220,10 +220,135 @@ You might know that in software development we have unit tests. Actually, the id
 
 > Unit tests conceptually break a program into discrete pieces and test each piece in isolation, while integration tests make sure that the pieces are working properly together as a whole. Unit tests are generally small and don’t take much time to write because they only test a small section of code.
 
-
-
 ## Level 3. Memory
 
+### Time
+
+Now we will learn how the computer executes one thing after another, i.e. how it perceives **time**.
+
+The way we let a computer perceive time is to use some kind of digital oscillator as a discrete time clock. This way we convert physical time into discrete time.
+
+Since the hardware uses voltage to represent bit state 0 and 1, and it takes time for the hardware to stablize after a state transition, we design the unit time step in the discrete clock to be slightly bigger than the time it takes to stablize. We then sample the stable state to be the state of that time unit.
+
+A time unit is at the atomic level, **the computer only knows one state within one time unit**.
+
+<img src="{{ site.baseurl }}/images/cs4ds/clock.png" alt="" align="middle"/>
+
+### Combinatorial vs. sequential logic
+
+Combinatorial logic just means that the output for a time unit only depends on the input in that time unit.
+
+```
+out[t] = function(in[t])
+```
+
+Sequential logic means we **use the same wire to store the bit**, and current step's output depends on the last time step.
+
+```
+state[t] = function(state[t-1])
+```
+
+This is the prototype of the **iterator**. With the sequential logic we can operate with time as input to our function.
+
+<img src="{{ site.baseurl }}/images/cs4ds/sequential.png" alt="" align="middle"/>
+
+### Flip Flops: Hardware that implements the sequential logic
+
+Previously we had logic gates and ALUs that can compute a variety of operations, but we are missing one key piece to enable sequential logic: the hardware to remember the state from time t-1 to time t. How to do that?
+
+We need something called the Clocked Data Flip Flop. Its output is input shifted one step forward.
+
+<img src="{{ site.baseurl }}/images/cs4ds/dff.png" alt="" align="middle"/>
+
+The little triangle in the diagram means it has a time-dependent chip. The combinatorial chips get the outputs instantaneously, while the sequential logic chips are time-dependent.
+
+Conceptually, with the NAND gate and the Data Flip Flop as a foundation, we can build everything needed in a computer!
+
+We are not going to describe how the flip flops are built physically here. The digital circuit is quite clever and elegant though. If you are interested, read about it [here](https://en.wikipedia.org/wiki/Flip-flop_(electronics)#D_flip-flop).
+
+### 1-bit register
+
+We can build a chip by using the D Flip Flop that remembers the last input state when the load state is 1.
+
+<img src="{{ site.baseurl }}/images/cs4ds/onebitreg.png" alt="" align="middle"/>
+
+The logic is:
+
+```
+if load(t-1):
+    out[t] = in[t-1]
+else:
+    out[t] = out[t-1]
+```
+
+A load of 1 at t-1 means we need to remember the input at t-1 from now on until a next load of 1 regardless of how input changes during this period.
+
+How to implement a 1-bit register using the D Flip Flop? Recall the **mutiplexor** (select one of two inputs based on a "select" bit).
+
+<img src="{{ site.baseurl }}/images/cs4ds/onebitreg-mux.png" alt="" align="middle"/>
+
+With the 1-bit register, we can start to build the memory unit!
+
+### The Memory Unit
+
+There are different types of memory. The most important type is the RAM. **It stores both data and instructions**.
+
+It is a **volatile device** meaning it depends on an external power supply to store information. Physically it is not like the disk or ROM (read-only memory), it clears everything whenever the computer is disconnected from power while in the disk or ROM, info is persisted.
+
+<img src="{{ site.baseurl }}/images/cs4ds/memorypic.png" alt="" align="middle"/>
+
+We can build an N-bit register by putting N 1-bit registers side by side. Here we talk about 16-bit registers without loss of generality. The register's **state** is the value stored in the register. To lookup the state, we just need to probe its output pins.
+
+To store a new input state `v`, we set `load` to 1 at that time step.
+
+**The RAM abstraction: A sequence of *n* addressable registers with addresses 0 to n-1.**
+
+**Important: At any given time, ONLY ONE REGISTER in the RAM is selected!**
+
+Since we have *n* addressable registers, we need a binary number to represent the address. Turning *n* to a binary number, we say it has *k* bits. So `k = log2(n)`.
+
+<img src="{{ site.baseurl }}/images/cs4ds/memoryparams.png" alt="" align="middle"/>
+
+**RAM is a sequential chip with a clocked behavior.**
+
+> Why is it called Random Access Memory?
+
+> A: Because regardless of how many registers the memory unit has, be it 1 million or 1 billion, it takes exactly the same access time to access any one of the registers with a given address!
+
+Some different RAM chips:
+
+<img src="{{ site.baseurl }}/images/cs4ds/ramchips.png" alt="" align="middle"/>
+
+### The Counter
+
+A Program Counter (PC) is a chip (hardware device) that realizes the following 3 abstractions:
+
+1. Reset: fetch the first instruction, PC = 0
+2. Next: fetch the next instruction, PC++
+3. Goto: fetch instruction n, PC = n
+
+Here is the logic the Counter does:
+
+```
+if reset[t] == 1:
+    out[t+1] = 0  # reset counter to 0
+elif load[t] == 1:
+    out[t+1] = in[t]  # set counter to input value at t
+elif inc[t] == 1:
+    out[t+1] = out[t] + 1  # increment counter by 1
+else:
+    out[t+1] = out[t]  # maintain the last value
+```
+
+<img src="{{ site.baseurl }}/images/cs4ds/counter.png" alt="" align="middle"/>
+
+### ROM vs. RAM vs. Flash vs. Cache memory
+
+The ROM (read-only memory) is an involatile device that keeps information persisted even without external power supply. For example, it is used in the computer booting process for this reason.
+
+Another technology is flash memory. It combines the good things of both ROM and RAM, it doesn't need external power supply to persist data, and is writable.
+
+Cache memory is a small and expensive memory that is close to the processor. It has very high performance. There is a hierarchy of cache memories, the closer to the processor, the faster, smaller and more expensive it gets.
 
 ## Level 4. Machine language
 

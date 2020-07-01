@@ -612,7 +612,7 @@ Don’t go overboard with private attributes, properties, slots, etc. They serve
 
 ### `__init__` vs `__call__`
 
-`__init__` vs `__call__` for a class: https://stackoverflow.com/questions/9663562/what-is-the-difference-between-init-and-call
+`__init__` vs `__call__` for a class: <https://stackoverflow.com/questions/9663562/what-is-the-difference-between-init-and-call>
 
 `__init__` uses the class name and creates an instance.
 

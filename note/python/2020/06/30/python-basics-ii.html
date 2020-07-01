@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>[Python Review] Part II: Classes and Objects | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="[Python Review] Part II: Classes and Objects" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Stepping up Python skills" />
+<meta property="og:description" content="Stepping up Python skills" />
+<link rel="canonical" href="http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-30T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Stepping up Python skills","@type":"BlogPosting","headline":"[Python Review] Part II: Classes and Objects","dateModified":"2020-06-30T00:00:00-05:00","datePublished":"2020-06-30T00:00:00-05:00","url":"http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>[Python Review] Part II: Classes and Objects | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="[Python Review] Part II: Classes and Objects" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Stepping up Python skills" />
+<meta property="og:description" content="Stepping up Python skills" />
+<link rel="canonical" href="http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-30T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Stepping up Python skills","@type":"BlogPosting","headline":"[Python Review] Part II: Classes and Objects","dateModified":"2020-06-30T00:00:00-05:00","datePublished":"2020-06-30T00:00:00-05:00","url":"http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Learning Automata</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">[Python Review] Part II: Classes and Objects</h1><p class="page-description">Stepping up Python skills</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-06-30T00:00:00-05:00" itemprop="datePublished">
+        Jun 30, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      7 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#note">note</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#python">python</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#class-and-object-basics">Class and object basics</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#overriding">Overriding</a></li>
+<li class="toc-entry toc-h3"><a href="#organizing-inheritance">Organizing inheritance</a></li>
+<li class="toc-entry toc-h3"><a href="#is-a-relationship">“is a” relationship</a></li>
+<li class="toc-entry toc-h3"><a href="#object-base-class">object base class</a></li>
+<li class="toc-entry toc-h3"><a href="#multiple-inheritance">Multiple Inheritance</a></li>
+<li class="toc-entry toc-h3"><a href="#special-methods">Special methods</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#special-dunder-methods-for-math">Special dunder methods for math</a></li>
+<li class="toc-entry toc-h4"><a href="#special-dunder-methods-for-item-access">Special dunder methods for item access</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#bound-method">Bound method</a></li>
+<li class="toc-entry toc-h3"><a href="#attribute-access">Attribute access</a></li>
+<li class="toc-entry toc-h3"><a href="#defining-new-exceptions">Defining new exceptions</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#inner-workings-of-python-objects">Inner workings of Python objects</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#dictionary-revisited">Dictionary revisited</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#reading-attribute">Reading attribute</a></li>
+<li class="toc-entry toc-h4"><a href="#how-inheritance-works">How inheritance works</a></li>
+<li class="toc-entry toc-h4"><a href="#reading-attributes-with-inheritance">Reading Attributes with Inheritance</a></li>
+<li class="toc-entry toc-h4"><a href="#reading-attributes-with-single-inheritance">Reading Attributes with Single Inheritance</a></li>
+<li class="toc-entry toc-h4"><a href="#method-resolution-order-or-mro">Method Resolution Order or MRO</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#encapsulation-techniques">Encapsulation techniques</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#reference">Reference</a></li>
+</ul><h2 id="class-and-object-basics">
+<a class="anchor" href="#class-and-object-basics" aria-hidden="true"><span class="octicon octicon-link"></span></a>Class and object basics</h2>
+
+<h3 id="overriding">
+<a class="anchor" href="#overriding" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overriding</h3>
+
+<p>Sometimes a class extends an existing method, but it wants to use the original implementation inside the redefinition. For this, use super() to call the old one:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Stock</span><span class="p">:</span>
+    <span class="o">...</span>
+    <span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shares</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">price</span>
+    <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">MyStock</span><span class="p">(</span><span class="n">Stock</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Check the call to `super`
+</span>        <span class="n">actual_cost</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">cost</span><span class="p">()</span>
+        <span class="k">return</span> <span class="mf">1.25</span> <span class="o">*</span> <span class="n">actual_cost</span>
+</code></pre></div></div>
+
+<p>If <code class="highlighter-rouge">__init__</code> is redefined, it is essential to initialize the parent.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Stock</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">shares</span><span class="p">,</span> <span class="n">price</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shares</span> <span class="o">=</span> <span class="n">shares</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">price</span> <span class="o">=</span> <span class="n">price</span>
+
+<span class="k">class</span> <span class="nc">MyStock</span><span class="p">(</span><span class="n">Stock</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">shares</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">factor</span><span class="p">):</span>
+        <span class="c1"># Check the call to `super` and `__init__`
+</span>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">shares</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factor</span> <span class="o">=</span> <span class="n">factor</span>
+
+    <span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor</span> <span class="o">*</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">cost</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h3 id="organizing-inheritance">
+<a class="anchor" href="#organizing-inheritance" aria-hidden="true"><span class="octicon octicon-link"></span></a>Organizing inheritance</h3>
+
+<p>Inheritance is sometimes used to organize related objects. Think of a logical hierarchy or taxonomy. However, <strong>a more common (and practical) usage is related to making reusable or extensible code</strong>. For example, <strong>a framework might define a base class and instruct you to customize it</strong>.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CustomHandler</span><span class="p">(</span><span class="n">TCPHandler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">handle_request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span>
+        <span class="c1"># Custom processing
+</span></code></pre></div></div>
+
+<p>The base class contains some general purpose code. Your class inherits and customized specific parts.</p>
+
+<h3 id="is-a-relationship">
+<a class="anchor" href="#is-a-relationship" aria-hidden="true"><span class="octicon octicon-link"></span></a>“is a” relationship</h3>
+
+<p>Inheritance establishes a type relationship.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Shape</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">Circle</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Circle</span><span class="p">(</span><span class="mf">4.0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">Shape</span><span class="p">)</span>
+<span class="bp">True</span>
+</code></pre></div></div>
+
+<p><strong>Important: Ideally, any code that worked with instances of the parent class will also work with instances of the child class.</strong></p>
+
+<h3 id="object-base-class">
+<a class="anchor" href="#object-base-class" aria-hidden="true"><span class="octicon octicon-link"></span></a><code class="highlighter-rouge">object</code> base class</h3>
+
+<p>If a class has no parent, you sometimes see <code class="highlighter-rouge">object</code> used as the base. <code class="highlighter-rouge">object</code> is the parent of all objects in Python.</p>
+
+<h3 id="multiple-inheritance">
+<a class="anchor" href="#multiple-inheritance" aria-hidden="true"><span class="octicon octicon-link"></span></a>Multiple Inheritance</h3>
+
+<p>You can inherit from multiple classes by specifying them in the definition of the class.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Mother</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">Father</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Mother</span><span class="p">,</span> <span class="n">Father</span><span class="p">):</span>
+    <span class="o">...</span>
+</code></pre></div></div>
+
+<p>The class Child inherits features from both parents. There are some rather tricky details. <strong>Don’t do it unless you know what you are doing</strong>.</p>
+
+<h3 id="special-methods">
+<a class="anchor" href="#special-methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Special methods</h3>
+
+<p>There are dozens of <code class="highlighter-rouge">__xxx__</code> methods in Python.</p>
+
+<p><code class="highlighter-rouge">__str__()</code> is used to create a nice printable output.</p>
+
+<p><code class="highlighter-rouge">__repr__()</code> is used to create a more detailed representation for programmers.</p>
+
+<p><em>Note: The convention for <strong>repr</strong>() is to return a string that, when fed to eval(), will recreate the underlying object. If this is not possible, some kind of easily readable representation is used instead.</em></p>
+
+<h4 id="special-dunder-methods-for-math">
+<a class="anchor" href="#special-dunder-methods-for-math" aria-hidden="true"><span class="octicon octicon-link"></span></a>Special dunder methods for math</h4>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">+</span> <span class="n">b</span>       <span class="n">a</span><span class="o">.</span><span class="n">__add__</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">-</span> <span class="n">b</span>       <span class="n">a</span><span class="o">.</span><span class="n">__sub__</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">*</span> <span class="n">b</span>       <span class="n">a</span><span class="o">.</span><span class="n">__mul__</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">/</span> <span class="n">b</span>       <span class="n">a</span><span class="o">.</span><span class="n">__truediv__</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">//</span> <span class="n">b</span>      <span class="n">a</span><span class="o">.</span><span class="n">__floordiv__</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">%</span> <span class="n">b</span>       <span class="n">a</span><span class="o">.</span><span class="n">__mod__</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="n">b</span>      <span class="n">a</span><span class="o">.</span><span class="n">__lshift__</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">b</span>      <span class="n">a</span><span class="o">.</span><span class="n">__rshift__</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span>       <span class="n">a</span><span class="o">.</span><span class="n">__and__</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">|</span> <span class="n">b</span>       <span class="n">a</span><span class="o">.</span><span class="n">__or__</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">^</span> <span class="n">b</span>       <span class="n">a</span><span class="o">.</span><span class="n">__xor__</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">**</span> <span class="n">b</span>      <span class="n">a</span><span class="o">.</span><span class="n">__pow__</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="o">-</span><span class="n">a</span>          <span class="n">a</span><span class="o">.</span><span class="n">__neg__</span><span class="p">()</span>
+<span class="o">~</span><span class="n">a</span>          <span class="n">a</span><span class="o">.</span><span class="n">__invert__</span><span class="p">()</span>
+<span class="nb">abs</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>      <span class="n">a</span><span class="o">.</span><span class="n">__abs__</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h4 id="special-dunder-methods-for-item-access">
+<a class="anchor" href="#special-dunder-methods-for-item-access" aria-hidden="true"><span class="octicon octicon-link"></span></a>Special dunder methods for item access</h4>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>      <span class="n">x</span><span class="o">.</span><span class="n">__len__</span><span class="p">()</span>
+<span class="n">x</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>        <span class="n">x</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">x</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>    <span class="n">x</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+<span class="k">del</span> <span class="n">x</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>    <span class="n">x</span><span class="o">.</span><span class="n">__delitem__</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="c1"># Implement a sequence
+</span><span class="k">class</span> <span class="nc">Sequence</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span>
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">):</span>
+        <span class="o">...</span>
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+        <span class="o">...</span>
+    <span class="k">def</span> <span class="nf">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="p">):</span>
+        <span class="o">...</span>
+</code></pre></div></div>
+
+<h3 id="bound-method">
+<a class="anchor" href="#bound-method" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bound method</h3>
+
+<p>A method that has not yet been invoked by the function call operator <code class="highlighter-rouge">()</code> is known as a <strong>bound method</strong>. It operates on the instance where it originated.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="n">Stock</span><span class="p">(</span><span class="s">'GOOG'</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">490.10</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">s</span>
+<span class="o">&lt;</span><span class="n">Stock</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x590d0</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">cost</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span>
+<span class="o">&lt;</span><span class="n">bound</span> <span class="n">method</span> <span class="n">Stock</span><span class="o">.</span><span class="n">cost</span> <span class="n">of</span> <span class="o">&lt;</span><span class="n">Stock</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x590d0</span><span class="o">&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="p">()</span>
+<span class="mf">49010.0</span>
+</code></pre></div></div>
+
+<p>Bound methods are often a source of careless non-obvious errors: you simply forgot to add <code class="highlighter-rouge">()</code>.</p>
+
+<h3 id="attribute-access">
+<a class="anchor" href="#attribute-access" aria-hidden="true"><span class="octicon octicon-link"></span></a>Attribute access</h3>
+
+<p>There is an alternative way to access, manipulate and manage attributes.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">'name'</span><span class="p">)</span>          <span class="c1"># Same as obj.name
+</span><span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">'name'</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>   <span class="c1"># Same as obj.name = value
+</span><span class="nb">delattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">'name'</span><span class="p">)</span>          <span class="c1"># Same as del obj.name
+</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">'name'</span><span class="p">)</span>          <span class="c1"># Tests if attribute exists
+</span></code></pre></div></div>
+
+<p>Example:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">'x'</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">'x'</span><span class="p">):</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>Note: <code class="highlighter-rouge">getattr()</code> also has a useful default value <code class="highlighter-rouge">*arg</code>.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s">'x'</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="defining-new-exceptions">
+<a class="anchor" href="#defining-new-exceptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Defining new exceptions</h3>
+
+<p>User defined exceptions are defined by classes. <strong>Exceptions always inherit from <code class="highlighter-rouge">Exception</code>. Usually they are empty classes. Use <code class="highlighter-rouge">pass</code> for the body.</strong></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">NetworkError</span><span class="p">(</span><span class="nb">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div></div>
+
+<p>You can make your own hierarchy of exceptions:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">AuthenticationError</span><span class="p">(</span><span class="n">NetworkError</span><span class="p">):</span>
+     <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">ProtocolError</span><span class="p">(</span><span class="n">NetworkError</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div></div>
+
+<h2 id="inner-workings-of-python-objects">
+<a class="anchor" href="#inner-workings-of-python-objects" aria-hidden="true"><span class="octicon octicon-link"></span></a>Inner workings of Python objects</h2>
+
+<p>Programmers coming from other programming languages often find Python’s notion of classes lacking in features. <em>For example, there is no notion of access-control (e.g., private, protected), the whole <code class="highlighter-rouge">self</code> argument feels weird, and frankly, working with objects sometimes feel like a “free for all”.</em> Maybe that’s true, but we’ll find out how it all works as well as <strong>some common programming idioms to better encapsulate the internals of objects</strong>.</p>
+
+<p>It’s not necessary to worry about the inner details to be productive. However, most Python coders have a basic awareness of how classes work.</p>
+
+<h3 id="dictionary-revisited">
+<a class="anchor" href="#dictionary-revisited" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dictionary revisited</h3>
+
+<p>The Python object system is largely based on an implementation involving dictionaries. They are used for critical parts of the interpreter and may be <strong>the most important type of data in Python</strong>.</p>
+
+<p>For example, a module has <code class="highlighter-rouge">.__dict__</code> or <code class="highlighter-rouge">globals()</code></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># foo.py
+</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="k">def</span> <span class="nf">bar</span><span class="p">():</span>
+    <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">spam</span><span class="p">():</span>
+    <span class="o">...</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">foo</span><span class="o">.</span><span class="n">__dict__</span>
+<span class="p">{</span>
+    <span class="s">'x'</span> <span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+    <span class="s">'bar'</span> <span class="p">:</span> <span class="o">&lt;</span><span class="n">function</span> <span class="n">bar</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="s">'spam'</span> <span class="p">:</span> <span class="o">&lt;</span><span class="n">function</span> <span class="n">spam</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>An object has <code class="highlighter-rouge">.__dict__</code> as well. <strong>In fact, the entire object system is mostly an extra layer that’s put on top of dictionaries.</strong></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="n">Stock</span><span class="p">(</span><span class="s">'GOOG'</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">490.1</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">s</span><span class="o">.</span><span class="n">__dict__</span>
+<span class="p">{</span><span class="s">'name'</span> <span class="p">:</span> <span class="s">'GOOG'</span><span class="p">,</span> <span class="s">'shares'</span> <span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s">'price'</span><span class="p">:</span> <span class="mf">490.1</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p>You populate this dict (and instance) when assigning to <code class="highlighter-rouge">self</code>.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Stock</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">shares</span><span class="p">,</span> <span class="n">price</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shares</span> <span class="o">=</span> <span class="n">shares</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">price</span> <span class="o">=</span> <span class="n">price</span>
+</code></pre></div></div>
+
+<p><strong>Each instance gets its own private dictionary.</strong></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="n">Stock</span><span class="p">(</span><span class="s">'GOOG'</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">490.1</span><span class="p">)</span>
+<span class="c1"># s.__dict__: {'name' : 'GOOG','shares' : 100, 'price': 490.1 }
+</span><span class="n">t</span> <span class="o">=</span> <span class="n">Stock</span><span class="p">(</span><span class="s">'AAPL'</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mf">123.45</span><span class="p">)</span>
+<span class="c1"># t.__dict__: {'name' : 'AAPL','shares' : 50, 'price': 123.45 }
+</span></code></pre></div></div>
+
+<p>If you created 100 instances of some class, there are 100 dictionaries sitting around holding data.</p>
+
+<p><strong>A separate dictionary</strong> for <strong>class members</strong>, <code class="highlighter-rouge">Stock.__dict__</code> also holds the methods:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Stock</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">shares</span><span class="p">,</span> <span class="n">price</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shares</span> <span class="o">=</span> <span class="n">shares</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">price</span> <span class="o">=</span> <span class="n">price</span>
+
+    <span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shares</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">price</span>
+
+    <span class="k">def</span> <span class="nf">sell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nshares</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shares</span> <span class="o">-=</span> <span class="n">nshares</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Stock</span><span class="o">.</span><span class="n">__dict__</span>
+<span class="p">{</span>
+    <span class="s">'cost'</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="s">'sell'</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="s">'__init__'</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">function</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Instances and classes are linked together. The <code class="highlighter-rouge">__class__</code> attribute refers back to the class.</p>
+
+<p><strong>The instance dictionary holds data unique to each instance, whereas the class dictionary holds data collectively shared by all instances.</strong></p>
+
+<p>When you work with an object, you access data and methods using the <code class="highlighter-rouge">.</code> operator.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span>          <span class="c1"># Getting
+</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">value</span>      <span class="c1"># Setting
+</span><span class="k">del</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span>          <span class="c1"># Deleting
+</span></code></pre></div></div>
+
+<p>These operations are directly tied to the dictionaries sitting underneath the covers. <strong>Operations that modify an object update the underlying dictionary.</strong></p>
+
+<h4 id="reading-attribute">
+<a class="anchor" href="#reading-attribute" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reading attribute</h4>
+
+<p>Suppose you read an attribute on an instance.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span>
+</code></pre></div></div>
+
+<p>The attribute may exist in two places:</p>
+
+<ul>
+  <li>Local instance dictionary.</li>
+  <li>Class dictionary.</li>
+</ul>
+
+<p>Both dictionaries must be checked. First, check in local <code class="highlighter-rouge">__dict__</code>. If not found, look in <code class="highlighter-rouge">__dict__</code> of class through <code class="highlighter-rouge">__class__</code>. This lookup scheme is how <strong>the members of a class get shared by all instances</strong>.</p>
+
+<h4 id="how-inheritance-works">
+<a class="anchor" href="#how-inheritance-works" aria-hidden="true"><span class="octicon octicon-link"></span></a>How inheritance works</h4>
+
+<p>Classes may inherit from other classes. The base classes are stored in a tuple in each class. This provides a link to parent classes.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">__bases__</span>
+<span class="p">(</span><span class="o">&lt;</span><span class="k">class</span> <span class="err">'</span><span class="nc">__main__</span><span class="o">.</span><span class="n">B</span><span class="s">'&gt;, &lt;class '</span><span class="n">__main__</span><span class="o">.</span><span class="n">C</span><span class="s">'&gt;)</span><span class="err">
+</span></code></pre></div></div>
+
+<h4 id="reading-attributes-with-inheritance">
+<a class="anchor" href="#reading-attributes-with-inheritance" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reading Attributes with Inheritance</h4>
+
+<p>Logically, the process of finding an attribute is as follows. First, check in local <code class="highlighter-rouge">__dict__</code>. If not found, look in <code class="highlighter-rouge">__dict__</code> of the class. If not found in class, look in the base classes through <code class="highlighter-rouge">__bases__</code>. However, there are some subtle aspects of this discussed next.</p>
+
+<h4 id="reading-attributes-with-single-inheritance">
+<a class="anchor" href="#reading-attributes-with-single-inheritance" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reading Attributes with Single Inheritance</h4>
+
+<p>In inheritance hierarchies, attributes are found by walking up the inheritance tree in order.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">A</span><span class="p">:</span> <span class="k">pass</span>
+<span class="k">class</span> <span class="nc">B</span><span class="p">(</span><span class="n">A</span><span class="p">):</span> <span class="k">pass</span>
+<span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">A</span><span class="p">):</span> <span class="k">pass</span>
+<span class="k">class</span> <span class="nc">D</span><span class="p">(</span><span class="n">B</span><span class="p">):</span> <span class="k">pass</span>
+<span class="k">class</span> <span class="nc">E</span><span class="p">(</span><span class="n">D</span><span class="p">):</span> <span class="k">pass</span>
+</code></pre></div></div>
+
+<p>With single inheritance, there is single path to the top. You stop with the first match.</p>
+
+<h4 id="method-resolution-order-or-mro">
+<a class="anchor" href="#method-resolution-order-or-mro" aria-hidden="true"><span class="octicon octicon-link"></span></a>Method Resolution Order or MRO</h4>
+
+<p>Python precomputes an inheritance chain and stores it in the MRO attribute on the class. You can view it.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">E</span><span class="o">.</span><span class="n">__mro__</span>
+<span class="p">(</span><span class="o">&lt;</span><span class="k">class</span> <span class="err">'</span><span class="nc">__main__</span><span class="o">.</span><span class="n">E</span><span class="s">'&gt;, &lt;class '</span><span class="n">__main__</span><span class="o">.</span><span class="n">D</span><span class="s">'&gt;,</span><span class="err">
+</span><span class="s"> &lt;class '</span><span class="n">__main__</span><span class="o">.</span><span class="n">B</span><span class="s">'&gt;, &lt;class '</span><span class="n">__main__</span><span class="o">.</span><span class="n">A</span><span class="s">'&gt;,</span><span class="err">
+</span><span class="s"> &lt;type '</span><span class="nb">object</span><span class="s">'&gt;)</span><span class="err">
+</span></code></pre></div></div>
+
+<p>This chain is called the <strong>Method Resolution Order</strong>. To find an attribute, Python walks the MRO in order. The first match wins.</p>
+
+<h3 id="encapsulation-techniques">
+<a class="anchor" href="#encapsulation-techniques" aria-hidden="true"><span class="octicon octicon-link"></span></a>Encapsulation techniques</h3>
+
+<p>Note: <code class="highlighter-rouge">__init__</code> vs <code class="highlighter-rouge">__call__</code> for a class: https://stackoverflow.com/questions/9663562/what-is-the-difference-between-init-and-call</p>
+
+<h2 id="reference">
+<a class="anchor" href="#reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reference</h2>
+
+<p><a href="https://dabeaz-course.github.io/practical-python/Notes">https://dabeaz-course.github.io/practical-python/Notes</a></p>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="logancyang/blog-learning-automata"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/note/python/2020/06/30/python-basics-ii.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notes, code and essays by Logan Yang.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

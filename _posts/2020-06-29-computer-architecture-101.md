@@ -3,7 +3,7 @@ toc: true
 layout: post
 description: CS foundamentals for non-CS majors
 categories: [note, compsci]
-title: "From NAND to TETRIS: Computer Architecture 101"
+title: "From NAND to TETRIS: Computer Architecture 101. Part I"
 comments: true
 ---
 
@@ -350,13 +350,9 @@ Another technology is flash memory. It combines the good things of both ROM and 
 
 Cache memory is a small and expensive memory that is close to the processor. It has very high performance. There is a hierarchy of cache memories, the closer to the processor, the faster, smaller and more expensive it gets.
 
-## Level 4. Machine language
+[Go to Part II](./2020-07-02-computer-architecture-101-part-ii.md)
 
 
-## Level 5. Computer architecture
+## Reference
 
-
-## Level 6. Assembler
-
-
-
+[Coursera From NAND To TETRIS](https://www.coursera.org/learn/build-a-computer)

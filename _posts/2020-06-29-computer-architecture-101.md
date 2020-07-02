@@ -3,7 +3,7 @@ toc: true
 layout: post
 description: CS foundamentals for non-CS majors
 categories: [note, compsci]
-title: "From NAND to TETRIS: Computer Architecture 101. Part I"
+title: "From NAND to TETRIS: Computer Architecture 101 Part I"
 comments: true
 ---
 

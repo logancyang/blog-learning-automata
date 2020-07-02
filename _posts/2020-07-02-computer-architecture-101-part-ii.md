@@ -3,7 +3,7 @@ toc: true
 layout: post
 description: CS foundamentals for non-CS majors
 categories: [note, compsci]
-title: "From NAND to TETRIS: Computer Architecture 101. Part II"
+title: "From NAND to TETRIS: Computer Architecture 101 Part II"
 comments: true
 ---
 
@@ -127,7 +127,7 @@ The Hack machine language recognizes 3 registers:
 
 <img src="{{ site.baseurl }}/images/cs4ds/reg3.png" alt="" align="middle"/>
 
-Notice that ROM (which stores the instructions) isn't included in the 3 registers!
+**Notice that ROM (which stores the instructions) isn't included in the 3 registers!**
 
 #### A-instruction
 
@@ -190,6 +190,88 @@ We don't need to remember all the possible values for the 3 registers. For detai
 
 ### Hack language specification
 
+We have two ways of specifying machine language code, one in symbols and one in binary numbers. An *assembler* can translate symbolic code into binary code.
+
+#### A-instruction specification
+
+<img src="{{ site.baseurl }}/images/cs4ds/ainst-binary.png" alt="" align="middle"/>
+
+A-instruction has an "op code" (first bit in binary code) of 0 at the beginning of the binary code.
+
+#### C-instruction specification
+
+C-instruction has an "op code" of 1, followed by 2 bits we don't use. By convention we set them to 1.
+
+Here is a table where we can convert symbols to binary codes.
+
+<img src="{{ site.baseurl }}/images/cs4ds/cinst-table.png" alt="" align="middle"/>
+
+For example, if we want to convert `D+1`, we find the symbol, it's in the column `a=0`, and has a value of `011111`.
+
+So the `comp` field `D+1` is `1110011111`.
+
+We also have a table for `dest` the destination field.
+
+<img src="{{ site.baseurl }}/images/cs4ds/cinst-dest-table.png" alt="" align="middle"/>
+
+Similarly, we have a table for `jump` values. Altogether we have everything in one slide here:
+
+<img src="{{ site.baseurl }}/images/cs4ds/cinst-table-full.png" alt="" align="middle"/>
+
+Finally, here is an example of a small Hack program and its translation to binary.
+
+<img src="{{ site.baseurl }}/images/cs4ds/hacklang-ex.png" alt="" align="middle"/>
+
+### Input/Output using machine language
+
+The computer gets data from humans via input devices like the keyboard, and outputs to output devices like the display.
+
+In high level languages such as Java and Python, we write code using input devices and the output devices give us the high level results such as text, graphics, audio and video. This is in the realm of **software hierarchy** and isn't the focus now. Now we focus on the hardware hierarchy.
+
+All the high level functionalities depend on the low level operations on bits.
+
+<img src="{{ site.baseurl }}/images/cs4ds/io-illustration.png" alt="" align="middle"/>
+
+#### Screen output
+
+There is a part in RAM that's called the **Screen Memory Map** which refreshes many times per second. It directly controls the display on the screen. When we need to display something, we manipulate this part of the memory.
+
+<img src="{{ site.baseurl }}/images/cs4ds/screenmemomap.png" alt="" align="middle"/>
+
+The Hack computer assumes a physical screen of 256x512 pixels black and white. In the memory, we use a chunk of 16-bit registers to represent this pixel matrix.
+
+Since one *word* is 16-bit, and one row in the screen is 512 pixels, we need `512/16=32` words to represent a row. Doing some math we can calculate the memory address of each pixel.
+
+Note that the whole screen memory chunk resides inside the big RAM and it has a starting address. We use a chip `Screen[]` to add the starting base address to the pixel coordinates to get the actual memory address.
+
+<img src="{{ site.baseurl }}/images/cs4ds/scrmap.png" alt="" align="middle"/>
+
+You might be shocked how much work we need to do just to manipulate one pixel. That's the reality at low level!
+
+#### Keyboard input
+
+A physical keyboard is connected to the Keyboard Memory Map in RAM. The good thing is that **we only need one 16-bit register to represent the keyboard**.
+
+<img src="{{ site.baseurl }}/images/cs4ds/keyboardmemmap.png" alt="" align="middle"/>
+
+Each key has a binary **scan code** that goes into the keyboard memory map. If the keyboard is not pressed, the scan code is 0.
+
+To see what key is pressed, just probe the keyboard chip. In the Hack computer, the keyboard memory map is at RAM[24576].
+
+Here is a complete scan code mapping for the Hack computer keyboard:
+
+<img src="{{ site.baseurl }}/images/cs4ds/scancode.png" alt="" align="middle"/>
+
+Notice that the keyboard memory map has 16 bits, it can represent $2^{16}=65536$ different keys which is more than enough even for unicode characters.
+
+
+
+## Level 5: Computer architecture
+
+
+
+
+## Level 6: Assembler
 
 
 
@@ -203,7 +285,7 @@ We don't need to remember all the possible values for the 3 registers. For detai
 
 
 
+## Reference
 
-
-
+[Coursera From NAND To TETRIS](https://www.coursera.org/learn/build-a-computer)
 

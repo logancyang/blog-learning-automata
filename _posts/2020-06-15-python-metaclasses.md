@@ -56,7 +56,7 @@ class Derived(Base):
 
 We can't do the same thing as before `assert hasattr(Derived, "bar"), "..."`. Try-except also doesn't work because it only catches the error at runtime, not before.
 
-Python is a "protocal-oriented" language. In C++ and Java, a class definition is not executable code. But in Python it is.
+Python is a "protocol-oriented" language. In C++ and Java, a class definition is not executable code. But in Python it is.
 
 Python has this `__build_class__()` method that lets you check things at the time when the class is being built.
 
@@ -398,7 +398,7 @@ This last example combined the 3 core features of Python together:
 
 ## Summary
 
-Python is a language oriented around *protocals*. There are ways to implement these protocals on any objects using "dunder" methods. If you forget how to use these methods, just google "Python data model".
+Python is a language oriented around *protocols*. There are ways to implement these protocols on any objects using "dunder" methods. If you forget how to use these methods, just google "Python data model".
 
 ## Reference
 

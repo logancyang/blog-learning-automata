@@ -74,7 +74,7 @@ There are 2 types of registers in the CPU.
 
 ### Input/Output
 
-CPU needs some kind of protocal known as **drivers** to talk to input/output devices, such as mouse, keyboard, camera, sensors, screen, printer, sound, etc.
+CPU needs some kind of protocol known as **drivers** to talk to input/output devices, such as mouse, keyboard, camera, sensors, screen, printer, sound, etc.
 
 One general method of interaction uses "memory mapping", e.g.
 

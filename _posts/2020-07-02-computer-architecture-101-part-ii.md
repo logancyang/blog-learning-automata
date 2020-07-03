@@ -3,9 +3,11 @@ toc: true
 layout: post
 description: CS foundamentals for non-CS majors
 categories: [note, compsci]
-title: "From NAND to TETRIS: Computer Architecture 101 Part II"
+title: "[From NAND to TETRIS] Computer Architecture 101 Part II: Machine Language"
 comments: true
 ---
+
+Continuing the discussion through abstraction level 1-3 in the [last post](http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101.html), we look at level 4: machine language in detail in this post.
 
 ## Level 4: Machine language
 
@@ -222,6 +224,170 @@ Finally, here is an example of a small Hack program and its translation to binar
 
 <img src="{{ site.baseurl }}/images/cs4ds/hacklang-ex.png" alt="" align="middle"/>
 
+### Working with registers and memory using machine language
+
+#### Some examples
+
+```
+// D=10
+@10     // There is no directive to directly set D=10. Set A=10 first
+D=A     // and set D=A
+
+// D++
+D=D+1   // This is easy
+
+// D = RAM[17]
+@17
+D=M
+
+// RAM[17] = D
+@17
+M=D
+
+// RAM[17] = 10
+@10
+D=A
+@17
+M=D
+
+// RAM[5] = RAM[3]
+@3
+D=M
+@5
+M=D
+```
+
+Here's another example:
+
+<img src="{{ site.baseurl }}/images/cs4ds/hackcode-ex.png" alt="" align="middle"/>
+
+Note that the white spaces are ignored, and each line of code has a line number in the background automatically.
+
+#### How to terminate the program properly
+
+We haven't talk about program termination. If we execute our code naively, a malicious hacker could add malicious code after our code to do bad things. It is called *[NOP slide](https://en.wikipedia.org/wiki/NOP_slide#:~:text=In%20computer%20security%2C%20a%20NOP,address%20anywhere%20on%20the%20slide.)*, meaning they added null operations after the actual code and before the malicious code to hide the latter.
+
+We use the fact that the computer never stands still and always executes something, **we end the program with an infinite loop** so it is under our control. This is the best practice for program termination.
+
+```
+...
+@6
+0; JMP
+```
+
+#### Built-in symbols
+
+The Hack assembly language features *built-in symbols* which are virtual registers, not real registers. The symbols are `R0, R1, R2, ... , R15` and they correspond to values `0, 1, 2, ..., 15`.
+
+Why do we need these virtual registers?
+
+It is purely for **style and readability**.
+
+For example,
+
+```
+// RAM[5]=15
+@15
+D=A
+
+@5
+M=D
+```
+
+The two `@x` lines are intended to do completely different things. The first is to set A and then set D. The second is to get address 5 in RAM and store D there.
+
+It means when we see `@x` we don't know what it wants to do until we see the next line of code. So we introduce `R5`,
+
+```
+// RAM[5]=15
+@15
+D=A
+
+@R5
+M=D
+```
+
+When we use `@R5` it's exactly the same as `@5`, but it means finding the address 5 so that it's more readable for people.
+
+Here are all the built-in symbols:
+
+<img src="{{ site.baseurl }}/images/cs4ds/builtin-symbols.png" alt="" align="middle"/>
+
+### Branching, variables, iteration using machine language
+
+#### Branching
+
+In any high level language there are many branching mechanisms such as if-else, while, switch, etc. In machine language, there is only one: *goto* using the `jump` directives.
+
+Example:
+
+```
+// Program: signum.asm
+// Computes:
+//   if R0 > 0:
+//       R1 = 1
+//   else:
+//       R1 = 0
+
+@R0
+D=M  // D = RAM[0]
+
+@8
+D; JGT  // if R0 > 0, goto 8
+
+@R1
+M=0  // RAM[1] = 0
+@10
+0; JMP  // end of program
+
+@R1
+M=1  // R1=1
+
+@10
+0; JMP  // end of program
+```
+
+You can see this code is quite unreadable if there's no comment or documentation. One thing we introduce to make it more readable is **labels**. One example is shown below. `(POSITIVE)` is a label that points to its next line. `@POSITIVE` is using the label to *goto* that line. This way we have a much more readable branching mechanism.
+
+<img src="{{ site.baseurl }}/images/cs4ds/goto-labels.png" alt="" align="middle"/>
+
+#### Variables
+
+Say we want to exchange the values of R0 and R1:
+
+```
+// Program: flip.asm
+// Flips the value of RAM[0] and RAM[1]
+
+// temp = R1
+// R1 = R0
+// R0 = temp
+```
+
+The people who created the Assembler can define a contract: `@somevar` with no label `(somevar)` means it's a variable, and it will use `RAM[program_base_address+16]`. Any new variable will increment 16, i.e. use `+17`, `+18`, etc.
+
+<img src="{{ site.baseurl }}/images/cs4ds/variables.png" alt="" align="middle"/>
+
+#### Iterations
+
+Suppose we want to compute `1+2+...+n`, we need an accumulator variable and an iteration in a high level language. The machine code is shown below:
+
+<img src="{{ site.baseurl }}/images/cs4ds/iterations.png" alt="" align="middle"/>
+
+### Pointers
+
+From the machine's perspective, an array is just a block of memory that starts at a certain base memory location with a certain length. The following example is to set -1 into the array.
+
+<img src="{{ site.baseurl }}/images/cs4ds/array-1.png" alt="" align="middle"/>
+
+First we set 2 variables, the base memory location `arr` and length `n`. Then we set the variable `i`. To achieve `RAM[arr+i] = -1`, we set register A to be `D+M`. This is the first time we set A using an arithmetic operation.
+
+<img src="{{ site.baseurl }}/images/cs4ds/pointers.png" alt="" align="middle"/>
+
+**Variables that store memory addresses like `arr` and `i` are called *pointers***. When we need to access memory using a pointer, we need an instruction like `A=M`.
+
+Typical pointer semantics: "set the address register to the content of some memory register".
+
 ### Input/Output using machine language
 
 The computer gets data from humans via input devices like the keyboard, and outputs to output devices like the display.
@@ -264,7 +430,31 @@ Here is a complete scan code mapping for the Hack computer keyboard:
 
 Notice that the keyboard memory map has 16 bits, it can represent $2^{16}=65536$ different keys which is more than enough even for unicode characters.
 
+#### Draw a rectangle with Hack programming
 
+<img src="{{ site.baseurl }}/images/cs4ds/inputoutputhack.png" alt="" align="middle"/>
+
+Let's consider the "hello world" program of computer graphics: drawing a rectangle.
+
+<img src="{{ site.baseurl }}/images/cs4ds/drawrec.png" alt="" align="middle"/>
+
+Let's focus on the pseudocode. The goal is to manipulate the Screen Memory Map to show the rectangle.
+
+<img src="{{ site.baseurl }}/images/cs4ds/recpseudo.png" alt="" align="middle"/>
+
+The following is the real Hack code
+
+<img src="{{ site.baseurl }}/images/cs4ds/reccode.png" alt="" align="middle"/>
+
+### Compiler: translates high level language to machine code
+
+This is *From NAND to TETRIS part I* and we don't concern ourselves with the compiler which translates a high level language to machine code. In part II, there's material showing how to write a compiler and an operating system.
+
+<img src="{{ site.baseurl }}/images/cs4ds/compiler.png" alt="" align="middle"/>
+
+### Comments
+
+Hack is a simplified version of the machine language. The machine language that controls our day-to-day personal computers is more complex and has more features such as floating point arithmetic. However, we can always use software to expand the capabilities of the machine language, and that is in the part II of *From NAND to TETRIS*.
 
 ## Level 5: Computer architecture
 

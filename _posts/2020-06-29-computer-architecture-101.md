@@ -3,7 +3,7 @@ toc: true
 layout: post
 description: CS foundamentals for non-CS majors
 categories: [note, compsci]
-title: "From NAND to TETRIS: Computer Architecture 101 Part I"
+title: "[From NAND to TETRIS] Computer Architecture 101 Part I: Logic Gates, ALU and Memory"
 comments: true
 ---
 
@@ -17,7 +17,7 @@ In this article, I will introduce all the concepts in an easily consumable manne
 
 After this exercise, you will walk away more confident and eliminate the insecurities of not knowing the foundational knowledge of computers.
 
-Ready? Let's get started.
+Ready? Let's get started and go through the **levels of abstractions** in the computer system.
 
 <img src="{{ site.baseurl }}/images/cs4ds/abstractions.png" alt="" align="middle"/>
 
@@ -350,7 +350,7 @@ Another technology is flash memory. It combines the good things of both ROM and 
 
 Cache memory is a small and expensive memory that is close to the processor. It has very high performance. There is a hierarchy of cache memories, the closer to the processor, the faster, smaller and more expensive it gets.
 
-[Go to Part II](./2020-07-02-computer-architecture-101-part-ii.md)
+[Go to Part II](http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html)
 
 
 ## Reference

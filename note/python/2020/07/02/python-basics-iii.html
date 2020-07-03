@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>[Python Review] Part III: Generators and Advanced Topics | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="[Python Review] Part III: Generators and Advanced Topics" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Stepping up Python skills" />
+<meta property="og:description" content="Stepping up Python skills" />
+<link rel="canonical" href="http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-02T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Stepping up Python skills","@type":"BlogPosting","headline":"[Python Review] Part III: Generators and Advanced Topics","dateModified":"2020-07-02T00:00:00-05:00","datePublished":"2020-07-02T00:00:00-05:00","url":"http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>[Python Review] Part III: Generators and Advanced Topics | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="[Python Review] Part III: Generators and Advanced Topics" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Stepping up Python skills" />
+<meta property="og:description" content="Stepping up Python skills" />
+<link rel="canonical" href="http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-02T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Stepping up Python skills","@type":"BlogPosting","headline":"[Python Review] Part III: Generators and Advanced Topics","dateModified":"2020-07-02T00:00:00-05:00","datePublished":"2020-07-02T00:00:00-05:00","url":"http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Learning Automata</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">[Python Review] Part III: Generators and Advanced Topics</h1><p class="page-description">Stepping up Python skills</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-07-02T00:00:00-05:00" itemprop="datePublished">
+        Jul 2, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      7 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#note">note</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#python">python</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#generators">Generators</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#iteration-protocol">Iteration protocol</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#support-iteration-in-your-custom-object">Support iteration in your custom object</a></li>
+<li class="toc-entry toc-h4"><a href="#next-built-in-function">next() built-in function</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#customizing-iteration">Customizing iteration</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#generator">Generator</a></li>
+<li class="toc-entry toc-h4"><a href="#generator-example-find-matching-substring-from-lines-in-file">Generator example: find matching substring from lines in file</a></li>
+<li class="toc-entry toc-h4"><a href="#generator-example-monitoring-a-streaming-data-source">Generator example: monitoring a streaming data source</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#producers-consumers-and-pipelines">Producers, consumers and pipelines</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#producer-consumer-problems">Producer-Consumer Problems</a></li>
+<li class="toc-entry toc-h4"><a href="#generator-pipelines">Generator Pipelines</a></li>
+<li class="toc-entry toc-h4"><a href="#generator-expressions">Generator expressions</a></li>
+<li class="toc-entry toc-h4"><a href="#why-generators">Why Generators</a></li>
+<li class="toc-entry toc-h4"><a href="#itertools-module">itertools module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#advanced-topics">Advanced topics</a></li>
+<li class="toc-entry toc-h2"><a href="#reference">Reference</a></li>
+</ul><h2 id="generators">
+<a class="anchor" href="#generators" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generators</h2>
+
+<h3 id="iteration-protocol">
+<a class="anchor" href="#iteration-protocol" aria-hidden="true"><span class="octicon octicon-link"></span></a>Iteration protocol</h3>
+
+<p>Many objects support iteration:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="s">'hello'</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span> <span class="c1"># Loop over characters in a
+</span>    <span class="o">...</span>
+
+<span class="n">b</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'name'</span><span class="p">:</span> <span class="s">'Dave'</span><span class="p">,</span> <span class="s">'password'</span><span class="p">:</span><span class="s">'foo'</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span> <span class="c1"># Loop over keys in dictionary
+</span>    <span class="o">...</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span> <span class="c1"># Loop over items in a list/tuple
+</span>    <span class="o">...</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'foo.txt'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span> <span class="c1"># Loop over lines in a file
+</span>    <span class="o">...</span>
+</code></pre></div></div>
+
+<p>What happens under the hood of a <code class="highlighter-rouge">for</code> loop?</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="c1"># Is equivalent to
+</span><span class="n">_iter</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">__iter__</span><span class="p">()</span>        <span class="c1"># Get iterator object
+</span><span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">_iter</span><span class="o">.</span><span class="n">__next__</span><span class="p">()</span>  <span class="c1"># Get next item
+</span>    <span class="k">except</span> <span class="nb">StopIteration</span><span class="p">:</span>     <span class="c1"># No more items
+</span>        <span class="k">break</span>
+    <span class="c1"># statements ...
+</span></code></pre></div></div>
+
+<p>All objects that support <code class="highlighter-rouge">for</code> loop implement this low level iteration protocol. This is a manual iteration through a list:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">it</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">__iter__</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">it</span>
+<span class="o">&lt;</span><span class="n">listiterator</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x590b0</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">it</span><span class="o">.</span><span class="n">__next__</span><span class="p">()</span>
+<span class="mi">1</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">it</span><span class="o">.</span><span class="n">__next__</span><span class="p">()</span>
+<span class="mi">2</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">it</span><span class="o">.</span><span class="n">__next__</span><span class="p">()</span>
+<span class="mi">3</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">it</span><span class="o">.</span><span class="n">__next__</span><span class="p">()</span>
+<span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+<span class="n">File</span> <span class="s">"&lt;stdin&gt;"</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="ow">in</span> <span class="err">?</span> <span class="nb">StopIteration</span>
+</code></pre></div></div>
+
+<h4 id="support-iteration-in-your-custom-object">
+<a class="anchor" href="#support-iteration-in-your-custom-object" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support iteration in your custom object</h4>
+
+<p>Knowing about iteration is useful if you want to add it to your own objects. For example, making a custom container.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Portfolio</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">holdings</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">holdings</span><span class="o">.</span><span class="n">__iter__</span><span class="p">()</span>
+    <span class="o">...</span>
+
+<span class="n">port</span> <span class="o">=</span> <span class="n">Portfolio</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">port</span><span class="p">:</span>
+    <span class="o">...</span>
+</code></pre></div></div>
+
+<p>For container objects, supporting iteration, indexing, containment, and other kinds of operators is an important part of being Pythonic.</p>
+
+<p><em>Side note: <code class="highlighter-rouge">__contains__()</code> is a function for the <code class="highlighter-rouge">in</code> check, for example:</em></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">any</span><span class="p">([</span><span class="n">s</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_holdings</span><span class="p">])</span>
+</code></pre></div></div>
+
+<h4 id="next-built-in-function">
+<a class="anchor" href="#next-built-in-function" aria-hidden="true"><span class="octicon octicon-link"></span></a><code class="highlighter-rouge">next()</code> built-in function</h4>
+
+<p>The <code class="highlighter-rouge">next()</code> built-in function is a shortcut for calling the <code class="highlighter-rouge">__next__()</code> method of an iterator. Try using it on a file:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'Data/portfolio.csv'</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span><span class="o">.</span><span class="n">__iter__</span><span class="p">()</span>    <span class="c1"># Note: This returns the file itself
+</span><span class="o">&lt;</span><span class="n">_io</span><span class="o">.</span><span class="n">TextIOWrapper</span> <span class="n">name</span><span class="o">=</span><span class="s">'Data/portfolio.csv'</span> <span class="n">mode</span><span class="o">=</span><span class="s">'r'</span> <span class="n">encoding</span><span class="o">=</span><span class="s">'UTF-8'</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">next</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="s">'name,shares,price</span><span class="se">\n</span><span class="s">'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">next</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="s">'"AA",100,32.20</span><span class="se">\n</span><span class="s">'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">next</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="s">'"IBM",50,91.10</span><span class="se">\n</span><span class="s">'</span>
+</code></pre></div></div>
+
+<h3 id="customizing-iteration">
+<a class="anchor" href="#customizing-iteration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Customizing iteration</h3>
+
+<p>Now we look at how we can generalize iteration using a <strong>generator</strong> function.</p>
+
+<p>Suppose you wanted to create your own custom iteration pattern.</p>
+
+<p>For example, a countdown.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">countdown</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+<span class="o">...</span>   <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s">' '</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="mi">10</span> <span class="mi">9</span> <span class="mi">8</span> <span class="mi">7</span> <span class="mi">6</span> <span class="mi">5</span> <span class="mi">4</span> <span class="mi">3</span> <span class="mi">2</span> <span class="mi">1</span>
+</code></pre></div></div>
+
+<p>There is an easy way to do this.</p>
+
+<h4 id="generator">
+<a class="anchor" href="#generator" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generator</h4>
+
+<p>A generator is a function that defines iteration.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">countdown</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">while</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">n</span>
+        <span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">countdown</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+<span class="o">...</span>   <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s">' '</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="mi">10</span> <span class="mi">9</span> <span class="mi">8</span> <span class="mi">7</span> <span class="mi">6</span> <span class="mi">5</span> <span class="mi">4</span> <span class="mi">3</span> <span class="mi">2</span> <span class="mi">1</span>
+</code></pre></div></div>
+
+<p><strong>Definition: A generator is any function that uses the <code class="highlighter-rouge">yield</code> statement.</strong></p>
+
+<p><strong>The behavior of generators is different than a normal function. Calling a generator function creates a generator object. It does not immediately execute the function.</strong></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">countdown</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="c1"># Added a print statement
+</span>    <span class="k">print</span><span class="p">(</span><span class="s">'Counting down from'</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">n</span>
+        <span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">countdown</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="c1"># There is NO PRINT STATEMENT
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">x</span>
+<span class="c1"># x is a generator object
+</span><span class="o">&lt;</span><span class="n">generator</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x58490</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>The function only executes on <code class="highlighter-rouge">__next__()</code> call.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">countdown</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span>
+<span class="o">&lt;</span><span class="n">generator</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x58490</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">__next__</span><span class="p">()</span>
+<span class="n">Counting</span> <span class="n">down</span> <span class="k">from</span> <span class="mi">10</span>
+<span class="mi">10</span>
+<span class="o">&gt;&gt;&gt;</span>
+</code></pre></div></div>
+
+<p><strong><code class="highlighter-rouge">yield</code> produces a value, but <em>suspends the function execution</em>. The function resumes on next call to <code class="highlighter-rouge">__next__()</code>.</strong></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">__next__</span><span class="p">()</span>
+<span class="mi">9</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">__next__</span><span class="p">()</span>
+<span class="mi">8</span>
+</code></pre></div></div>
+
+<p>When the generator finally returns, the iteration raises an error.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">__next__</span><span class="p">()</span>
+<span class="mi">1</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">__next__</span><span class="p">()</span>
+<span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+<span class="n">File</span> <span class="s">"&lt;stdin&gt;"</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="ow">in</span> <span class="err">?</span> <span class="nb">StopIteration</span>
+</code></pre></div></div>
+
+<p>This means <strong>a generator function implements the same low-level protocol that the for statements uses on lists, tuples, dicts, files, etc.</strong></p>
+
+<h4 id="generator-example-find-matching-substring-from-lines-in-file">
+<a class="anchor" href="#generator-example-find-matching-substring-from-lines-in-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generator example: find matching substring from lines in file</h4>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="k">def</span> <span class="nf">filematch</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">substr</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">substr</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="n">line</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s">'Data/portfolio.csv'</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s">''</span><span class="p">)</span>
+
+<span class="n">name</span><span class="p">,</span><span class="n">shares</span><span class="p">,</span><span class="n">price</span>
+<span class="s">"AA"</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mf">32.20</span>
+<span class="s">"IBM"</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mf">91.10</span>
+<span class="s">"CAT"</span><span class="p">,</span><span class="mi">150</span><span class="p">,</span><span class="mf">83.44</span>
+<span class="s">"MSFT"</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mf">51.23</span>
+<span class="s">"GE"</span><span class="p">,</span><span class="mi">95</span><span class="p">,</span><span class="mf">40.37</span>
+<span class="s">"MSFT"</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mf">65.10</span>
+<span class="s">"IBM"</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mf">70.44</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">filematch</span><span class="p">(</span><span class="s">'Data/portfolio.csv'</span><span class="p">,</span> <span class="s">'IBM'</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s">''</span><span class="p">)</span>
+
+<span class="s">"IBM"</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mf">91.10</span>
+<span class="s">"IBM"</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mf">70.44</span>
+<span class="o">&gt;&gt;&gt;</span>
+</code></pre></div></div>
+
+<h4 id="generator-example-monitoring-a-streaming-data-source">
+<a class="anchor" href="#generator-example-monitoring-a-streaming-data-source" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generator example: monitoring a streaming data source</h4>
+
+<p>Suppose there is a running program that keeps writing to <code class="highlighter-rouge">Data/stocklog.csv</code> in realtime. We use the code below to monitor the stream.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># follow.py
+</span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'Data/stocklog.csv'</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">SEEK_END</span><span class="p">)</span>   <span class="c1"># Move file pointer 0 bytes from end of file
+</span>
+<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s">''</span><span class="p">:</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>   <span class="c1"># Sleep briefly and retry
+</span>        <span class="k">continue</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">'"'</span><span class="p">)</span>
+    <span class="n">price</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">change</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">change</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">'{name:&gt;10s} {price:&gt;10.2f} {change:&gt;10.2f}'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This <code class="highlighter-rouge">while True</code> loop along with some <code class="highlighter-rouge">if</code> checks and small <code class="highlighter-rouge">sleep</code> time keeps checking the end of the file. <code class="highlighter-rouge">readline()</code> will either return new data or an empty string, so if we get empty string we continue to the next retry.</p>
+
+<p>It is just like the Unix <code class="highlighter-rouge">tail -f</code> command that is used to watch a log file.</p>
+
+<h3 id="producers-consumers-and-pipelines">
+<a class="anchor" href="#producers-consumers-and-pipelines" aria-hidden="true"><span class="octicon octicon-link"></span></a>Producers, consumers and pipelines</h3>
+
+<p>Generators are a useful tool for setting various kinds of producer/consumer problems and dataflow pipelines.</p>
+
+<h4 id="producer-consumer-problems">
+<a class="anchor" href="#producer-consumer-problems" aria-hidden="true"><span class="octicon octicon-link"></span></a>Producer-Consumer Problems</h4>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Producer
+</span><span class="k">def</span> <span class="nf">follow</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="o">...</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="o">...</span>
+        <span class="k">yield</span> <span class="n">line</span>        <span class="c1"># Produces value in `line` below
+</span>        <span class="o">...</span>
+
+<span class="c1"># Consumer
+</span><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">follow</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>    <span class="c1"># Consumes vale from `yield` above
+</span>    <span class="o">...</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">yield</code> produces values that <code class="highlighter-rouge">for</code> consumes.</p>
+
+<h4 id="generator-pipelines">
+<a class="anchor" href="#generator-pipelines" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generator Pipelines</h4>
+
+<p>You can use this aspect of generators to set up processing pipelines (like Unix pipes).</p>
+
+<p><em>producer → processing → processing → consumer</em></p>
+
+<p>Processing pipes have an initial data producer, some set of intermediate processing stages and a final consumer.</p>
+
+<ul>
+  <li>The producer is typically a generator. Although it could also be a list of some other sequence. <code class="highlighter-rouge">yield</code> feeds data into the pipeline.</li>
+  <li>Intermediate processing stages simultaneously consume and produce items. They might modify the data stream. They can also filter (discarding items).</li>
+  <li>Consumer is a for-loop. It gets items and does something with them.</li>
+</ul>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"""
+producer → processing → processing → consumer
+"""</span>
+<span class="k">def</span> <span class="nf">producer</span><span class="p">():</span>
+    <span class="o">...</span>
+    <span class="k">yield</span> <span class="n">item</span>          <span class="c1"># yields the item that is received by the `processing`
+</span>    <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">processing</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>      <span class="c1"># Comes from the `producer`
+</span>        <span class="o">...</span>
+        <span class="k">yield</span> <span class="n">newitem</span>   <span class="c1"># yields a new item
+</span>        <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">consumer</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>      <span class="c1"># Comes from the `processing`
+</span>        <span class="o">...</span>
+
+<span class="s">"""
+To actually use it and setup the pipeline
+"""</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">producer</span><span class="p">()</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">processing</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">consumer</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>You can create various generator functions and chain them together to perform processing involving data-flow pipelines. In addition, you can create functions that package a series of pipeline stages into a single function call</strong></p>
+
+<h4 id="generator-expressions">
+<a class="anchor" href="#generator-expressions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generator expressions</h4>
+
+<p>Generator expressions are like list comprehension, except that generator expressions use <code class="highlighter-rouge">()</code> instead of <code class="highlighter-rouge">[]</code>.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">a</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span>
+<span class="o">&lt;</span><span class="n">generator</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x58760</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span>
+<span class="o">...</span>   <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s">' '</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="mi">2</span> <span class="mi">4</span> <span class="mi">6</span> <span class="mi">8</span>
+</code></pre></div></div>
+
+<p>Differences with List Comprehensions.</p>
+
+<ul>
+  <li>Does not construct a list.</li>
+  <li>Only useful purpose is iteration.</li>
+  <li><strong>Once consumed, can’t be reused.</strong></li>
+</ul>
+
+<p>General syntax: <code class="highlighter-rouge">(&lt;expression&gt; for i in s if &lt;conditional&gt;)</code>.</p>
+
+<p>It can also serve as a function argument: <code class="highlighter-rouge">sum(x*x for x in a)</code>.</p>
+
+<p>It can be applied to any iterable.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">a</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">b</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">c</span><span class="p">:</span>
+<span class="o">...</span>   <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s">' '</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="o">-</span><span class="mi">1</span> <span class="o">-</span><span class="mi">4</span> <span class="o">-</span><span class="mi">9</span> <span class="o">-</span><span class="mi">16</span>
+</code></pre></div></div>
+
+<p><strong>The main use of generator expressions is in code that performs some calculation on a sequence, but only uses the result once.</strong> For example, strip all comments from a file.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'somefile.txt'</span><span class="p">)</span>
+<span class="n">lines</span> <span class="o">=</span> <span class="p">(</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">'#'</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+    <span class="o">...</span>
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><strong>With generators, the code runs faster and uses little memory. It’s like <em>a filter applied to a stream</em>.</strong></p>
+
+<h4 id="why-generators">
+<a class="anchor" href="#why-generators" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why Generators</h4>
+<ul>
+  <li>Many problems are much more clearly expressed in terms of iteration.
+    <ul>
+      <li>Looping over a collection of items and performing some kind of operation (searching, replacing, modifying, etc.).</li>
+      <li>Processing pipelines can be applied to a wide range of data processing problems.</li>
+    </ul>
+  </li>
+  <li>Better memory efficiency.
+    <ul>
+      <li>Only produce values when needed.</li>
+      <li>Contrast to constructing giant lists.</li>
+      <li>Can operate on streaming data</li>
+    </ul>
+  </li>
+  <li>Generators encourage code reuse
+    <ul>
+      <li>Separates the iteration from code that uses the iteration</li>
+      <li>You can build a toolbox of interesting iteration functions and mix-n-match.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="itertools-module">
+<a class="anchor" href="#itertools-module" aria-hidden="true"><span class="octicon octicon-link"></span></a><code class="highlighter-rouge">itertools</code> module</h4>
+
+<p>The <code class="highlighter-rouge">itertools</code> is a library module with various functions designed to help with iterators/generators.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span><span class="n">s2</span><span class="p">)</span>
+<span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">itertools</span><span class="o">.</span><span class="n">dropwhile</span><span class="p">(</span><span class="n">predicate</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+<span class="n">itertools</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">itertools</span><span class="o">.</span><span class="n">ifilter</span><span class="p">(</span><span class="n">predicate</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+<span class="n">itertools</span><span class="o">.</span><span class="n">imap</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="o">...</span> <span class="n">sN</span><span class="p">)</span>
+<span class="n">itertools</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">itertools</span><span class="o">.</span><span class="n">tee</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ncopies</span><span class="p">)</span>
+<span class="n">itertools</span><span class="o">.</span><span class="n">izip</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="o">...</span> <span class="p">,</span> <span class="n">sN</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>All functions process data iteratively. They implement various kinds of iteration patterns.</p>
+
+<h2 id="advanced-topics">
+<a class="anchor" href="#advanced-topics" aria-hidden="true"><span class="octicon octicon-link"></span></a>Advanced topics</h2>
+
+<h2 id="reference">
+<a class="anchor" href="#reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reference</h2>
+
+<p><a href="https://dabeaz-course.github.io/practical-python/Notes">https://dabeaz-course.github.io/practical-python/Notes</a></p>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="logancyang/blog-learning-automata"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/note/python/2020/07/02/python-basics-iii.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notes, code and essays by Logan Yang.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

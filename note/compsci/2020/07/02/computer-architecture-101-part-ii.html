@@ -3,9 +3,9 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>From NAND to TETRIS: Computer Architecture 101 Part II | Learning Automata</title>
+<title>[From NAND to TETRIS] Computer Architecture 101 Part II: Machine Language | Learning Automata</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="From NAND to TETRIS: Computer Architecture 101 Part II" />
+<meta property="og:title" content="[From NAND to TETRIS] Computer Architecture 101 Part II: Machine Language" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="CS foundamentals for non-CS majors" />
 <meta property="og:description" content="CS foundamentals for non-CS majors" />
@@ -15,7 +15,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-07-02T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"CS foundamentals for non-CS majors","@type":"BlogPosting","headline":"From NAND to TETRIS: Computer Architecture 101 Part II","dateModified":"2020-07-02T00:00:00-05:00","datePublished":"2020-07-02T00:00:00-05:00","url":"http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html"},"@context":"https://schema.org"}</script>
+{"description":"CS foundamentals for non-CS majors","@type":"BlogPosting","headline":"[From NAND to TETRIS] Computer Architecture 101 Part II: Machine Language","dateModified":"2020-07-02T00:00:00-05:00","datePublished":"2020-07-02T00:00:00-05:00","url":"http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -24,9 +24,9 @@
 <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
 
 <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>From NAND to TETRIS: Computer Architecture 101 Part II | Learning Automata</title>
+<title>[From NAND to TETRIS] Computer Architecture 101 Part II: Machine Language | Learning Automata</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="From NAND to TETRIS: Computer Architecture 101 Part II" />
+<meta property="og:title" content="[From NAND to TETRIS] Computer Architecture 101 Part II: Machine Language" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="CS foundamentals for non-CS majors" />
 <meta property="og:description" content="CS foundamentals for non-CS majors" />
@@ -36,7 +36,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-07-02T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"CS foundamentals for non-CS majors","@type":"BlogPosting","headline":"From NAND to TETRIS: Computer Architecture 101 Part II","dateModified":"2020-07-02T00:00:00-05:00","datePublished":"2020-07-02T00:00:00-05:00","url":"http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html"},"@context":"https://schema.org"}</script>
+{"description":"CS foundamentals for non-CS majors","@type":"BlogPosting","headline":"[From NAND to TETRIS] Computer Architecture 101 Part II: Machine Language","dateModified":"2020-07-02T00:00:00-05:00","datePublished":"2020-07-02T00:00:00-05:00","url":"http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -113,13 +113,13 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">From NAND to TETRIS: Computer Architecture 101 Part II</h1><p class="page-description">CS foundamentals for non-CS majors</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-07-02T00:00:00-05:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">[From NAND to TETRIS] Computer Architecture 101 Part II: Machine Language</h1><p class="page-description">CS foundamentals for non-CS majors</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-07-02T00:00:00-05:00" itemprop="datePublished">
         Jul 2, 2020
       </time>
        • <span class="read-time" title="Estimated read time">
     
     
-      8 min read
+      13 min read
     
 </span></p>
 
@@ -161,18 +161,38 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h4"><a href="#c-instruction-specification">C-instruction specification</a></li>
 </ul>
 </li>
+<li class="toc-entry toc-h3"><a href="#working-with-registers-and-memory-using-machine-language">Working with registers and memory using machine language</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#some-examples">Some examples</a></li>
+<li class="toc-entry toc-h4"><a href="#how-to-terminate-the-program-properly">How to terminate the program properly</a></li>
+<li class="toc-entry toc-h4"><a href="#built-in-symbols">Built-in symbols</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#branching-variables-iteration-using-machine-language">Branching, variables, iteration using machine language</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#branching">Branching</a></li>
+<li class="toc-entry toc-h4"><a href="#variables">Variables</a></li>
+<li class="toc-entry toc-h4"><a href="#iterations">Iterations</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#pointers">Pointers</a></li>
 <li class="toc-entry toc-h3"><a href="#inputoutput-using-machine-language">Input/Output using machine language</a>
 <ul>
 <li class="toc-entry toc-h4"><a href="#screen-output">Screen output</a></li>
 <li class="toc-entry toc-h4"><a href="#keyboard-input">Keyboard input</a></li>
+<li class="toc-entry toc-h4"><a href="#draw-a-rectangle-with-hack-programming">Draw a rectangle with Hack programming</a></li>
 </ul>
 </li>
+<li class="toc-entry toc-h3"><a href="#compiler-translates-high-level-language-to-machine-code">Compiler: translates high level language to machine code</a></li>
+<li class="toc-entry toc-h3"><a href="#comments">Comments</a></li>
 </ul>
 </li>
 <li class="toc-entry toc-h2"><a href="#level-5-computer-architecture">Level 5: Computer architecture</a></li>
 <li class="toc-entry toc-h2"><a href="#level-6-assembler">Level 6: Assembler</a></li>
 <li class="toc-entry toc-h2"><a href="#reference">Reference</a></li>
-</ul><h2 id="level-4-machine-language">
+</ul><p>Continuing the discussion through abstraction level 1-3 in the <a href="http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101.html">last post</a>, we look at level 4: machine language in detail in this post.</p>
+
+<h2 id="level-4-machine-language">
 <a class="anchor" href="#level-4-machine-language" aria-hidden="true"><span class="octicon octicon-link"></span></a>Level 4: Machine language</h2>
 
 <p>Before we build the computer, let’s understand what we want the computer to be able to do from a user point of view.</p>
@@ -419,6 +439,173 @@ M=A-1; JEQ
 
 <p><img src="/images/cs4ds/hacklang-ex.png" alt="" align="middle"></p>
 
+<h3 id="working-with-registers-and-memory-using-machine-language">
+<a class="anchor" href="#working-with-registers-and-memory-using-machine-language" aria-hidden="true"><span class="octicon octicon-link"></span></a>Working with registers and memory using machine language</h3>
+
+<h4 id="some-examples">
+<a class="anchor" href="#some-examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Some examples</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// D=10
+@10     // There is no directive to directly set D=10. Set A=10 first
+D=A     // and set D=A
+
+// D++
+D=D+1   // This is easy
+
+// D = RAM[17]
+@17
+D=M
+
+// RAM[17] = D
+@17
+M=D
+
+// RAM[17] = 10
+@10
+D=A
+@17
+M=D
+
+// RAM[5] = RAM[3]
+@3
+D=M
+@5
+M=D
+</code></pre></div></div>
+
+<p>Here’s another example:</p>
+
+<p><img src="/images/cs4ds/hackcode-ex.png" alt="" align="middle"></p>
+
+<p>Note that the white spaces are ignored, and each line of code has a line number in the background automatically.</p>
+
+<h4 id="how-to-terminate-the-program-properly">
+<a class="anchor" href="#how-to-terminate-the-program-properly" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to terminate the program properly</h4>
+
+<p>We haven’t talk about program termination. If we execute our code naively, a malicious hacker could add malicious code after our code to do bad things. It is called <em><a href="https://en.wikipedia.org/wiki/NOP_slide#:~:text=In%20computer%20security%2C%20a%20NOP,address%20anywhere%20on%20the%20slide.">NOP slide</a></em>, meaning they added null operations after the actual code and before the malicious code to hide the latter.</p>
+
+<p>We use the fact that the computer never stands still and always executes something, <strong>we end the program with an infinite loop</strong> so it is under our control. This is the best practice for program termination.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
+@6
+0; JMP
+</code></pre></div></div>
+
+<h4 id="built-in-symbols">
+<a class="anchor" href="#built-in-symbols" aria-hidden="true"><span class="octicon octicon-link"></span></a>Built-in symbols</h4>
+
+<p>The Hack assembly language features <em>built-in symbols</em> which are virtual registers, not real registers. The symbols are <code class="highlighter-rouge">R0, R1, R2, ... , R15</code> and they correspond to values <code class="highlighter-rouge">0, 1, 2, ..., 15</code>.</p>
+
+<p>Why do we need these virtual registers?</p>
+
+<p>It is purely for <strong>style and readability</strong>.</p>
+
+<p>For example,</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// RAM[5]=15
+@15
+D=A
+
+@5
+M=D
+</code></pre></div></div>
+
+<p>The two <code class="highlighter-rouge">@x</code> lines are intended to do completely different things. The first is to set A and then set D. The second is to get address 5 in RAM and store D there.</p>
+
+<p>It means when we see <code class="highlighter-rouge">@x</code> we don’t know what it wants to do until we see the next line of code. So we introduce <code class="highlighter-rouge">R5</code>,</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// RAM[5]=15
+@15
+D=A
+
+@R5
+M=D
+</code></pre></div></div>
+
+<p>When we use <code class="highlighter-rouge">@R5</code> it’s exactly the same as <code class="highlighter-rouge">@5</code>, but it means finding the address 5 so that it’s more readable for people.</p>
+
+<p>Here are all the built-in symbols:</p>
+
+<p><img src="/images/cs4ds/builtin-symbols.png" alt="" align="middle"></p>
+
+<h3 id="branching-variables-iteration-using-machine-language">
+<a class="anchor" href="#branching-variables-iteration-using-machine-language" aria-hidden="true"><span class="octicon octicon-link"></span></a>Branching, variables, iteration using machine language</h3>
+
+<h4 id="branching">
+<a class="anchor" href="#branching" aria-hidden="true"><span class="octicon octicon-link"></span></a>Branching</h4>
+
+<p>In any high level language there are many branching mechanisms such as if-else, while, switch, etc. In machine language, there is only one: <em>goto</em> using the <code class="highlighter-rouge">jump</code> directives.</p>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Program: signum.asm
+// Computes:
+//   if R0 &gt; 0:
+//       R1 = 1
+//   else:
+//       R1 = 0
+
+@R0
+D=M  // D = RAM[0]
+
+@8
+D; JGT  // if R0 &gt; 0, goto 8
+
+@R1
+M=0  // RAM[1] = 0
+@10
+0; JMP  // end of program
+
+@R1
+M=1  // R1=1
+
+@10
+0; JMP  // end of program
+</code></pre></div></div>
+
+<p>You can see this code is quite unreadable if there’s no comment or documentation. One thing we introduce to make it more readable is <strong>labels</strong>. One example is shown below. <code class="highlighter-rouge">(POSITIVE)</code> is a label that points to its next line. <code class="highlighter-rouge">@POSITIVE</code> is using the label to <em>goto</em> that line. This way we have a much more readable branching mechanism.</p>
+
+<p><img src="/images/cs4ds/goto-labels.png" alt="" align="middle"></p>
+
+<h4 id="variables">
+<a class="anchor" href="#variables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Variables</h4>
+
+<p>Say we want to exchange the values of R0 and R1:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Program: flip.asm
+// Flips the value of RAM[0] and RAM[1]
+
+// temp = R1
+// R1 = R0
+// R0 = temp
+</code></pre></div></div>
+
+<p>The people who created the Assembler can define a contract: <code class="highlighter-rouge">@somevar</code> with no label <code class="highlighter-rouge">(somevar)</code> means it’s a variable, and it will use <code class="highlighter-rouge">RAM[program_base_address+16]</code>. Any new variable will increment 16, i.e. use <code class="highlighter-rouge">+17</code>, <code class="highlighter-rouge">+18</code>, etc.</p>
+
+<p><img src="/images/cs4ds/variables.png" alt="" align="middle"></p>
+
+<h4 id="iterations">
+<a class="anchor" href="#iterations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Iterations</h4>
+
+<p>Suppose we want to compute <code class="highlighter-rouge">1+2+...+n</code>, we need an accumulator variable and an iteration in a high level language. The machine code is shown below:</p>
+
+<p><img src="/images/cs4ds/iterations.png" alt="" align="middle"></p>
+
+<h3 id="pointers">
+<a class="anchor" href="#pointers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pointers</h3>
+
+<p>From the machine’s perspective, an array is just a block of memory that starts at a certain base memory location with a certain length. The following example is to set -1 into the array.</p>
+
+<p><img src="/images/cs4ds/array-1.png" alt="" align="middle"></p>
+
+<p>First we set 2 variables, the base memory location <code class="highlighter-rouge">arr</code> and length <code class="highlighter-rouge">n</code>. Then we set the variable <code class="highlighter-rouge">i</code>. To achieve <code class="highlighter-rouge">RAM[arr+i] = -1</code>, we set register A to be <code class="highlighter-rouge">D+M</code>. This is the first time we set A using an arithmetic operation.</p>
+
+<p><img src="/images/cs4ds/pointers.png" alt="" align="middle"></p>
+
+<p><strong>Variables that store memory addresses like <code class="highlighter-rouge">arr</code> and <code class="highlighter-rouge">i</code> are called <em>pointers</em></strong>. When we need to access memory using a pointer, we need an instruction like <code class="highlighter-rouge">A=M</code>.</p>
+
+<p>Typical pointer semantics: “set the address register to the content of some memory register”.</p>
+
 <h3 id="inputoutput-using-machine-language">
 <a class="anchor" href="#inputoutput-using-machine-language" aria-hidden="true"><span class="octicon octicon-link"></span></a>Input/Output using machine language</h3>
 
@@ -463,6 +650,35 @@ M=A-1; JEQ
 <p><img src="/images/cs4ds/scancode.png" alt="" align="middle"></p>
 
 <p>Notice that the keyboard memory map has 16 bits, it can represent $2^{16}=65536$ different keys which is more than enough even for unicode characters.</p>
+
+<h4 id="draw-a-rectangle-with-hack-programming">
+<a class="anchor" href="#draw-a-rectangle-with-hack-programming" aria-hidden="true"><span class="octicon octicon-link"></span></a>Draw a rectangle with Hack programming</h4>
+
+<p><img src="/images/cs4ds/inputoutputhack.png" alt="" align="middle"></p>
+
+<p>Let’s consider the “hello world” program of computer graphics: drawing a rectangle.</p>
+
+<p><img src="/images/cs4ds/drawrec.png" alt="" align="middle"></p>
+
+<p>Let’s focus on the pseudocode. The goal is to manipulate the Screen Memory Map to show the rectangle.</p>
+
+<p><img src="/images/cs4ds/recpseudo.png" alt="" align="middle"></p>
+
+<p>The following is the real Hack code</p>
+
+<p><img src="/images/cs4ds/reccode.png" alt="" align="middle"></p>
+
+<h3 id="compiler-translates-high-level-language-to-machine-code">
+<a class="anchor" href="#compiler-translates-high-level-language-to-machine-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Compiler: translates high level language to machine code</h3>
+
+<p>This is <em>From NAND to TETRIS part I</em> and we don’t concern ourselves with the compiler which translates a high level language to machine code. In part II, there’s material showing how to write a compiler and an operating system.</p>
+
+<p><img src="/images/cs4ds/compiler.png" alt="" align="middle"></p>
+
+<h3 id="comments">
+<a class="anchor" href="#comments" aria-hidden="true"><span class="octicon octicon-link"></span></a>Comments</h3>
+
+<p>Hack is a simplified version of the machine language. The machine language that controls our day-to-day personal computers is more complex and has more features such as floating point arithmetic. However, we can always use software to expand the capabilities of the machine language, and that is in the part II of <em>From NAND to TETRIS</em>.</p>
 
 <h2 id="level-5-computer-architecture">
 <a class="anchor" href="#level-5-computer-architecture" aria-hidden="true"><span class="octicon octicon-link"></span></a>Level 5: Computer architecture</h2>

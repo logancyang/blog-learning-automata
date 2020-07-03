@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-07-02T21:26:06-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[Python Review] Part III: Generators and Advanced Topics</title><link href="http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html" rel="alternate" type="text/html" title="[Python Review] Part III: Generators and Advanced Topics" /><published>2020-07-02T00:00:00-05:00</published><updated>2020-07-02T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html">&lt;h2 id=&quot;generators&quot;&gt;Generators&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-07-03T15:57:26-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[Python Review] Part III: Generators and Advanced Topics</title><link href="http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html" rel="alternate" type="text/html" title="[Python Review] Part III: Generators and Advanced Topics" /><published>2020-07-02T00:00:00-05:00</published><updated>2020-07-02T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html">&lt;h2 id=&quot;generators&quot;&gt;Generators&lt;/h2&gt;
 
 &lt;h3 id=&quot;iteration-protocol&quot;&gt;Iteration protocol&lt;/h3&gt;
 
@@ -382,7 +382,9 @@ To actually use it and setup the pipeline
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Generators</summary></entry><entry><title type="html">From NAND to TETRIS: Computer Architecture 101 Part II</title><link href="http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html" rel="alternate" type="text/html" title="From NAND to TETRIS: Computer Architecture 101 Part II" /><published>2020-07-02T00:00:00-05:00</published><updated>2020-07-02T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii</id><content type="html" xml:base="http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html">&lt;h2 id=&quot;level-4-machine-language&quot;&gt;Level 4: Machine language&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Generators</summary></entry><entry><title type="html">[From NAND to TETRIS] Computer Architecture 101 Part II: Machine Language</title><link href="http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html" rel="alternate" type="text/html" title="[From NAND to TETRIS] Computer Architecture 101 Part II: Machine Language" /><published>2020-07-02T00:00:00-05:00</published><updated>2020-07-02T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii</id><content type="html" xml:base="http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html">&lt;p&gt;Continuing the discussion through abstraction level 1-3 in the &lt;a href=&quot;http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101.html&quot;&gt;last post&lt;/a&gt;, we look at level 4: machine language in detail in this post.&lt;/p&gt;
+
+&lt;h2 id=&quot;level-4-machine-language&quot;&gt;Level 4: Machine language&lt;/h2&gt;
 
 &lt;p&gt;Before we build the computer, let’s understand what we want the computer to be able to do from a user point of view.&lt;/p&gt;
 
@@ -615,6 +617,164 @@ M=A-1; JEQ
 
 &lt;p&gt;&lt;img src=&quot;/images/cs4ds/hacklang-ex.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
 
+&lt;h3 id=&quot;working-with-registers-and-memory-using-machine-language&quot;&gt;Working with registers and memory using machine language&lt;/h3&gt;
+
+&lt;h4 id=&quot;some-examples&quot;&gt;Some examples&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// D=10
+@10     // There is no directive to directly set D=10. Set A=10 first
+D=A     // and set D=A
+
+// D++
+D=D+1   // This is easy
+
+// D = RAM[17]
+@17
+D=M
+
+// RAM[17] = D
+@17
+M=D
+
+// RAM[17] = 10
+@10
+D=A
+@17
+M=D
+
+// RAM[5] = RAM[3]
+@3
+D=M
+@5
+M=D
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Here’s another example:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackcode-ex.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Note that the white spaces are ignored, and each line of code has a line number in the background automatically.&lt;/p&gt;
+
+&lt;h4 id=&quot;how-to-terminate-the-program-properly&quot;&gt;How to terminate the program properly&lt;/h4&gt;
+
+&lt;p&gt;We haven’t talk about program termination. If we execute our code naively, a malicious hacker could add malicious code after our code to do bad things. It is called &lt;em&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/NOP_slide#:~:text=In%20computer%20security%2C%20a%20NOP,address%20anywhere%20on%20the%20slide.&quot;&gt;NOP slide&lt;/a&gt;&lt;/em&gt;, meaning they added null operations after the actual code and before the malicious code to hide the latter.&lt;/p&gt;
+
+&lt;p&gt;We use the fact that the computer never stands still and always executes something, &lt;strong&gt;we end the program with an infinite loop&lt;/strong&gt; so it is under our control. This is the best practice for program termination.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;...
+@6
+0; JMP
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;built-in-symbols&quot;&gt;Built-in symbols&lt;/h4&gt;
+
+&lt;p&gt;The Hack assembly language features &lt;em&gt;built-in symbols&lt;/em&gt; which are virtual registers, not real registers. The symbols are &lt;code class=&quot;highlighter-rouge&quot;&gt;R0, R1, R2, ... , R15&lt;/code&gt; and they correspond to values &lt;code class=&quot;highlighter-rouge&quot;&gt;0, 1, 2, ..., 15&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Why do we need these virtual registers?&lt;/p&gt;
+
+&lt;p&gt;It is purely for &lt;strong&gt;style and readability&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;For example,&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// RAM[5]=15
+@15
+D=A
+
+@5
+M=D
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The two &lt;code class=&quot;highlighter-rouge&quot;&gt;@x&lt;/code&gt; lines are intended to do completely different things. The first is to set A and then set D. The second is to get address 5 in RAM and store D there.&lt;/p&gt;
+
+&lt;p&gt;It means when we see &lt;code class=&quot;highlighter-rouge&quot;&gt;@x&lt;/code&gt; we don’t know what it wants to do until we see the next line of code. So we introduce &lt;code class=&quot;highlighter-rouge&quot;&gt;R5&lt;/code&gt;,&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// RAM[5]=15
+@15
+D=A
+
+@R5
+M=D
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;When we use &lt;code class=&quot;highlighter-rouge&quot;&gt;@R5&lt;/code&gt; it’s exactly the same as &lt;code class=&quot;highlighter-rouge&quot;&gt;@5&lt;/code&gt;, but it means finding the address 5 so that it’s more readable for people.&lt;/p&gt;
+
+&lt;p&gt;Here are all the built-in symbols:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/builtin-symbols.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;branching-variables-iteration-using-machine-language&quot;&gt;Branching, variables, iteration using machine language&lt;/h3&gt;
+
+&lt;h4 id=&quot;branching&quot;&gt;Branching&lt;/h4&gt;
+
+&lt;p&gt;In any high level language there are many branching mechanisms such as if-else, while, switch, etc. In machine language, there is only one: &lt;em&gt;goto&lt;/em&gt; using the &lt;code class=&quot;highlighter-rouge&quot;&gt;jump&lt;/code&gt; directives.&lt;/p&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Program: signum.asm
+// Computes:
+//   if R0 &amp;gt; 0:
+//       R1 = 1
+//   else:
+//       R1 = 0
+
+@R0
+D=M  // D = RAM[0]
+
+@8
+D; JGT  // if R0 &amp;gt; 0, goto 8
+
+@R1
+M=0  // RAM[1] = 0
+@10
+0; JMP  // end of program
+
+@R1
+M=1  // R1=1
+
+@10
+0; JMP  // end of program
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You can see this code is quite unreadable if there’s no comment or documentation. One thing we introduce to make it more readable is &lt;strong&gt;labels&lt;/strong&gt;. One example is shown below. &lt;code class=&quot;highlighter-rouge&quot;&gt;(POSITIVE)&lt;/code&gt; is a label that points to its next line. &lt;code class=&quot;highlighter-rouge&quot;&gt;@POSITIVE&lt;/code&gt; is using the label to &lt;em&gt;goto&lt;/em&gt; that line. This way we have a much more readable branching mechanism.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/goto-labels.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;variables&quot;&gt;Variables&lt;/h4&gt;
+
+&lt;p&gt;Say we want to exchange the values of R0 and R1:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Program: flip.asm
+// Flips the value of RAM[0] and RAM[1]
+
+// temp = R1
+// R1 = R0
+// R0 = temp
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The people who created the Assembler can define a contract: &lt;code class=&quot;highlighter-rouge&quot;&gt;@somevar&lt;/code&gt; with no label &lt;code class=&quot;highlighter-rouge&quot;&gt;(somevar)&lt;/code&gt; means it’s a variable, and it will use &lt;code class=&quot;highlighter-rouge&quot;&gt;RAM[program_base_address+16]&lt;/code&gt;. Any new variable will increment 16, i.e. use &lt;code class=&quot;highlighter-rouge&quot;&gt;+17&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;+18&lt;/code&gt;, etc.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/variables.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;iterations&quot;&gt;Iterations&lt;/h4&gt;
+
+&lt;p&gt;Suppose we want to compute &lt;code class=&quot;highlighter-rouge&quot;&gt;1+2+...+n&lt;/code&gt;, we need an accumulator variable and an iteration in a high level language. The machine code is shown below:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/iterations.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;pointers&quot;&gt;Pointers&lt;/h3&gt;
+
+&lt;p&gt;From the machine’s perspective, an array is just a block of memory that starts at a certain base memory location with a certain length. The following example is to set -1 into the array.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/array-1.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;First we set 2 variables, the base memory location &lt;code class=&quot;highlighter-rouge&quot;&gt;arr&lt;/code&gt; and length &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;. Then we set the variable &lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt;. To achieve &lt;code class=&quot;highlighter-rouge&quot;&gt;RAM[arr+i] = -1&lt;/code&gt;, we set register A to be &lt;code class=&quot;highlighter-rouge&quot;&gt;D+M&lt;/code&gt;. This is the first time we set A using an arithmetic operation.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/pointers.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Variables that store memory addresses like &lt;code class=&quot;highlighter-rouge&quot;&gt;arr&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt; are called &lt;em&gt;pointers&lt;/em&gt;&lt;/strong&gt;. When we need to access memory using a pointer, we need an instruction like &lt;code class=&quot;highlighter-rouge&quot;&gt;A=M&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Typical pointer semantics: “set the address register to the content of some memory register”.&lt;/p&gt;
+
 &lt;h3 id=&quot;inputoutput-using-machine-language&quot;&gt;Input/Output using machine language&lt;/h3&gt;
 
 &lt;p&gt;The computer gets data from humans via input devices like the keyboard, and outputs to output devices like the display.&lt;/p&gt;
@@ -657,13 +817,39 @@ M=A-1; JEQ
 
 &lt;p&gt;Notice that the keyboard memory map has 16 bits, it can represent $2^{16}=65536$ different keys which is more than enough even for unicode characters.&lt;/p&gt;
 
+&lt;h4 id=&quot;draw-a-rectangle-with-hack-programming&quot;&gt;Draw a rectangle with Hack programming&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/inputoutputhack.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s consider the “hello world” program of computer graphics: drawing a rectangle.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/drawrec.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s focus on the pseudocode. The goal is to manipulate the Screen Memory Map to show the rectangle.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/recpseudo.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The following is the real Hack code&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/reccode.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;compiler-translates-high-level-language-to-machine-code&quot;&gt;Compiler: translates high level language to machine code&lt;/h3&gt;
+
+&lt;p&gt;This is &lt;em&gt;From NAND to TETRIS part I&lt;/em&gt; and we don’t concern ourselves with the compiler which translates a high level language to machine code. In part II, there’s material showing how to write a compiler and an operating system.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/compiler.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;comments&quot;&gt;Comments&lt;/h3&gt;
+
+&lt;p&gt;Hack is a simplified version of the machine language. The machine language that controls our day-to-day personal computers is more complex and has more features such as floating point arithmetic. However, we can always use software to expand the capabilities of the machine language, and that is in the part II of &lt;em&gt;From NAND to TETRIS&lt;/em&gt;.&lt;/p&gt;
+
 &lt;h2 id=&quot;level-5-computer-architecture&quot;&gt;Level 5: Computer architecture&lt;/h2&gt;
 
 &lt;h2 id=&quot;level-6-assembler&quot;&gt;Level 6: Assembler&lt;/h2&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://www.coursera.org/learn/build-a-computer&quot;&gt;Coursera From NAND To TETRIS&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Level 4: Machine language</summary></entry><entry><title type="html">[Python Review] Part II: Classes and Objects</title><link href="http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii.html" rel="alternate" type="text/html" title="[Python Review] Part II: Classes and Objects" /><published>2020-06-30T00:00:00-05:00</published><updated>2020-06-30T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii.html">&lt;h2 id=&quot;class-and-object-basics&quot;&gt;Class and object basics&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.coursera.org/learn/build-a-computer&quot;&gt;Coursera From NAND To TETRIS&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Continuing the discussion through abstraction level 1-3 in the last post, we look at level 4: machine language in detail in this post.</summary></entry><entry><title type="html">[Python Review] Part II: Classes and Objects</title><link href="http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii.html" rel="alternate" type="text/html" title="[Python Review] Part II: Classes and Objects" /><published>2020-06-30T00:00:00-05:00</published><updated>2020-06-30T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii.html">&lt;h2 id=&quot;class-and-object-basics&quot;&gt;Class and object basics&lt;/h2&gt;
 
 &lt;h3 id=&quot;overriding&quot;&gt;Overriding&lt;/h3&gt;
 
@@ -2010,7 +2196,7 @@ bash % prog.py
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">String methods</summary></entry><entry><title type="html">From NAND to TETRIS: Computer Architecture 101 Part I</title><link href="http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101.html" rel="alternate" type="text/html" title="From NAND to TETRIS: Computer Architecture 101 Part I" /><published>2020-06-29T00:00:00-05:00</published><updated>2020-06-29T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101</id><content type="html" xml:base="http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101.html">&lt;p&gt;Ever wondered how a computer executes your code with those tiny silicon thingys? If it sounds like a mystery to you, you need to read this article.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">String methods</summary></entry><entry><title type="html">[From NAND to TETRIS] Computer Architecture 101 Part I: Logic Gates, ALU and Memory</title><link href="http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101.html" rel="alternate" type="text/html" title="[From NAND to TETRIS] Computer Architecture 101 Part I: Logic Gates, ALU and Memory" /><published>2020-06-29T00:00:00-05:00</published><updated>2020-06-29T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101</id><content type="html" xml:base="http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101.html">&lt;p&gt;Ever wondered how a computer executes your code with those tiny silicon thingys? If it sounds like a mystery to you, you need to read this article.&lt;/p&gt;
 
 &lt;p&gt;A computer system is a multiple-layer abstraction. You worry about &lt;em&gt;what&lt;/em&gt; you want to do using &lt;em&gt;interfaces&lt;/em&gt; that are &lt;em&gt;abstracted away&lt;/em&gt; from you. Getting to know what the abstractions are and having an rough idea of how they work under the hood is an important and often overlooked prerequisite for a good coder. If you don’t have this knowledge as a data scientist or software developer, you will feel you work on top of a floating and unreliable foundation.&lt;/p&gt;
 
@@ -2020,7 +2206,7 @@ bash % prog.py
 
 &lt;p&gt;After this exercise, you will walk away more confident and eliminate the insecurities of not knowing the foundational knowledge of computers.&lt;/p&gt;
 
-&lt;p&gt;Ready? Let’s get started.&lt;/p&gt;
+&lt;p&gt;Ready? Let’s get started and go through the &lt;strong&gt;levels of abstractions&lt;/strong&gt; in the computer system.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/images/cs4ds/abstractions.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
 
@@ -2366,7 +2552,7 @@ else:
 
 &lt;p&gt;Cache memory is a small and expensive memory that is close to the processor. It has very high performance. There is a hierarchy of cache memories, the closer to the processor, the faster, smaller and more expensive it gets.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;./2020-07-02-computer-architecture-101-part-ii.md&quot;&gt;Go to Part II&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html&quot;&gt;Go to Part II&lt;/a&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 

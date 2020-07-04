@@ -225,6 +225,21 @@ window.onload = wrap_img;
 
 <p>The ‘utf-8’ argument specifies a character encoding. Other common values include ‘ascii’ and ‘latin1’.</p>
 
+<p>Another example for handling Chinese unicode characters:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="s">u'好'</span>
+<span class="k">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="c1"># 好
+</span><span class="n">b</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">)</span> <span class="c1"># unicode str to byte str. "utf-8" is default
+</span><span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="c1"># b'\xe5\xa5\xbd'
+</span><span class="n">ch</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span> <span class="c1"># byte str to unicode str Chinese
+</span><span class="k">print</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+<span class="c1"># 好
+</span></code></pre></div></div>
+
+<p>For full details. check out this <a href="https://realpython.com/python-encodings-guide/#encoding-and-decoding-in-python-3">article</a>.</p>
+
 <h3 id="raw-strings">
 <a class="anchor" href="#raw-strings" aria-hidden="true"><span class="octicon octicon-link"></span></a>Raw strings</h3>
 

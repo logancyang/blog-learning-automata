@@ -3,7 +3,7 @@ toc: true
 layout: post
 description: Stepping up Python skills
 categories: [note, python]
-title: "Python Essentials: Digging into Package and Environment Management to Find the Best Approach"
+title: "[Python Essentials] Digging into Package and Environment Management to Find the Best Approach"
 comments: true
 ---
 

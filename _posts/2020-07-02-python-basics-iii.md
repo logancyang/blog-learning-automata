@@ -394,7 +394,425 @@ All functions process data iteratively. They implement various kinds of iteratio
 
 ## Advanced topics
 
+These are some useful advanced topics that you will use day-to-day.
 
+### Variable arguments
+
+A function that accepts any number of arguments is said to use variable arguments. For example, `*args` is a tuple that contains any number of positional arguments:
+
+```py
+def f(x, *args):
+    ...
+
+f(1,2,3,4,5)
+
+def f(x, *args):
+    # x -> 1
+    # args -> (2,3,4,5), a tuple
+```
+
+A function can also accept any number of keyword arguments. For example:
+
+```py
+def f(x, y, **kwargs):
+    ...
+
+f(2, 3, flag=True, mode='fast', header='debug')
+
+def f(x, y, **kwargs):
+    # x -> 2
+    # y -> 3
+    # kwargs -> { 'flag': True, 'mode': 'fast', 'header': 'debug' }, a dict
+```
+
+Combining both we have:
+
+```py
+def f(*args, **kwargs):
+    ...
+
+f(2, 3, flag=True, mode='fast', header='debug')
+
+def f(*args, **kwargs):
+    # args = (2, 3)
+    # kwargs -> { 'flag': True, 'mode': 'fast', 'header': 'debug' }
+    ...
+```
+
+This function takes any combination of positional or keyword arguments. It is sometimes **used when writing wrappers or when you want to pass arguments through to another function**.
+
+#### Passing tuples and dicts
+
+We can also use `*` to expand tuple, `**` to expand dict, and pass into a function.
+
+```py
+numbers = (2,3,4)
+f(1, *numbers)
+# Same as f(1,2,3,4)
+
+options = {
+    'color' : 'red',
+    'delimiter' : ',',
+    'width' : 400
+}
+f(data, **options)
+# Same as f(data, color='red', delimiter=',', width=400)
+```
+
+### Callback function, and Lambda anonymous function
+
+If we want to sort a dictionary in-place, we do:
+
+```py
+def stock_name(s):
+    return s['name']
+
+# stock_name is a callback
+portfolio.sort(key=stock_name)
+
+"""
+# Check how the dictionaries are sorted by the `name` key
+[
+  {'name': 'AA', 'price': 32.2, 'shares': 100},
+  {'name': 'CAT', 'price': 83.44, 'shares': 150},
+  {'name': 'GE', 'price': 40.37, 'shares': 95},
+  {'name': 'IBM', 'price': 91.1, 'shares': 50},
+  {'name': 'IBM', 'price': 70.44, 'shares': 100},
+  {'name': 'MSFT', 'price': 51.23, 'shares': 200},
+  {'name': 'MSFT', 'price': 65.1, 'shares': 50}
+]
+"""
+```
+
+The `key` function is an example of a **callback** function.
+
+The `sort()` method “calls back” to a function you supply.
+
+**Callback functions are often short one-line functions that are only used for that one operation**. Programmers often ask for a short-cut for specifying this extra processing.
+
+Use a lambda instead of creating the function. In our previous sorting example.
+
+```py
+portfolio.sort(key=lambda s: s['name'])
+```
+
+This creates an unnamed function that evaluates **a single expression**.
+
+Using `lambda`
+
+- `lambda` is highly restricted.
+- Only a single expression is allowed.
+- No statements like if, while, etc.
+- Most common use is with functions like sort().
+
+### Returning functions
+
+We can **use functions to create other functions**.
+
+Consider this example:
+
+```py
+def add(x, y):
+    def do_add():
+        # `x` and `y` are defined outside `do_add()`
+        print('Adding', x, y)
+        return x + y
+    return do_add
+```
+
+`x` and `y` are defined outside `do_add()`.
+
+Further observe that **those variables are somehow kept alive after `add()` has finished**!
+
+```py
+>>> a = add(3,4)
+>>> a
+<function do_add at 0x6a670>
+>>> a()
+Adding 3 4      # Where are these values coming from?
+7
+```
+
+#### Closures
+
+**When an inner function is returned as a result, that inner function is known as a closure**.
+
+```py
+def add(x, y):
+    # `do_add` is a closure
+    def do_add():
+        print('Adding', x, y)
+        return x + y
+    return do_add
+```
+
+Essential feature: **A closure *retains the values of all variables* needed for the function to *run properly later on***.
+
+**Think of a closure as a function plus an extra environment that holds the values of variables that it depends on.**
+
+#### Use Closure in callback functions
+
+Closure are an essential feature of Python. However, their use is often subtle. Common applications:
+
+- Use in callback functions
+- Delayed evaluation
+- Decorator functions
+
+Consider a function like this:
+
+```py
+def after(seconds, func):
+    time.sleep(seconds)
+    func()
+```
+
+Usage example:
+
+```py
+def greeting():
+    print('Hello Guido')
+
+after(30, greeting)
+```
+
+`after` executes the supplied function... later.
+
+Closures carry extra information around.
+
+```py
+def add(x, y):
+    def do_add():
+        print(f'Adding {x} + {y} -> {x+y}')
+    return do_add
+
+def after(seconds, func):
+    time.sleep(seconds)
+    func()
+
+after(30, add(2, 3))
+# `do_add` has the references x -> 2 and y -> 3
+```
+
+#### Use closure to avoid code repetition
+
+Closures can also be used as technique for avoiding excessive code repetition. You can write functions that make code.
+
+Consider this code:
+
+```py
+class Stock:
+    def __init__(self, name, shares, price):
+        self.name = name
+        self.shares = shares
+        self.price = price
+    ...
+    @property
+    def shares(self):
+        return self._shares
+
+    @shares.setter
+    def shares(self, value):
+        if not isinstance(value, int):
+            raise TypeError('Expected int')
+        self._shares = value
+    ...
+```
+
+You want the type check to apply not just on `shares`, but on all other things, and you want to avoid typing this code again and again, what do you do?
+
+```py
+# typedproperty.py
+
+def typedproperty(name, expected_type):
+    private_name = '_' + name
+    @property
+    def prop(self):
+        return getattr(self, private_name)
+
+    @prop.setter
+    def prop(self, value):
+        if not isinstance(value, expected_type):
+            raise TypeError(f'Expected {expected_type}')
+        setattr(self, private_name, value)
+
+    return prop
+
+# stock.py
+from typedproperty import typedproperty
+
+class Stock:
+    name = typedproperty('name', str)
+    shares = typedproperty('shares', int)
+    price = typedproperty('price', float)
+
+    def __init__(self, name, shares, price):
+        self.name = name
+        self.shares = shares
+        self.price = price
+
+
+>>> s = Stock('IBM', 50, 91.1)
+>>> s.name
+'IBM'
+>>> s.shares = '100'
+... should get a TypeError ...
+>>>
+```
+
+### Decorators
+
+A decorator function is a function that wraps the decorated function with some additional stuff.
+
+Say you want to do logging for `add` and `sub`,
+
+```py
+def add(x, y):
+    print('Calling add')
+    return x + y
+
+def sub(x, y):
+    print('Calling sub')
+    return x - y
+```
+
+This is repetitive. I could have:
+
+```py
+def logged(func):
+    def wrapper(*args, **kwargs):
+        print('Calling', func.__name__)
+        return func(*args, **kwargs)
+    return wrapper
+
+def add(x, y):
+    return x + y
+
+logged_add = logged(add)
+logged_add(3, 4)      # You see the logging message appear
+```
+
+This example illustrates the process of creating a so-called **wrapper function**.
+
+A wrapper is a function that wraps around another function with some extra bits of processing, but otherwise works in the exact same way as the original function.
+
+**The `logged()` function creates the wrapper and returns it as a result.**
+
+Putting wrappers around functions is extremely common in Python. So common, there is a special syntax for it -- the decorator.
+
+```py
+def add(x, y):
+    return x + y
+add = logged(add)
+
+# Special syntax
+@logged
+def add(x, y):
+    return x + y
+```
+
+A decorator is just syntactic sugar. It's exactly the same as the first approach.
+
+There are many more subtle details to decorators than what has been presented here. For example, using them in classes. Or using multiple decorators with a function. However, the previous example is a good illustration of how their use tends to arise. Usually, it’s in response to repetitive code appearing across a wide range of function definitions. A decorator can move that code to a central definition.
+
+For more information on decorators, check out this [post](http://blog.logancyang.com/note/python/2020/06/15/python-metaclasses.html#decorators).
+
+### Static and class methods
+
+There are a few built-in decorators that are used in combination with method definitions.
+
+```py
+class Foo:
+    def bar(self,a):
+        ...
+
+    @staticmethod
+    def spam(a):
+        ...
+
+    @classmethod
+    def grok(cls,a):
+        ...
+
+    @property
+    def name(self):
+        ...
+```
+
+#### Static methods: for generic functionality or design patterns
+
+`@staticmethod` is used to define a so-called static class methods (from C++/Java).
+
+**A static method is a function that is part of the class, but which *does not operate on instances*.**
+
+```py
+class Foo(object):
+    @staticmethod
+    def bar(x):
+        print('x =', x)
+
+>>> Foo.bar(2)
+x = 2
+```
+
+Static methods are sometimes used to implement internal supporting code for a class. For example, code to help **manage created instances (memory management, system resources, persistence, locking, etc)**. They’re also **used by certain design patterns** (not discussed here).
+
+#### Class Methods: for alternative constructors
+
+`@classmethod` is used to define class methods.
+
+**A class method is a method that receives the *class object as the first parameter instead of the instance*.**
+
+```py
+class Foo:
+    def bar(self):
+        print(self)
+
+    @classmethod
+    def spam(cls):
+        print(cls)
+
+>>> f = Foo()
+>>> f.bar()
+<__main__.Foo object at 0x971690>   # The instance `f`
+>>> Foo.spam()
+<class '__main__.Foo'>              # The class `Foo`
+```
+
+**Class methods are most often used as a tool for *defining alternate constructors*.**
+
+```py
+class Date:
+    def __init__(self,year,month,day):
+        self.year = year
+        self.month = month
+        self.day = day
+
+    @classmethod
+    def today(cls):
+        # Notice how the class is passed as an argument
+        tm = time.localtime()
+        # And used to create a new instance
+        return cls(tm.tm_year, tm.tm_mon, tm.tm_mday)
+
+d = Date.today()
+```
+
+Class methods solve some tricky problems with features like inheritance.
+
+```py
+class Date:
+    ...
+    @classmethod
+    def today(cls):
+        # Gets the correct class (e.g. `NewDate`)
+        tm = time.localtime()
+        return cls(tm.tm_year, tm.tm_mon, tm.tm_mday)
+
+class NewDate(Date):
+    ...
+
+d = NewDate.today()
+```
 
 ## Reference
 

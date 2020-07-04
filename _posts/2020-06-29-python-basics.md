@@ -46,6 +46,22 @@ data = text.encode('utf-8') # text -> bytes
 
 The 'utf-8' argument specifies a character encoding. Other common values include 'ascii' and 'latin1'.
 
+Another example for handling Chinese unicode characters:
+
+```py
+s = u'好'
+print(s)
+# 好
+b = s.encode("utf-8") # unicode str to byte str. "utf-8" is default
+print(b)
+# b'\xe5\xa5\xbd'
+ch = b.decode() # byte str to unicode str Chinese
+print(ch)
+# 好
+```
+
+For full details. check out this [article](https://realpython.com/python-encodings-guide/#encoding-and-decoding-in-python-3).
+
 ### Raw strings
 
 Raw strings are string literals with an uninterpreted backslash.

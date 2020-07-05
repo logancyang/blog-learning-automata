@@ -456,6 +456,8 @@ This is *From NAND to TETRIS part I* and we don't concern ourselves with the com
 
 Hack is a simplified version of the machine language. The machine language that controls our day-to-day personal computers is more complex and has more features such as floating point arithmetic. However, we can always use software to expand the capabilities of the machine language, and that is in the part II of *From NAND to TETRIS*.
 
+[Go to Part III](http://blog.logancyang.com/note/compsci/2020/07/04/computer-architecture-101-part-iii.html)
+
 ## Reference
 
 [Coursera From NAND To TETRIS](https://www.coursera.org/learn/build-a-computer)

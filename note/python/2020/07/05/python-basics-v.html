@@ -119,7 +119,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      1 min read
+      8 min read
     
 </span></p>
 
@@ -139,16 +139,436 @@ window.onload = wrap_img;
 
   <div class="post-content e-content" itemprop="articleBody">
     <ul class="section-nav">
-<li class="toc-entry toc-h2"><a href="#packages">Packages</a></li>
+<li class="toc-entry toc-h2"><a href="#packages">Packages</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#modules">Modules</a></li>
+<li class="toc-entry toc-h3"><a href="#packages-vs-modules">Packages vs Modules</a></li>
+<li class="toc-entry toc-h3"><a href="#using-a-package">Using a package</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#problem-imports">Problem: imports</a></li>
+<li class="toc-entry toc-h4"><a href="#use-relative-imports-inside-a-package">Use relative imports inside a package</a></li>
+<li class="toc-entry toc-h4"><a href="#problem-main-scripts">Problem: Main Scripts</a></li>
+<li class="toc-entry toc-h4"><a href="#__init__py-files">__init__.py files</a></li>
+<li class="toc-entry toc-h4"><a href="#another-solution-for-scripts">Another solution for scripts</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#application-structure">Application structure</a></li>
+<li class="toc-entry toc-h2"><a href="#third-party-packages">Third-party packages</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#the-module-search-path">The Module Search Path</a></li>
+<li class="toc-entry toc-h3"><a href="#standard-library-modules">Standard Library Modules</a></li>
+<li class="toc-entry toc-h3"><a href="#third-party-modules">Third-party modules</a></li>
+<li class="toc-entry toc-h3"><a href="#installing-modules">Installing modules</a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#problems">Problems</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#virtual-environments">Virtual environments</a></li>
+<li class="toc-entry toc-h3"><a href="#handling-third-party-dependencies-in-your-application">Handling Third-Party Dependencies in Your Application</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#distribution">Distribution</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#creating-a-setuppy-file">Creating a setup.py file</a></li>
+<li class="toc-entry toc-h3"><a href="#creating-manifestin">Creating MANIFEST.in</a></li>
+<li class="toc-entry toc-h3"><a href="#creating-a-source-distribution">Creating a source distribution</a></li>
+<li class="toc-entry toc-h3"><a href="#installing-your-code">Installing your code</a></li>
+<li class="toc-entry toc-h3"><a href="#comment">Comment</a></li>
+</ul>
+</li>
 <li class="toc-entry toc-h2"><a href="#reference">Reference</a></li>
 </ul><h2 id="packages">
 <a class="anchor" href="#packages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Packages</h2>
+
+<p>This part is about</p>
+
+<ul>
+  <li>how to organize your code into a package structure</li>
+  <li>the installation of third party packages</li>
+  <li>preparing to give your own code away to others.</li>
+</ul>
+
+<p>Since the landscape of Python packaging tools is evolving, the main focus of this section is on some <strong>general code organization principles</strong> that will prove useful no matter what tools you later use to give code away or manage dependencies.</p>
+
+<p>If writing a larger program, you don’t really want to organize it as a large of collection of standalone files at the top level. Here is how you can organize the files in hierarchy.</p>
+
+<h3 id="modules">
+<a class="anchor" href="#modules" aria-hidden="true"><span class="octicon octicon-link"></span></a>Modules</h3>
+
+<p>Any Python source file is a module.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># foo.py
+</span><span class="k">def</span> <span class="nf">grok</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="o">...</span>
+<span class="k">def</span> <span class="nf">spam</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+    <span class="o">...</span>
+</code></pre></div></div>
+
+<p>An <code class="highlighter-rouge">import</code> statement loads and <strong>executes</strong> a module.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># program.py
+</span><span class="kn">import</span> <span class="nn">foo</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">foo</span><span class="o">.</span><span class="n">grok</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">foo</span><span class="o">.</span><span class="n">spam</span><span class="p">(</span><span class="s">'Hello'</span><span class="p">)</span>
+<span class="o">...</span>
+</code></pre></div></div>
+
+<h3 id="packages-vs-modules">
+<a class="anchor" href="#packages-vs-modules" aria-hidden="true"><span class="octicon octicon-link"></span></a>Packages vs Modules</h3>
+
+<p>For larger collections of code, it is common to organize modules into a package.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># From this
+pcost.py
+report.py
+fileparse.py
+
+# To this
+porty/
+    __init__.py
+    pcost.py
+    report.py
+    fileparse.py
+</code></pre></div></div>
+
+<p>You pick a name and make a top-level directory. <code class="highlighter-rouge">porty</code> in the example above (picking this name is the most important first step).</p>
+
+<p>Add an <code class="highlighter-rouge">__init__.py</code> file to the directory. It may be empty.</p>
+
+<p>Put your source files into the directory.</p>
+
+<h3 id="using-a-package">
+<a class="anchor" href="#using-a-package" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using a package</h3>
+
+<p>A package serves as a <strong>namespace</strong> for imports.</p>
+
+<p>This means that there are now multilevel imports.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">porty.report</span>
+<span class="n">port</span> <span class="o">=</span> <span class="n">porty</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">read_portfolio</span><span class="p">(</span><span class="s">'port.csv'</span><span class="p">)</span>
+
+<span class="c1"># Or
+</span>
+<span class="kn">from</span> <span class="nn">porty</span> <span class="kn">import</span> <span class="n">report</span>
+<span class="n">port</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">read_portfolio</span><span class="p">(</span><span class="s">'portfolio.csv'</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">porty.report</span> <span class="kn">import</span> <span class="n">read_portfolio</span>
+<span class="n">port</span> <span class="o">=</span> <span class="n">read_portfolio</span><span class="p">(</span><span class="s">'portfolio.csv'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>There are two main problems with this approach.</p>
+
+<ul>
+  <li>imports between files in the same package break.</li>
+  <li>main scripts placed inside the package break.</li>
+</ul>
+
+<h4 id="problem-imports">
+<a class="anchor" href="#problem-imports" aria-hidden="true"><span class="octicon octicon-link"></span></a>Problem: imports</h4>
+
+<p>Imports <strong>between files in the same package</strong> must now <strong>include the package name in the import</strong>.</p>
+
+<p>Remember the structure.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>porty/
+    __init__.py
+    pcost.py
+    report.py
+    fileparse.py
+</code></pre></div></div>
+
+<p>Modified import example:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># report.py
+</span><span class="kn">from</span> <span class="nn">porty</span> <span class="kn">import</span> <span class="n">fileparse</span>
+
+<span class="k">def</span> <span class="nf">read_portfolio</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">fileparse</span><span class="o">.</span><span class="n">parse_csv</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>These imports are absolute</strong>, not relative.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># report.py
+</span><span class="kn">import</span> <span class="nn">fileparse</span>    <span class="c1"># BREAKS. fileparse not found
+</span></code></pre></div></div>
+
+<h4 id="use-relative-imports-inside-a-package">
+<a class="anchor" href="#use-relative-imports-inside-a-package" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use relative imports inside a package</h4>
+
+<p>Instead of directly using the package name, you can use <code class="highlighter-rouge">.</code> to refer to the current package.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># report.py
+</span><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">fileparse</span>
+
+<span class="k">def</span> <span class="nf">read_portfolio</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">fileparse</span><span class="o">.</span><span class="n">parse_csv</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Using <code class="highlighter-rouge">from . import modname</code> <strong>makes it easy to rename the package</strong>.</p>
+
+<h4 id="problem-main-scripts">
+<a class="anchor" href="#problem-main-scripts" aria-hidden="true"><span class="octicon octicon-link"></span></a>Problem: Main Scripts</h4>
+
+<p>Running a package submodule as a main script breaks.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash <span class="nv">$ </span>python porty/pcost.py <span class="c"># BREAKS</span>
+</code></pre></div></div>
+
+<p>Reason: You are running Python on a single file and Python doesn’t see the rest of the package structure correctly (<code class="highlighter-rouge">sys.path</code> is wrong).</p>
+
+<p>All imports break.</p>
+
+<p>Solution: run your program in a different way, <strong>using the <code class="highlighter-rouge">-m</code> option</strong>.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash <span class="nv">$ </span>python <span class="nt">-m</span> porty.pcost <span class="c"># WORKS</span>
+</code></pre></div></div>
+
+<h4 id="__init__py-files">
+<a class="anchor" href="#__init__py-files" aria-hidden="true"><span class="octicon octicon-link"></span></a><code class="highlighter-rouge">__init__.py</code> files</h4>
+
+<p>The primary purpose of these files is to stitch modules together.</p>
+
+<p>Example: consolidating functions</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># porty/__init__.py
+</span><span class="kn">from</span> <span class="nn">.pcost</span> <span class="kn">import</span> <span class="n">portfolio_cost</span>
+<span class="kn">from</span> <span class="nn">.report</span> <span class="kn">import</span> <span class="n">portfolio_report</span>
+</code></pre></div></div>
+
+<p><strong>This makes names appear at the <em>top-level</em> when importing.</strong></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">porty</span> <span class="kn">import</span> <span class="n">portfolio_cost</span>
+<span class="n">portfolio_cost</span><span class="p">(</span><span class="s">'portfolio.csv'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>instead of using the multilevel imports.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">porty</span> <span class="kn">import</span> <span class="n">pcost</span>
+<span class="n">pcost</span><span class="o">.</span><span class="n">portfolio_cost</span><span class="p">(</span><span class="s">'portfolio.csv'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="another-solution-for-scripts">
+<a class="anchor" href="#another-solution-for-scripts" aria-hidden="true"><span class="octicon octicon-link"></span></a>Another solution for scripts</h4>
+
+<p>As mentioned, you now need to use -m package.module to run scripts within your package.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">bash</span> <span class="o">%</span> <span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">porty</span><span class="o">.</span><span class="n">pcost</span> <span class="n">portfolio</span><span class="o">.</span><span class="n">csv</span>
+</code></pre></div></div>
+
+<p>There is another alternative: Write a new top-level script.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+# pcost.py
+</span><span class="kn">import</span> <span class="nn">porty.pcost</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">porty</span><span class="o">.</span><span class="n">pcost</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This script lives <strong>outside</strong> the package. For example, looking at the directory structure:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pcost.py       # top-level-script
+porty/         # package directory
+    __init__.py
+    pcost.py
+    ...
+</code></pre></div></div>
+
+<h2 id="application-structure">
+<a class="anchor" href="#application-structure" aria-hidden="true"><span class="octicon octicon-link"></span></a>Application structure</h2>
+
+<p>Code organization and file structure is key to the maintainability of an application.</p>
+
+<p>There is no “one-size fits all” approach for Python.</p>
+
+<p>However, <strong>one structure that works for a lot of problems is something like this.</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>porty-app/
+  README.txt
+  script.py         # SCRIPT
+  porty/
+    # LIBRARY CODE
+    __init__.py
+    pcost.py
+    report.py
+    fileparse.py
+</code></pre></div></div>
+
+<p>The top-level <code class="highlighter-rouge">porty-app</code> is a container for everything else –- documentation, top-level scripts, examples, etc.</p>
+
+<p>Again, top-level scripts (if any) need to exist outside the code package. One level up.</p>
+
+<h2 id="third-party-packages">
+<a class="anchor" href="#third-party-packages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Third-party packages</h2>
+
+<p>Python has a large library of <strong>built-in modules</strong>.</p>
+
+<p>There are even more <strong>third party modules</strong>. Check them in the <strong><a href="https://pypi.org/">Python Package Index</a></strong> or <strong>PyPi</strong>. Or just do a Google search for a specific topic.</p>
+
+<p>How to handle third-party dependencies is an ever-evolving topic with Python. This section merely covers the basics to help you wrap your brain around how it works.</p>
+
+<h3 id="the-module-search-path">
+<a class="anchor" href="#the-module-search-path" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Module Search Path</h3>
+
+<p><strong><code class="highlighter-rouge">sys.path</code> is a directory that contains the list of all directories checked by the import statement</strong>. Look at it:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">sys</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span>
+<span class="o">...</span> <span class="n">look</span> <span class="n">at</span> <span class="n">the</span> <span class="n">result</span> <span class="o">...</span>
+</code></pre></div></div>
+
+<p>If you import something and it’s not located in one of those directories, you will get an ImportError exception.</p>
+
+<h3 id="standard-library-modules">
+<a class="anchor" href="#standard-library-modules" aria-hidden="true"><span class="octicon octicon-link"></span></a>Standard Library Modules</h3>
+
+<p>Modules from Python’s standard library usually come from a location such as <code class="highlighter-rouge">/usr/local/lib/python3.6</code>. You can find out for certain by trying a short test:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">re</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">re</span>
+<span class="o">&lt;</span><span class="n">module</span> <span class="s">'re'</span> <span class="k">from</span> <span class="s">'/usr/local/lib/python3.6/re.py'</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p><strong>Simply looking at a module in the REPL is a good debugging tip to know about. It will show you the location of the file</strong>.</p>
+
+<h3 id="third-party-modules">
+<a class="anchor" href="#third-party-modules" aria-hidden="true"><span class="octicon octicon-link"></span></a>Third-party modules</h3>
+
+<p>Third party modules are usually located in a dedicated <code class="highlighter-rouge">site-packages</code> directory. You’ll see it if you perform the same steps as above:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">numpy</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">numpy</span>
+<span class="o">&lt;</span><span class="n">module</span> <span class="s">'numpy'</span> <span class="k">from</span> <span class="s">'/usr/local/lib/python3.6/site-packages/numpy/__init__.py'</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>Again, looking at a module is a good debugging tip if you’re trying to figure out why something related to <code class="highlighter-rouge">import</code> isn’t working as expected.</p>
+
+<h3 id="installing-modules">
+<a class="anchor" href="#installing-modules" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installing modules</h3>
+
+<p>The most common technique for installing a third-party module is to use <code class="highlighter-rouge">pip</code>. For example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash % python3 <span class="nt">-m</span> pip <span class="nb">install </span>packagename
+</code></pre></div></div>
+
+<p>This command will download the package and install it in the <code class="highlighter-rouge">site-packages</code> directory.</p>
+
+<h4 id="problems">
+<a class="anchor" href="#problems" aria-hidden="true"><span class="octicon octicon-link"></span></a>Problems</h4>
+
+<ul>
+  <li>You may be using an installation of Python that you don’t directly control.
+    <ul>
+      <li>A corporate approved installation</li>
+      <li>You’re using the Python version that comes with the OS.</li>
+    </ul>
+  </li>
+  <li>You might not have permission to install global packages in the computer.</li>
+  <li>There might be other dependencies.</li>
+</ul>
+
+<p>Use virtual environment!</p>
+
+<h3 id="virtual-environments">
+<a class="anchor" href="#virtual-environments" aria-hidden="true"><span class="octicon octicon-link"></span></a>Virtual environments</h3>
+
+<p>A common solution to package installation issues is to create a so-called “virtual environment” for yourself. Naturally, there is no “one way” to do this–in fact, there are several competing tools and techniques. However, if you are using a standard Python installation, you can try typing this:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash % python <span class="nt">-m</span> venv mypython
+</code></pre></div></div>
+
+<p>After a few moments of waiting, you will have a new directory <code class="highlighter-rouge">mypython</code> that’s your own little Python install. Within that directory you’ll find a <code class="highlighter-rouge">bin/</code> directory (Unix) or a <code class="highlighter-rouge">Scripts/</code> directory (Windows). If you run the <code class="highlighter-rouge">activate</code> script found there, it will “activate” this version of Python, <strong>making it the default python command for the shell</strong>. For example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash % <span class="nb">source </span>mypython/bin/activate
+<span class="o">(</span>mypython<span class="o">)</span> bash %
+</code></pre></div></div>
+
+<p>From here, you can now start installing Python packages for yourself. For example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">(</span>mypython<span class="o">)</span> bash % python <span class="nt">-m</span> pip <span class="nb">install </span>pandas
+</code></pre></div></div>
+
+<p>For the purposes of experimenting and trying out different packages, a virtual environment will usually work fine. <strong>If, on the other hand, you’re creating an application and it has specific package dependencies, that is a slightly different problem.</strong></p>
+
+<h3 id="handling-third-party-dependencies-in-your-application">
+<a class="anchor" href="#handling-third-party-dependencies-in-your-application" aria-hidden="true"><span class="octicon octicon-link"></span></a>Handling Third-Party Dependencies in Your Application</h3>
+
+<p>If you have written an application and it has specific third-party dependencies, one challange concerns the creation and preservation of the environment that includes your code and the dependencies.</p>
+
+<p>The current (2020) recommendation is to use <a href="https://python-poetry.org/">Poetry</a>.</p>
+
+<p>Refer to the <a href="https://packaging.python.org/">Python Packaging User Guide</a> for the most up-to-date guide.</p>
+
+<h2 id="distribution">
+<a class="anchor" href="#distribution" aria-hidden="true"><span class="octicon octicon-link"></span></a>Distribution</h2>
+
+<p>At some point you might want to give your code to someone else, possibly just a co-worker. This section gives the most basic technique of doing that. For more detailed information, consult the <a href="https://packaging.python.org/">Python Packaging User Guide</a>.</p>
+
+<h3 id="creating-a-setuppy-file">
+<a class="anchor" href="#creating-a-setuppy-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating a <code class="highlighter-rouge">setup.py</code> file</h3>
+
+<p>Add a <code class="highlighter-rouge">setup.py</code> file to the top-level of your project directory.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># setup.py
+</span><span class="kn">import</span> <span class="nn">setuptools</span>
+
+<span class="n">setuptools</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s">"porty"</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s">"0.0.1"</span><span class="p">,</span>
+    <span class="n">author</span><span class="o">=</span><span class="s">"Your Name"</span><span class="p">,</span>
+    <span class="n">author_email</span><span class="o">=</span><span class="s">"you@example.com"</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s">"Practical Python Code"</span><span class="p">,</span>
+    <span class="n">packages</span><span class="o">=</span><span class="n">setuptools</span><span class="o">.</span><span class="n">find_packages</span><span class="p">(),</span>
+<span class="p">)</span>
+</code></pre></div></div>
+<h3 id="creating-manifestin">
+<a class="anchor" href="#creating-manifestin" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating <code class="highlighter-rouge">MANIFEST.in</code>
+</h3>
+
+<p>If there are additional files associated with your project, specify them with a <code class="highlighter-rouge">MANIFEST.in</code> file. For example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># MANIFEST.in</span>
+include <span class="k">*</span>.csv
+</code></pre></div></div>
+
+<p>Put the <code class="highlighter-rouge">MANIFEST.in</code> file in the same directory as <code class="highlighter-rouge">setup.py</code>.</p>
+
+<h3 id="creating-a-source-distribution">
+<a class="anchor" href="#creating-a-source-distribution" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating a source distribution</h3>
+
+<p>To create a distribution of your code, use the <code class="highlighter-rouge">setup.py</code> file. For example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash % python setup.py sdist
+</code></pre></div></div>
+
+<p>This will create a <code class="highlighter-rouge">.tar.gz</code> or <code class="highlighter-rouge">.zip</code> file in the directory <code class="highlighter-rouge">dist/</code>. That file is something that you can now give away to others.</p>
+
+<h3 id="installing-your-code">
+<a class="anchor" href="#installing-your-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installing your code</h3>
+
+<p>Others can install your Python code using <code class="highlighter-rouge">pip</code> in the same way that they do for other packages. They simply need to supply the file created in the previous step. For example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash % python <span class="nt">-m</span> pip <span class="nb">install </span>porty-0.0.1.tar.gz
+</code></pre></div></div>
+
+<h3 id="comment">
+<a class="anchor" href="#comment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Comment</h3>
+
+<p>The steps above describe the absolute most minimal basics of creating a package of Python code that you can give to another person. In reality, it can be much more complicated depending on third-party dependencies, whether or not your application includes foreign code (i.e., C/C++), and so forth. We’ve only taken a tiny first step.</p>
+
+<p>Refer to the <a href="https://packaging.python.org/tutorials/packaging-projects/">official guide</a> to see how to upload your package to PyPi.</p>
+
+<p>For a deeper discussion and selection of virtual environment, application dependency management tools, check another <a href="http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html">post</a> dedicated to this topic.</p>
 
 <h2 id="reference">
 <a class="anchor" href="#reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reference</h2>
 
 <ul>
   <li><a href="https://dabeaz-course.github.io/practical-python/Notes">https://dabeaz-course.github.io/practical-python/Notes</a></li>
+  <li><a href="https://packaging.python.org/tutorials/packaging-projects/">https://packaging.python.org/tutorials/packaging-projects/</a></li>
+  <li><a href="http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html">http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html</a></li>
 </ul>
 
   </div><!-- from https://github.com/utterance/utterances -->

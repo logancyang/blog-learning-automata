@@ -1,9 +1,367 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-07-05T20:19:50-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[Python Review] Part V: Packages</title><link href="http://blog.logancyang.com/note/python/2020/07/05/python-basics-v.html" rel="alternate" type="text/html" title="[Python Review] Part V: Packages" /><published>2020-07-05T00:00:00-05:00</published><updated>2020-07-05T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/05/python-basics-v</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/05/python-basics-v.html">&lt;h2 id=&quot;packages&quot;&gt;Packages&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-07-06T15:06:44-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[Python Review] Part V: Packages</title><link href="http://blog.logancyang.com/note/python/2020/07/05/python-basics-v.html" rel="alternate" type="text/html" title="[Python Review] Part V: Packages" /><published>2020-07-05T00:00:00-05:00</published><updated>2020-07-05T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/05/python-basics-v</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/05/python-basics-v.html">&lt;h2 id=&quot;packages&quot;&gt;Packages&lt;/h2&gt;
+
+&lt;p&gt;This part is about&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;how to organize your code into a package structure&lt;/li&gt;
+  &lt;li&gt;the installation of third party packages&lt;/li&gt;
+  &lt;li&gt;preparing to give your own code away to others.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Since the landscape of Python packaging tools is evolving, the main focus of this section is on some &lt;strong&gt;general code organization principles&lt;/strong&gt; that will prove useful no matter what tools you later use to give code away or manage dependencies.&lt;/p&gt;
+
+&lt;p&gt;If writing a larger program, you don’t really want to organize it as a large of collection of standalone files at the top level. Here is how you can organize the files in hierarchy.&lt;/p&gt;
+
+&lt;h3 id=&quot;modules&quot;&gt;Modules&lt;/h3&gt;
+
+&lt;p&gt;Any Python source file is a module.&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# foo.py
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;grok&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;spam&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;An &lt;code class=&quot;highlighter-rouge&quot;&gt;import&lt;/code&gt; statement loads and &lt;strong&gt;executes&lt;/strong&gt; a module.&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# program.py
+&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;foo&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grok&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spam&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Hello'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;packages-vs-modules&quot;&gt;Packages vs Modules&lt;/h3&gt;
+
+&lt;p&gt;For larger collections of code, it is common to organize modules into a package.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# From this
+pcost.py
+report.py
+fileparse.py
+
+# To this
+porty/
+    __init__.py
+    pcost.py
+    report.py
+    fileparse.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You pick a name and make a top-level directory. &lt;code class=&quot;highlighter-rouge&quot;&gt;porty&lt;/code&gt; in the example above (picking this name is the most important first step).&lt;/p&gt;
+
+&lt;p&gt;Add an &lt;code class=&quot;highlighter-rouge&quot;&gt;__init__.py&lt;/code&gt; file to the directory. It may be empty.&lt;/p&gt;
+
+&lt;p&gt;Put your source files into the directory.&lt;/p&gt;
+
+&lt;h3 id=&quot;using-a-package&quot;&gt;Using a package&lt;/h3&gt;
+
+&lt;p&gt;A package serves as a &lt;strong&gt;namespace&lt;/strong&gt; for imports.&lt;/p&gt;
+
+&lt;p&gt;This means that there are now multilevel imports.&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;porty.report&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;port&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;porty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;report&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read_portfolio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'port.csv'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Or
+&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;porty&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;report&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;port&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;report&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read_portfolio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'portfolio.csv'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;porty.report&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;read_portfolio&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;port&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;read_portfolio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'portfolio.csv'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;There are two main problems with this approach.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;imports between files in the same package break.&lt;/li&gt;
+  &lt;li&gt;main scripts placed inside the package break.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;problem-imports&quot;&gt;Problem: imports&lt;/h4&gt;
+
+&lt;p&gt;Imports &lt;strong&gt;between files in the same package&lt;/strong&gt; must now &lt;strong&gt;include the package name in the import&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Remember the structure.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;porty/
+    __init__.py
+    pcost.py
+    report.py
+    fileparse.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Modified import example:&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# report.py
+&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;porty&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fileparse&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;read_portfolio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fileparse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parse_csv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;These imports are absolute&lt;/strong&gt;, not relative.&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# report.py
+&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;fileparse&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;# BREAKS. fileparse not found
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;use-relative-imports-inside-a-package&quot;&gt;Use relative imports inside a package&lt;/h4&gt;
+
+&lt;p&gt;Instead of directly using the package name, you can use &lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt; to refer to the current package.&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# report.py
+&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fileparse&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;read_portfolio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fileparse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parse_csv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Using &lt;code class=&quot;highlighter-rouge&quot;&gt;from . import modname&lt;/code&gt; &lt;strong&gt;makes it easy to rename the package&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;problem-main-scripts&quot;&gt;Problem: Main Scripts&lt;/h4&gt;
+
+&lt;p&gt;Running a package submodule as a main script breaks.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bash &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;python porty/pcost.py &lt;span class=&quot;c&quot;&gt;# BREAKS&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Reason: You are running Python on a single file and Python doesn’t see the rest of the package structure correctly (&lt;code class=&quot;highlighter-rouge&quot;&gt;sys.path&lt;/code&gt; is wrong).&lt;/p&gt;
+
+&lt;p&gt;All imports break.&lt;/p&gt;
+
+&lt;p&gt;Solution: run your program in a different way, &lt;strong&gt;using the &lt;code class=&quot;highlighter-rouge&quot;&gt;-m&lt;/code&gt; option&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bash &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;python &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; porty.pcost &lt;span class=&quot;c&quot;&gt;# WORKS&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;__init__py-files&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;__init__.py&lt;/code&gt; files&lt;/h4&gt;
+
+&lt;p&gt;The primary purpose of these files is to stitch modules together.&lt;/p&gt;
+
+&lt;p&gt;Example: consolidating functions&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# porty/__init__.py
+&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;.pcost&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;portfolio_cost&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;.report&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;portfolio_report&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;This makes names appear at the &lt;em&gt;top-level&lt;/em&gt; when importing.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;porty&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;portfolio_cost&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;portfolio_cost&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'portfolio.csv'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;instead of using the multilevel imports.&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;porty&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pcost&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;pcost&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;portfolio_cost&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'portfolio.csv'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;another-solution-for-scripts&quot;&gt;Another solution for scripts&lt;/h4&gt;
+
+&lt;p&gt;As mentioned, you now need to use -m package.module to run scripts within your package.&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;bash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;python3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;porty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pcost&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;portfolio&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;csv&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;There is another alternative: Write a new top-level script.&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#!/usr/bin/env python3
+# pcost.py
+&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;porty.pcost&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sys&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;porty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pcost&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This script lives &lt;strong&gt;outside&lt;/strong&gt; the package. For example, looking at the directory structure:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pcost.py       # top-level-script
+porty/         # package directory
+    __init__.py
+    pcost.py
+    ...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;application-structure&quot;&gt;Application structure&lt;/h2&gt;
+
+&lt;p&gt;Code organization and file structure is key to the maintainability of an application.&lt;/p&gt;
+
+&lt;p&gt;There is no “one-size fits all” approach for Python.&lt;/p&gt;
+
+&lt;p&gt;However, &lt;strong&gt;one structure that works for a lot of problems is something like this.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;porty-app/
+  README.txt
+  script.py         # SCRIPT
+  porty/
+    # LIBRARY CODE
+    __init__.py
+    pcost.py
+    report.py
+    fileparse.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The top-level &lt;code class=&quot;highlighter-rouge&quot;&gt;porty-app&lt;/code&gt; is a container for everything else –- documentation, top-level scripts, examples, etc.&lt;/p&gt;
+
+&lt;p&gt;Again, top-level scripts (if any) need to exist outside the code package. One level up.&lt;/p&gt;
+
+&lt;h2 id=&quot;third-party-packages&quot;&gt;Third-party packages&lt;/h2&gt;
+
+&lt;p&gt;Python has a large library of &lt;strong&gt;built-in modules&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;There are even more &lt;strong&gt;third party modules&lt;/strong&gt;. Check them in the &lt;strong&gt;&lt;a href=&quot;https://pypi.org/&quot;&gt;Python Package Index&lt;/a&gt;&lt;/strong&gt; or &lt;strong&gt;PyPi&lt;/strong&gt;. Or just do a Google search for a specific topic.&lt;/p&gt;
+
+&lt;p&gt;How to handle third-party dependencies is an ever-evolving topic with Python. This section merely covers the basics to help you wrap your brain around how it works.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-module-search-path&quot;&gt;The Module Search Path&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;sys.path&lt;/code&gt; is a directory that contains the list of all directories checked by the import statement&lt;/strong&gt;. Look at it:&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sys&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;look&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;at&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;the&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If you import something and it’s not located in one of those directories, you will get an ImportError exception.&lt;/p&gt;
+
+&lt;h3 id=&quot;standard-library-modules&quot;&gt;Standard Library Modules&lt;/h3&gt;
+
+&lt;p&gt;Modules from Python’s standard library usually come from a location such as &lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/local/lib/python3.6&lt;/code&gt;. You can find out for certain by trying a short test:&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;re&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;re&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'re'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'/usr/local/lib/python3.6/re.py'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Simply looking at a module in the REPL is a good debugging tip to know about. It will show you the location of the file&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;third-party-modules&quot;&gt;Third-party modules&lt;/h3&gt;
+
+&lt;p&gt;Third party modules are usually located in a dedicated &lt;code class=&quot;highlighter-rouge&quot;&gt;site-packages&lt;/code&gt; directory. You’ll see it if you perform the same steps as above:&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;numpy&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;numpy&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'numpy'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'/usr/local/lib/python3.6/site-packages/numpy/__init__.py'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Again, looking at a module is a good debugging tip if you’re trying to figure out why something related to &lt;code class=&quot;highlighter-rouge&quot;&gt;import&lt;/code&gt; isn’t working as expected.&lt;/p&gt;
+
+&lt;h3 id=&quot;installing-modules&quot;&gt;Installing modules&lt;/h3&gt;
+
+&lt;p&gt;The most common technique for installing a third-party module is to use &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt;. For example:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bash % python3 &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; pip &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;packagename
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This command will download the package and install it in the &lt;code class=&quot;highlighter-rouge&quot;&gt;site-packages&lt;/code&gt; directory.&lt;/p&gt;
+
+&lt;h4 id=&quot;problems&quot;&gt;Problems&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;You may be using an installation of Python that you don’t directly control.
+    &lt;ul&gt;
+      &lt;li&gt;A corporate approved installation&lt;/li&gt;
+      &lt;li&gt;You’re using the Python version that comes with the OS.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;You might not have permission to install global packages in the computer.&lt;/li&gt;
+  &lt;li&gt;There might be other dependencies.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Use virtual environment!&lt;/p&gt;
+
+&lt;h3 id=&quot;virtual-environments&quot;&gt;Virtual environments&lt;/h3&gt;
+
+&lt;p&gt;A common solution to package installation issues is to create a so-called “virtual environment” for yourself. Naturally, there is no “one way” to do this–in fact, there are several competing tools and techniques. However, if you are using a standard Python installation, you can try typing this:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bash % python &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; venv mypython
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;After a few moments of waiting, you will have a new directory &lt;code class=&quot;highlighter-rouge&quot;&gt;mypython&lt;/code&gt; that’s your own little Python install. Within that directory you’ll find a &lt;code class=&quot;highlighter-rouge&quot;&gt;bin/&lt;/code&gt; directory (Unix) or a &lt;code class=&quot;highlighter-rouge&quot;&gt;Scripts/&lt;/code&gt; directory (Windows). If you run the &lt;code class=&quot;highlighter-rouge&quot;&gt;activate&lt;/code&gt; script found there, it will “activate” this version of Python, &lt;strong&gt;making it the default python command for the shell&lt;/strong&gt;. For example:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bash % &lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;mypython/bin/activate
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mypython&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; bash %
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;From here, you can now start installing Python packages for yourself. For example:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;mypython&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; bash % python &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; pip &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;pandas
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;For the purposes of experimenting and trying out different packages, a virtual environment will usually work fine. &lt;strong&gt;If, on the other hand, you’re creating an application and it has specific package dependencies, that is a slightly different problem.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;handling-third-party-dependencies-in-your-application&quot;&gt;Handling Third-Party Dependencies in Your Application&lt;/h3&gt;
+
+&lt;p&gt;If you have written an application and it has specific third-party dependencies, one challange concerns the creation and preservation of the environment that includes your code and the dependencies.&lt;/p&gt;
+
+&lt;p&gt;The current (2020) recommendation is to use &lt;a href=&quot;https://python-poetry.org/&quot;&gt;Poetry&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Refer to the &lt;a href=&quot;https://packaging.python.org/&quot;&gt;Python Packaging User Guide&lt;/a&gt; for the most up-to-date guide.&lt;/p&gt;
+
+&lt;h2 id=&quot;distribution&quot;&gt;Distribution&lt;/h2&gt;
+
+&lt;p&gt;At some point you might want to give your code to someone else, possibly just a co-worker. This section gives the most basic technique of doing that. For more detailed information, consult the &lt;a href=&quot;https://packaging.python.org/&quot;&gt;Python Packaging User Guide&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;creating-a-setuppy-file&quot;&gt;Creating a &lt;code class=&quot;highlighter-rouge&quot;&gt;setup.py&lt;/code&gt; file&lt;/h3&gt;
+
+&lt;p&gt;Add a &lt;code class=&quot;highlighter-rouge&quot;&gt;setup.py&lt;/code&gt; file to the top-level of your project directory.&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# setup.py
+&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;setuptools&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;setuptools&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;setup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;porty&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;0.0.1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Your Name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;author_email&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;you@example.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Practical Python Code&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;packages&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;setuptools&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find_packages&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;creating-manifestin&quot;&gt;Creating &lt;code class=&quot;highlighter-rouge&quot;&gt;MANIFEST.in&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;If there are additional files associated with your project, specify them with a &lt;code class=&quot;highlighter-rouge&quot;&gt;MANIFEST.in&lt;/code&gt; file. For example:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# MANIFEST.in&lt;/span&gt;
+include &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.csv
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Put the &lt;code class=&quot;highlighter-rouge&quot;&gt;MANIFEST.in&lt;/code&gt; file in the same directory as &lt;code class=&quot;highlighter-rouge&quot;&gt;setup.py&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;creating-a-source-distribution&quot;&gt;Creating a source distribution&lt;/h3&gt;
+
+&lt;p&gt;To create a distribution of your code, use the &lt;code class=&quot;highlighter-rouge&quot;&gt;setup.py&lt;/code&gt; file. For example:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bash % python setup.py sdist
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This will create a &lt;code class=&quot;highlighter-rouge&quot;&gt;.tar.gz&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;.zip&lt;/code&gt; file in the directory &lt;code class=&quot;highlighter-rouge&quot;&gt;dist/&lt;/code&gt;. That file is something that you can now give away to others.&lt;/p&gt;
+
+&lt;h3 id=&quot;installing-your-code&quot;&gt;Installing your code&lt;/h3&gt;
+
+&lt;p&gt;Others can install your Python code using &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; in the same way that they do for other packages. They simply need to supply the file created in the previous step. For example:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bash % python &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; pip &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;porty-0.0.1.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;comment&quot;&gt;Comment&lt;/h3&gt;
+
+&lt;p&gt;The steps above describe the absolute most minimal basics of creating a package of Python code that you can give to another person. In reality, it can be much more complicated depending on third-party dependencies, whether or not your application includes foreign code (i.e., C/C++), and so forth. We’ve only taken a tiny first step.&lt;/p&gt;
+
+&lt;p&gt;Refer to the &lt;a href=&quot;https://packaging.python.org/tutorials/packaging-projects/&quot;&gt;official guide&lt;/a&gt; to see how to upload your package to PyPi.&lt;/p&gt;
+
+&lt;p&gt;For a deeper discussion and selection of virtual environment, application dependency management tools, check another &lt;a href=&quot;http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html&quot;&gt;post&lt;/a&gt; dedicated to this topic.&lt;/p&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://packaging.python.org/tutorials/packaging-projects/&quot;&gt;https://packaging.python.org/tutorials/packaging-projects/&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html&quot;&gt;http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</content><author><name></name></author><summary type="html">Packages</summary></entry><entry><title type="html">[From NAND to TETRIS] Computer Architecture 101 Part III: Computer Architecture and Assembler</title><link href="http://blog.logancyang.com/note/compsci/2020/07/04/computer-architecture-101-part-iii.html" rel="alternate" type="text/html" title="[From NAND to TETRIS] Computer Architecture 101 Part III: Computer Architecture and Assembler" /><published>2020-07-04T00:00:00-05:00</published><updated>2020-07-04T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/compsci/2020/07/04/computer-architecture-101-part-iii</id><content type="html" xml:base="http://blog.logancyang.com/note/compsci/2020/07/04/computer-architecture-101-part-iii.html">&lt;p&gt;Continuing the discussion through abstraction level 4 in the &lt;a href=&quot;http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html&quot;&gt;last post&lt;/a&gt;, we look at level 5 and level 6 in this post.&lt;/p&gt;
 
 &lt;h2 id=&quot;level-5-computer-architecture&quot;&gt;Level 5: Computer Architecture&lt;/h2&gt;

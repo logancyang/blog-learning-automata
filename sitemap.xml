@@ -121,6 +121,10 @@
 <lastmod>2020-07-04T00:00:00-05:00</lastmod>
 </url>
 <url>
+<loc>http://blog.logancyang.com/note/python/2020/07/05/python-basics-v.html</loc>
+<lastmod>2020-07-05T00:00:00-05:00</lastmod>
+</url>
+<url>
 <loc>http://blog.logancyang.com/about/</loc>
 </url>
 <url>
@@ -134,5 +138,8 @@
 </url>
 <url>
 <loc>http://blog.logancyang.com/page2/</loc>
+</url>
+<url>
+<loc>http://blog.logancyang.com/page3/</loc>
 </url>
 </urlset>

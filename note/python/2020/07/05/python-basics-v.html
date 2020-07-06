@@ -3,19 +3,19 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Page 2 of 3 for Learning Automata | Notes, code and essays by Logan Yang.</title>
+<title>[Python Review] Part V: Packages | Learning Automata</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Learning Automata" />
+<meta property="og:title" content="[Python Review] Part V: Packages" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Notes, code and essays by Logan Yang." />
-<meta property="og:description" content="Notes, code and essays by Logan Yang." />
-<link rel="canonical" href="http://blog.logancyang.com/page2/" />
-<meta property="og:url" content="http://blog.logancyang.com/page2/" />
+<meta name="description" content="Stepping up Python skills" />
+<meta property="og:description" content="Stepping up Python skills" />
+<link rel="canonical" href="http://blog.logancyang.com/note/python/2020/07/05/python-basics-v.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/python/2020/07/05/python-basics-v.html" />
 <meta property="og:site_name" content="Learning Automata" />
-<link rel="prev" href="http://blog.logancyang.com/" />
-<link rel="next" href="http://blog.logancyang.com/page3/" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-05T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"Notes, code and essays by Logan Yang.","@type":"WebPage","headline":"Learning Automata","url":"http://blog.logancyang.com/page2/","@context":"https://schema.org"}</script>
+{"description":"Stepping up Python skills","@type":"BlogPosting","headline":"[Python Review] Part V: Packages","dateModified":"2020-07-05T00:00:00-05:00","datePublished":"2020-07-05T00:00:00-05:00","url":"http://blog.logancyang.com/note/python/2020/07/05/python-basics-v.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/python/2020/07/05/python-basics-v.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -24,19 +24,19 @@
 <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
 
 <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Page 2 of 3 for Learning Automata | Notes, code and essays by Logan Yang.</title>
+<title>[Python Review] Part V: Packages | Learning Automata</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Learning Automata" />
+<meta property="og:title" content="[Python Review] Part V: Packages" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Notes, code and essays by Logan Yang." />
-<meta property="og:description" content="Notes, code and essays by Logan Yang." />
-<link rel="canonical" href="http://blog.logancyang.com/page2/" />
-<meta property="og:url" content="http://blog.logancyang.com/page2/" />
+<meta name="description" content="Stepping up Python skills" />
+<meta property="og:description" content="Stepping up Python skills" />
+<link rel="canonical" href="http://blog.logancyang.com/note/python/2020/07/05/python-basics-v.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/python/2020/07/05/python-basics-v.html" />
 <meta property="og:site_name" content="Learning Automata" />
-<link rel="prev" href="http://blog.logancyang.com/" />
-<link rel="next" href="http://blog.logancyang.com/page3/" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-05T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"Notes, code and essays by Logan Yang.","@type":"WebPage","headline":"Learning Automata","url":"http://blog.logancyang.com/page2/","@context":"https://schema.org"}</script>
+{"description":"Stepping up Python skills","@type":"BlogPosting","headline":"[Python Review] Part V: Packages","dateModified":"2020-07-05T00:00:00-05:00","datePublished":"2020-07-05T00:00:00-05:00","url":"http://blog.logancyang.com/note/python/2020/07/05/python-basics-v.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/python/2020/07/05/python-basics-v.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -110,111 +110,57 @@ window.onload = wrap_img;
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <div class="home"><h1 id="posts">Posts</h1>
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
-
-
-  
-
-  <!-- Hide posts if front matter flag hide:true -->
-  
-  
-
-  <!-- Sort posts by rank, then date -->
-  
-  
-  
-
- 
-  
-
-   <!-- Assemble final sorted posts array -->
-  
-  <ul class="post-list"><li><h3>
-    <a class="post-link" href="/note/fastai/2020/04/30/fastai-lesson7.html">
-    FastAI Lesson 7: Resnets from scratch; U-net; Generative adversarial networks; RNNs
-    </a>
-</h3><p class="post-meta-description">fast.ai note series</p><p class="post-meta">Apr 30, 2020</p>
-</li><li><h3>
-    <a class="post-link" href="/note/fastai/2020/04/22/fastai-lesson6.html">
-    FastAI Lesson 6: Regression on Tabular Time Series; Regularization; Convolution; Data Ethics
-    </a>
-</h3><p class="post-meta-description">fast.ai note series</p><p class="post-meta">Apr 22, 2020</p>
-</li><li><h3>
-    <a class="post-link" href="/note/fastai/2020/04/19/fastai-lesson5.html">
-    FastAI Lesson 5: Collaborative Filtering cont.; Backpropagation; Accelerated SGD; NN from Scratch
-    </a>
-</h3><p class="post-meta-description">fast.ai note series</p><p class="post-meta">Apr 19, 2020</p>
-</li><li><h3>
-    <a class="post-link" href="/note/fastai/2020/04/13/fastai-lesson4.html">
-    FastAI Lesson 4: NLP; Tabular Data; Collaborative Filtering and Embeddings
-    </a>
-</h3><p class="post-meta-description">fast.ai note series</p><p class="post-meta">Apr 13, 2020</p>
-</li><li><h3>
-    <a class="post-link" href="/note/fastai/2020/04/11/fastai-lesson3.html">
-    FastAI Lesson 3: Data blocks; Multi-label classification; Segmentation
-    </a>
-</h3><p class="post-meta-description">fast.ai note series</p><p class="post-meta">Apr 11, 2020</p>
-</li><li><h3>
-    <a class="post-link" href="/note/fastai/2020/04/08/fastai-lesson2.html">
-    FastAI Lesson 2: Data Cleaning and Production. SGD from Scratch
-    </a>
-</h3><p class="post-meta-description">fast.ai note series</p><p class="post-meta">Apr 8, 2020</p>
-</li><li><h3>
-    <a class="post-link" href="/note/fastai/2020/04/07/fastai-lesson1.html">
-    FastAI Lesson 1: Pets
-    </a>
-</h3><p class="post-meta-description">fast.ai note series</p><p class="post-meta">Apr 7, 2020</p>
-</li><li><h3>
-    <a class="post-link" href="/note/natureofcode/simulation/processing/p5js/2020/03/13/nature-of-code-1.html">
-    [Nature of Code] Part I: Creating Physics Engine
-    </a>
-</h3><p class="post-meta-description">Nature of Code note series</p><p class="post-meta">Mar 13, 2020</p>
-</li><li><h3>
-    <a class="post-link" href="/note/fullstack/flask/2019/07/08/flask-frontend.html">
-    Flask Full Stack Part 1: Frontend Quick Walkthrough
-    </a>
-</h3><p class="post-meta-description">Flask full stack note series</p><p class="post-meta">Jul 8, 2019</p>
-</li><li><h3>
-    <a class="post-link" href="/note/fullstack/flask/2019/07/08/flask-db.html">
-    Flask Full Stack Part 3: Flask and SQL Database Walkthrough
-    </a>
-</h3><p class="post-meta-description">Flask full stack note series</p><p class="post-meta">Jul 8, 2019</p>
-</li><li><h3>
-    <a class="post-link" href="/note/spacy/nlp/2019/06/07/keyword-entity.html">
-    How to Create Keyword List Entities in spaCy (v2.1)
-    </a>
-</h3><p class="post-meta-description">spaCy named entity recognition note series</p><p class="post-meta">Jun 7, 2019</p>
-</li><li><h3>
-    <a class="post-link" href="/note/fastai/2019/05/27/fastai-gpu-setup.html">
-    How to setup local GPU server for fast.ai
-    </a>
-</h3><p class="post-meta-description">fast.ai note series</p><p class="post-meta">May 27, 2019</p>
-</li><li><h3>
-    <a class="post-link" href="/note/theory/2018/06/23/cs231n-note.html">
-    [CS231n] Overview of Neural Networks
-    </a>
-</h3><p class="post-meta-description">Deep learning note for cs231n</p><p class="post-meta">Jun 23, 2018</p>
-</li><li><h3>
-    <a class="post-link" href="/note/2017/01/22/regression-and-nn.html">
-    Hinton Neural Network course
-    </a>
-</h3><p class="post-meta-description">Notes for Hinton's Neural Network course</p><p class="post-meta">Jan 22, 2017</p>
-</li><li><h3>
-    <a class="post-link" href="/note/algo/2015/10/03/graphsearch.html">
-    Graph Search: Subsets, Permutations
-    </a>
-</h3><p class="post-meta-description">Notes for graph search algorithm problems</p><p class="post-meta">Oct 3, 2015</p>
-</li></ul>
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">[Python Review] Part V: Packages</h1><p class="page-description">Stepping up Python skills</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-07-05T00:00:00-05:00" itemprop="datePublished">
+        Jul 5, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
 
     
-      <div class="pager">
-        <ul class="pagination">
-          <li><a href="/" class="previous-page">1</a></li>
-          <li><div class="current-page">2</div></li>
-          <li><a href="/page3/" class="next-page">3</a></li>
-        </ul>
-      </div></div>
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#note">note</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#python">python</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#packages">Packages</a></li>
+<li class="toc-entry toc-h2"><a href="#reference">Reference</a></li>
+</ul><h2 id="packages">
+<a class="anchor" href="#packages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Packages</h2>
+
+<h2 id="reference">
+<a class="anchor" href="#reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reference</h2>
+
+<ul>
+  <li><a href="https://dabeaz-course.github.io/practical-python/Notes">https://dabeaz-course.github.io/practical-python/Notes</a></li>
+</ul>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="logancyang/blog-learning-automata"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/note/python/2020/07/05/python-basics-v.html" hidden></a>
+</article>
       </div>
     </main><footer class="site-footer h-card">
   <data class="u-url" href="/"></data>

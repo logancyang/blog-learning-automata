@@ -380,7 +380,13 @@ bash % python -m pip install porty-0.0.1.tar.gz
 
 The steps above describe the absolute most minimal basics of creating a package of Python code that you can give to another person. In reality, it can be much more complicated depending on third-party dependencies, whether or not your application includes foreign code (i.e., C/C++), and so forth. We’ve only taken a tiny first step.
 
+Refer to the [official guide](https://packaging.python.org/tutorials/packaging-projects/) to see how to upload your package to PyPi.
+
+For a deeper discussion and selection of virtual environment, application dependency management tools, check another [post](http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html) dedicated to this topic.
+
 
 ## Reference
 
 - <https://dabeaz-course.github.io/practical-python/Notes>
+- <https://packaging.python.org/tutorials/packaging-projects/>
+- <http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html>

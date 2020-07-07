@@ -1,4 +1,128 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-07-06T15:06:44-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[Python Review] Part V: Packages</title><link href="http://blog.logancyang.com/note/python/2020/07/05/python-basics-v.html" rel="alternate" type="text/html" title="[Python Review] Part V: Packages" /><published>2020-07-05T00:00:00-05:00</published><updated>2020-07-05T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/05/python-basics-v</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/05/python-basics-v.html">&lt;h2 id=&quot;packages&quot;&gt;Packages&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-07-07T15:04:23-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[Python Essentials] Poetry Quick Start</title><link href="http://blog.logancyang.com/note/python/2020/07/07/poetry-quickstart.html" rel="alternate" type="text/html" title="[Python Essentials] Poetry Quick Start" /><published>2020-07-07T00:00:00-05:00</published><updated>2020-07-07T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/07/poetry-quickstart</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/07/poetry-quickstart.html">&lt;p&gt;&lt;a href=&quot;https://python-poetry.org/&quot;&gt;Poetry&lt;/a&gt; is the current best choice for Python application dependency and environment management. It uses two files&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;pyproject.toml&lt;/li&gt;
+  &lt;li&gt;poetry.lock&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;to manage dependencies instead of&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;setup.py&lt;/li&gt;
+  &lt;li&gt;requirements.txt&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;set-up-a-project&quot;&gt;Set up a project&lt;/h2&gt;
+
+&lt;h3 id=&quot;prerequisite-pyenv&quot;&gt;Prerequisite: &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;Make sure you properly setup pyenv first. Add the following to &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.zshrc&lt;/code&gt;,&lt;/p&gt;
+
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PYENV_ROOT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$HOME&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/.pyenv&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$PYENV_ROOT&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/bin:&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$PATH&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;command&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; pyenv 1&amp;gt;/dev/null 2&amp;gt;&amp;amp;1&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
+  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;eval&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;pyenv init -&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;fi&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;and do&lt;/p&gt;
+
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv global 3.7.4
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;to set the global default Python version to 3.7.4.&lt;/p&gt;
+
+&lt;h3 id=&quot;install-poetry&quot;&gt;Install &lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;Run the following command to install&lt;/p&gt;
+
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl &lt;span class=&quot;nt&quot;&gt;-sSL&lt;/span&gt; https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, to make sure &lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt; use the right Python version, add an alias to &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.zshrc&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;poetry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;python3 &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$HOME&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/.poetry/bin/poetry&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;create-a-new-project&quot;&gt;Create a new project&lt;/h3&gt;
+
+&lt;p&gt;Run&lt;/p&gt;
+
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;poetry new &amp;lt;new_project_name&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;It will create a directory &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;new_project_name&amp;gt;&lt;/code&gt; in the current directory.&lt;/p&gt;
+
+&lt;p&gt;Go inside and type &lt;code class=&quot;highlighter-rouge&quot;&gt;tree&lt;/code&gt; (assuming you have &lt;code class=&quot;highlighter-rouge&quot;&gt;tree&lt;/code&gt; installed, on MacOS run &lt;code class=&quot;highlighter-rouge&quot;&gt;brew install tree&lt;/code&gt;) you will see&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.
+├── README.rst
+├── &amp;lt;new_project_name&amp;gt;
+│   └── __init__.py
+├── pyproject.toml
+└── tests
+    ├── __init__.py
+    └── test_&amp;lt;new_project_name&amp;gt;.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;with a prefilled &lt;code class=&quot;highlighter-rouge&quot;&gt;pyproject.toml&lt;/code&gt; file:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[tool.poetry]
+name = &quot;&amp;lt;new_project_name&amp;gt;&quot;
+version = &quot;0.1.0&quot;
+description = &quot;&quot;
+authors = [&quot;Your name &amp;lt;your email&amp;gt;&quot;]
+
+[tool.poetry.dependencies]
+python = &quot;^3.7&quot;
+
+[tool.poetry.dev-dependencies]
+pytest = &quot;^5.2&quot;
+
+[build-system]
+requires = [&quot;poetry&amp;gt;=0.12&quot;]
+build-backend = &quot;poetry.masonry.api&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Note that &lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt; gets &lt;code class=&quot;highlighter-rouge&quot;&gt;&quot;Your name &amp;lt;your email&amp;gt;&quot;&lt;/code&gt; from your &lt;code class=&quot;highlighter-rouge&quot;&gt;git&lt;/code&gt; setting.&lt;/p&gt;
+
+&lt;p&gt;Run&lt;/p&gt;
+
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git config &lt;span class=&quot;nt&quot;&gt;--global&lt;/span&gt; user.email &amp;lt;email&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;to change the git email address if you need to.&lt;/p&gt;
+
+&lt;p&gt;Now, we can add a package, for example, &lt;code class=&quot;highlighter-rouge&quot;&gt;flask&lt;/code&gt;,&lt;/p&gt;
+
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;poetry add flask
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And a virtual environment will be created automatically at &lt;code class=&quot;highlighter-rouge&quot;&gt;/Users/&amp;lt;username&amp;gt;/Library/Caches/pypoetry/virtualenvs/&lt;/code&gt; by default, and &lt;code class=&quot;highlighter-rouge&quot;&gt;flask&lt;/code&gt; will be installed there.&lt;/p&gt;
+
+&lt;p&gt;Check the lock file for detailed subdependencies.&lt;/p&gt;
+
+&lt;h3 id=&quot;activate-that-virtual-environment-in-shell&quot;&gt;Activate that virtual environment in shell&lt;/h3&gt;
+
+&lt;p&gt;Run the following command to activate the virtual environment.&lt;/p&gt;
+
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;poetry shell
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;set-the-interpreter-in-vscode&quot;&gt;Set the interpreter in VSCode&lt;/h3&gt;
+
+&lt;p&gt;As of June 2020, the Python extension in VSCode doesn’t support automatic discovery of poetry environments. Refer to this &lt;a href=&quot;https://github.com/microsoft/vscode-python/issues/8372&quot;&gt;issue&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The current workaround is to add the path into VSCode setting &lt;code class=&quot;highlighter-rouge&quot;&gt;python.venvPath&lt;/code&gt;,&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&quot;python.venvPath&quot;: &quot;/Users/&amp;lt;username&amp;gt;/Library/Caches/pypoetry/virtualenvs&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we can see the virtual environments created by &lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt; in the list in VSCode.&lt;/p&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;p&gt;Check the official docs for &lt;a href=&quot;https://python-poetry.org/docs/cli/&quot;&gt;poetry commands&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Poetry is the current best choice for Python application dependency and environment management. It uses two files</summary></entry><entry><title type="html">[Python Review] Part V: Packages</title><link href="http://blog.logancyang.com/note/python/2020/07/05/python-basics-v.html" rel="alternate" type="text/html" title="[Python Review] Part V: Packages" /><published>2020-07-05T00:00:00-05:00</published><updated>2020-07-05T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/05/python-basics-v</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/05/python-basics-v.html">&lt;h2 id=&quot;packages&quot;&gt;Packages&lt;/h2&gt;
 
 &lt;p&gt;This part is about&lt;/p&gt;
 
@@ -2905,367 +3029,7 @@ Notice, s.cost does not need ()
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Class and object basics</summary></entry><entry><title type="html">[From NAND to TETRIS] Computer Architecture 101 Part I: Logic Gates, ALU and Memory</title><link href="http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101.html" rel="alternate" type="text/html" title="[From NAND to TETRIS] Computer Architecture 101 Part I: Logic Gates, ALU and Memory" /><published>2020-06-29T00:00:00-05:00</published><updated>2020-06-29T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101</id><content type="html" xml:base="http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101.html">&lt;p&gt;Ever wondered how a computer executes your code with those tiny silicon thingys? If it sounds like a mystery to you, you need to read this article.&lt;/p&gt;
-
-&lt;p&gt;A computer system is a multiple-layer abstraction. You worry about &lt;em&gt;what&lt;/em&gt; you want to do using &lt;em&gt;interfaces&lt;/em&gt; that are &lt;em&gt;abstracted away&lt;/em&gt; from you. Getting to know what the abstractions are and having an rough idea of how they work under the hood is an important and often overlooked prerequisite for a good coder. If you don’t have this knowledge as a data scientist or software developer, you will feel you work on top of a floating and unreliable foundation.&lt;/p&gt;
-
-&lt;p&gt;In this article, I will introduce all the concepts in an easily consumable manner by walking through the process of building a general purpose computer called Hack from the ground up using first principles.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hack.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;After this exercise, you will walk away more confident and eliminate the insecurities of not knowing the foundational knowledge of computers.&lt;/p&gt;
-
-&lt;p&gt;Ready? Let’s get started and go through the &lt;strong&gt;levels of abstractions&lt;/strong&gt; in the computer system.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/abstractions.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;level-1-boolean-operations-and-logic-gates&quot;&gt;Level 1. Boolean operations and logic gates&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/booleanops.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Booleans functions -&amp;gt; truth table.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/truthtable.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Boolean algebra laws&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/boollaws.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;How to construct a function from basic operations? (how to construct hardware)&lt;/p&gt;
-
-&lt;p&gt;Find all the 1s in truth table, write an expression for each, and OR them together! We can further simplify the expression. However, finding the shortest expression is NP hard.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Any boolean function can be constructed with AND and NOT operations.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;OR can be constructed with AND and NOT.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/constructbool.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;the-amazing-nand-operation&quot;&gt;The amazing NAND operation&lt;/h3&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Any boolean function can be constructed with NAND operations.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Because AND and NOT can be constructed with only the NAND gate.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/nand.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Def: NAND
-x NAND y = NOT(x AND y)
-
-# NAND =&amp;gt; NOT
-NOT(x) = x NAND x
-
-# NAND =&amp;gt; AND
-x AND y = NOT(x NAND y)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Logic gates are physical chips consisting of transistors that actually implement these boolean operations. We can use elementary logic gates such as AND, OR, NAND to construct composite gates.&lt;/p&gt;
-
-&lt;p&gt;Electrical engineers are responsible for constructing these gates with circuits and transistors. These chips have very clear specifications.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/andtransistor.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;
-(wikipedia and gate)&lt;/p&gt;
-
-&lt;p&gt;We are not going to dive into the design of the circuit. We take the specifications of inputs and outputs and use them to build more complex logic. There is a type of language called Hardware Description Language (HDL) that can be used in this process. The two most popular HDLs are VHDL and Verilog, and there are others as well.&lt;/p&gt;
-
-&lt;p&gt;Designing composite gates from elementary ones takes experience. Here is an example of XOR built with AND, OR and NOT.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/designxor.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;We can write HDL code and load it into a hardware simulator, run test scripts to make sure it works.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hardwaresim.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;A hardware construction project usually involves a system architect and some developers. The system architect breaks down the task into an overall chip API and smaller individual chips, and the developers build them using HDL.&lt;/p&gt;
-
-&lt;h3 id=&quot;multi-bit-buses-an-array-of-bits-as-one-entity&quot;&gt;Multi-bit buses: an array of bits as one entity&lt;/h3&gt;
-
-&lt;p&gt;When we manipulate many bits together, like adding two 16-bit integers, we can think of the bits as groups. Each group or array of bits is called “bus”. HDL provides ways to manipulate buses as arrays.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hdlbus.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;These buses are indexed from right to left. Right means the least significant bit.&lt;/p&gt;
-
-&lt;h3 id=&quot;programmable-elementary-gates&quot;&gt;Programmable elementary gates&lt;/h3&gt;
-
-&lt;p&gt;The mutiplexor gate &lt;code class=&quot;highlighter-rouge&quot;&gt;mux&lt;/code&gt; is an example of programmable gates. You give it a “selected bit” &lt;code class=&quot;highlighter-rouge&quot;&gt;sel&lt;/code&gt; and it selects one of the inputs to be the output. This is a foundamental operations that exists in all kinds of programs.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/mux.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/muxprogrammable.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The demultiplexor gate &lt;code class=&quot;highlighter-rouge&quot;&gt;dmux&lt;/code&gt; is the inverse of &lt;code class=&quot;highlighter-rouge&quot;&gt;mux&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/demux.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;A concrete example of an application using &lt;code class=&quot;highlighter-rouge&quot;&gt;mux&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;dmux&lt;/code&gt; is a single communication line that interleaves two (or more) messages together!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/muxdemux.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;level-2-boolean-arithmetic-and-arithmetic-logic-unit-alu&quot;&gt;Level 2. Boolean arithmetic and Arithmetic Logic Unit (ALU)&lt;/h2&gt;
-
-&lt;p&gt;Doing binary addition is similar to decimal addition except that we carry over 1 to the next digit one position reaches 2 and not 10.&lt;/p&gt;
-
-&lt;p&gt;For an 8-bit binary number, we call “8” the &lt;strong&gt;word size&lt;/strong&gt;. Anything outside the range of 8-bit representation is going to cause “overflow”&lt;/p&gt;
-
-&lt;p&gt;What the computer does when faced with overflow is just to ignore the overflow and truncate the result back to the word size.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/overflow.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;building-an-adder&quot;&gt;Building an adder&lt;/h3&gt;
-
-&lt;p&gt;First we look at a “half adder”. It takes in 2 bits and outputs a sum bit and a carry bit. The carry bit is 1 when the sum reaches 2.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/halfadder.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Then we can build a “full adder” that takes in 2 bits and a carry bit from a previous addition, and outputs a sum bit and a carry bit.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/fulladder-diagram.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/fulladder.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;With a half adder for the least significant bit, and several full adders, we can build a multi-bit adder, say, for 16-bit binary numbers.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/multibitadder.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/adder.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;negative-numbers&quot;&gt;Negative numbers&lt;/h3&gt;
-
-&lt;p&gt;We could use the first bit as the sign and the remaining bits for the actual number. But this approach has problems such as -0 and we need extra logic to handle subtraction.&lt;/p&gt;
-
-&lt;p&gt;The approach we actually use is called the 2’s complement.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/twoscomp.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;negative-addition&quot;&gt;Negative addition&lt;/h4&gt;
-
-&lt;p&gt;Negative addition comes for free because we throw away the overflowing bit, i.e. do a modulo $2^n$.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/negadd.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;negative-subtraction-solve-negation-first&quot;&gt;Negative subtraction: solve negation first&lt;/h4&gt;
-
-&lt;p&gt;We use a math trick,&lt;/p&gt;
-
-&lt;span class=&quot;katex-display&quot;&gt;&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;msup&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/msup&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;msup&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/msup&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;2^n - x = 1 + (2^n - 1) - x&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.7977219999999999em;vertical-align:-0.08333em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.7143919999999999em;&quot;&gt;&lt;span style=&quot;top:-3.113em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mathdefault mtight&quot;&gt;n&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.43056em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathdefault&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mrel&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.72777em;vertical-align:-0.08333em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.7143919999999999em;&quot;&gt;&lt;span style=&quot;top:-3.113em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mathdefault mtight&quot;&gt;n&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.43056em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathdefault&quot;&gt;x&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
-
-&lt;p&gt;We use it for these reasons:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Since $2^n - x = -x$ in our 2’s complement representation, the left hand side is &lt;code class=&quot;highlighter-rouge&quot;&gt;-x&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;$(2^n - 1)$ in binary is &lt;code class=&quot;highlighter-rouge&quot;&gt;11111...1&lt;/code&gt;, just &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; 1’s, subtracting a binary number &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt; from it is easy - just flip all its bits!&lt;/li&gt;
-  &lt;li&gt;Now we have $(2^n - 1) - x$ in binary, adding 1 is trivial.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/negsub.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;arithmetic-logic-unit-alu&quot;&gt;Arithmetic Logic Unit (ALU)&lt;/h3&gt;
-
-&lt;p&gt;The famous Von Neumann architecture&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/vonarch.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ALU performs a function on input bits&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/alu.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;For the Hack computer we are building, we define the Hack ALU as follows,&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackalu.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The pins at the top are the control bits.&lt;/p&gt;
-
-&lt;p&gt;The output of the ALU is determined completely by the truth table below,&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackalu-truthtable.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;There are many more functions we can compute, but we choose these ones for Hack.&lt;/p&gt;
-
-&lt;p&gt;The control bits are directives that ALU examines and &lt;strong&gt;executes from left to right sequentially&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if zx then x = 0&lt;/code&gt;, zero all bits of x.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if nx then x != x&lt;/code&gt;, flip all bits of x.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if zy then y = 0&lt;/code&gt;, zero all bits of y.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if ny then y != y&lt;/code&gt;, flip all bits of y.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if f then out = x + y, else out = x &amp;amp; y&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if no then out != out&lt;/code&gt;, flip all bits of out.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;You can check one operation, i.e. a row in the following truth table and verify that these sequential control directives output the right output for the desired operation on the inputs.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/alu-example.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;We also have &lt;strong&gt;output control bits&lt;/strong&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;zr&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;ng&lt;/code&gt; defined as follows,&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/aluoutputcontrol.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Why do we need these output control bits? The reason will become clear when we have the big picture of computer architecture.&lt;/p&gt;
-
-&lt;p&gt;The Hack ALU is simple, elegant and easy to implement.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Leonardo da Vinci: Simplicity is the ultimate sophistication.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;However, keep in mind that this is an extremely simplified version of the ALU. The real ALU in computers are much more complicated.&lt;/p&gt;
-
-&lt;h3 id=&quot;comments&quot;&gt;Comments&lt;/h3&gt;
-
-&lt;h4 id=&quot;hardware--software-tradeoff&quot;&gt;Hardware / software tradeoff&lt;/h4&gt;
-
-&lt;p&gt;There is a tradeoff between the hardware and software. For example, we can let the hardware do multiplication and division instead using software. A complex hardware is faster for operations but more costly to design and manufacture. It’s the freedom of the hardware designer to decide whether to move some operations to software.&lt;/p&gt;
-
-&lt;h4 id=&quot;unit-testing&quot;&gt;Unit testing&lt;/h4&gt;
-
-&lt;p&gt;You might know that in software development we have unit tests. Actually, the idea comes from hardware development since we can isolate one logic unit and test whether it works correctly with its defined interfaces.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Unit tests conceptually break a program into discrete pieces and test each piece in isolation, while integration tests make sure that the pieces are working properly together as a whole. Unit tests are generally small and don’t take much time to write because they only test a small section of code.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;level-3-memory&quot;&gt;Level 3. Memory&lt;/h2&gt;
-
-&lt;h3 id=&quot;time&quot;&gt;Time&lt;/h3&gt;
-
-&lt;p&gt;Now we will learn how the computer executes one thing after another, i.e. how it perceives &lt;strong&gt;time&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;The way we let a computer perceive time is to use some kind of digital oscillator as a discrete time clock. This way we convert physical time into discrete time.&lt;/p&gt;
-
-&lt;p&gt;Since the hardware uses voltage to represent bit state 0 and 1, and it takes time for the hardware to stablize after a state transition, we design the unit time step in the discrete clock to be slightly bigger than the time it takes to stablize. We then sample the stable state to be the state of that time unit.&lt;/p&gt;
-
-&lt;p&gt;A time unit is at the atomic level, &lt;strong&gt;the computer only knows one state within one time unit&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/clock.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;combinatorial-vs-sequential-logic&quot;&gt;Combinatorial vs. sequential logic&lt;/h3&gt;
-
-&lt;p&gt;Combinatorial logic just means that the output for a time unit only depends on the input in that time unit.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;out[t] = function(in[t])
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Sequential logic means we &lt;strong&gt;use the same wire to store the bit&lt;/strong&gt;, and current step’s output depends on the last time step.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;state[t] = function(state[t-1])
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This is the prototype of the &lt;strong&gt;iterator&lt;/strong&gt;. With the sequential logic we can operate with time as input to our function.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/sequential.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;flip-flops-hardware-that-implements-the-sequential-logic&quot;&gt;Flip Flops: Hardware that implements the sequential logic&lt;/h3&gt;
-
-&lt;p&gt;Previously we had logic gates and ALUs that can compute a variety of operations, but we are missing one key piece to enable sequential logic: the hardware to remember the state from time t-1 to time t. How to do that?&lt;/p&gt;
-
-&lt;p&gt;We need something called the Clocked Data Flip Flop. Its output is input shifted one step forward.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/dff.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The little triangle in the diagram means it has a time-dependent chip. The combinatorial chips get the outputs instantaneously, while the sequential logic chips are time-dependent.&lt;/p&gt;
-
-&lt;p&gt;Conceptually, with the NAND gate and the Data Flip Flop as a foundation, we can build everything needed in a computer!&lt;/p&gt;
-
-&lt;p&gt;We are not going to describe how the flip flops are built physically here. The digital circuit is quite clever and elegant though. If you are interested, read about it &lt;a href=&quot;https://en.wikipedia.org/wiki/Flip-flop_(electronics)#D_flip-flop&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;1-bit-register&quot;&gt;1-bit register&lt;/h3&gt;
-
-&lt;p&gt;We can build a chip by using the D Flip Flop that remembers the last input state when the load state is 1.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/onebitreg.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The logic is:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if load(t-1):
-    out[t] = in[t-1]
-else:
-    out[t] = out[t-1]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;A load of 1 at t-1 means we need to remember the input at t-1 from now on until a next load of 1 regardless of how input changes during this period.&lt;/p&gt;
-
-&lt;p&gt;How to implement a 1-bit register using the D Flip Flop? Recall the &lt;strong&gt;mutiplexor&lt;/strong&gt; (select one of two inputs based on a “select” bit).&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/onebitreg-mux.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;With the 1-bit register, we can start to build the memory unit!&lt;/p&gt;
-
-&lt;h3 id=&quot;the-memory-unit&quot;&gt;The Memory Unit&lt;/h3&gt;
-
-&lt;p&gt;There are different types of memory. The most important type is the RAM. &lt;strong&gt;It stores both data and instructions&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;It is a &lt;strong&gt;volatile device&lt;/strong&gt; meaning it depends on an external power supply to store information. Physically it is not like the disk or ROM (read-only memory), it clears everything whenever the computer is disconnected from power while in the disk or ROM, info is persisted.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/memorypic.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;We can build an N-bit register by putting N 1-bit registers side by side. Here we talk about 16-bit registers without loss of generality. The register’s &lt;strong&gt;state&lt;/strong&gt; is the value stored in the register. To lookup the state, we just need to probe its output pins.&lt;/p&gt;
-
-&lt;p&gt;To store a new input state &lt;code class=&quot;highlighter-rouge&quot;&gt;v&lt;/code&gt;, we set &lt;code class=&quot;highlighter-rouge&quot;&gt;load&lt;/code&gt; to 1 at that time step.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;The RAM abstraction: A sequence of &lt;em&gt;n&lt;/em&gt; addressable registers with addresses 0 to n-1.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Important: At any given time, ONLY ONE REGISTER in the RAM is selected!&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Since we have &lt;em&gt;n&lt;/em&gt; addressable registers, we need a binary number to represent the address. Turning &lt;em&gt;n&lt;/em&gt; to a binary number, we say it has &lt;em&gt;k&lt;/em&gt; bits. So &lt;code class=&quot;highlighter-rouge&quot;&gt;k = log2(n)&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/memoryparams.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;RAM is a sequential chip with a clocked behavior.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Why is it called Random Access Memory?&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;A: Because regardless of how many registers the memory unit has, be it 1 million or 1 billion, it takes exactly the same access time to access any one of the registers with a given address!&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Some different RAM chips:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/ramchips.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;the-counter&quot;&gt;The Counter&lt;/h3&gt;
-
-&lt;p&gt;A Program Counter (PC) is a chip (hardware device) that realizes the following 3 abstractions:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Reset: fetch the first instruction, PC = 0&lt;/li&gt;
-  &lt;li&gt;Next: fetch the next instruction, PC++&lt;/li&gt;
-  &lt;li&gt;Goto: fetch instruction n, PC = n&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Here is the logic the Counter does:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if reset[t] == 1:
-    out[t+1] = 0  # reset counter to 0
-elif load[t] == 1:
-    out[t+1] = in[t]  # set counter to input value at t
-elif inc[t] == 1:
-    out[t+1] = out[t] + 1  # increment counter by 1
-else:
-    out[t+1] = out[t]  # maintain the last value
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/counter.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;rom-vs-ram-vs-flash-vs-cache-memory&quot;&gt;ROM vs. RAM vs. Flash vs. Cache memory&lt;/h3&gt;
-
-&lt;p&gt;The ROM (read-only memory) is an involatile device that keeps information persisted even without external power supply. For example, it is used in the computer booting process for this reason.&lt;/p&gt;
-
-&lt;p&gt;Another technology is flash memory. It combines the good things of both ROM and RAM, it doesn’t need external power supply to persist data, and is writable.&lt;/p&gt;
-
-&lt;p&gt;Cache memory is a small and expensive memory that is close to the processor. It has very high performance. There is a hierarchy of cache memories, the closer to the processor, the faster, smaller and more expensive it gets.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html&quot;&gt;Go to Part II&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.coursera.org/learn/build-a-computer&quot;&gt;Coursera From NAND To TETRIS&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Ever wondered how a computer executes your code with those tiny silicon thingys? If it sounds like a mystery to you, you need to read this article.</summary></entry><entry><title type="html">[Python Review] Part I: The Basics</title><link href="http://blog.logancyang.com/note/python/2020/06/29/python-basics.html" rel="alternate" type="text/html" title="[Python Review] Part I: The Basics" /><published>2020-06-29T00:00:00-05:00</published><updated>2020-06-29T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/06/29/python-basics</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/06/29/python-basics.html">&lt;h2 id=&quot;string-methods&quot;&gt;String methods&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Class and object basics</summary></entry><entry><title type="html">[Python Review] Part I: The Basics</title><link href="http://blog.logancyang.com/note/python/2020/06/29/python-basics.html" rel="alternate" type="text/html" title="[Python Review] Part I: The Basics" /><published>2020-06-29T00:00:00-05:00</published><updated>2020-06-29T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/06/29/python-basics</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/06/29/python-basics.html">&lt;h2 id=&quot;string-methods&quot;&gt;String methods&lt;/h2&gt;
 
 &lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endswith&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;suffix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;# Check if string ends with suffix
 &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;              &lt;span class=&quot;c1&quot;&gt;# First occurrence of t in s
@@ -4039,7 +3803,367 @@ bash % prog.py
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">String methods</summary></entry><entry><title type="html">[Python Essentials] Digging into Package and Environment Management to Find the Best Approach</title><link href="http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html" rel="alternate" type="text/html" title="[Python Essentials] Digging into Package and Environment Management to Find the Best Approach" /><published>2020-06-17T00:00:00-05:00</published><updated>2020-06-17T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html">&lt;p&gt;This post is for clarifying several points about Python package and environment management.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">String methods</summary></entry><entry><title type="html">[From NAND to TETRIS] Computer Architecture 101 Part I: Logic Gates, ALU and Memory</title><link href="http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101.html" rel="alternate" type="text/html" title="[From NAND to TETRIS] Computer Architecture 101 Part I: Logic Gates, ALU and Memory" /><published>2020-06-29T00:00:00-05:00</published><updated>2020-06-29T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101</id><content type="html" xml:base="http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101.html">&lt;p&gt;Ever wondered how a computer executes your code with those tiny silicon thingys? If it sounds like a mystery to you, you need to read this article.&lt;/p&gt;
+
+&lt;p&gt;A computer system is a multiple-layer abstraction. You worry about &lt;em&gt;what&lt;/em&gt; you want to do using &lt;em&gt;interfaces&lt;/em&gt; that are &lt;em&gt;abstracted away&lt;/em&gt; from you. Getting to know what the abstractions are and having an rough idea of how they work under the hood is an important and often overlooked prerequisite for a good coder. If you don’t have this knowledge as a data scientist or software developer, you will feel you work on top of a floating and unreliable foundation.&lt;/p&gt;
+
+&lt;p&gt;In this article, I will introduce all the concepts in an easily consumable manner by walking through the process of building a general purpose computer called Hack from the ground up using first principles.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hack.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After this exercise, you will walk away more confident and eliminate the insecurities of not knowing the foundational knowledge of computers.&lt;/p&gt;
+
+&lt;p&gt;Ready? Let’s get started and go through the &lt;strong&gt;levels of abstractions&lt;/strong&gt; in the computer system.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/abstractions.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;level-1-boolean-operations-and-logic-gates&quot;&gt;Level 1. Boolean operations and logic gates&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/booleanops.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Booleans functions -&amp;gt; truth table.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/truthtable.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Boolean algebra laws&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/boollaws.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;How to construct a function from basic operations? (how to construct hardware)&lt;/p&gt;
+
+&lt;p&gt;Find all the 1s in truth table, write an expression for each, and OR them together! We can further simplify the expression. However, finding the shortest expression is NP hard.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Any boolean function can be constructed with AND and NOT operations.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;OR can be constructed with AND and NOT.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/constructbool.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;the-amazing-nand-operation&quot;&gt;The amazing NAND operation&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Any boolean function can be constructed with NAND operations.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Because AND and NOT can be constructed with only the NAND gate.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/nand.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Def: NAND
+x NAND y = NOT(x AND y)
+
+# NAND =&amp;gt; NOT
+NOT(x) = x NAND x
+
+# NAND =&amp;gt; AND
+x AND y = NOT(x NAND y)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Logic gates are physical chips consisting of transistors that actually implement these boolean operations. We can use elementary logic gates such as AND, OR, NAND to construct composite gates.&lt;/p&gt;
+
+&lt;p&gt;Electrical engineers are responsible for constructing these gates with circuits and transistors. These chips have very clear specifications.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/andtransistor.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;
+(wikipedia and gate)&lt;/p&gt;
+
+&lt;p&gt;We are not going to dive into the design of the circuit. We take the specifications of inputs and outputs and use them to build more complex logic. There is a type of language called Hardware Description Language (HDL) that can be used in this process. The two most popular HDLs are VHDL and Verilog, and there are others as well.&lt;/p&gt;
+
+&lt;p&gt;Designing composite gates from elementary ones takes experience. Here is an example of XOR built with AND, OR and NOT.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/designxor.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We can write HDL code and load it into a hardware simulator, run test scripts to make sure it works.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hardwaresim.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;A hardware construction project usually involves a system architect and some developers. The system architect breaks down the task into an overall chip API and smaller individual chips, and the developers build them using HDL.&lt;/p&gt;
+
+&lt;h3 id=&quot;multi-bit-buses-an-array-of-bits-as-one-entity&quot;&gt;Multi-bit buses: an array of bits as one entity&lt;/h3&gt;
+
+&lt;p&gt;When we manipulate many bits together, like adding two 16-bit integers, we can think of the bits as groups. Each group or array of bits is called “bus”. HDL provides ways to manipulate buses as arrays.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hdlbus.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;These buses are indexed from right to left. Right means the least significant bit.&lt;/p&gt;
+
+&lt;h3 id=&quot;programmable-elementary-gates&quot;&gt;Programmable elementary gates&lt;/h3&gt;
+
+&lt;p&gt;The mutiplexor gate &lt;code class=&quot;highlighter-rouge&quot;&gt;mux&lt;/code&gt; is an example of programmable gates. You give it a “selected bit” &lt;code class=&quot;highlighter-rouge&quot;&gt;sel&lt;/code&gt; and it selects one of the inputs to be the output. This is a foundamental operations that exists in all kinds of programs.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/mux.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/muxprogrammable.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The demultiplexor gate &lt;code class=&quot;highlighter-rouge&quot;&gt;dmux&lt;/code&gt; is the inverse of &lt;code class=&quot;highlighter-rouge&quot;&gt;mux&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/demux.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;A concrete example of an application using &lt;code class=&quot;highlighter-rouge&quot;&gt;mux&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;dmux&lt;/code&gt; is a single communication line that interleaves two (or more) messages together!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/muxdemux.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;level-2-boolean-arithmetic-and-arithmetic-logic-unit-alu&quot;&gt;Level 2. Boolean arithmetic and Arithmetic Logic Unit (ALU)&lt;/h2&gt;
+
+&lt;p&gt;Doing binary addition is similar to decimal addition except that we carry over 1 to the next digit one position reaches 2 and not 10.&lt;/p&gt;
+
+&lt;p&gt;For an 8-bit binary number, we call “8” the &lt;strong&gt;word size&lt;/strong&gt;. Anything outside the range of 8-bit representation is going to cause “overflow”&lt;/p&gt;
+
+&lt;p&gt;What the computer does when faced with overflow is just to ignore the overflow and truncate the result back to the word size.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/overflow.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;building-an-adder&quot;&gt;Building an adder&lt;/h3&gt;
+
+&lt;p&gt;First we look at a “half adder”. It takes in 2 bits and outputs a sum bit and a carry bit. The carry bit is 1 when the sum reaches 2.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/halfadder.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Then we can build a “full adder” that takes in 2 bits and a carry bit from a previous addition, and outputs a sum bit and a carry bit.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/fulladder-diagram.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/fulladder.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;With a half adder for the least significant bit, and several full adders, we can build a multi-bit adder, say, for 16-bit binary numbers.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/multibitadder.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/adder.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;negative-numbers&quot;&gt;Negative numbers&lt;/h3&gt;
+
+&lt;p&gt;We could use the first bit as the sign and the remaining bits for the actual number. But this approach has problems such as -0 and we need extra logic to handle subtraction.&lt;/p&gt;
+
+&lt;p&gt;The approach we actually use is called the 2’s complement.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/twoscomp.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;negative-addition&quot;&gt;Negative addition&lt;/h4&gt;
+
+&lt;p&gt;Negative addition comes for free because we throw away the overflowing bit, i.e. do a modulo $2^n$.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/negadd.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;negative-subtraction-solve-negation-first&quot;&gt;Negative subtraction: solve negation first&lt;/h4&gt;
+
+&lt;p&gt;We use a math trick,&lt;/p&gt;
+
+&lt;span class=&quot;katex-display&quot;&gt;&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;msup&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/msup&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;msup&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/msup&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;2^n - x = 1 + (2^n - 1) - x&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.7977219999999999em;vertical-align:-0.08333em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.7143919999999999em;&quot;&gt;&lt;span style=&quot;top:-3.113em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mathdefault mtight&quot;&gt;n&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.43056em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathdefault&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mrel&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.72777em;vertical-align:-0.08333em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.7143919999999999em;&quot;&gt;&lt;span style=&quot;top:-3.113em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mathdefault mtight&quot;&gt;n&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.43056em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathdefault&quot;&gt;x&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+
+&lt;p&gt;We use it for these reasons:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Since $2^n - x = -x$ in our 2’s complement representation, the left hand side is &lt;code class=&quot;highlighter-rouge&quot;&gt;-x&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;$(2^n - 1)$ in binary is &lt;code class=&quot;highlighter-rouge&quot;&gt;11111...1&lt;/code&gt;, just &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; 1’s, subtracting a binary number &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt; from it is easy - just flip all its bits!&lt;/li&gt;
+  &lt;li&gt;Now we have $(2^n - 1) - x$ in binary, adding 1 is trivial.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/negsub.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;arithmetic-logic-unit-alu&quot;&gt;Arithmetic Logic Unit (ALU)&lt;/h3&gt;
+
+&lt;p&gt;The famous Von Neumann architecture&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/vonarch.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ALU performs a function on input bits&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/alu.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For the Hack computer we are building, we define the Hack ALU as follows,&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackalu.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The pins at the top are the control bits.&lt;/p&gt;
+
+&lt;p&gt;The output of the ALU is determined completely by the truth table below,&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackalu-truthtable.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;There are many more functions we can compute, but we choose these ones for Hack.&lt;/p&gt;
+
+&lt;p&gt;The control bits are directives that ALU examines and &lt;strong&gt;executes from left to right sequentially&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if zx then x = 0&lt;/code&gt;, zero all bits of x.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if nx then x != x&lt;/code&gt;, flip all bits of x.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if zy then y = 0&lt;/code&gt;, zero all bits of y.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if ny then y != y&lt;/code&gt;, flip all bits of y.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if f then out = x + y, else out = x &amp;amp; y&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if no then out != out&lt;/code&gt;, flip all bits of out.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can check one operation, i.e. a row in the following truth table and verify that these sequential control directives output the right output for the desired operation on the inputs.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/alu-example.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We also have &lt;strong&gt;output control bits&lt;/strong&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;zr&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;ng&lt;/code&gt; defined as follows,&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/aluoutputcontrol.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Why do we need these output control bits? The reason will become clear when we have the big picture of computer architecture.&lt;/p&gt;
+
+&lt;p&gt;The Hack ALU is simple, elegant and easy to implement.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Leonardo da Vinci: Simplicity is the ultimate sophistication.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;However, keep in mind that this is an extremely simplified version of the ALU. The real ALU in computers are much more complicated.&lt;/p&gt;
+
+&lt;h3 id=&quot;comments&quot;&gt;Comments&lt;/h3&gt;
+
+&lt;h4 id=&quot;hardware--software-tradeoff&quot;&gt;Hardware / software tradeoff&lt;/h4&gt;
+
+&lt;p&gt;There is a tradeoff between the hardware and software. For example, we can let the hardware do multiplication and division instead using software. A complex hardware is faster for operations but more costly to design and manufacture. It’s the freedom of the hardware designer to decide whether to move some operations to software.&lt;/p&gt;
+
+&lt;h4 id=&quot;unit-testing&quot;&gt;Unit testing&lt;/h4&gt;
+
+&lt;p&gt;You might know that in software development we have unit tests. Actually, the idea comes from hardware development since we can isolate one logic unit and test whether it works correctly with its defined interfaces.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Unit tests conceptually break a program into discrete pieces and test each piece in isolation, while integration tests make sure that the pieces are working properly together as a whole. Unit tests are generally small and don’t take much time to write because they only test a small section of code.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;level-3-memory&quot;&gt;Level 3. Memory&lt;/h2&gt;
+
+&lt;h3 id=&quot;time&quot;&gt;Time&lt;/h3&gt;
+
+&lt;p&gt;Now we will learn how the computer executes one thing after another, i.e. how it perceives &lt;strong&gt;time&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;The way we let a computer perceive time is to use some kind of digital oscillator as a discrete time clock. This way we convert physical time into discrete time.&lt;/p&gt;
+
+&lt;p&gt;Since the hardware uses voltage to represent bit state 0 and 1, and it takes time for the hardware to stablize after a state transition, we design the unit time step in the discrete clock to be slightly bigger than the time it takes to stablize. We then sample the stable state to be the state of that time unit.&lt;/p&gt;
+
+&lt;p&gt;A time unit is at the atomic level, &lt;strong&gt;the computer only knows one state within one time unit&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/clock.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;combinatorial-vs-sequential-logic&quot;&gt;Combinatorial vs. sequential logic&lt;/h3&gt;
+
+&lt;p&gt;Combinatorial logic just means that the output for a time unit only depends on the input in that time unit.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;out[t] = function(in[t])
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Sequential logic means we &lt;strong&gt;use the same wire to store the bit&lt;/strong&gt;, and current step’s output depends on the last time step.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;state[t] = function(state[t-1])
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This is the prototype of the &lt;strong&gt;iterator&lt;/strong&gt;. With the sequential logic we can operate with time as input to our function.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/sequential.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;flip-flops-hardware-that-implements-the-sequential-logic&quot;&gt;Flip Flops: Hardware that implements the sequential logic&lt;/h3&gt;
+
+&lt;p&gt;Previously we had logic gates and ALUs that can compute a variety of operations, but we are missing one key piece to enable sequential logic: the hardware to remember the state from time t-1 to time t. How to do that?&lt;/p&gt;
+
+&lt;p&gt;We need something called the Clocked Data Flip Flop. Its output is input shifted one step forward.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/dff.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The little triangle in the diagram means it has a time-dependent chip. The combinatorial chips get the outputs instantaneously, while the sequential logic chips are time-dependent.&lt;/p&gt;
+
+&lt;p&gt;Conceptually, with the NAND gate and the Data Flip Flop as a foundation, we can build everything needed in a computer!&lt;/p&gt;
+
+&lt;p&gt;We are not going to describe how the flip flops are built physically here. The digital circuit is quite clever and elegant though. If you are interested, read about it &lt;a href=&quot;https://en.wikipedia.org/wiki/Flip-flop_(electronics)#D_flip-flop&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;1-bit-register&quot;&gt;1-bit register&lt;/h3&gt;
+
+&lt;p&gt;We can build a chip by using the D Flip Flop that remembers the last input state when the load state is 1.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/onebitreg.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The logic is:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if load(t-1):
+    out[t] = in[t-1]
+else:
+    out[t] = out[t-1]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;A load of 1 at t-1 means we need to remember the input at t-1 from now on until a next load of 1 regardless of how input changes during this period.&lt;/p&gt;
+
+&lt;p&gt;How to implement a 1-bit register using the D Flip Flop? Recall the &lt;strong&gt;mutiplexor&lt;/strong&gt; (select one of two inputs based on a “select” bit).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/onebitreg-mux.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;With the 1-bit register, we can start to build the memory unit!&lt;/p&gt;
+
+&lt;h3 id=&quot;the-memory-unit&quot;&gt;The Memory Unit&lt;/h3&gt;
+
+&lt;p&gt;There are different types of memory. The most important type is the RAM. &lt;strong&gt;It stores both data and instructions&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;It is a &lt;strong&gt;volatile device&lt;/strong&gt; meaning it depends on an external power supply to store information. Physically it is not like the disk or ROM (read-only memory), it clears everything whenever the computer is disconnected from power while in the disk or ROM, info is persisted.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/memorypic.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We can build an N-bit register by putting N 1-bit registers side by side. Here we talk about 16-bit registers without loss of generality. The register’s &lt;strong&gt;state&lt;/strong&gt; is the value stored in the register. To lookup the state, we just need to probe its output pins.&lt;/p&gt;
+
+&lt;p&gt;To store a new input state &lt;code class=&quot;highlighter-rouge&quot;&gt;v&lt;/code&gt;, we set &lt;code class=&quot;highlighter-rouge&quot;&gt;load&lt;/code&gt; to 1 at that time step.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;The RAM abstraction: A sequence of &lt;em&gt;n&lt;/em&gt; addressable registers with addresses 0 to n-1.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Important: At any given time, ONLY ONE REGISTER in the RAM is selected!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Since we have &lt;em&gt;n&lt;/em&gt; addressable registers, we need a binary number to represent the address. Turning &lt;em&gt;n&lt;/em&gt; to a binary number, we say it has &lt;em&gt;k&lt;/em&gt; bits. So &lt;code class=&quot;highlighter-rouge&quot;&gt;k = log2(n)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/memoryparams.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;RAM is a sequential chip with a clocked behavior.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Why is it called Random Access Memory?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;A: Because regardless of how many registers the memory unit has, be it 1 million or 1 billion, it takes exactly the same access time to access any one of the registers with a given address!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Some different RAM chips:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/ramchips.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;the-counter&quot;&gt;The Counter&lt;/h3&gt;
+
+&lt;p&gt;A Program Counter (PC) is a chip (hardware device) that realizes the following 3 abstractions:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Reset: fetch the first instruction, PC = 0&lt;/li&gt;
+  &lt;li&gt;Next: fetch the next instruction, PC++&lt;/li&gt;
+  &lt;li&gt;Goto: fetch instruction n, PC = n&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Here is the logic the Counter does:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if reset[t] == 1:
+    out[t+1] = 0  # reset counter to 0
+elif load[t] == 1:
+    out[t+1] = in[t]  # set counter to input value at t
+elif inc[t] == 1:
+    out[t+1] = out[t] + 1  # increment counter by 1
+else:
+    out[t+1] = out[t]  # maintain the last value
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/counter.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;rom-vs-ram-vs-flash-vs-cache-memory&quot;&gt;ROM vs. RAM vs. Flash vs. Cache memory&lt;/h3&gt;
+
+&lt;p&gt;The ROM (read-only memory) is an involatile device that keeps information persisted even without external power supply. For example, it is used in the computer booting process for this reason.&lt;/p&gt;
+
+&lt;p&gt;Another technology is flash memory. It combines the good things of both ROM and RAM, it doesn’t need external power supply to persist data, and is writable.&lt;/p&gt;
+
+&lt;p&gt;Cache memory is a small and expensive memory that is close to the processor. It has very high performance. There is a hierarchy of cache memories, the closer to the processor, the faster, smaller and more expensive it gets.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html&quot;&gt;Go to Part II&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.coursera.org/learn/build-a-computer&quot;&gt;Coursera From NAND To TETRIS&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Ever wondered how a computer executes your code with those tiny silicon thingys? If it sounds like a mystery to you, you need to read this article.</summary></entry><entry><title type="html">[Python Essentials] Digging into Package and Environment Management to Find the Best Approach</title><link href="http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html" rel="alternate" type="text/html" title="[Python Essentials] Digging into Package and Environment Management to Find the Best Approach" /><published>2020-06-17T00:00:00-05:00</published><updated>2020-06-17T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html">&lt;p&gt;This post is for clarifying several points about Python package and environment management.&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; vs. &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt;?&lt;/li&gt;
@@ -4390,386 +4514,4 @@ Package operations: 5 installs, 0 updates, 0 removals
   &lt;li&gt;&lt;a href=&quot;https://sedimental.org/the_packaging_gradient.html&quot;&gt;https://sedimental.org/the_packaging_gradient.html&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://youtu.be/3J02sec99RM&quot;&gt;https://youtu.be/3J02sec99RM&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://youtu.be/o1Vue9CWRxU&quot;&gt;https://youtu.be/o1Vue9CWRxU&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">This post is for clarifying several points about Python package and environment management.</summary></entry><entry><title type="html">[Python Essentials] Mental Models of Expert Level Features</title><link href="http://blog.logancyang.com/note/python/2020/06/15/python-metaclasses.html" rel="alternate" type="text/html" title="[Python Essentials] Mental Models of Expert Level Features" /><published>2020-06-15T00:00:00-05:00</published><updated>2020-06-15T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/06/15/python-metaclasses</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/06/15/python-metaclasses.html">&lt;h2 id=&quot;metaclass-problem&quot;&gt;Metaclass: problem&lt;/h2&gt;
-
-&lt;p&gt;Suppose there is an infra team that writes library code for other developers to use, and there is user code for business logics.&lt;/p&gt;
-
-&lt;p&gt;Here we have &lt;code class=&quot;highlighter-rouge&quot;&gt;library.py&lt;/code&gt; from the infra team, &lt;code class=&quot;highlighter-rouge&quot;&gt;user.py&lt;/code&gt; from the user facing team:&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# library.py
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'foo'&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# user.py
-&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;library&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Base&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Derived&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Suppose we are on the user facing team and we can’t change the library code. What if the &lt;code class=&quot;highlighter-rouge&quot;&gt;foo&lt;/code&gt; method gets removed? We don’t want our &lt;code class=&quot;highlighter-rouge&quot;&gt;bar&lt;/code&gt; method to break at runtime, we want to catch this before runtime production environment. How to do this easily?&lt;/p&gt;
-
-&lt;p&gt;We could add a line above the &lt;code class=&quot;highlighter-rouge&quot;&gt;Derived&lt;/code&gt; class,&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;assert&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;hasattr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;foo&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;You broke it!&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This enforces a constraint on the Base class.&lt;/p&gt;
-
-&lt;p&gt;Now let’s consider the scenario below where we are in the infra team and are responsible for the library code. We need to make sure the business logic team implement the &lt;code class=&quot;highlighter-rouge&quot;&gt;bar&lt;/code&gt; method.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# library.py
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-
-
-&lt;span class=&quot;c1&quot;&gt;# user.py
-&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;library&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Base&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Derived&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'bar'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;We can’t do the same thing as before &lt;code class=&quot;highlighter-rouge&quot;&gt;assert hasattr(Derived, &quot;bar&quot;), &quot;...&quot;&lt;/code&gt;. Try-except also doesn’t work because it only catches the error at runtime, not before.&lt;/p&gt;
-
-&lt;p&gt;Python is a “protocol-oriented” language. In C++ and Java, a class definition is not executable code. But in Python it is.&lt;/p&gt;
-
-&lt;p&gt;Python has this &lt;code class=&quot;highlighter-rouge&quot;&gt;__build_class__()&lt;/code&gt; method that lets you check things at the time when the class is being built.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;old_bc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__build_class__&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;my_bc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kw&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;base&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Check if bar method defined&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;base&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;old_bc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kw&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;old_bc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kw&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;builtins&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;builtins&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__build_class__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my_bc&lt;/span&gt;
-
-&lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
-Running the code above:
-
-    Check if bar method defined
-&quot;&quot;&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This isn’t typically what we do for the purpose of checking whether the library code is going to break when used in user code. This is just to show that in Python we can hook into the processes of building classes, defining functions, importing modules, and do what we want.&lt;/p&gt;
-
-&lt;p&gt;This pattern exists but we don’t use it for this purpose, people use 2 fundamental features of Python to solve this problem of enforcing constraints.&lt;/p&gt;
-
-&lt;p&gt;The first one is Metaclass.&lt;/p&gt;
-
-&lt;h2 id=&quot;metaclass-solution&quot;&gt;Metaclass: solution&lt;/h2&gt;
-
-&lt;p&gt;A metaclass is just a class derived from &lt;code class=&quot;highlighter-rouge&quot;&gt;type&lt;/code&gt; class that allows you to intercept derived types.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BaseMeta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__new__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bases&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'BaseMeta.__new__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bases&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;# To prevent user class without `bar` method
-&lt;/span&gt;        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'bar'&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;TypeError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Bad user class&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__new__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bases&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;metaclass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BaseMeta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;Metaclass is way to enforce constraints on the derived classes, e.g. user code, in the base classes, i.e. library code.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Checkout &lt;code class=&quot;highlighter-rouge&quot;&gt;collections.abc&lt;/code&gt;’s (&lt;a href=&quot;https://docs.python.org/3/library/collections.abc.html&quot;&gt;doc&lt;/a&gt;) &lt;code class=&quot;highlighter-rouge&quot;&gt;abc&lt;/code&gt; metaclass which has decorators such as &lt;code class=&quot;highlighter-rouge&quot;&gt;@abstractmethod&lt;/code&gt; so we don’t have to write metaclass ourselves!&lt;/em&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;decorators&quot;&gt;Decorators&lt;/h2&gt;
-
-&lt;p&gt;&lt;em&gt;Again, Python is a “live” language as in that function definitions, class definitions are executable code that gets executed line by line at runtime.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;The function decorator is a very important pattern in Python to simplify user code. It makes quick function wrappers. Say we want to time a function, we can do:&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;functools&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;wraps&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;timeit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wraps&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;wrapper_func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;before&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;rv&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;after&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;elapsed time:&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;after&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;before&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rv&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;wrapper_func&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timeit&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;
-
-&lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
-Decorator is merely a syntax, it is equivalent to
-&quot;&quot;&quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;add&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timeit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h3 id=&quot;functoolswraps&quot;&gt;functools.wraps&lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;functools.wraps&lt;/code&gt; is simply a way to preserve the name and docstring of the the original function that is being wrapped. Without it, the wrapped function would lose its original metadata.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;functools&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;wraps&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;logged&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wraps&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;with_logging&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; was called&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;with_logging&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logged&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-   &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;does some math&quot;&quot;&quot;&lt;/span&gt;
-   &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# prints 'f'
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__doc__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;# prints 'does some math'
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Note that not all decorators wrap functions, some of them just “register” the name of the input function, for example. In that case we don’t need to use &lt;code class=&quot;highlighter-rouge&quot;&gt;functools.wraps&lt;/code&gt;. &lt;strong&gt;But usually we should use it for decorators&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;decorator-with-parameters-the-partial-trick&quot;&gt;Decorator with parameters: the &lt;code class=&quot;highlighter-rouge&quot;&gt;partial&lt;/code&gt; trick&lt;/h3&gt;
-
-&lt;p&gt;One way of thinking about decorators with parameters is&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;decorator&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;pass&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;translates to&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;decorator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;So if the decorator had parameters,&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;decorator_with_params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;param&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;pass&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;translates to&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;decorator_with_params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;param&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;To make this work, we need to write the decorator function as follows,&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;functools&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;partial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;wraps&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;_outer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# magic sauce to lift the name and doc of the function
-&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wraps&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;inner&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;#do stuff here, for eg.
-&lt;/span&gt;        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;decorator params: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inner&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# THIS IS THE KEY TRICK TO TAKE PARAMS INTO DECORATORS
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;real_decorator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;partial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_outer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;param&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;real_decorator&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;pass&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;em&gt;The line &lt;code class=&quot;highlighter-rouge&quot;&gt;real_decorator = partial(_outer, params=param)&lt;/code&gt; is the key trick to take parameters into a decorator function!&lt;/em&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;generators-two-mental-models&quot;&gt;Generators: two mental models&lt;/h2&gt;
-
-&lt;p&gt;There are two important mental models for generators.&lt;/p&gt;
-
-&lt;h3 id=&quot;laziness&quot;&gt;Laziness&lt;/h3&gt;
-
-&lt;p&gt;A generator avoids eager execution and gives you the item you want one by one. This lets you avoid waiting for the entire loop to finish and storing all the items in it.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;yield&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;sequencing&quot;&gt;Sequencing&lt;/h3&gt;
-
-&lt;p&gt;A generator &lt;strong&gt;can enforce sequences in execution&lt;/strong&gt;. It enables interleaving of &lt;strong&gt;coroutines&lt;/strong&gt;: some library code runs, then some user code, then some library code…&lt;/p&gt;
-
-&lt;p&gt;Say we have an API that needs run some methods &lt;strong&gt;in order&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
-In this scenario, there is no enforcement of order
-&quot;&quot;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Api&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run_this_first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run_this_second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run_this_last&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;last&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-
-&lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
-In this scenario, last() will never be run before second(), by
-using the generator.
-&quot;&quot;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;api&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;yield&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;yield&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;last&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;context-managers&quot;&gt;Context managers&lt;/h2&gt;
-
-&lt;p&gt;Simply put, a Context Manager makes sure a pair of commands: an initial action and a final action are always executed.&lt;/p&gt;
-
-&lt;p&gt;Here’s what a context manager is under the hood.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;pass&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# &amp;lt;=&amp;gt;
-&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__enter__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;pass&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;finally&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__exit__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;What do we need this? For example, when we do something in a database and would like to drop table when we are done:&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sqlite3&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;connect&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;connect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'test.db'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'create table points(x int, y int)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'insert into points (x, y) values(1, 1)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'insert into points (x, y) values(1, 2)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'insert into points (x, y) values(2, 1)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;row&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'select x, y from points'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'drop table points'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;We can write our own context manager to achieve this by:&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;temptable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__enter__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'__enter__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'create table points(x int, y int)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__exit__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'__exit__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'drop table points'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;connect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'test.db'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temptable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'insert into points (x, y) values(1, 1)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'insert into points (x, y) values(1, 2)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'insert into points (x, y) values(2, 1)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;row&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'select x, y from points'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This is a bit better, we can enforce running &lt;code class=&quot;highlighter-rouge&quot;&gt;__enter__&lt;/code&gt; before &lt;code class=&quot;highlighter-rouge&quot;&gt;__exit__&lt;/code&gt; by using context manager, i.e. in this case we enforce &lt;code class=&quot;highlighter-rouge&quot;&gt;create table&lt;/code&gt; before &lt;code class=&quot;highlighter-rouge&quot;&gt;drop table&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Now we notice we have &lt;strong&gt;sequencing&lt;/strong&gt; in execution because one must run before another. This reminds us about &lt;strong&gt;generators&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;We can refactor,&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# THIS IS A GENERATOR WITH INPUT `cur`
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;temptable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'create table points(x int, y int)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;yield&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'drop table points'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# THIS IS A CALLABLE CLASS WITH A GENERATOR INPUT
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Contextmanager&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gen&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gen&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__call__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__enter__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'__enter__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gen_instance&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gen_instance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__exit__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'__exit__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gen_instance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;temptable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Contextmanager&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;temptable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;connect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'test.db'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temptable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'insert into points (x, y) values(1, 1)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'insert into points (x, y) values(1, 2)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'insert into points (x, y) values(2, 1)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;row&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'select x, y from points'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The line &lt;code class=&quot;highlighter-rouge&quot;&gt;temptable = Contextmanager(temptable)&lt;/code&gt; reminds us of &lt;strong&gt;decorators&lt;/strong&gt;!&lt;/p&gt;
-
-&lt;p&gt;Fortunately, we don’t need to write &lt;code class=&quot;highlighter-rouge&quot;&gt;Contextmanager&lt;/code&gt; class ourselves, there is this library called &lt;code class=&quot;highlighter-rouge&quot;&gt;contextlib&lt;/code&gt; which already provides it.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sqlite3&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;connect&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;contextlib&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;contextmanager&lt;/span&gt;
-
-
-&lt;span class=&quot;c1&quot;&gt;# THIS IS A GENERATOR WITH INPUT `cur`
-# @contextmanager TURNS A GENERATOR INTO A CONTEXT MANAGER!
-&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;contextmanager&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;temptable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'create table points(x int, y int)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;yield&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;finally&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'drop table points'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-
-&lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;connect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'test.db'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temptable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'insert into points (x, y) values(1, 1)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'insert into points (x, y) values(1, 2)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'insert into points (x, y) values(2, 1)'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;row&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cur&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'select x, y from points'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@contextmanager&lt;/code&gt; turns a generator into a context manager! This is a really useful pattern for creating a context manager for a pair of commands.&lt;/p&gt;
-
-&lt;p&gt;This last example combined the 3 core features of Python together:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;decorator&lt;/strong&gt;: syntactic sugar for function wrapping&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;generator&lt;/strong&gt;: avoid eagerness, save resources, force sequencing&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;context manager&lt;/strong&gt;: force paired commands&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;summary&quot;&gt;Summary&lt;/h2&gt;
-
-&lt;p&gt;Python is a language oriented around &lt;em&gt;protocols&lt;/em&gt;. There are ways to implement these protocols on any objects using “dunder” methods. If you forget how to use these methods, just google “Python data model”.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=cKPlPJyQrt4&quot;&gt;James Powell: So you want to be a Python expert? PyData Seattle 2017&lt;/a&gt; (~2hr)&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;functools.wraps&lt;/code&gt;: &lt;a href=&quot;https://stackoverflow.com/questions/308999/what-does-functools-wraps-do&quot;&gt;https://stackoverflow.com/questions/308999/what-does-functools-wraps-do&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;partial&lt;/code&gt; trick for decorators with parameters: &lt;a href=&quot;https://stackoverflow.com/a/25827070/2280673&quot;&gt;https://stackoverflow.com/a/25827070/2280673&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Metaclass: problem</summary></entry></feed>
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">This post is for clarifying several points about Python package and environment management.</summary></entry></feed>

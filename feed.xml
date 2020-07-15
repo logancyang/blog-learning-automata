@@ -1,4 +1,228 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-07-07T15:04:23-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[Python Essentials] Poetry Quick Start</title><link href="http://blog.logancyang.com/note/python/2020/07/07/poetry-quickstart.html" rel="alternate" type="text/html" title="[Python Essentials] Poetry Quick Start" /><published>2020-07-07T00:00:00-05:00</published><updated>2020-07-07T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/07/poetry-quickstart</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/07/poetry-quickstart.html">&lt;p&gt;&lt;a href=&quot;https://python-poetry.org/&quot;&gt;Poetry&lt;/a&gt; is the current best choice for Python application dependency and environment management. It uses two files&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-07-15T18:27:19-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[JavaScript Essentials] Promise, fetch, async and await</title><link href="http://blog.logancyang.com/note/p5js/javascript/2020/07/15/JavaScript-promise-async.html" rel="alternate" type="text/html" title="[JavaScript Essentials] Promise, fetch, async and await" /><published>2020-07-15T00:00:00-05:00</published><updated>2020-07-15T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/p5js/javascript/2020/07/15/JavaScript-promise-async</id><content type="html" xml:base="http://blog.logancyang.com/note/p5js/javascript/2020/07/15/JavaScript-promise-async.html">&lt;h2 id=&quot;promises-es6&quot;&gt;Promises (ES6)&lt;/h2&gt;
+
+&lt;p&gt;A callback function is associated with an &lt;strong&gt;event&lt;/strong&gt;, e.g. when the mouse is pressed, trigger some function.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Example task: Consider a series of API calls for data, say you call &lt;code class=&quot;highlighter-rouge&quot;&gt;wordnikAPI&lt;/code&gt; to get a word, &lt;em&gt;and then&lt;/em&gt; use that word to call &lt;code class=&quot;highlighter-rouge&quot;&gt;giphyAPI&lt;/code&gt; to get a gif for it.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;You then need to nest callback in callback. If you have a long chain of calls, it can quickly become super nested and unwieldy. This is called &lt;strong&gt;callback hell&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// p5.js loadJSON&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;loadJSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;loadJSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;loadJSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;...&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Instead of passing a callback function, we can use a &lt;code class=&quot;highlighter-rouge&quot;&gt;Promise&lt;/code&gt; object,&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// fetch() returns a Promise. It is native JavaScript&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;promise&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;It can have one of several states: &lt;code class=&quot;highlighter-rouge&quot;&gt;pending, fulfilled, rejected&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;With the promise object defined, we can chain &lt;code class=&quot;highlighter-rouge&quot;&gt;then()&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;catch()&lt;/code&gt; to it.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;then()&lt;/code&gt; is for the state &lt;code class=&quot;highlighter-rouge&quot;&gt;fulfilled&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;catch()&lt;/code&gt; is for the state &lt;code class=&quot;highlighter-rouge&quot;&gt;rejected&lt;/code&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;The usual way to use &lt;code class=&quot;highlighter-rouge&quot;&gt;fetch&lt;/code&gt; is chaining.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Keep in mind that &lt;code class=&quot;highlighter-rouge&quot;&gt;fetch&lt;/code&gt; returns a promise that needs &lt;code class=&quot;highlighter-rouge&quot;&gt;.json()&lt;/code&gt; to convert it into something we can use. But the object returned by &lt;code class=&quot;highlighter-rouge&quot;&gt;.json()&lt;/code&gt; is also a promise!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;resp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;resp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;cm&quot;&gt;/* do something with json data */&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;cm&quot;&gt;/* do something with err */&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;To do 2 API calls one after the other, and use the result of the first for the second call, with promise chaining:&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;resp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;resp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;/* do something with json data */&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url2_with_json_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;resp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;resp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;cm&quot;&gt;/* do something with json data from url2 */&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In every step of this chain, there could be an error. The final &lt;code class=&quot;highlighter-rouge&quot;&gt;catch&lt;/code&gt; can catch all of them. This is much nicer than writing a callback to handle the error for each step.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Don’t forget to &lt;em&gt;return&lt;/em&gt; the promise in the middle of the chain!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;make-your-own-promise&quot;&gt;Make your own &lt;code class=&quot;highlighter-rouge&quot;&gt;Promise&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;Consider this callback example&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;setTimeout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sayHello&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sayHello&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;createP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;Hello!&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Hello!&lt;/code&gt; will pop up in the webpage 1 second after loading the page.&lt;/p&gt;
+
+&lt;p&gt;What if we want to use a Promise? We need to create pathways to resolve the promise.&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;delay&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;createP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;Hello&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// `delay` need to return a new Promise&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;delay&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Promise&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;resolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;reject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;isNaN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;// reject promise. Error will be caught by .catch()&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;reject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;delay requires a number&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;// This means &quot;after this amount of time, resolve the promise&quot;&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;setTimeout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;resolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;asyncawait-keywords-es8&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;async/await&lt;/code&gt; keywords (ES8)&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;async&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;await&lt;/code&gt; are syntactic sugar for Promises. It makes things easier to read, but it doesn’t provide extra functionalities.&lt;/p&gt;
+
+&lt;p&gt;Let’s consider the previous example where we need to chain a lot of &lt;code class=&quot;highlighter-rouge&quot;&gt;then&lt;/code&gt;s together.&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;resp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;resp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;/* do something with json data */&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url2_with_json_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;resp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;resp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;cm&quot;&gt;/* do something with json data from url2 */&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)});&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This looks bad. What we can do instead:&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;wordGIF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;json1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;word&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;json1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// It is fine to console.log the data here, it resolved&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// We can await multiple fetches!&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;json2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;image_url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;json2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;images&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;fixed_height_small&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// Returns promise to be resolved&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;image_url&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;wordGIF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;createP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;createImg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;img_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}).&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;promiseall&quot;&gt;Promise.all()&lt;/h2&gt;
+
+&lt;p&gt;Say &lt;code class=&quot;highlighter-rouge&quot;&gt;wordGIF(num)&lt;/code&gt; takes a number and it gets a word of that length from wordnik API. Let’s look at a comparison&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;wordGIF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;createP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;createImg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;img_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;wordGIF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;createP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;createImg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;img_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// vs.&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;wordGIF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;createP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;createImg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;img_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}).&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;wordGIF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;createP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;createImg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;img_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}).&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The top one has order, it runs &lt;code class=&quot;highlighter-rouge&quot;&gt;wordGIF(3)&lt;/code&gt; first and then do &lt;code class=&quot;highlighter-rouge&quot;&gt;wordGIF(4)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The bottom one is parallel, there is no guaranteed ordering. &lt;code class=&quot;highlighter-rouge&quot;&gt;wordGIF(4)&lt;/code&gt; may come back first and its word and image may get rendered above &lt;code class=&quot;highlighter-rouge&quot;&gt;wordGIF(3)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Instead of chaining them with &lt;code class=&quot;highlighter-rouge&quot;&gt;then()&lt;/code&gt;, there is another way to maintain order: using &lt;code class=&quot;highlighter-rouge&quot;&gt;Promise.all()&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;promises&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;wordGIF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;wordGIF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;wordGIF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)];&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;Promise&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;promises&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;createP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;createImg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}).&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Promise.all()&lt;/code&gt; gets the array of results when all of them resolve, and returns them &lt;em&gt;in one batch&lt;/em&gt;. It maintains the order, and the effect here is that they render at the same time.&lt;/p&gt;
+
+&lt;p&gt;The downside is that it’s all or nothing, if any of them gets an error, it fails everything.&lt;/p&gt;
+
+&lt;h2 id=&quot;try-catch-with-promises&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;try&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;catch&lt;/code&gt; with Promises&lt;/h2&gt;
+
+&lt;p&gt;Since &lt;code class=&quot;highlighter-rouge&quot;&gt;Promise.all()&lt;/code&gt; is all or nothing, we need to catch and handle the error for each case in the array if there is any.&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;wordGIF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;word&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;image_url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;image_url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;json2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;images&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;fixed_height_small&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;No image found for &lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;// Returns promise to be resolved&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;image_url&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;promises&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[];&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;promises&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;wordGIF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;Promise&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;promises&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;createP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;image_url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;createImg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}).&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This will show the gifs that are successfully found and log the error message for those are not found!&lt;/p&gt;
+
+&lt;h2 id=&quot;next-steps&quot;&gt;Next steps&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Learn to get promises in an array in concurrently, render as they come in.&lt;/li&gt;
+  &lt;li&gt;Add a loading bar&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Promises (ES6)</summary></entry><entry><title type="html">[Python Essentials] Poetry Quick Start</title><link href="http://blog.logancyang.com/note/python/2020/07/07/poetry-quickstart.html" rel="alternate" type="text/html" title="[Python Essentials] Poetry Quick Start" /><published>2020-07-07T00:00:00-05:00</published><updated>2020-07-07T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/07/poetry-quickstart</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/07/poetry-quickstart.html">&lt;p&gt;&lt;a href=&quot;https://python-poetry.org/&quot;&gt;Poetry&lt;/a&gt; is the current best choice for Python application dependency and environment management. It uses two files&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;pyproject.toml&lt;/li&gt;
@@ -486,284 +710,7 @@ include &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.csv
   &lt;li&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://packaging.python.org/tutorials/packaging-projects/&quot;&gt;https://packaging.python.org/tutorials/packaging-projects/&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html&quot;&gt;http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Packages</summary></entry><entry><title type="html">[From NAND to TETRIS] Computer Architecture 101 Part III: Computer Architecture and Assembler</title><link href="http://blog.logancyang.com/note/compsci/2020/07/04/computer-architecture-101-part-iii.html" rel="alternate" type="text/html" title="[From NAND to TETRIS] Computer Architecture 101 Part III: Computer Architecture and Assembler" /><published>2020-07-04T00:00:00-05:00</published><updated>2020-07-04T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/compsci/2020/07/04/computer-architecture-101-part-iii</id><content type="html" xml:base="http://blog.logancyang.com/note/compsci/2020/07/04/computer-architecture-101-part-iii.html">&lt;p&gt;Continuing the discussion through abstraction level 4 in the &lt;a href=&quot;http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html&quot;&gt;last post&lt;/a&gt;, we look at level 5 and level 6 in this post.&lt;/p&gt;
-
-&lt;h2 id=&quot;level-5-computer-architecture&quot;&gt;Level 5: Computer Architecture&lt;/h2&gt;
-
-&lt;p&gt;We are going to build the Von Neumann Architecture that is capable of executing any program.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/vonneumann.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;von-neumann-architecture&quot;&gt;Von Neumann Architecture&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/infoflow.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The CPU has ALUs and registers. The ALUs do the arithmetic and logical operations.&lt;/p&gt;
-
-&lt;p&gt;The memory holds the data and the program.&lt;/p&gt;
-
-&lt;p&gt;To move data around, there are 3 kinds of buses: the data bus, address bus, and control bus (or control wires).&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;The ALU loads information from the Data bus and manipulates it using the Control bits.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;We need a two-way connection between the CPU registers and the data bus for intermediate results. We also need to connect CPU registers to the address bus (one way) because we access the memory by the memory address in the registers. So &lt;strong&gt;the CPU registers have both data and addresses&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;For the memory, we need to connect the data memory to the data bus, and the program memory to the control bus.&lt;/p&gt;
-
-&lt;h3 id=&quot;the-fetch-execute-cycle&quot;&gt;The Fetch-Execute Cycle&lt;/h3&gt;
-
-&lt;p&gt;All that the CPU does is fetch an instruction and execute it, and repeat. This is the CPU loop.&lt;/p&gt;
-
-&lt;p&gt;Fetch:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;put the &lt;strong&gt;location&lt;/strong&gt; of the next instruction (available from the program counter) into the &lt;strong&gt;address&lt;/strong&gt; of the &lt;strong&gt;program memory&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;and then get the instruction code itself by reading the memory content at that location.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/fetch.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;In the execute cycle, we use the bits from the control bus and access the registers and/or the data memory to manipulate the data.&lt;/p&gt;
-
-&lt;p&gt;There is clash between fetch and execute because they access the program and data memory which are in the same physical memory. Usually, we use a multiplexor to do the fetch cycle first and remember the content of the instruction in the register, and then access the data memory. There’s a variant of the Von Neumann Architecture which is the Harvard Architecture. It physically separate the program and data memory to avoid this complication.&lt;/p&gt;
-
-&lt;h3 id=&quot;the-hack-cpu&quot;&gt;The Hack CPU&lt;/h3&gt;
-
-&lt;p&gt;The hack CPU is the brain of the computer, it decides which instruction to execute next and how.&lt;/p&gt;
-
-&lt;p&gt;It has 3 inputs:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Data value&lt;/li&gt;
-  &lt;li&gt;Instruction&lt;/li&gt;
-  &lt;li&gt;Reset bit&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackcpuinput.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;And 4 outputs:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Data value&lt;/li&gt;
-  &lt;li&gt;Write to memory (Y/N)&lt;/li&gt;
-  &lt;li&gt;Memory address&lt;/li&gt;
-  &lt;li&gt;Address of the next instruction&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackcpuoutput.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Here’s the Hack CPU architecture:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackcpu.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;All the chips used are the ones we have built before. We just need to assemble them together in this way. The &lt;code class=&quot;highlighter-rouge&quot;&gt;C&lt;/code&gt; bits are control bits.&lt;/p&gt;
-
-&lt;p&gt;Here is how the CPU recognizes and handles an A-instruction:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/insthandling.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Here is how the CPU recognizes and handles a C-instruction:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/insthandling-c.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Looking at ALU:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/alu-inputs.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/alu-outputs.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Reset bit: program starts/restarts when reset is 1.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Here is the control implementation and program counter logic:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/cpucontrol.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/controlimpl.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;data-memory&quot;&gt;Data memory&lt;/h3&gt;
-
-&lt;p&gt;Recall the overall Hack architecture:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackoverall.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Now that we have the CPU implementation, we look at the memory. It has 3 parts: the RAM part that is the data memory, plus the Screen Memory Map, and the kernel memory map.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/ram.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The fist part, RAM16, is already implemented in our previous sections.&lt;/p&gt;
-
-&lt;p&gt;We also went through Screen Memory Map and Keyboard Memory Map in detail before. One special feature of the Screen chip is that it can refresh the display at a frequency.&lt;/p&gt;
-
-&lt;h3 id=&quot;rom32k-instruction-memory&quot;&gt;ROM32K: Instruction memory&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/rom.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;To put a program into ROM, there are 2 ways&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Burn the program onto a ROM chip, such as a CD, and run the program with the CD.&lt;/li&gt;
-  &lt;li&gt;Load the program which is written in a text file using &lt;strong&gt;hardware simulation&lt;/strong&gt; by the built-in ROM chip.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;putting-it-all-together&quot;&gt;Putting it all together&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/arch.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;comments&quot;&gt;Comments&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;We can have a chip that tracks the state the computer is in to make sure it performs the right set of instructions given its state. We use the concept of Finite State Machine to organize the states and their transitions.&lt;/li&gt;
-  &lt;li&gt;To add more peripheral input/output devices, we can allocate more segments in the memory for them.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;level-6-assembler&quot;&gt;Level 6. Assembler&lt;/h2&gt;
-
-&lt;p&gt;For the first time in this series, this part is software. The Assembler translates the machine language to binary code that can be executed. It is the first software layer above the hardware.&lt;/p&gt;
-
-&lt;p&gt;But where do we run the Assembler if it is not already in 0s and 1s itself?&lt;/p&gt;
-
-&lt;p&gt;Since we are not building the first computer in the world, we can write the Assembler on another computer, compile it down to binary, transfer the binary to the Hack computer we are building, and use the binary directly.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/assembler.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The Assembler reads a line of Hack code into an character array. It ignores comments and whitespaces when breaking down the line into fields.&lt;/p&gt;
-
-&lt;p&gt;The Assember also supports symbols (variable names). The way it supports that is to store the symbol name at an address.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/symbol-addr.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Essentially, a symbol is just an alias for an address location.&lt;/p&gt;
-
-&lt;p&gt;It is possible in the Assembly (Hack) machine language that a “jump” symbol is used before it is declared using the &lt;code class=&quot;highlighter-rouge&quot;&gt;@&lt;/code&gt; operator. One solution is to do 2 passes for the code, the first pass builds the symbol table, and the second pass uses it to correctly executes the program.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/symbols.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;the-translator-perspective&quot;&gt;The translator perspective&lt;/h3&gt;
-
-&lt;p&gt;We have already seen the tables that map A and C instructions to binary code. Along with user symbols that are constructed by the declarations, we have all we need to do the translation.&lt;/p&gt;
-
-&lt;p&gt;We take care of&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;White spaces, empty line, indentation&lt;/li&gt;
-  &lt;li&gt;Comments, inline comments&lt;/li&gt;
-  &lt;li&gt;A, C instructions&lt;/li&gt;
-  &lt;li&gt;Symbols&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;step-1-handling-whitespaces&quot;&gt;Step 1: Handling whitespaces&lt;/h4&gt;
-
-&lt;p&gt;Let’s focus on them one by one. First we handle whitespaces for a simplified Hack program with no symbols.&lt;/p&gt;
-
-&lt;p&gt;This is the easiest one. We simply &lt;strong&gt;strip all whitespaces, so the program after this step has no whitespace&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h4 id=&quot;step-2-translating-a-instructions&quot;&gt;Step 2: Translating A-instructions&lt;/h4&gt;
-
-&lt;p&gt;An A-instruction is just &lt;code class=&quot;highlighter-rouge&quot;&gt;@value&lt;/code&gt;. In binary, we prepend the op code &lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt; for A-instruction, and convert the value in decimal to binary, add 0 paddings accordingly.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/trans-a.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;step-3-translating-c-instructions&quot;&gt;Step 3: Translating C-instructions&lt;/h4&gt;
-
-&lt;p&gt;Consider &lt;code class=&quot;highlighter-rouge&quot;&gt;MD=D+1&lt;/code&gt;. This C-instruction has a &lt;code class=&quot;highlighter-rouge&quot;&gt;dest: MD&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;comp: D+1&lt;/code&gt;, with no &lt;code class=&quot;highlighter-rouge&quot;&gt;jump&lt;/code&gt; field.&lt;/p&gt;
-
-&lt;p&gt;The binary syntax for C-instructions is&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1 1 1 a c1 c2 c3 c4 c5 c6 d1 d2 d3 j1 j2 j3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;3 1s at the beginning, and fill in the &lt;code class=&quot;highlighter-rouge&quot;&gt;a, c, d, j&lt;/code&gt; bits according to the table below&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/trans-c.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;step-4-handling-symbols&quot;&gt;Step 4: Handling symbols&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/handle-symbol.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;For pre-defined symbols, we can simply replace them with their values based on the table below&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/pre-symbols.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;For the label symbols, they are used for &lt;code class=&quot;highlighter-rouge&quot;&gt;jump&lt;/code&gt; commands.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;The program uses the label to “goto” another instruction&lt;/li&gt;
-  &lt;li&gt;Declared with &lt;code class=&quot;highlighter-rouge&quot;&gt;()&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;A label symbol points to the memory location of its next instruction. &lt;code class=&quot;highlighter-rouge&quot;&gt;label -&amp;gt; mem_index_of_next_instruction&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;When translating a label symbol, simply replace it with the value &lt;code class=&quot;highlighter-rouge&quot;&gt;mem_index_of_next_instruction&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;For the variable symbols, they are assigned to memory locations starting from address 16 (a designer’s decision).&lt;/p&gt;
-
-&lt;p&gt;We need a &lt;strong&gt;symbol table&lt;/strong&gt; to keep track of the new and old variable symbols. It has key-value pairs of symbol name and symbol address.&lt;/p&gt;
-
-&lt;p&gt;The symbol table is initialized with all the predefined symbols and their addresses.&lt;/p&gt;
-
-&lt;p&gt;The Assembler performs &lt;strong&gt;2 passes&lt;/strong&gt;. In the first pass adds the &lt;strong&gt;label symbols&lt;/strong&gt; to the symbol table. The second pass adds the variable symbols to the symbol table.&lt;/p&gt;
-
-&lt;p&gt;The symbol table is an auxilary data structure that the Assembler needs to process the program. Once the processing completes, the symbol table can be tossed away.&lt;/p&gt;
-
-&lt;h3 id=&quot;overall-assembler-logic&quot;&gt;Overall Assembler logic&lt;/h3&gt;
-
-&lt;p&gt;Keep in mind, the Assembler is just a &lt;strong&gt;text processor&lt;/strong&gt; that takes in the Assembly/Hack language and returns a file containing only two types of characters, 0 and 1. These 0s and 1s are still ASCII characters. When the computer loads it into memory it then becomes &lt;em&gt;real&lt;/em&gt; 0s and 1s.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Although we say we are not building the world’s first computer and resort to a high level language to write this Assembler text processor, all that matters is the resulting translation directive text file. One &lt;em&gt;can&lt;/em&gt; write it from scratch with hardware logic, but it’s cumbersome. It’s not that we are not able to produce this text processor without the help of a high level language. We already have all the logic we need.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/assembler-overall.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The overall Assembler process:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/assembler-proc.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;To implement the Assembler in a high level language like Python or Java, here’s the pseudocode:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/assembler-pseudo.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;macro-assembler-and-macro-commands&quot;&gt;Macro assembler and macro commands&lt;/h3&gt;
-
-&lt;p&gt;We can make the Hack language more user friendly by adding &lt;em&gt;macro commands&lt;/em&gt;. For example, we can convert&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@100
-D=M
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;to&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;D=M[100]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;To achieve this, simply add the translation logic into the Assembler.&lt;/p&gt;
-
-&lt;h3 id=&quot;how-was-the-first-assembler-created-in-history-without-the-assistance-of-high-level-languages&quot;&gt;How was the first Assembler created in history without the assistance of high level languages?&lt;/h3&gt;
-
-&lt;p&gt;The first Assembler was built &lt;strong&gt;by hand&lt;/strong&gt;. People write the binary code for the translation process. However, we only needed to do it &lt;strong&gt;once&lt;/strong&gt;. Once it’s created, people can build on it and create new Assemblers by programming.&lt;/p&gt;
-
-&lt;h2 id=&quot;from-nand-to-tetris-part-i-last-words&quot;&gt;From NAND to TETRIS Part I: Last words&lt;/h2&gt;
-
-&lt;p&gt;Now we have built the entire Hack computer from NAND gates!&lt;/p&gt;
-
-&lt;p&gt;Outside the classroom, it is rare that people need to work with the Assemly language. People only work with high level languages in programming unless they really need to optimize a piece of code for a specialized device.&lt;/p&gt;
-
-&lt;p&gt;The most important concept introduced here is that &lt;strong&gt;why computers are programmable&lt;/strong&gt; and can do all kinds of tasks.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;We bridged the gap from hardware to software&lt;/strong&gt;. This is the key idea we learned!&lt;/p&gt;
-
-&lt;p&gt;In &lt;em&gt;&lt;a href=&quot;https://www.coursera.org/learn/nand2tetris2&quot;&gt;From NAND to TETRIS Part II&lt;/a&gt;&lt;/em&gt;, the material will cover the software layers such as the virtual machine, the compiler, operating system, etc.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.coursera.org/learn/build-a-computer&quot;&gt;Coursera From NAND To TETRIS&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;The amazing lecturers:
-    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;https://www.coursera.org/instructor/shimon&quot;&gt;Shimon Schocken&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;https://www.coursera.org/instructor/noamnisan&quot;&gt;Noam Nisan&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Continuing the discussion through abstraction level 4 in the last post, we look at level 5 and level 6 in this post.</summary></entry><entry><title type="html">[Python Review] Part IV: Testing, Logging and Debugging</title><link href="http://blog.logancyang.com/note/python/2020/07/04/python-basics-iv.html" rel="alternate" type="text/html" title="[Python Review] Part IV: Testing, Logging and Debugging" /><published>2020-07-04T00:00:00-05:00</published><updated>2020-07-04T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/04/python-basics-iv</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/04/python-basics-iv.html">&lt;h2 id=&quot;testing&quot;&gt;Testing&lt;/h2&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Packages</summary></entry><entry><title type="html">[Python Review] Part IV: Testing, Logging and Debugging</title><link href="http://blog.logancyang.com/note/python/2020/07/04/python-basics-iv.html" rel="alternate" type="text/html" title="[Python Review] Part IV: Testing, Logging and Debugging" /><published>2020-07-04T00:00:00-05:00</published><updated>2020-07-04T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/04/python-basics-iv</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/04/python-basics-iv.html">&lt;h2 id=&quot;testing&quot;&gt;Testing&lt;/h2&gt;
 
 &lt;p&gt;The dynamic nature of Python makes testing critically important to most applications. There is no compiler to find your bugs. The only way to find bugs is to run the code and make sure you try out all of its features.&lt;/p&gt;
 
@@ -1190,7 +1137,284 @@ AttributeError: &lt;span class=&quot;s1&quot;&gt;'int'&lt;/span&gt; object has n
   &lt;li&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://stackoverflow.com/questions/2120507/why-do-python-function-docs-include-the-comma-after-the-bracket-for-optional-arg&quot;&gt;https://stackoverflow.com/questions/2120507/why-do-python-function-docs-include-the-comma-after-the-bracket-for-optional-arg&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://stackoverflow.com/questions/6918493/in-python-why-use-logging-instead-of-print&quot;&gt;https://stackoverflow.com/questions/6918493/in-python-why-use-logging-instead-of-print&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Testing</summary></entry><entry><title type="html">[Python Review] Part III: Generators and Advanced Topics</title><link href="http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html" rel="alternate" type="text/html" title="[Python Review] Part III: Generators and Advanced Topics" /><published>2020-07-02T00:00:00-05:00</published><updated>2020-07-02T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html">&lt;h2 id=&quot;generators&quot;&gt;Generators&lt;/h2&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Testing</summary></entry><entry><title type="html">[From NAND to TETRIS] Computer Architecture 101 Part III: Computer Architecture and Assembler</title><link href="http://blog.logancyang.com/note/compsci/2020/07/04/computer-architecture-101-part-iii.html" rel="alternate" type="text/html" title="[From NAND to TETRIS] Computer Architecture 101 Part III: Computer Architecture and Assembler" /><published>2020-07-04T00:00:00-05:00</published><updated>2020-07-04T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/compsci/2020/07/04/computer-architecture-101-part-iii</id><content type="html" xml:base="http://blog.logancyang.com/note/compsci/2020/07/04/computer-architecture-101-part-iii.html">&lt;p&gt;Continuing the discussion through abstraction level 4 in the &lt;a href=&quot;http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html&quot;&gt;last post&lt;/a&gt;, we look at level 5 and level 6 in this post.&lt;/p&gt;
+
+&lt;h2 id=&quot;level-5-computer-architecture&quot;&gt;Level 5: Computer Architecture&lt;/h2&gt;
+
+&lt;p&gt;We are going to build the Von Neumann Architecture that is capable of executing any program.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/vonneumann.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;von-neumann-architecture&quot;&gt;Von Neumann Architecture&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/infoflow.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The CPU has ALUs and registers. The ALUs do the arithmetic and logical operations.&lt;/p&gt;
+
+&lt;p&gt;The memory holds the data and the program.&lt;/p&gt;
+
+&lt;p&gt;To move data around, there are 3 kinds of buses: the data bus, address bus, and control bus (or control wires).&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;The ALU loads information from the Data bus and manipulates it using the Control bits.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;We need a two-way connection between the CPU registers and the data bus for intermediate results. We also need to connect CPU registers to the address bus (one way) because we access the memory by the memory address in the registers. So &lt;strong&gt;the CPU registers have both data and addresses&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;For the memory, we need to connect the data memory to the data bus, and the program memory to the control bus.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-fetch-execute-cycle&quot;&gt;The Fetch-Execute Cycle&lt;/h3&gt;
+
+&lt;p&gt;All that the CPU does is fetch an instruction and execute it, and repeat. This is the CPU loop.&lt;/p&gt;
+
+&lt;p&gt;Fetch:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;put the &lt;strong&gt;location&lt;/strong&gt; of the next instruction (available from the program counter) into the &lt;strong&gt;address&lt;/strong&gt; of the &lt;strong&gt;program memory&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;and then get the instruction code itself by reading the memory content at that location.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/fetch.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In the execute cycle, we use the bits from the control bus and access the registers and/or the data memory to manipulate the data.&lt;/p&gt;
+
+&lt;p&gt;There is clash between fetch and execute because they access the program and data memory which are in the same physical memory. Usually, we use a multiplexor to do the fetch cycle first and remember the content of the instruction in the register, and then access the data memory. There’s a variant of the Von Neumann Architecture which is the Harvard Architecture. It physically separate the program and data memory to avoid this complication.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-hack-cpu&quot;&gt;The Hack CPU&lt;/h3&gt;
+
+&lt;p&gt;The hack CPU is the brain of the computer, it decides which instruction to execute next and how.&lt;/p&gt;
+
+&lt;p&gt;It has 3 inputs:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Data value&lt;/li&gt;
+  &lt;li&gt;Instruction&lt;/li&gt;
+  &lt;li&gt;Reset bit&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackcpuinput.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And 4 outputs:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Data value&lt;/li&gt;
+  &lt;li&gt;Write to memory (Y/N)&lt;/li&gt;
+  &lt;li&gt;Memory address&lt;/li&gt;
+  &lt;li&gt;Address of the next instruction&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackcpuoutput.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Here’s the Hack CPU architecture:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackcpu.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;All the chips used are the ones we have built before. We just need to assemble them together in this way. The &lt;code class=&quot;highlighter-rouge&quot;&gt;C&lt;/code&gt; bits are control bits.&lt;/p&gt;
+
+&lt;p&gt;Here is how the CPU recognizes and handles an A-instruction:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/insthandling.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Here is how the CPU recognizes and handles a C-instruction:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/insthandling-c.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Looking at ALU:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/alu-inputs.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/alu-outputs.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Reset bit: program starts/restarts when reset is 1.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Here is the control implementation and program counter logic:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/cpucontrol.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/controlimpl.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;data-memory&quot;&gt;Data memory&lt;/h3&gt;
+
+&lt;p&gt;Recall the overall Hack architecture:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackoverall.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now that we have the CPU implementation, we look at the memory. It has 3 parts: the RAM part that is the data memory, plus the Screen Memory Map, and the kernel memory map.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/ram.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The fist part, RAM16, is already implemented in our previous sections.&lt;/p&gt;
+
+&lt;p&gt;We also went through Screen Memory Map and Keyboard Memory Map in detail before. One special feature of the Screen chip is that it can refresh the display at a frequency.&lt;/p&gt;
+
+&lt;h3 id=&quot;rom32k-instruction-memory&quot;&gt;ROM32K: Instruction memory&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/rom.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To put a program into ROM, there are 2 ways&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Burn the program onto a ROM chip, such as a CD, and run the program with the CD.&lt;/li&gt;
+  &lt;li&gt;Load the program which is written in a text file using &lt;strong&gt;hardware simulation&lt;/strong&gt; by the built-in ROM chip.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;putting-it-all-together&quot;&gt;Putting it all together&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/arch.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;comments&quot;&gt;Comments&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;We can have a chip that tracks the state the computer is in to make sure it performs the right set of instructions given its state. We use the concept of Finite State Machine to organize the states and their transitions.&lt;/li&gt;
+  &lt;li&gt;To add more peripheral input/output devices, we can allocate more segments in the memory for them.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;level-6-assembler&quot;&gt;Level 6. Assembler&lt;/h2&gt;
+
+&lt;p&gt;For the first time in this series, this part is software. The Assembler translates the machine language to binary code that can be executed. It is the first software layer above the hardware.&lt;/p&gt;
+
+&lt;p&gt;But where do we run the Assembler if it is not already in 0s and 1s itself?&lt;/p&gt;
+
+&lt;p&gt;Since we are not building the first computer in the world, we can write the Assembler on another computer, compile it down to binary, transfer the binary to the Hack computer we are building, and use the binary directly.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/assembler.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The Assembler reads a line of Hack code into an character array. It ignores comments and whitespaces when breaking down the line into fields.&lt;/p&gt;
+
+&lt;p&gt;The Assember also supports symbols (variable names). The way it supports that is to store the symbol name at an address.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/symbol-addr.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Essentially, a symbol is just an alias for an address location.&lt;/p&gt;
+
+&lt;p&gt;It is possible in the Assembly (Hack) machine language that a “jump” symbol is used before it is declared using the &lt;code class=&quot;highlighter-rouge&quot;&gt;@&lt;/code&gt; operator. One solution is to do 2 passes for the code, the first pass builds the symbol table, and the second pass uses it to correctly executes the program.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/symbols.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;the-translator-perspective&quot;&gt;The translator perspective&lt;/h3&gt;
+
+&lt;p&gt;We have already seen the tables that map A and C instructions to binary code. Along with user symbols that are constructed by the declarations, we have all we need to do the translation.&lt;/p&gt;
+
+&lt;p&gt;We take care of&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;White spaces, empty line, indentation&lt;/li&gt;
+  &lt;li&gt;Comments, inline comments&lt;/li&gt;
+  &lt;li&gt;A, C instructions&lt;/li&gt;
+  &lt;li&gt;Symbols&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;step-1-handling-whitespaces&quot;&gt;Step 1: Handling whitespaces&lt;/h4&gt;
+
+&lt;p&gt;Let’s focus on them one by one. First we handle whitespaces for a simplified Hack program with no symbols.&lt;/p&gt;
+
+&lt;p&gt;This is the easiest one. We simply &lt;strong&gt;strip all whitespaces, so the program after this step has no whitespace&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;step-2-translating-a-instructions&quot;&gt;Step 2: Translating A-instructions&lt;/h4&gt;
+
+&lt;p&gt;An A-instruction is just &lt;code class=&quot;highlighter-rouge&quot;&gt;@value&lt;/code&gt;. In binary, we prepend the op code &lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt; for A-instruction, and convert the value in decimal to binary, add 0 paddings accordingly.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/trans-a.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;step-3-translating-c-instructions&quot;&gt;Step 3: Translating C-instructions&lt;/h4&gt;
+
+&lt;p&gt;Consider &lt;code class=&quot;highlighter-rouge&quot;&gt;MD=D+1&lt;/code&gt;. This C-instruction has a &lt;code class=&quot;highlighter-rouge&quot;&gt;dest: MD&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;comp: D+1&lt;/code&gt;, with no &lt;code class=&quot;highlighter-rouge&quot;&gt;jump&lt;/code&gt; field.&lt;/p&gt;
+
+&lt;p&gt;The binary syntax for C-instructions is&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1 1 1 a c1 c2 c3 c4 c5 c6 d1 d2 d3 j1 j2 j3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;3 1s at the beginning, and fill in the &lt;code class=&quot;highlighter-rouge&quot;&gt;a, c, d, j&lt;/code&gt; bits according to the table below&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/trans-c.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;step-4-handling-symbols&quot;&gt;Step 4: Handling symbols&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/handle-symbol.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For pre-defined symbols, we can simply replace them with their values based on the table below&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/pre-symbols.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For the label symbols, they are used for &lt;code class=&quot;highlighter-rouge&quot;&gt;jump&lt;/code&gt; commands.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The program uses the label to “goto” another instruction&lt;/li&gt;
+  &lt;li&gt;Declared with &lt;code class=&quot;highlighter-rouge&quot;&gt;()&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;A label symbol points to the memory location of its next instruction. &lt;code class=&quot;highlighter-rouge&quot;&gt;label -&amp;gt; mem_index_of_next_instruction&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;When translating a label symbol, simply replace it with the value &lt;code class=&quot;highlighter-rouge&quot;&gt;mem_index_of_next_instruction&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;For the variable symbols, they are assigned to memory locations starting from address 16 (a designer’s decision).&lt;/p&gt;
+
+&lt;p&gt;We need a &lt;strong&gt;symbol table&lt;/strong&gt; to keep track of the new and old variable symbols. It has key-value pairs of symbol name and symbol address.&lt;/p&gt;
+
+&lt;p&gt;The symbol table is initialized with all the predefined symbols and their addresses.&lt;/p&gt;
+
+&lt;p&gt;The Assembler performs &lt;strong&gt;2 passes&lt;/strong&gt;. In the first pass adds the &lt;strong&gt;label symbols&lt;/strong&gt; to the symbol table. The second pass adds the variable symbols to the symbol table.&lt;/p&gt;
+
+&lt;p&gt;The symbol table is an auxilary data structure that the Assembler needs to process the program. Once the processing completes, the symbol table can be tossed away.&lt;/p&gt;
+
+&lt;h3 id=&quot;overall-assembler-logic&quot;&gt;Overall Assembler logic&lt;/h3&gt;
+
+&lt;p&gt;Keep in mind, the Assembler is just a &lt;strong&gt;text processor&lt;/strong&gt; that takes in the Assembly/Hack language and returns a file containing only two types of characters, 0 and 1. These 0s and 1s are still ASCII characters. When the computer loads it into memory it then becomes &lt;em&gt;real&lt;/em&gt; 0s and 1s.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Although we say we are not building the world’s first computer and resort to a high level language to write this Assembler text processor, all that matters is the resulting translation directive text file. One &lt;em&gt;can&lt;/em&gt; write it from scratch with hardware logic, but it’s cumbersome. It’s not that we are not able to produce this text processor without the help of a high level language. We already have all the logic we need.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/assembler-overall.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The overall Assembler process:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/assembler-proc.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To implement the Assembler in a high level language like Python or Java, here’s the pseudocode:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/assembler-pseudo.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;macro-assembler-and-macro-commands&quot;&gt;Macro assembler and macro commands&lt;/h3&gt;
+
+&lt;p&gt;We can make the Hack language more user friendly by adding &lt;em&gt;macro commands&lt;/em&gt;. For example, we can convert&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@100
+D=M
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;to&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;D=M[100]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;To achieve this, simply add the translation logic into the Assembler.&lt;/p&gt;
+
+&lt;h3 id=&quot;how-was-the-first-assembler-created-in-history-without-the-assistance-of-high-level-languages&quot;&gt;How was the first Assembler created in history without the assistance of high level languages?&lt;/h3&gt;
+
+&lt;p&gt;The first Assembler was built &lt;strong&gt;by hand&lt;/strong&gt;. People write the binary code for the translation process. However, we only needed to do it &lt;strong&gt;once&lt;/strong&gt;. Once it’s created, people can build on it and create new Assemblers by programming.&lt;/p&gt;
+
+&lt;h2 id=&quot;from-nand-to-tetris-part-i-last-words&quot;&gt;From NAND to TETRIS Part I: Last words&lt;/h2&gt;
+
+&lt;p&gt;Now we have built the entire Hack computer from NAND gates!&lt;/p&gt;
+
+&lt;p&gt;Outside the classroom, it is rare that people need to work with the Assemly language. People only work with high level languages in programming unless they really need to optimize a piece of code for a specialized device.&lt;/p&gt;
+
+&lt;p&gt;The most important concept introduced here is that &lt;strong&gt;why computers are programmable&lt;/strong&gt; and can do all kinds of tasks.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;We bridged the gap from hardware to software&lt;/strong&gt;. This is the key idea we learned!&lt;/p&gt;
+
+&lt;p&gt;In &lt;em&gt;&lt;a href=&quot;https://www.coursera.org/learn/nand2tetris2&quot;&gt;From NAND to TETRIS Part II&lt;/a&gt;&lt;/em&gt;, the material will cover the software layers such as the virtual machine, the compiler, operating system, etc.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.coursera.org/learn/build-a-computer&quot;&gt;Coursera From NAND To TETRIS&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;The amazing lecturers:
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;https://www.coursera.org/instructor/shimon&quot;&gt;Shimon Schocken&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://www.coursera.org/instructor/noamnisan&quot;&gt;Noam Nisan&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Continuing the discussion through abstraction level 4 in the last post, we look at level 5 and level 6 in this post.</summary></entry><entry><title type="html">[Python Review] Part III: Generators and Advanced Topics</title><link href="http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html" rel="alternate" type="text/html" title="[Python Review] Part III: Generators and Advanced Topics" /><published>2020-07-02T00:00:00-05:00</published><updated>2020-07-02T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html">&lt;h2 id=&quot;generators&quot;&gt;Generators&lt;/h2&gt;
 
 &lt;h3 id=&quot;iteration-protocol&quot;&gt;Iteration protocol&lt;/h3&gt;
 
@@ -4163,355 +4387,4 @@ else:
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://www.coursera.org/learn/build-a-computer&quot;&gt;Coursera From NAND To TETRIS&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Ever wondered how a computer executes your code with those tiny silicon thingys? If it sounds like a mystery to you, you need to read this article.</summary></entry><entry><title type="html">[Python Essentials] Digging into Package and Environment Management to Find the Best Approach</title><link href="http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html" rel="alternate" type="text/html" title="[Python Essentials] Digging into Package and Environment Management to Find the Best Approach" /><published>2020-06-17T00:00:00-05:00</published><updated>2020-06-17T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html">&lt;p&gt;This post is for clarifying several points about Python package and environment management.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; vs. &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt;?&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; vs. &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; env?&lt;/li&gt;
-  &lt;li&gt;How to choose the package and environment tools for Python development?&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;pip-vs-conda&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; vs. &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt;&lt;/h2&gt;
-
-&lt;h3 id=&quot;difference-1&quot;&gt;Difference 1&lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; is a &lt;strong&gt;&lt;em&gt;Python&lt;/em&gt; package manager&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; is a &lt;strong&gt;language-agnostic&lt;/strong&gt; cross-platform &lt;strong&gt;&lt;em&gt;environment&lt;/em&gt; manager&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;Package management and environment management are two different things. So &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; are different things and do not compete with each other.&lt;/p&gt;
-
-&lt;p&gt;Pip installs Python software packaged as &lt;strong&gt;wheels or source distributions&lt;/strong&gt;. Source distributions may require that the system have compatible compilers, and possibly libraries, installed before invoking pip to succeed.&lt;/p&gt;
-
-&lt;p&gt;Conda packages are binaries. There is never a need to have compilers available to install them. Additionally conda packages are not limited to Python software. They may also contain C or C++ libraries, R packages or any other software.&lt;/p&gt;
-
-&lt;p&gt;Before using pip, a Python interpreter must be installed via a system package manager or by downloading and running an installer. Conda on the other hand can install Python packages as well as the Python interpreter directly.&lt;/p&gt;
-
-&lt;h3 id=&quot;difference-2&quot;&gt;Difference 2&lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; has the ability to create isolated environments, &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; needs &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;venv&lt;/code&gt; to create a virtual environment.&lt;/p&gt;
-
-&lt;p&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt; is a tool that wraps &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; together and is recommended for application development. Will discuss in later sections.)&lt;/p&gt;
-
-&lt;h3 id=&quot;difference-3&quot;&gt;Difference 3&lt;/h3&gt;
-
-&lt;p&gt;When installing packages, pip installs dependencies in a recursive, serial loop. No effort is made to ensure that the dependencies of all packages are fulfilled simultaneously. This can lead to environments that are broken in subtle ways, if packages installed earlier in the order have incompatible dependency versions relative to packages installed later in the order. In contrast, conda uses a satisfiability (SAT) solver to verify that all requirements of all packages installed in an environment are met. This check can take extra time but helps prevent the creation of broken environments. As long as package metadata about dependencies is correct, conda will predictably produce working environments.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/misc/pipvconda.png&quot; alt=&quot;pipvconda&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Now we know the difference between &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt;, but choosing which to use also depends on the way they work with virtual environments. I will discuss that in later sections. Now let’s understand some basics how Python installs pacakges, and check the resulting package locations after &lt;code class=&quot;highlighter-rouge&quot;&gt;pip install&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;conda install&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;where-does-python-install-packages-mac-system-python-dont-do-this&quot;&gt;Where does Python install packages (mac system Python, DON’T DO THIS)&lt;/h2&gt;
-
-&lt;p&gt;By default, without a virtual environment, all &lt;code class=&quot;highlighter-rouge&quot;&gt;python&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; commands will use the default executables, usually your &lt;strong&gt;system Python install&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;It is strongly recommended to keep your system Python clean of unnecessary site packages by using virtual environments&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;Otherwise, over time, you will add lots of things to your system packages and things might conflict and cause problems. Using an isolated environment for each project ensures easy reproducability and reduced conflict.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;DO NOT install into your global Python interpreter! ALWAYS use an environment when developing locally!&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;To see what directories are being used to search for packages, invoke the &lt;code class=&quot;highlighter-rouge&quot;&gt;site&lt;/code&gt; module directly by running &lt;code class=&quot;highlighter-rouge&quot;&gt;python -m site&lt;/code&gt; outside virtual environments:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;python &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; site
-
-sys.path &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
-    &lt;span class=&quot;s1&quot;&gt;'&amp;lt;current_dir&amp;gt;'&lt;/span&gt;,
-    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python27.zip'&lt;/span&gt;,
-    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7'&lt;/span&gt;,
-    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-darwin'&lt;/span&gt;,
-    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac'&lt;/span&gt;,
-    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/plat-mac/lib-scriptpackages'&lt;/span&gt;,
-    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk'&lt;/span&gt;,
-    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-old'&lt;/span&gt;,
-    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-dynload'&lt;/span&gt;,
-    &lt;span class=&quot;s1&quot;&gt;'/Library/Python/2.7/site-packages'&lt;/span&gt;,
-    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python'&lt;/span&gt;,
-    &lt;span class=&quot;s1&quot;&gt;'/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/PyObjC'&lt;/span&gt;,
-&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-USER_BASE: &lt;span class=&quot;s1&quot;&gt;'/Users/&amp;lt;username&amp;gt;/Library/Python/2.7'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;doesn&lt;span class=&quot;s1&quot;&gt;'t exist)
-USER_SITE: '&lt;/span&gt;/Users/&amp;lt;username&amp;gt;/Library/Python/2.7/lib/python/site-packages&lt;span class=&quot;s1&quot;&gt;' (doesn'&lt;/span&gt;t exist&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-ENABLE_USER_SITE: True
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The Python at &lt;code class=&quot;highlighter-rouge&quot;&gt;/System/Library/Frameworks/...&lt;/code&gt; is MacOS’s pre-installed Python.&lt;/p&gt;
-
-&lt;p&gt;Run &lt;code class=&quot;highlighter-rouge&quot;&gt;pip show &amp;lt;package_name&amp;gt;&lt;/code&gt; to see where it’s installed. For system Python, it’s something like:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pip show setuptools
-
-Name: setuptools
-Version: 41.0.1
-Summary: Easily download, build, &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;, upgrade, and uninstall Python packages
-Home-page: https://github.com/pypa/setuptools
-Author: Python Packaging Authority
-Author-email: distutils-sig@python.org
-License: UNKNOWN
-Location: /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python
-Requires:
-Required-by:
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;You can also run &lt;code class=&quot;highlighter-rouge&quot;&gt;pip list -v&lt;/code&gt; to check install locations.&lt;/p&gt;
-
-&lt;h2 id=&quot;pip-install-vs-conda-install-where-do-they-install-the-packages&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pip install&lt;/code&gt; vs. &lt;code class=&quot;highlighter-rouge&quot;&gt;conda install&lt;/code&gt;: where do they install the packages&lt;/h2&gt;
-
-&lt;p&gt;If you run &lt;code class=&quot;highlighter-rouge&quot;&gt;pip install&lt;/code&gt; in a virtual environment, by default it will install into&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;project_root&amp;gt;/&amp;lt;virtualenv_name&amp;gt;/lib/&amp;lt;python_ver&amp;gt;/site-packages/
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;For &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt;, it always installs packages into a conda environment. Without an activated conda environment, &lt;code class=&quot;highlighter-rouge&quot;&gt;conda install&lt;/code&gt; will install into the &lt;code class=&quot;highlighter-rouge&quot;&gt;base&lt;/code&gt; conda environment. With a conda environment, e.g. &lt;code class=&quot;highlighter-rouge&quot;&gt;testenv&lt;/code&gt; activated, &lt;em&gt;by default&lt;/em&gt; it installs to&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/home/&amp;lt;user&amp;gt;/anaconda3/envs/testenv/
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;(&lt;strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; envs are located in a centralized path by default&lt;/strong&gt;. Later I will mention the pros and cons of this approach.)&lt;/p&gt;
-
-&lt;p&gt;We can use &lt;code class=&quot;highlighter-rouge&quot;&gt;conda list&lt;/code&gt; to check the path of the current environment and the packages installed in it.&lt;/p&gt;
-
-&lt;p&gt;Later I will compare the two and choose my preferred way to manage packages and environments.&lt;/p&gt;
-
-&lt;h2 id=&quot;virtualenv-vs-conda-env&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; vs conda env&lt;/h2&gt;
-
-&lt;p&gt;With &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; vs. &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; out of the way, a more valid comparison is &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; vs. conda environments. When to use which? To answer that, we need to really understand what virtual environment is and how they achieve isolation.&lt;/p&gt;
-
-&lt;h3 id=&quot;always-use-a-virtual-environment&quot;&gt;Always use a virtual environment!&lt;/h3&gt;
-
-&lt;p&gt;A virtual environment is &lt;strong&gt;a directory that contains its own installation of Python and its own set of libraries (site packages)&lt;/strong&gt;. It solves problems such as conflicting requirements for two applications by having an isolated environment for each application.&lt;/p&gt;
-
-&lt;h3 id=&quot;how-does-virtualenv-achieve-isolation&quot;&gt;How does &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; achieve isolation&lt;/h3&gt;
-
-&lt;p&gt;Notice the difference between the first path in &lt;code class=&quot;highlighter-rouge&quot;&gt;$PATH&lt;/code&gt; before and after the activation:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$PATH&lt;/span&gt;
-/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:
-
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;source env&lt;/span&gt;/bin/activate
-&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$PATH&lt;/span&gt;
-/Users/&amp;lt;username&amp;gt;/&amp;lt;project&amp;gt;/venv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This raises the following questions:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;What’s the difference between these two executables anyway?&lt;/li&gt;
-  &lt;li&gt;How is the virtual environment’s Python executable able to use something other than the system’s site-packages?&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;This can be explained by how Python starts up and where it is located on the system. There actually isn’t any difference between these two Python executables. &lt;strong&gt;It’s their directory locations that matter&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;When Python is starting up, it looks at the &lt;strong&gt;path of its binary&lt;/strong&gt;. In a virtual environment, it is actually just a copy of, or symlink to, your system’s Python binary. It then sets the location of &lt;code class=&quot;highlighter-rouge&quot;&gt;sys.prefix&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;sys.exec_prefix&lt;/code&gt; based on this location, omitting the bin portion of the path.&lt;/p&gt;
-
-&lt;p&gt;The path located in &lt;code class=&quot;highlighter-rouge&quot;&gt;sys.prefix&lt;/code&gt; is then used for locating the &lt;code class=&quot;highlighter-rouge&quot;&gt;site-packages&lt;/code&gt; directory by searching the relative path &lt;code class=&quot;highlighter-rouge&quot;&gt;lib/pythonX.X/site-packages/&lt;/code&gt;, where X.X is the version of Python you’re using.&lt;/p&gt;
-
-&lt;p&gt;In our example, the binary is located at&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/Users/&amp;lt;username&amp;gt;/&amp;lt;project&amp;gt;/venv/bin
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;which means &lt;code class=&quot;highlighter-rouge&quot;&gt;sys.prefix&lt;/code&gt; would be&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/Users/&amp;lt;username&amp;gt;/&amp;lt;project&amp;gt;/venv/
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;and therefore the site-packages directory used would be&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/Users/&amp;lt;username&amp;gt;/&amp;lt;project&amp;gt;/venv/lib/pythonX.X/site-packages
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Finally, this path is stored in the &lt;code class=&quot;highlighter-rouge&quot;&gt;sys.path&lt;/code&gt; array, which contains all of the locations where a package can reside.&lt;/p&gt;
-
-&lt;h3 id=&quot;considerations-for-picking-virtualenv-or-conda-env&quot;&gt;Considerations for picking &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; env&lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; env &lt;em&gt;can&lt;/em&gt; replace &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt;, but there are some differences. There is a &lt;a href=&quot;https://stackoverflow.com/a/59755292/2280673&quot;&gt;great answer&lt;/a&gt; from stackoverflow, I quote and arrange into the points below.&lt;/p&gt;
-
-&lt;h4 id=&quot;where-do-the-envs-live-central-vs-per-project&quot;&gt;Where do the envs live: central vs. per-project&lt;/h4&gt;
-
-&lt;p&gt;By default &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; prefers to manage a list of environments for you in a central location, i.e.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/home/&amp;lt;user&amp;gt;/anaconda3/envs/
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;whereas &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; makes a folder in the current directory.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; (centralized) makes sense if you are e.g. doing machine learning and just have a couple of broad environments that you use across many projects and want to jump into them from anywhere.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; (per project folder) makes sense if you are doing projects that have completely different sets of lib requirements that really belong more to the project itself.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;environment-size-favors-virtualenv&quot;&gt;Environment size (favors &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt;)&lt;/h4&gt;
-
-&lt;p&gt;The empty environment that Conda creates is about 122MB whereas the virtualenv’s is about 12MB, so that’s another reason you may prefer not to scatter Conda environments around everywhere.&lt;/p&gt;
-
-&lt;h4 id=&quot;prefix-for-shell-display-favors-virtualenv&quot;&gt;Prefix for shell display (favors &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt;)&lt;/h4&gt;
-
-&lt;p&gt;Finally, another superficial indication that &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; prefers its centralized envs is that (again, by default) if you do create a &lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; env in your own project folder and activate it the name prefix that appears in your shell is the (way too long) absolute path to the folder. You can fix that by giving it a name, but &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; does the right thing by default.&lt;/p&gt;
-
-&lt;h3 id=&quot;weird-question-of-mine-what-if-virtualenv-and-conda-env-are-both-activated&quot;&gt;Weird question of mine: what if &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; and conda env are both activated?&lt;/h3&gt;
-
-&lt;p&gt;I did this experiment by activating one before the other and check &lt;code class=&quot;highlighter-rouge&quot;&gt;which python&lt;/code&gt;, and guess what, the result is that the active environment is whichever environment &lt;strong&gt;activated last&lt;/strong&gt;!&lt;/p&gt;
-
-&lt;h3 id=&quot;some-tips&quot;&gt;Some tips&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Avoid using &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; by itself. Using &lt;code class=&quot;highlighter-rouge&quot;&gt;python -m pip&lt;/code&gt; will always guarantee you are using the pip associated with that specific python being called, instead of potentially calling a pip associated with a different python.&lt;/li&gt;
-  &lt;li&gt;Sometimes there is a pip3 to go with python3 to differentiate python 2 executables python/pip.&lt;/li&gt;
-  &lt;li&gt;Sometimes Linux distributions require you to install virtualenv as a separate package. For example &lt;code class=&quot;highlighter-rouge&quot;&gt;sudo apt install python3-virtualenv&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;You should never copy or move around virtual environments. Always create new ones.
-Ignore the virtual environment directories from repositories. For example, &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt; them.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;pyenv&quot;&gt;pyenv&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv&lt;/code&gt; is a mature tool for installing and managing multiple Python versions on macOS. You can install it with &lt;code class=&quot;highlighter-rouge&quot;&gt;brew&lt;/code&gt;. If you’re using Windows, you can use &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv-win&lt;/code&gt;. After you’ve got &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv&lt;/code&gt; installed, you can install multiple versions of Python into your Python environment with a few short commands:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv versions
-&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; system
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;python &lt;span class=&quot;nt&quot;&gt;--version&lt;/span&gt;
-Python 2.7.10
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;3.7.3  &lt;span class=&quot;c&quot;&gt;# This may take some time&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv versions
-&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; system
-  3.7.3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;You can manage which Python you’d like to use in your current session, globally, or on a per-project basis as well. pyenv will make the python command point to whichever Python you specify. Note that none of these overrides the default system Python for other applications, so you’re safe to use them however they work best for you within your Python environment:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv global 3.7.3
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv versions
-  system
-&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; 3.7.3 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;by /Users/&amp;lt;username&amp;gt;/.pyenv/version&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv &lt;span class=&quot;nb&quot;&gt;local &lt;/span&gt;3.7.3
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv versions
-  system
-&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; 3.7.3 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;by /Users/&amp;lt;username&amp;gt;/myproj/.python-version&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv shell 3.7.3
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv versions
-  system
-&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; 3.7.3 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;by PYENV_VERSION environment variable&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;python &lt;span class=&quot;nt&quot;&gt;--version&lt;/span&gt;
-Python 3.7.3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;There is something called &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv virtualenv&lt;/code&gt;.&lt;/strong&gt; Install it with &lt;code class=&quot;highlighter-rouge&quot;&gt;brew install pyenv-virtualenv&lt;/code&gt; and use it with &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv virtualenv &amp;lt;python version&amp;gt; &amp;lt;project name&amp;gt;&lt;/code&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Create virtual environment
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv virtualenv 3.7.3 my-env
-
-// Activate virtual environment
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv activate my-env
-
-// Exit virtual environment
-&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;my-env&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv deactivate
-
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv virtualenv 3.7.3 proj1
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv virtualenv 3.7.3 proj2
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /Users/&amp;lt;username&amp;gt;/proj1
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv &lt;span class=&quot;nb&quot;&gt;local &lt;/span&gt;proj1
-&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;proj1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ../proj2
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv &lt;span class=&quot;nb&quot;&gt;local &lt;/span&gt;proj2
-&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;proj2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pyenv versions
-  system
-  3.7.3
-  3.7.3/envs/proj1
-  3.7.3/envs/proj2
-  proj1
-&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; proj2 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;by /Users/&amp;lt;username&amp;gt;/proj2/.python-version&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;It can set the default environment for a directory! This way you don’t have to remember which environment to use.&lt;/strong&gt; But the caveat is that it has conda-like centralized envs. You can find them by the command &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv virtualenvs&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;For more details, check out &lt;a href=&quot;https://realpython.com/intro-to-pyenv/&quot;&gt;https://realpython.com/intro-to-pyenv/&lt;/a&gt; and &lt;a href=&quot;https://github.com/pyenv/pyenv-virtualenv&quot;&gt;https://github.com/pyenv/pyenv-virtualenv&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;my-setup-2020&quot;&gt;My setup 2020&lt;/h2&gt;
-
-&lt;p&gt;Tools:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; for &lt;strong&gt;library&lt;/strong&gt; development.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt; for &lt;strong&gt;application&lt;/strong&gt; development. &lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt; wraps &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; to provide a unified method for working with these environments.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;I use &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; instead of &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv-virtualenv&lt;/code&gt; to explicitly have a folder for the virtual environment in the project directory because it is the clearest way for me to manage virtual environments for different projects.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;conda&lt;/code&gt; can be used for &lt;strong&gt;one-off experiments&lt;/strong&gt; with broad machine learning environments.&lt;/p&gt;
-
-&lt;p&gt;For a comparison of library vs. application development and more Python packaging considerations, check out this great article: &lt;a href=&quot;https://sedimental.org/the_packaging_gradient.html&quot;&gt;The Packaging Gradient&lt;/a&gt;.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Application packaging must not be confused with library packaging. Python is for both, but pip is for libraries.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&quot;quick-intro-to-poetry&quot;&gt;Quick intro to &lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt;&lt;/h3&gt;
-
-&lt;p&gt;Use &lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt; instead of &lt;code class=&quot;highlighter-rouge&quot;&gt;pipenv&lt;/code&gt; for Python application development. &lt;code class=&quot;highlighter-rouge&quot;&gt;pipenv&lt;/code&gt; is &lt;a href=&quot;https://packaging.python.org/tutorials/managing-dependencies/#recommendation-caveats-as-of-april-2020&quot;&gt;not actively issuing updates as of 2020&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt; addresses additional facets of package management, including creating and publishing your own packages. After installing &lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt;, you can use it to create a new project:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;poetry new myproj
-Created package myproj &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;myproj
-&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;ls &lt;/span&gt;myproj/
-README.rst    myproj    pyproject.toml    tests
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Similarly to how pipenv creates the Pipfile, poetry creates a pyproject.toml file. This recent standard contains metadata about the project as well as dependency versions:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Config file
-[tool.poetry]
-name = &quot;myproj&quot;
-version = &quot;0.1.0&quot;
-description = &quot;&quot;
-authors = [&quot;Logan Yang &amp;lt;logancyang@gmail.com&amp;gt;&quot;]
-
-[tool.poetry.dependencies]
-python = &quot;^3.7&quot;
-
-[tool.poetry.dev-dependencies]
-pytest = &quot;^3.0&quot;
-
-[build-system]
-requires = [&quot;poetry&amp;gt;=0.12&quot;]
-build-backend = &quot;poetry.masonry.api&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;You can install packages with poetry add (or as development dependencies with poetry add –dev):&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;poetry add requests
-Using version ^2.22 &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;requests
-
-Updating dependencies
-Resolving dependencies... &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0.2s&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-
-Writing lock file
-
-
-Package operations: 5 installs, 0 updates, 0 removals
-
-  - Installing certifi &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2019.6.16&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-  - Installing chardet &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3.0.4&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-  - Installing idna &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.8&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-  - Installing urllib3 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.25.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-  - Installing requests &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.22.0&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt; also maintains a lock file, and it has a benefit over &lt;code class=&quot;highlighter-rouge&quot;&gt;pipenv&lt;/code&gt; because it keeps track of which packages are subdependencies. As a result, you can uninstall &lt;code class=&quot;highlighter-rouge&quot;&gt;requests&lt;/code&gt; and its dependencies with &lt;code class=&quot;highlighter-rouge&quot;&gt;poetry remove requests&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.anaconda.com/blog/understanding-conda-and-pip&quot;&gt;https://www.anaconda.com/blog/understanding-conda-and-pip&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://jakevdp.github.io/blog/2016/08/25/conda-myths-and-misconceptions/&quot;&gt;https://jakevdp.github.io/blog/2016/08/25/conda-myths-and-misconceptions/&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://stackoverflow.com/questions/54834579/specific-reasons-to-favor-pip-vs-conda-when-installing-python-packages&quot;&gt;https://stackoverflow.com/questions/54834579/specific-reasons-to-favor-pip-vs-conda-when-installing-python-packages&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://stackoverflow.com/a/59755292/2280673&quot;&gt;https://stackoverflow.com/a/59755292/2280673&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://realpython.com/effective-python-environment/&quot;&gt;https://realpython.com/effective-python-environment/&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://realpython.com/python-virtual-environments-a-primer/&quot;&gt;https://realpython.com/python-virtual-environments-a-primer/&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://packaging.python.org/tutorials/managing-dependencies/&quot;&gt;https://packaging.python.org/tutorials/managing-dependencies/&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://sedimental.org/the_packaging_gradient.html&quot;&gt;https://sedimental.org/the_packaging_gradient.html&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://youtu.be/3J02sec99RM&quot;&gt;https://youtu.be/3J02sec99RM&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://youtu.be/o1Vue9CWRxU&quot;&gt;https://youtu.be/o1Vue9CWRxU&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">This post is for clarifying several points about Python package and environment management.</summary></entry></feed>
+&lt;p&gt;&lt;a href=&quot;https://www.coursera.org/learn/build-a-computer&quot;&gt;Coursera From NAND To TETRIS&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Ever wondered how a computer executes your code with those tiny silicon thingys? If it sounds like a mystery to you, you need to read this article.</summary></entry></feed>

@@ -11,7 +11,9 @@ comments: true
 
 A callback function is associated with an **event**, e.g. when the mouse is pressed, trigger some function.
 
-Consider a series of API calls for data, say you call `wordnikAPI` to get a word, *and then* use that word to call `giphyAPI` to get a gif for it. You then need to nest callback in callback. If you have a long chain of calls, it can quickly become super nested and unwieldy. This is called **callback hell**.
+**Example task: Consider a series of API calls for data, say you call `wordnikAPI` to get a word, *and then* use that word to call `giphyAPI` to get a gif for it.**
+
+You then need to nest callback in callback. If you have a long chain of calls, it can quickly become super nested and unwieldy. This is called **callback hell**.
 
 ```js
 // p5.js loadJSON
@@ -195,7 +197,45 @@ The downside is that it's all or nothing, if any of them gets an error, it fails
 
 ## `try`, `catch` with Promises
 
+Since `Promise.all()` is all or nothing, we need to catch and handle the error for each case in the array if there is any.
 
+```js
+async function wordGIF(num) {
+  const data = await fetch(url);
+  const json = data.json();
+  const word = json.word;
+
+  let image_url = null;
+  try {
+    image_url = json2.data[0].images['fixed_height_small'].url;
+  } catch (err) {
+    console.log("No image found for " + word);
+    console.error(err);
+  }
+
+  // Returns promise to be resolved
+  return {
+    word,
+    image_url
+  }
+}
+
+let promises = [];
+for (let i = 3; i < 10; i++) {
+  promises.push(wordGIF(i));
+}
+
+Promise.all(promises).then(results => {
+  for (const result of results) {
+    createP(result);
+    if (result.image_url !== null) {
+      createImg(result);
+    }
+  }
+}).catch(err => console.error(err));
+```
+
+This will show the gifs that are successfully found and log the error message for those are not found!
 
 ## Next steps
 

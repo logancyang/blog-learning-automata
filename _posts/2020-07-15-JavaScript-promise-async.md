@@ -241,3 +241,7 @@ This will show the gifs that are successfully found and log the error message fo
 
 - Learn to get promises in an array in concurrently, render as they come in.
 - Add a loading bar
+
+## Reference
+
+- The Coding Train [videos](https://www.youtube.com/playlist?list=PLRqwX-V7Uu6YgpA3Oht-7B4NBQwFVe3pr)

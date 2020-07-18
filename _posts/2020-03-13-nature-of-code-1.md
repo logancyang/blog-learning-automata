@@ -3,7 +3,7 @@ toc: true
 layout: post
 description: Nature of Code note series
 categories: [note, natureofcode, simulation, processing, p5js]
-title: "[Nature of Code] Part I: Creating Physics Engine"
+title: "[Nature of Code] Part 1.1: Creating Physics Engine"
 comments: true
 ---
 
@@ -11,12 +11,21 @@ comments: true
 
 Part I: Creating Physics Engine
 
+----
+
+(This note)
+
 - Vectors
 - Forces
 - Oscillations
 - Particle Systems
     - Inheritance
     - Polymorphism
+
+----
+
+(future notes)
+
 - Box2D
 - Steering Forces
 
@@ -410,6 +419,8 @@ for (Animal a: kingdom) {
 }
 ```
 
+### JavaScript ES6 Inheritance
+
 JavaScript ES6 has the same syntax `extends` and `super` as Java!
 
 Note that JS has differences between ES5 class syntax and ES6 ones.
@@ -470,4 +481,6 @@ Processing uses `PImage` for images. Preload an image and don't load it in the c
 There is this `blendMode` concept, with `blendMode(ADD)` all the RGB values are added
 on top of each other which creates a brighter effect.
 
-[Ref video](https://www.youtube.com/watch?v=nzDYHa6ursA&list=PLRqwX-V7Uu6Z9hI4mSgx2FlE5w8zvjmEy&index=9)
+## Reference
+
+- [The Coding Train videos](https://www.youtube.com/watch?v=nzDYHa6ursA&list=PLRqwX-V7Uu6Z9hI4mSgx2FlE5w8zvjmEy&index=9)

@@ -1,4 +1,104 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-07-15T18:27:19-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[JavaScript Essentials] Promise, fetch, async and await</title><link href="http://blog.logancyang.com/note/p5js/javascript/2020/07/15/JavaScript-promise-async.html" rel="alternate" type="text/html" title="[JavaScript Essentials] Promise, fetch, async and await" /><published>2020-07-15T00:00:00-05:00</published><updated>2020-07-15T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/p5js/javascript/2020/07/15/JavaScript-promise-async</id><content type="html" xml:base="http://blog.logancyang.com/note/p5js/javascript/2020/07/15/JavaScript-promise-async.html">&lt;h2 id=&quot;promises-es6&quot;&gt;Promises (ES6)&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-07-17T21:03:44-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[JavaScript Essentials] Prototype and Inheritance</title><link href="http://blog.logancyang.com/note/p5js/javascript/2020/07/17/javascript-prototype.html" rel="alternate" type="text/html" title="[JavaScript Essentials] Prototype and Inheritance" /><published>2020-07-17T00:00:00-05:00</published><updated>2020-07-17T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/p5js/javascript/2020/07/17/javascript-prototype</id><content type="html" xml:base="http://blog.logancyang.com/note/p5js/javascript/2020/07/17/javascript-prototype.html">&lt;p&gt;Not like Java or Python, JavaScript is based on &lt;em&gt;prototypes&lt;/em&gt; and not &lt;em&gt;class&lt;/em&gt;. The ES6 class syntax is syntactic sugar on top of prototypes. Here let’s take a look at the prototype with some examples.&lt;/p&gt;
+
+&lt;p&gt;In ES5 we use a function as the constructor.&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Particle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;99&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;When you say &lt;code class=&quot;highlighter-rouge&quot;&gt;new Particle()&lt;/code&gt;, JavaScript knows that the function is a constructor and will execute it as such.&lt;/p&gt;
+
+&lt;p&gt;The idea of Object Prototype is that you can define things in the prototype that all objects can share.&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;p1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Particle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;p2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Particle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Define a function `show` that works for all Particles&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;Particle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;prototype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;show&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// `point` is a p5 function&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;point&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Now we can call&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The way it works is that when you call &lt;code class=&quot;highlighter-rouge&quot;&gt;p1.show()&lt;/code&gt;, JavaScript first tries to find &lt;code class=&quot;highlighter-rouge&quot;&gt;show()&lt;/code&gt; in &lt;code class=&quot;highlighter-rouge&quot;&gt;p1&lt;/code&gt;’s definition, if it’s not there, it tries the &lt;code class=&quot;highlighter-rouge&quot;&gt;Particle&lt;/code&gt; definition. &lt;code class=&quot;highlighter-rouge&quot;&gt;Particle&lt;/code&gt; has a property &lt;code class=&quot;highlighter-rouge&quot;&gt;__proto__&lt;/code&gt; that points to &lt;code class=&quot;highlighter-rouge&quot;&gt;Object.prototype&lt;/code&gt; that has all the properties &lt;code class=&quot;highlighter-rouge&quot;&gt;Particle&lt;/code&gt; objects share.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Every JavaScript object has &lt;code class=&quot;highlighter-rouge&quot;&gt;Object.prototype&lt;/code&gt;, such as arrays, functions, etc.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Object.prototype&lt;/code&gt; has some special properties. One is &lt;code class=&quot;highlighter-rouge&quot;&gt;hasOwnProperty()&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;hasOwnProperty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;z&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// false&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;hasOwnProperty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// true&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;One interesting thing about &lt;code class=&quot;highlighter-rouge&quot;&gt;hasOwnProperty()&lt;/code&gt; is that it doesn’t go up the &lt;em&gt;prototype chain&lt;/em&gt;, it only finds the property of that instance.&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;hasOwnProperty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// false&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;prototype-inheritance-chain&quot;&gt;Prototype inheritance chain&lt;/h2&gt;
+
+&lt;p&gt;Consider this example where &lt;code class=&quot;highlighter-rouge&quot;&gt;Confetti&lt;/code&gt; should inherit from &lt;code class=&quot;highlighter-rouge&quot;&gt;Particle&lt;/code&gt; and have its own &lt;code class=&quot;highlighter-rouge&quot;&gt;show&lt;/code&gt; function.&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Particle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;99&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;confetti&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Have the Particle constructor&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;Particle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;color&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;255&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;255&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// Pink&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;Particle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;prototype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;update&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// random is from p5&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;Particle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;prototype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;show&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;stroke&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;255&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;strokeWeight&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;point&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Create a new object as Confetti.prototype&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// It is a copy of Particle.prototype&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;Confetti&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;prototype&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Particle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;prototype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;Confetti&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;prototype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;constructor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Confetti&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;Confetti&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;prototype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;show&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;stroke&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;noFill&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;strokeWeight&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;square&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The key here is that we need to create a copy of &lt;code class=&quot;highlighter-rouge&quot;&gt;Particle.prototype&lt;/code&gt; and assign it to &lt;code class=&quot;highlighter-rouge&quot;&gt;Confetti.prototype&lt;/code&gt; so that when we modify the latter it won’t affect the former. This is how inheritance works under the hood in JavaScript.&lt;/p&gt;
+
+&lt;p&gt;But doesn’t this look bad? Good news is that in ES6 we can use &lt;strong&gt;class&lt;/strong&gt; for inheritance instead of this!&lt;/p&gt;
+
+&lt;p&gt;For ES6 inheritance, refer to this post: &lt;a href=&quot;http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/03/13/nature-of-code-1.html&quot;&gt;[Nature of Code] Part I: Creating Physics Engine&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The Coding Train
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;https://youtu.be/hS_WqkyUah8&quot;&gt;https://youtu.be/hS_WqkyUah8&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://youtu.be/CpmE5twq1h0&quot;&gt;https://youtu.be/CpmE5twq1h0&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Not like Java or Python, JavaScript is based on prototypes and not class. The ES6 class syntax is syntactic sugar on top of prototypes. Here let’s take a look at the prototype with some examples.</summary></entry><entry><title type="html">[JavaScript Essentials] Promise, fetch, async and await</title><link href="http://blog.logancyang.com/note/p5js/javascript/2020/07/15/JavaScript-promise-async.html" rel="alternate" type="text/html" title="[JavaScript Essentials] Promise, fetch, async and await" /><published>2020-07-15T00:00:00-05:00</published><updated>2020-07-15T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/p5js/javascript/2020/07/15/JavaScript-promise-async</id><content type="html" xml:base="http://blog.logancyang.com/note/p5js/javascript/2020/07/15/JavaScript-promise-async.html">&lt;h2 id=&quot;promises-es6&quot;&gt;Promises (ES6)&lt;/h2&gt;
 
 &lt;p&gt;A callback function is associated with an &lt;strong&gt;event&lt;/strong&gt;, e.g. when the mouse is pressed, trigger some function.&lt;/p&gt;
 
@@ -222,6 +322,12 @@
 &lt;ul&gt;
   &lt;li&gt;Learn to get promises in an array in concurrently, render as they come in.&lt;/li&gt;
   &lt;li&gt;Add a loading bar&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The Coding Train &lt;a href=&quot;https://www.youtube.com/playlist?list=PLRqwX-V7Uu6YgpA3Oht-7B4NBQwFVe3pr&quot;&gt;videos&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</content><author><name></name></author><summary type="html">Promises (ES6)</summary></entry><entry><title type="html">[Python Essentials] Poetry Quick Start</title><link href="http://blog.logancyang.com/note/python/2020/07/07/poetry-quickstart.html" rel="alternate" type="text/html" title="[Python Essentials] Poetry Quick Start" /><published>2020-07-07T00:00:00-05:00</published><updated>2020-07-07T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/07/poetry-quickstart</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/07/poetry-quickstart.html">&lt;p&gt;&lt;a href=&quot;https://python-poetry.org/&quot;&gt;Poetry&lt;/a&gt; is the current best choice for Python application dependency and environment management. It uses two files&lt;/p&gt;
 
 &lt;ul&gt;
@@ -4027,364 +4133,4 @@ bash % prog.py
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">String methods</summary></entry><entry><title type="html">[From NAND to TETRIS] Computer Architecture 101 Part I: Logic Gates, ALU and Memory</title><link href="http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101.html" rel="alternate" type="text/html" title="[From NAND to TETRIS] Computer Architecture 101 Part I: Logic Gates, ALU and Memory" /><published>2020-06-29T00:00:00-05:00</published><updated>2020-06-29T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101</id><content type="html" xml:base="http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101.html">&lt;p&gt;Ever wondered how a computer executes your code with those tiny silicon thingys? If it sounds like a mystery to you, you need to read this article.&lt;/p&gt;
-
-&lt;p&gt;A computer system is a multiple-layer abstraction. You worry about &lt;em&gt;what&lt;/em&gt; you want to do using &lt;em&gt;interfaces&lt;/em&gt; that are &lt;em&gt;abstracted away&lt;/em&gt; from you. Getting to know what the abstractions are and having an rough idea of how they work under the hood is an important and often overlooked prerequisite for a good coder. If you don’t have this knowledge as a data scientist or software developer, you will feel you work on top of a floating and unreliable foundation.&lt;/p&gt;
-
-&lt;p&gt;In this article, I will introduce all the concepts in an easily consumable manner by walking through the process of building a general purpose computer called Hack from the ground up using first principles.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hack.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;After this exercise, you will walk away more confident and eliminate the insecurities of not knowing the foundational knowledge of computers.&lt;/p&gt;
-
-&lt;p&gt;Ready? Let’s get started and go through the &lt;strong&gt;levels of abstractions&lt;/strong&gt; in the computer system.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/abstractions.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;level-1-boolean-operations-and-logic-gates&quot;&gt;Level 1. Boolean operations and logic gates&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/booleanops.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Booleans functions -&amp;gt; truth table.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/truthtable.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Boolean algebra laws&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/boollaws.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;How to construct a function from basic operations? (how to construct hardware)&lt;/p&gt;
-
-&lt;p&gt;Find all the 1s in truth table, write an expression for each, and OR them together! We can further simplify the expression. However, finding the shortest expression is NP hard.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Any boolean function can be constructed with AND and NOT operations.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;OR can be constructed with AND and NOT.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/constructbool.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;the-amazing-nand-operation&quot;&gt;The amazing NAND operation&lt;/h3&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Any boolean function can be constructed with NAND operations.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Because AND and NOT can be constructed with only the NAND gate.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/nand.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Def: NAND
-x NAND y = NOT(x AND y)
-
-# NAND =&amp;gt; NOT
-NOT(x) = x NAND x
-
-# NAND =&amp;gt; AND
-x AND y = NOT(x NAND y)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Logic gates are physical chips consisting of transistors that actually implement these boolean operations. We can use elementary logic gates such as AND, OR, NAND to construct composite gates.&lt;/p&gt;
-
-&lt;p&gt;Electrical engineers are responsible for constructing these gates with circuits and transistors. These chips have very clear specifications.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/andtransistor.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;
-(wikipedia and gate)&lt;/p&gt;
-
-&lt;p&gt;We are not going to dive into the design of the circuit. We take the specifications of inputs and outputs and use them to build more complex logic. There is a type of language called Hardware Description Language (HDL) that can be used in this process. The two most popular HDLs are VHDL and Verilog, and there are others as well.&lt;/p&gt;
-
-&lt;p&gt;Designing composite gates from elementary ones takes experience. Here is an example of XOR built with AND, OR and NOT.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/designxor.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;We can write HDL code and load it into a hardware simulator, run test scripts to make sure it works.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hardwaresim.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;A hardware construction project usually involves a system architect and some developers. The system architect breaks down the task into an overall chip API and smaller individual chips, and the developers build them using HDL.&lt;/p&gt;
-
-&lt;h3 id=&quot;multi-bit-buses-an-array-of-bits-as-one-entity&quot;&gt;Multi-bit buses: an array of bits as one entity&lt;/h3&gt;
-
-&lt;p&gt;When we manipulate many bits together, like adding two 16-bit integers, we can think of the bits as groups. Each group or array of bits is called “bus”. HDL provides ways to manipulate buses as arrays.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hdlbus.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;These buses are indexed from right to left. Right means the least significant bit.&lt;/p&gt;
-
-&lt;h3 id=&quot;programmable-elementary-gates&quot;&gt;Programmable elementary gates&lt;/h3&gt;
-
-&lt;p&gt;The mutiplexor gate &lt;code class=&quot;highlighter-rouge&quot;&gt;mux&lt;/code&gt; is an example of programmable gates. You give it a “selected bit” &lt;code class=&quot;highlighter-rouge&quot;&gt;sel&lt;/code&gt; and it selects one of the inputs to be the output. This is a foundamental operations that exists in all kinds of programs.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/mux.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/muxprogrammable.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The demultiplexor gate &lt;code class=&quot;highlighter-rouge&quot;&gt;dmux&lt;/code&gt; is the inverse of &lt;code class=&quot;highlighter-rouge&quot;&gt;mux&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/demux.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;A concrete example of an application using &lt;code class=&quot;highlighter-rouge&quot;&gt;mux&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;dmux&lt;/code&gt; is a single communication line that interleaves two (or more) messages together!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/muxdemux.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;level-2-boolean-arithmetic-and-arithmetic-logic-unit-alu&quot;&gt;Level 2. Boolean arithmetic and Arithmetic Logic Unit (ALU)&lt;/h2&gt;
-
-&lt;p&gt;Doing binary addition is similar to decimal addition except that we carry over 1 to the next digit one position reaches 2 and not 10.&lt;/p&gt;
-
-&lt;p&gt;For an 8-bit binary number, we call “8” the &lt;strong&gt;word size&lt;/strong&gt;. Anything outside the range of 8-bit representation is going to cause “overflow”&lt;/p&gt;
-
-&lt;p&gt;What the computer does when faced with overflow is just to ignore the overflow and truncate the result back to the word size.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/overflow.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;building-an-adder&quot;&gt;Building an adder&lt;/h3&gt;
-
-&lt;p&gt;First we look at a “half adder”. It takes in 2 bits and outputs a sum bit and a carry bit. The carry bit is 1 when the sum reaches 2.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/halfadder.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Then we can build a “full adder” that takes in 2 bits and a carry bit from a previous addition, and outputs a sum bit and a carry bit.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/fulladder-diagram.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/fulladder.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;With a half adder for the least significant bit, and several full adders, we can build a multi-bit adder, say, for 16-bit binary numbers.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/multibitadder.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/adder.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;negative-numbers&quot;&gt;Negative numbers&lt;/h3&gt;
-
-&lt;p&gt;We could use the first bit as the sign and the remaining bits for the actual number. But this approach has problems such as -0 and we need extra logic to handle subtraction.&lt;/p&gt;
-
-&lt;p&gt;The approach we actually use is called the 2’s complement.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/twoscomp.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;negative-addition&quot;&gt;Negative addition&lt;/h4&gt;
-
-&lt;p&gt;Negative addition comes for free because we throw away the overflowing bit, i.e. do a modulo $2^n$.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/negadd.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;negative-subtraction-solve-negation-first&quot;&gt;Negative subtraction: solve negation first&lt;/h4&gt;
-
-&lt;p&gt;We use a math trick,&lt;/p&gt;
-
-&lt;span class=&quot;katex-display&quot;&gt;&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;msup&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/msup&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;msup&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/msup&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;2^n - x = 1 + (2^n - 1) - x&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.7977219999999999em;vertical-align:-0.08333em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.7143919999999999em;&quot;&gt;&lt;span style=&quot;top:-3.113em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mathdefault mtight&quot;&gt;n&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.43056em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathdefault&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mrel&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.72777em;vertical-align:-0.08333em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.7143919999999999em;&quot;&gt;&lt;span style=&quot;top:-3.113em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mathdefault mtight&quot;&gt;n&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:1em;vertical-align:-0.25em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mbin&quot;&gt;−&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2222222222222222em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.43056em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathdefault&quot;&gt;x&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
-
-&lt;p&gt;We use it for these reasons:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Since $2^n - x = -x$ in our 2’s complement representation, the left hand side is &lt;code class=&quot;highlighter-rouge&quot;&gt;-x&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;$(2^n - 1)$ in binary is &lt;code class=&quot;highlighter-rouge&quot;&gt;11111...1&lt;/code&gt;, just &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; 1’s, subtracting a binary number &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt; from it is easy - just flip all its bits!&lt;/li&gt;
-  &lt;li&gt;Now we have $(2^n - 1) - x$ in binary, adding 1 is trivial.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/negsub.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;arithmetic-logic-unit-alu&quot;&gt;Arithmetic Logic Unit (ALU)&lt;/h3&gt;
-
-&lt;p&gt;The famous Von Neumann architecture&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/vonarch.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ALU performs a function on input bits&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/alu.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;For the Hack computer we are building, we define the Hack ALU as follows,&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackalu.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The pins at the top are the control bits.&lt;/p&gt;
-
-&lt;p&gt;The output of the ALU is determined completely by the truth table below,&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackalu-truthtable.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;There are many more functions we can compute, but we choose these ones for Hack.&lt;/p&gt;
-
-&lt;p&gt;The control bits are directives that ALU examines and &lt;strong&gt;executes from left to right sequentially&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if zx then x = 0&lt;/code&gt;, zero all bits of x.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if nx then x != x&lt;/code&gt;, flip all bits of x.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if zy then y = 0&lt;/code&gt;, zero all bits of y.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if ny then y != y&lt;/code&gt;, flip all bits of y.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if f then out = x + y, else out = x &amp;amp; y&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;if no then out != out&lt;/code&gt;, flip all bits of out.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;You can check one operation, i.e. a row in the following truth table and verify that these sequential control directives output the right output for the desired operation on the inputs.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/alu-example.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;We also have &lt;strong&gt;output control bits&lt;/strong&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;zr&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;ng&lt;/code&gt; defined as follows,&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/aluoutputcontrol.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Why do we need these output control bits? The reason will become clear when we have the big picture of computer architecture.&lt;/p&gt;
-
-&lt;p&gt;The Hack ALU is simple, elegant and easy to implement.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Leonardo da Vinci: Simplicity is the ultimate sophistication.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;However, keep in mind that this is an extremely simplified version of the ALU. The real ALU in computers are much more complicated.&lt;/p&gt;
-
-&lt;h3 id=&quot;comments&quot;&gt;Comments&lt;/h3&gt;
-
-&lt;h4 id=&quot;hardware--software-tradeoff&quot;&gt;Hardware / software tradeoff&lt;/h4&gt;
-
-&lt;p&gt;There is a tradeoff between the hardware and software. For example, we can let the hardware do multiplication and division instead using software. A complex hardware is faster for operations but more costly to design and manufacture. It’s the freedom of the hardware designer to decide whether to move some operations to software.&lt;/p&gt;
-
-&lt;h4 id=&quot;unit-testing&quot;&gt;Unit testing&lt;/h4&gt;
-
-&lt;p&gt;You might know that in software development we have unit tests. Actually, the idea comes from hardware development since we can isolate one logic unit and test whether it works correctly with its defined interfaces.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Unit tests conceptually break a program into discrete pieces and test each piece in isolation, while integration tests make sure that the pieces are working properly together as a whole. Unit tests are generally small and don’t take much time to write because they only test a small section of code.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;level-3-memory&quot;&gt;Level 3. Memory&lt;/h2&gt;
-
-&lt;h3 id=&quot;time&quot;&gt;Time&lt;/h3&gt;
-
-&lt;p&gt;Now we will learn how the computer executes one thing after another, i.e. how it perceives &lt;strong&gt;time&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;The way we let a computer perceive time is to use some kind of digital oscillator as a discrete time clock. This way we convert physical time into discrete time.&lt;/p&gt;
-
-&lt;p&gt;Since the hardware uses voltage to represent bit state 0 and 1, and it takes time for the hardware to stablize after a state transition, we design the unit time step in the discrete clock to be slightly bigger than the time it takes to stablize. We then sample the stable state to be the state of that time unit.&lt;/p&gt;
-
-&lt;p&gt;A time unit is at the atomic level, &lt;strong&gt;the computer only knows one state within one time unit&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/clock.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;combinatorial-vs-sequential-logic&quot;&gt;Combinatorial vs. sequential logic&lt;/h3&gt;
-
-&lt;p&gt;Combinatorial logic just means that the output for a time unit only depends on the input in that time unit.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;out[t] = function(in[t])
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Sequential logic means we &lt;strong&gt;use the same wire to store the bit&lt;/strong&gt;, and current step’s output depends on the last time step.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;state[t] = function(state[t-1])
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This is the prototype of the &lt;strong&gt;iterator&lt;/strong&gt;. With the sequential logic we can operate with time as input to our function.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/sequential.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;flip-flops-hardware-that-implements-the-sequential-logic&quot;&gt;Flip Flops: Hardware that implements the sequential logic&lt;/h3&gt;
-
-&lt;p&gt;Previously we had logic gates and ALUs that can compute a variety of operations, but we are missing one key piece to enable sequential logic: the hardware to remember the state from time t-1 to time t. How to do that?&lt;/p&gt;
-
-&lt;p&gt;We need something called the Clocked Data Flip Flop. Its output is input shifted one step forward.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/dff.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The little triangle in the diagram means it has a time-dependent chip. The combinatorial chips get the outputs instantaneously, while the sequential logic chips are time-dependent.&lt;/p&gt;
-
-&lt;p&gt;Conceptually, with the NAND gate and the Data Flip Flop as a foundation, we can build everything needed in a computer!&lt;/p&gt;
-
-&lt;p&gt;We are not going to describe how the flip flops are built physically here. The digital circuit is quite clever and elegant though. If you are interested, read about it &lt;a href=&quot;https://en.wikipedia.org/wiki/Flip-flop_(electronics)#D_flip-flop&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;1-bit-register&quot;&gt;1-bit register&lt;/h3&gt;
-
-&lt;p&gt;We can build a chip by using the D Flip Flop that remembers the last input state when the load state is 1.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/onebitreg.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The logic is:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if load(t-1):
-    out[t] = in[t-1]
-else:
-    out[t] = out[t-1]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;A load of 1 at t-1 means we need to remember the input at t-1 from now on until a next load of 1 regardless of how input changes during this period.&lt;/p&gt;
-
-&lt;p&gt;How to implement a 1-bit register using the D Flip Flop? Recall the &lt;strong&gt;mutiplexor&lt;/strong&gt; (select one of two inputs based on a “select” bit).&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/onebitreg-mux.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;With the 1-bit register, we can start to build the memory unit!&lt;/p&gt;
-
-&lt;h3 id=&quot;the-memory-unit&quot;&gt;The Memory Unit&lt;/h3&gt;
-
-&lt;p&gt;There are different types of memory. The most important type is the RAM. &lt;strong&gt;It stores both data and instructions&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;It is a &lt;strong&gt;volatile device&lt;/strong&gt; meaning it depends on an external power supply to store information. Physically it is not like the disk or ROM (read-only memory), it clears everything whenever the computer is disconnected from power while in the disk or ROM, info is persisted.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/memorypic.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;We can build an N-bit register by putting N 1-bit registers side by side. Here we talk about 16-bit registers without loss of generality. The register’s &lt;strong&gt;state&lt;/strong&gt; is the value stored in the register. To lookup the state, we just need to probe its output pins.&lt;/p&gt;
-
-&lt;p&gt;To store a new input state &lt;code class=&quot;highlighter-rouge&quot;&gt;v&lt;/code&gt;, we set &lt;code class=&quot;highlighter-rouge&quot;&gt;load&lt;/code&gt; to 1 at that time step.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;The RAM abstraction: A sequence of &lt;em&gt;n&lt;/em&gt; addressable registers with addresses 0 to n-1.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Important: At any given time, ONLY ONE REGISTER in the RAM is selected!&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Since we have &lt;em&gt;n&lt;/em&gt; addressable registers, we need a binary number to represent the address. Turning &lt;em&gt;n&lt;/em&gt; to a binary number, we say it has &lt;em&gt;k&lt;/em&gt; bits. So &lt;code class=&quot;highlighter-rouge&quot;&gt;k = log2(n)&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/memoryparams.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;RAM is a sequential chip with a clocked behavior.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Why is it called Random Access Memory?&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;A: Because regardless of how many registers the memory unit has, be it 1 million or 1 billion, it takes exactly the same access time to access any one of the registers with a given address!&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Some different RAM chips:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/ramchips.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;the-counter&quot;&gt;The Counter&lt;/h3&gt;
-
-&lt;p&gt;A Program Counter (PC) is a chip (hardware device) that realizes the following 3 abstractions:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Reset: fetch the first instruction, PC = 0&lt;/li&gt;
-  &lt;li&gt;Next: fetch the next instruction, PC++&lt;/li&gt;
-  &lt;li&gt;Goto: fetch instruction n, PC = n&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Here is the logic the Counter does:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if reset[t] == 1:
-    out[t+1] = 0  # reset counter to 0
-elif load[t] == 1:
-    out[t+1] = in[t]  # set counter to input value at t
-elif inc[t] == 1:
-    out[t+1] = out[t] + 1  # increment counter by 1
-else:
-    out[t+1] = out[t]  # maintain the last value
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/counter.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;rom-vs-ram-vs-flash-vs-cache-memory&quot;&gt;ROM vs. RAM vs. Flash vs. Cache memory&lt;/h3&gt;
-
-&lt;p&gt;The ROM (read-only memory) is an involatile device that keeps information persisted even without external power supply. For example, it is used in the computer booting process for this reason.&lt;/p&gt;
-
-&lt;p&gt;Another technology is flash memory. It combines the good things of both ROM and RAM, it doesn’t need external power supply to persist data, and is writable.&lt;/p&gt;
-
-&lt;p&gt;Cache memory is a small and expensive memory that is close to the processor. It has very high performance. There is a hierarchy of cache memories, the closer to the processor, the faster, smaller and more expensive it gets.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html&quot;&gt;Go to Part II&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.coursera.org/learn/build-a-computer&quot;&gt;Coursera From NAND To TETRIS&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Ever wondered how a computer executes your code with those tiny silicon thingys? If it sounds like a mystery to you, you need to read this article.</summary></entry></feed>
+&lt;p&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">String methods</summary></entry></feed>

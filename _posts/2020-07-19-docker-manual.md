@@ -174,7 +174,7 @@ CMD ["5"]
 
 In this case, `docker run ubuntu-sleeper 10` will override `5`. And without any parameter, it defaults to `5`.
 
-## Docker Compose with YAML
+## `docker-compose` with YAML
 
 If we need to run multiple services (mutiple `docker run` commands at the same time and `--link` them together), we can use `docker-compose`.
 

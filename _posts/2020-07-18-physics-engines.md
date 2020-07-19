@@ -51,6 +51,10 @@ We will use P5.js as the renderer.
 
 **IMPORTANT: Need to match the way matter.js and P5.js draw stuff. For example, matter.js has `rectangle` with `x, y` representing the center, and P5.js has `x, y` representing the top left corner! In this case, use `rectMode(CENTER)` in P5.js.**
 
+One weird thing that could happen is, if you have a very thin ground or boundary, the objects can sometimes pass through it when they move very fast. This is because matter.js checks the position of objects in every time step. Fast moving objects can fly through a boundary without overlapping with it. One way to fix this is to have thicker boundaries.
+
+Another common pitfall with physics engine is that you can't assign a body's property such as angle directly, you can only set it at the time of instantiation. Because angle is a result of the laws of physics after you create the object. When you directly assign it, you violate the law of physics.
+
 ## Reference
 
 - The Coding Train [videos](https://youtu.be/urR596FsU68)

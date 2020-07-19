@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Docker Manual | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Docker Manual" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="DevOps note series" />
+<meta property="og:description" content="DevOps note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/docker/devops/2020/07/19/docker-manual.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/docker/devops/2020/07/19/docker-manual.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-19T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"DevOps note series","@type":"BlogPosting","headline":"Docker Manual","dateModified":"2020-07-19T00:00:00-05:00","datePublished":"2020-07-19T00:00:00-05:00","url":"http://blog.logancyang.com/note/docker/devops/2020/07/19/docker-manual.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/docker/devops/2020/07/19/docker-manual.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Docker Manual | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Docker Manual" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="DevOps note series" />
+<meta property="og:description" content="DevOps note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/docker/devops/2020/07/19/docker-manual.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/docker/devops/2020/07/19/docker-manual.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-19T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"DevOps note series","@type":"BlogPosting","headline":"Docker Manual","dateModified":"2020-07-19T00:00:00-05:00","datePublished":"2020-07-19T00:00:00-05:00","url":"http://blog.logancyang.com/note/docker/devops/2020/07/19/docker-manual.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/docker/devops/2020/07/19/docker-manual.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Learning Automata</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Docker Manual</h1><p class="page-description">DevOps note series</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-07-19T00:00:00-05:00" itemprop="datePublished">
+        Jul 19, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      5 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#note">note</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#docker">docker</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#devops">devops</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#list-of-common-docker-commands">List of common Docker commands</a></li>
+<li class="toc-entry toc-h2"><a href="#docker-run-options">docker run options</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#port-mapping">Port mapping</a></li>
+<li class="toc-entry toc-h3"><a href="#check-container-internal-ip">Check container internal IP</a></li>
+<li class="toc-entry toc-h3"><a href="#persist-data-and-configuration">Persist data and configuration</a></li>
+<li class="toc-entry toc-h3"><a href="#check-os-version">Check OS version</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#docker-images">Docker images</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#dockerfile">Dockerfile</a></li>
+<li class="toc-entry toc-h3"><a href="#environment-variables">Environment variables</a></li>
+<li class="toc-entry toc-h3"><a href="#command-vs-entrypoint">COMMAND vs. ENTRYPOINT</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#docker-compose-with-yaml">docker-compose with YAML</a></li>
+<li class="toc-entry toc-h2"><a href="#docker-registry">Docker registry</a></li>
+<li class="toc-entry toc-h2"><a href="#docker-engine-storage-and-networking">Docker engine, storage, and networking</a></li>
+<li class="toc-entry toc-h2"><a href="#docker-on-mac-and-windows">Docker on Mac and Windows</a></li>
+<li class="toc-entry toc-h2"><a href="#container-orchestration---docker-swarm-and-kubernetes">Container orchestration - Docker Swarm and Kubernetes</a></li>
+<li class="toc-entry toc-h2"><a href="#reference">Reference</a></li>
+</ul><h2 id="list-of-common-docker-commands">
+<a class="anchor" href="#list-of-common-docker-commands" aria-hidden="true"><span class="octicon octicon-link"></span></a>List of common Docker commands</h2>
+
+<p>Note: <code class="highlighter-rouge">CONTAINER_ID</code> can be <code class="highlighter-rouge">CONTAINER_NAME</code> in all the commands here.</p>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run &lt;IMAGE_NAME&gt;:&lt;TAG&gt;  <span class="c"># run in foreground</span>
+docker run <span class="nt">-d</span> &lt;IMAGE_NAME&gt;:&lt;TAG&gt;  <span class="c"># run in background</span>
+docker run <span class="nt">-it</span> &lt;IMAGE_NAME&gt;:&lt;TAG&gt;  <span class="c"># run in interactive mode</span>
+
+docker attach &lt;CONTAINER_ID&gt;  <span class="c"># attach a container in the background</span>
+
+docker ps  <span class="c"># show running containers</span>
+docker ps <span class="nt">-a</span>  <span class="c"># show all containers</span>
+
+docker stop &lt;CONTAINER_NAME&gt;  <span class="c"># can also use first characters of id</span>
+docker <span class="nb">rm</span> &lt;CONTAINER_NAME&gt;
+
+docker images  <span class="c"># show images</span>
+docker rmi &lt;IMAGE_NAME&gt;  <span class="c"># remove image</span>
+
+docker pull &lt;IMAGE_NAME&gt;  <span class="c"># pull and not run an image</span>
+
+<span class="c"># run a command inside a container</span>
+docker <span class="nb">exec</span> &lt;CONTAINER_ID&gt; &lt;some bash <span class="nb">command</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>Docker doesn’t run OS, it runs processes. Once the process, e.g. a web server crashes, the container exits.</p>
+
+<h2 id="docker-run-options">
+<a class="anchor" href="#docker-run-options" aria-hidden="true"><span class="octicon octicon-link"></span></a><code class="highlighter-rouge">docker run</code> options</h2>
+
+<h3 id="port-mapping">
+<a class="anchor" href="#port-mapping" aria-hidden="true"><span class="octicon octicon-link"></span></a>Port mapping</h3>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker run <span class="nt">-p</span> &lt;CONTAINER_INTERNAL_PORT&gt;:&lt;EXTERNAL_PORT&gt; &lt;IMAGE_NAME&gt;:&lt;TAG&gt;
+</code></pre></div></div>
+
+<p>The host machine Docker is running on can use <code class="highlighter-rouge">EXTERNAL_PORT</code> to access the application with this command. The application runs on <code class="highlighter-rouge">CONTAINER_INTERNAL_PORT</code> inside the container, and it maps to the <code class="highlighter-rouge">EXTERNAL_PORT</code> of the host machine.</p>
+
+<p><img src="/images/misc/docker-port-mapping.png" alt="port mapping" align="middle"></p>
+
+<h3 id="check-container-internal-ip">
+<a class="anchor" href="#check-container-internal-ip" aria-hidden="true"><span class="octicon octicon-link"></span></a>Check container internal IP</h3>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker inspect &lt;CONTAINER_ID&gt;
+</code></pre></div></div>
+
+<p>and find <code class="highlighter-rouge">Networks: bridge: IPAddress</code>.</p>
+
+<p>Now we can use this internal IP to access the application in the browser at <code class="highlighter-rouge">&lt;INTERNAL_IP&gt;:&lt;INTERNAL_PORT&gt;</code>.</p>
+
+<p>Usually we use <code class="highlighter-rouge">localhost</code> on the host machine instead of the internal IP. One way of doing this on Mac or Windows is to use port forwarding for the VM Docker is running on. Check <a href="https://www.jhipster.tech/tips/020_tip_using_docker_containers_as_localhost_on_mac_and_windows.html">here</a>.</p>
+
+<p>Another way is to have your application server run <code class="highlighter-rouge">-b 0.0.0.0</code>, and use <code class="highlighter-rouge">-p</code> to map the ports.</p>
+
+<h3 id="persist-data-and-configuration">
+<a class="anchor" href="#persist-data-and-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Persist data and configuration</h3>
+
+<p>If we want to persist data and configuration, we need to map a volume from the container to the host machine. For example, if we want to run Jenkins with some plugins installed, we need to persist the state of Jenkins where they are installed. Use <code class="highlighter-rouge">docker run -v</code> to map a volume.</p>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker run <span class="nt">-p</span> 8080:8080 <span class="nt">-v</span> /root/my-jenkins-data:/var/jenkins_home <span class="nt">-u</span> root jenkins
+</code></pre></div></div>
+
+<p>Here <code class="highlighter-rouge">/root/my-jenkins-data</code> is a custom volume I set, <code class="highlighter-rouge">/var/jenkins_home</code> is the default place Jenkins has its data in the container.</p>
+
+<h3 id="check-os-version">
+<a class="anchor" href="#check-os-version" aria-hidden="true"><span class="octicon octicon-link"></span></a>Check OS version</h3>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run ubuntu:17.10 <span class="nb">cat</span> /etc/<span class="k">*</span>release<span class="k">*</span>
+</code></pre></div></div>
+
+<h2 id="docker-images">
+<a class="anchor" href="#docker-images" aria-hidden="true"><span class="octicon octicon-link"></span></a>Docker images</h2>
+
+<h3 id="dockerfile">
+<a class="anchor" href="#dockerfile" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dockerfile</h3>
+
+<p>For example, if we want to containerize a Flask app, we write a Dockerfile</p>
+
+<p><img src="/images/misc/dockerfile-build.png" alt="dockerfile" align="middle"></p>
+
+<p>A Dockerfile has lines of <code class="highlighter-rouge">DOCKER_INSTRUCTION command_to_run</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM Ubuntu
+
+RUN apt-get update
+RUN apt-get install python
+
+RUN pip install flask
+RUN pip install flask-mysql
+
+# This line copies the source code from the current directory on
+# the host machine to the container's `/opt/source-code`
+COPY . /opt/source-code
+
+ENTRYPOINT FLASK_APP=/opt/source-code/app.py flask run
+</code></pre></div></div>
+
+<p><img src="/images/misc/docker-build.png" alt="docker build" align="middle"></p>
+
+<p>We can push the image to Docker Hub by <code class="highlighter-rouge">docker push &lt;image-name&gt;</code>.</p>
+
+<p>To build:</p>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker build <span class="nb">.</span> <span class="nt">-t</span> &lt;SPECIFY_IMAGE_NAME&gt;
+</code></pre></div></div>
+
+<p>For pushing, do <code class="highlighter-rouge">docker login</code> and</p>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker build <span class="nb">.</span> <span class="nt">-t</span> &lt;username&gt;/&lt;image-name&gt;
+<span class="nv">$ </span>docker push &lt;username&gt;/&lt;image-name&gt;
+</code></pre></div></div>
+
+<h3 id="environment-variables">
+<a class="anchor" href="#environment-variables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Environment variables</h3>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker run <span class="nt">-e</span> MYVAR1 <span class="nt">--env</span> <span class="nv">MYVAR2</span><span class="o">=</span>foo <span class="nt">--env-file</span> ./env.list
+
+<span class="nv">$ </span><span class="nb">cat </span>env.list
+<span class="c"># This is a comment</span>
+<span class="nv">VAR1</span><span class="o">=</span>value1
+<span class="nv">VAR2</span><span class="o">=</span>value2
+USER
+</code></pre></div></div>
+
+<p>We can inspect a container by <code class="highlighter-rouge">docker inspect &lt;container&gt;</code> and check <code class="highlighter-rouge">Config:Env:</code> for existing environment variables.</p>
+
+<h3 id="command-vs-entrypoint">
+<a class="anchor" href="#command-vs-entrypoint" aria-hidden="true"><span class="octicon octicon-link"></span></a>COMMAND vs. ENTRYPOINT</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CMD command param1
+# also
+CMD ["command", "param1"]
+</code></pre></div></div>
+
+<p>Say we want to do</p>
+
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker run ubuntu <span class="nb">sleep </span>5
+</code></pre></div></div>
+
+<p>which starts ubuntu and sleeps for 5 seconds. We can use <code class="highlighter-rouge">CMD</code> or <code class="highlighter-rouge">ENTRYPOINT</code> in the Dockerfile. Say we have image <code class="highlighter-rouge">ubuntu-sleeper</code> with Dockerfile:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM ubuntu
+CMD sleep 5
+</code></pre></div></div>
+
+<p>The next time we do <code class="highlighter-rouge">docker run ubuntu-sleeper</code> it will starts ubuntu and sleeps for 5 seconds.</p>
+
+<p>If we want to pass in the parameter, we use <code class="highlighter-rouge">ENTRYPOINT</code> instead of <code class="highlighter-rouge">CMD</code>. How <code class="highlighter-rouge">ENTRYPOINT</code> works is that the following commands will be appended to it. In contrast, <code class="highlighter-rouge">CMD</code> gets overridden by the command in <code class="highlighter-rouge">docker run</code> if there’s any.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM ubuntu
+ENTRYPOINT ["sleep"]
+</code></pre></div></div>
+
+<p>Now we can run it as <code class="highlighter-rouge">docker run ubuntu-sleeper 5</code>. If we don’t supply the param here, it will give and error. To have a default value for <code class="highlighter-rouge">sleep</code>, we write</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM ubuntu
+ENTRYPOINT ["sleep"]
+CMD ["5"]
+</code></pre></div></div>
+
+<p>In this case, <code class="highlighter-rouge">docker run ubuntu-sleeper 10</code> will override <code class="highlighter-rouge">5</code>. And without any parameter, it defaults to <code class="highlighter-rouge">5</code>.</p>
+
+<h2 id="docker-compose-with-yaml">
+<a class="anchor" href="#docker-compose-with-yaml" aria-hidden="true"><span class="octicon octicon-link"></span></a><code class="highlighter-rouge">docker-compose</code> with YAML</h2>
+
+<p>If we need to run multiple services (mutiple <code class="highlighter-rouge">docker run</code> commands at the same time and <code class="highlighter-rouge">--link</code> them together), we can use <code class="highlighter-rouge">docker-compose</code>.</p>
+
+<p>Using Compose is basically a three-step process:</p>
+
+<ol>
+  <li>Define your app’s environment with a <code class="highlighter-rouge">Dockerfile</code> so it can be reproduced anywhere.</li>
+  <li>Define the services that make up your app in <code class="highlighter-rouge">docker-compose.yml</code> so they can be run together in an isolated environment.</li>
+  <li>Run <code class="highlighter-rouge">docker-compose up</code> and Compose starts and runs your entire app.</li>
+</ol>
+
+<p>A <code class="highlighter-rouge">docker-compose.yml</code> file that looks something like:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>services:
+    web:
+        image: "&lt;username&gt;/simple-web-app"
+    database:
+        image: "mongodb"
+    messaging:
+        image: "redis:alpine"
+    orchestration:
+        image: "ansible"
+</code></pre></div></div>
+
+<p>Consider this app that has</p>
+
+<ul>
+  <li>
+<code class="highlighter-rouge">vote-app</code>: Python web app for users to cast vote in browser</li>
+  <li>
+<code class="highlighter-rouge">redis</code>: in-memory database using Redis for storing the votes from <code class="highlighter-rouge">vote-app</code>
+</li>
+  <li>
+<code class="highlighter-rouge">worker</code>: .NET worker that puts the data in Redis into a Postgres db</li>
+  <li>
+<code class="highlighter-rouge">db</code>: a Postgres db</li>
+  <li>
+<code class="highlighter-rouge">result-app</code>: a Node.js app that shows the votes in browser</li>
+</ul>
+
+<p><img src="/images/misc/sample-app.png" alt="sample app" align="middle"></p>
+
+<p>In the old times, people use <code class="highlighter-rouge">docker run --link</code> commands to let <code class="highlighter-rouge">vote-app</code> and <code class="highlighter-rouge">result-app</code> to know where to find host names <code class="highlighter-rouge">redis</code> and <code class="highlighter-rouge">db</code> in their source code. Now we have <code class="highlighter-rouge">docker compose</code>.</p>
+
+<p><img src="/images/misc/docker-compose.png" alt="docker compose" align="middle"></p>
+
+<p>The above is for docker compose version 1. Then we have version 2 and 3. To specify version, you must add</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 3
+</code></pre></div></div>
+
+<p>in <code class="highlighter-rouge">docker-compose.yml</code>. Since version 2, <code class="highlighter-rouge">services</code> is added, and <code class="highlighter-rouge">link</code> is deprecated, we should use <code class="highlighter-rouge">depends_on</code> instead. Version 3 supports Docker swarm which will be discussed later.</p>
+
+<p><img src="/images/misc/docker-compose-ver.png" alt="docker compose versions" align="middle"></p>
+
+<p>For a more advanced setting, we can separate the front end and back end networks for this voting application system. We add <code class="highlighter-rouge">Networks</code> section in the file and specify which network a service belongs to under each service.</p>
+
+<p><img src="/images/misc/docker-networks.png" alt="docker networks" align="middle"></p>
+
+<p>(<a href="https://kodekloud.com/p/json-path-quiz">YAML course</a>)</p>
+
+<h2 id="docker-registry">
+<a class="anchor" href="#docker-registry" aria-hidden="true"><span class="octicon octicon-link"></span></a>Docker registry</h2>
+
+<h2 id="docker-engine-storage-and-networking">
+<a class="anchor" href="#docker-engine-storage-and-networking" aria-hidden="true"><span class="octicon octicon-link"></span></a>Docker engine, storage, and networking</h2>
+
+<h2 id="docker-on-mac-and-windows">
+<a class="anchor" href="#docker-on-mac-and-windows" aria-hidden="true"><span class="octicon octicon-link"></span></a>Docker on Mac and Windows</h2>
+
+<h2 id="container-orchestration---docker-swarm-and-kubernetes">
+<a class="anchor" href="#container-orchestration---docker-swarm-and-kubernetes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Container orchestration - Docker Swarm and Kubernetes</h2>
+
+<h2 id="reference">
+<a class="anchor" href="#reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reference</h2>
+
+<ul>
+  <li><a href="https://www.udemy.com/course/learn-docker/">Udemy course</a></li>
+</ul>
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="logancyang/blog-learning-automata"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/note/docker/devops/2020/07/19/docker-manual.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notes, code and essays by Logan Yang.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -1,4 +1,61 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-07-17T21:03:44-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[JavaScript Essentials] Prototype and Inheritance</title><link href="http://blog.logancyang.com/note/p5js/javascript/2020/07/17/javascript-prototype.html" rel="alternate" type="text/html" title="[JavaScript Essentials] Prototype and Inheritance" /><published>2020-07-17T00:00:00-05:00</published><updated>2020-07-17T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/p5js/javascript/2020/07/17/javascript-prototype</id><content type="html" xml:base="http://blog.logancyang.com/note/p5js/javascript/2020/07/17/javascript-prototype.html">&lt;p&gt;Not like Java or Python, JavaScript is based on &lt;em&gt;prototypes&lt;/em&gt; and not &lt;em&gt;class&lt;/em&gt;. The ES6 class syntax is syntactic sugar on top of prototypes. Here let’s take a look at the prototype with some examples.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-07-19T00:28:12-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[Nature of Code] Part 1.2: Physics Engines</title><link href="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/18/physics-engines.html" rel="alternate" type="text/html" title="[Nature of Code] Part 1.2: Physics Engines" /><published>2020-07-18T00:00:00-05:00</published><updated>2020-07-18T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/18/physics-engines</id><content type="html" xml:base="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/18/physics-engines.html">&lt;p&gt;This is the second note in the Nature of Code series. For how to create your own mini physics engine, checkout the previous &lt;a href=&quot;http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/03/13/nature-of-code-1.html&quot;&gt;post&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;physics-engines&quot;&gt;Physics Engines&lt;/h2&gt;
+
+&lt;p&gt;In the last note, we covered how to create a physics engine. Usually we just want to use it. There are several available physics engines that we can use out of the box.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Box2D: famous, behind a lot of 2D mobile games like Angry Birds (2D)&lt;/li&gt;
+  &lt;li&gt;toxiclibs: Java library (2D and 3D)&lt;/li&gt;
+  &lt;li&gt;bullet (3D)&lt;/li&gt;
+  &lt;li&gt;matter.js (2D)&lt;/li&gt;
+  &lt;li&gt;canon.js (3D)
+etc.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;All these physics engines have the same paradigm: &lt;strong&gt;world&lt;/strong&gt;, &lt;strong&gt;body&lt;/strong&gt; (or shape), and &lt;strong&gt;constraint&lt;/strong&gt; (or connection, or joint).&lt;/p&gt;
+
+&lt;h3 id=&quot;when-to-use-a-physics-engine&quot;&gt;When to use a physics engine&lt;/h3&gt;
+
+&lt;p&gt;Use a physics engine instead of your own code when you have&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;collisions&lt;/li&gt;
+  &lt;li&gt;a connected system: a cloth, a soft body, an elastic pendulum&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Different physics engines have different advantages:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Box2D: good at collisions&lt;/li&gt;
+  &lt;li&gt;toxiclibs: very good at connected systems, springs, it has no collision!&lt;/li&gt;
+  &lt;li&gt;matter.js: has both collision and connected system&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If your scenario is simple, such as some bouncing balls, you can use your own implementation.&lt;/p&gt;
+
+&lt;p&gt;I will focus on &lt;strong&gt;matter.js&lt;/strong&gt; for in-browser simulations.&lt;/p&gt;
+
+&lt;h2 id=&quot;introduction-to-matterjs&quot;&gt;Introduction to Matter.js&lt;/h2&gt;
+
+&lt;p&gt;To use matter.js, go to their &lt;a href=&quot;https://github.com/liabru/matter-js/wiki/Getting-started&quot;&gt;Get Started page&lt;/a&gt;, download a stable release and put the &lt;code class=&quot;highlighter-rouge&quot;&gt;matter.js&lt;/code&gt; under &lt;code class=&quot;highlighter-rouge&quot;&gt;build&lt;/code&gt; into your project, then add the following to your HTML.&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;path_to/matter.js&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We will use P5.js as the renderer.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;IMPORTANT: Need to match the way matter.js and P5.js draw stuff. For example, matter.js has &lt;code class=&quot;highlighter-rouge&quot;&gt;rectangle&lt;/code&gt; with &lt;code class=&quot;highlighter-rouge&quot;&gt;x, y&lt;/code&gt; representing the center, and P5.js has &lt;code class=&quot;highlighter-rouge&quot;&gt;x, y&lt;/code&gt; representing the top left corner! In this case, use &lt;code class=&quot;highlighter-rouge&quot;&gt;rectMode(CENTER)&lt;/code&gt; in P5.js.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;One weird thing that could happen is, if you have a very thin ground or boundary, the objects can sometimes pass through it when they move very fast. This is because matter.js checks the position of objects in every time step. Fast moving objects can fly through a boundary without overlapping with it. One way to fix this is to have thicker boundaries.&lt;/p&gt;
+
+&lt;p&gt;Another common pitfall with physics engine is that you can’t assign a body’s property such as angle directly, you can only set it at the time of instantiation. Because angle is a result of the laws of physics after you create the object. When you directly assign it, you violate the law of physics.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The Coding Train &lt;a href=&quot;https://youtu.be/urR596FsU68&quot;&gt;videos&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">This is the second note in the Nature of Code series. For how to create your own mini physics engine, checkout the previous post.</summary></entry><entry><title type="html">[JavaScript Essentials] Prototype and Inheritance</title><link href="http://blog.logancyang.com/note/p5js/javascript/2020/07/17/javascript-prototype.html" rel="alternate" type="text/html" title="[JavaScript Essentials] Prototype and Inheritance" /><published>2020-07-17T00:00:00-05:00</published><updated>2020-07-17T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/p5js/javascript/2020/07/17/javascript-prototype</id><content type="html" xml:base="http://blog.logancyang.com/note/p5js/javascript/2020/07/17/javascript-prototype.html">&lt;p&gt;Not like Java or Python, JavaScript is based on &lt;em&gt;prototypes&lt;/em&gt; and not &lt;em&gt;class&lt;/em&gt;. The ES6 class syntax is syntactic sugar on top of prototypes. Here let’s take a look at the prototype with some examples.&lt;/p&gt;
 
 &lt;p&gt;In ES5 we use a function as the constructor.&lt;/p&gt;
 
@@ -1520,7 +1577,472 @@ D=M
       &lt;li&gt;&lt;a href=&quot;https://www.coursera.org/instructor/noamnisan&quot;&gt;Noam Nisan&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Continuing the discussion through abstraction level 4 in the last post, we look at level 5 and level 6 in this post.</summary></entry><entry><title type="html">[Python Review] Part III: Generators and Advanced Topics</title><link href="http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html" rel="alternate" type="text/html" title="[Python Review] Part III: Generators and Advanced Topics" /><published>2020-07-02T00:00:00-05:00</published><updated>2020-07-02T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html">&lt;h2 id=&quot;generators&quot;&gt;Generators&lt;/h2&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Continuing the discussion through abstraction level 4 in the last post, we look at level 5 and level 6 in this post.</summary></entry><entry><title type="html">[From NAND to TETRIS] Computer Architecture 101 Part II: Machine Language</title><link href="http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html" rel="alternate" type="text/html" title="[From NAND to TETRIS] Computer Architecture 101 Part II: Machine Language" /><published>2020-07-02T00:00:00-05:00</published><updated>2020-07-02T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii</id><content type="html" xml:base="http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html">&lt;p&gt;Continuing the discussion through abstraction level 1-3 in the &lt;a href=&quot;http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101.html&quot;&gt;last post&lt;/a&gt;, we look at level 4: machine language in detail in this post.&lt;/p&gt;
+
+&lt;h2 id=&quot;level-4-machine-language&quot;&gt;Level 4: Machine language&lt;/h2&gt;
+
+&lt;p&gt;Before we build the computer, let’s understand what we want the computer to be able to do from a user point of view.&lt;/p&gt;
+
+&lt;p&gt;The reason that computers can do a lot of different tasks is because it is modeled based on Universal Turing Machine in theory, and Von Neumann Architecture in practice.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/turing-von.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/vonneumann.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The machine is designed to read binary instructions and perform different tasks. The binary instructions are called machine language. It is one of the most important elements of computer science because it is how software controls hardware.&lt;/p&gt;
+
+&lt;p&gt;Machine language consists of three conceptual parts:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Operations. It has a list of operations encoded in binary to go through. Each operation instructs it to do a different thing.&lt;/li&gt;
+  &lt;li&gt;Program counter. Let the computer know which operation to execute next.&lt;/li&gt;
+  &lt;li&gt;Address. Let the computer know what to operate on, where it can get it and where to put the output.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/machinelang.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We humans don’t program in machine language. We write high level language and let the compiler to translate it to machine language. But since now we are learning how to build a computer, we need to understand machine language.&lt;/p&gt;
+
+&lt;p&gt;Machine language is just a sequence of bits. For example, the ADD operation is defined as &lt;code class=&quot;highlighter-rouge&quot;&gt;0100010&lt;/code&gt;, say a variable R3 is &lt;code class=&quot;highlighter-rouge&quot;&gt;0011&lt;/code&gt;, R2 is&lt;code class=&quot;highlighter-rouge&quot;&gt;0010&lt;/code&gt;, then &lt;code class=&quot;highlighter-rouge&quot;&gt;010001000110010&lt;/code&gt; means &lt;code class=&quot;highlighter-rouge&quot;&gt;ADD R3 R2&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;We allow humans to write machine language via Assemly language. In Level 6, we will build “Assembler” to convert it into bits.&lt;/p&gt;
+
+&lt;p&gt;Machine language is usually in close correspondence to actual hardware architecture. If we want more powerful machine language operations, we need more advanced hardware.&lt;/p&gt;
+
+&lt;p&gt;Common machine operations:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Arithmetic&lt;/li&gt;
+  &lt;li&gt;Logical operations&lt;/li&gt;
+  &lt;li&gt;Flow control: goto instruction Y, if A then goto instruction C&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Differences between machine languages:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Richness of operations (division? bulk copy?)&lt;/li&gt;
+  &lt;li&gt;Data types (width, floating point…)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For example, some machines can only handle 8-bit arithmetic. To do a 64-bit addition, it can still do it by iterating through its 8 bits and relying on algorithm. But a 64-bit machine can do it much faster and more easily than the 8-bit machine.&lt;/p&gt;
+
+&lt;h3 id=&quot;memory-hierarchy&quot;&gt;Memory hierarchy&lt;/h3&gt;
+
+&lt;p&gt;Accessing a memory location is expensive.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;large memory has long addresses&lt;/li&gt;
+  &lt;li&gt;getting the memory content into CPU takes time (slow compared to CPU carrying out the operation)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The solution was introduced by Von Neumann when he built the first computer: memory hierarchy.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/mem-hier.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We have CPU registers (smallest and fastest), then cache, main memory, and disk (biggest and slowest). Smaller memory is faster because there are only a few registers, the addresses are short, and they sit closer to CPU.&lt;/p&gt;
+
+&lt;h4 id=&quot;cpu-registers&quot;&gt;CPU registers&lt;/h4&gt;
+
+&lt;p&gt;CPU registers are built with the fastest technology. And since they sit inside the CPU, there’s almost no delay.&lt;/p&gt;
+
+&lt;p&gt;There are 2 types of registers in the CPU.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Data registers. We can put numbers in them directly.&lt;/li&gt;
+  &lt;li&gt;Pointer to main memory, e.g. put variable &lt;code class=&quot;highlighter-rouge&quot;&gt;X&lt;/code&gt; into &lt;code class=&quot;highlighter-rouge&quot;&gt;@A&lt;/code&gt; where &lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt; is an address in the main memory.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/addressing-modes.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;inputoutput&quot;&gt;Input/Output&lt;/h3&gt;
+
+&lt;p&gt;CPU needs some kind of protocol known as &lt;strong&gt;drivers&lt;/strong&gt; to talk to input/output devices, such as mouse, keyboard, camera, sensors, screen, printer, sound, etc.&lt;/p&gt;
+
+&lt;p&gt;One general method of interaction uses “memory mapping”, e.g.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Memory location 12345 holds the direction of the last mouse movement.&lt;/li&gt;
+  &lt;li&gt;Memory location 45678 is not a real memory location but a way to tell the printer which paper to use.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;flow-control&quot;&gt;Flow control&lt;/h3&gt;
+
+&lt;p&gt;Flow control is the way we tell the hardware which instruction to execute next.&lt;/p&gt;
+
+&lt;p&gt;There is unconditional jump so we can loop:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/uncond-jump.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;There is conditional jump if a condition is met:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/cond-jump.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;the-hack-computer-and-machine-language&quot;&gt;The Hack computer and machine language&lt;/h3&gt;
+
+&lt;p&gt;The Hack computer we are building is going to a 16-bit computer with an architecture shown below:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hack16bit.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It has&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;a data memory (RAM)&lt;/li&gt;
+  &lt;li&gt;an instruction memory (ROM)&lt;/li&gt;
+  &lt;li&gt;a CPU consists of 16-bit ALUs that performs 16-bit instructions&lt;/li&gt;
+  &lt;li&gt;some buses to move data between them. Think of them as highways of 16 lanes moving 16-bit data around.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;hack-software&quot;&gt;Hack software&lt;/h4&gt;
+
+&lt;p&gt;We design the Hack machine language to have 2 types of instructions:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;16-bit A-instructions&lt;/li&gt;
+  &lt;li&gt;16-bit C-instructions&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Hack program = a sequence of instructions written in the Hack machine language.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The Hack program is loaded into the instruction memory (ROM), then the reset button is pushed to start the program. The reset button is pushed once for one program.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackreset.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The Hack machine language recognizes 3 registers:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;D register: holds a 16-bit value&lt;/li&gt;
+  &lt;li&gt;A register: holds a 16-bit value or an address&lt;/li&gt;
+  &lt;li&gt;M register: called the selected memory register, a 16-bit RAM register addressed by A.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/reg3.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Notice that ROM (which stores the instructions) isn’t included in the 3 registers!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;a-instruction&quot;&gt;A-instruction&lt;/h4&gt;
+
+&lt;p&gt;Example: &lt;code class=&quot;highlighter-rouge&quot;&gt;@100&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;When this A-instruction is executed, the A register holds &lt;code class=&quot;highlighter-rouge&quot;&gt;100&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;RAM[100]&lt;/code&gt; is selected in the M register (RAM).&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Set RAM[100] to -1
+@100    // A=100, select RAM[100]
+M = -1  // RAM[100]=-1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The above Hack machine language means we select &lt;code class=&quot;highlighter-rouge&quot;&gt;RAM[100]&lt;/code&gt; by setting A register to 100. &lt;code class=&quot;highlighter-rouge&quot;&gt;M&lt;/code&gt; denotes the memory content of &lt;code class=&quot;highlighter-rouge&quot;&gt;RAM[100]&lt;/code&gt;, we assign -1 to it.&lt;/p&gt;
+
+&lt;h4 id=&quot;c-instruction&quot;&gt;C-instruction&lt;/h4&gt;
+
+&lt;p&gt;C-instruction is the work horse of the language. It has 3 fields: &lt;code class=&quot;highlighter-rouge&quot;&gt;dest = comp ; jump&lt;/code&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Computation. Consists of logical operations on A, D and M.&lt;/li&gt;
+  &lt;li&gt;Destination (optional)&lt;/li&gt;
+  &lt;li&gt;A jump directive (optional)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/cinst-ex1.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Refer to the slide above for possible &lt;code class=&quot;highlighter-rouge&quot;&gt;comp&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;dest&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;jump&lt;/code&gt; values.&lt;/p&gt;
+
+&lt;p&gt;Example: set RAM[300] to D-1&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@300
+M = D-1  // D-1 is in the predefined comp as shown above
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Example: if D-1 == 0, jump to execute the instruction stored in ROM[56]&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@56         // A=56
+D-1; JEQ    // if D-1 == 0, goto 56
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JEQ&lt;/code&gt; checks if &lt;code class=&quot;highlighter-rouge&quot;&gt;comp&lt;/code&gt; equals 0, if yes then jump to address A (keep in mind that &lt;code class=&quot;highlighter-rouge&quot;&gt;jump&lt;/code&gt; aims at ROM addresses, not RAM). In this case, &lt;code class=&quot;highlighter-rouge&quot;&gt;comp&lt;/code&gt; is &lt;code class=&quot;highlighter-rouge&quot;&gt;D-1&lt;/code&gt;, so &lt;code class=&quot;highlighter-rouge&quot;&gt;JEQ&lt;/code&gt; checks if &lt;code class=&quot;highlighter-rouge&quot;&gt;D-1&lt;/code&gt; equals 0.&lt;/p&gt;
+
+&lt;p&gt;Example code:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@1
+M=A-1; JEQ
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;What does this do?&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@1&lt;/code&gt; sets A register to 1.&lt;/li&gt;
+  &lt;li&gt;Compute &lt;code class=&quot;highlighter-rouge&quot;&gt;comp&lt;/code&gt; which is &lt;code class=&quot;highlighter-rouge&quot;&gt;A-1&lt;/code&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;A-1&lt;/code&gt; equals 0.&lt;/li&gt;
+  &lt;li&gt;Then it stores the result 0 into the M register, RAM[1], because A is 1.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JEQ&lt;/code&gt; checks if &lt;code class=&quot;highlighter-rouge&quot;&gt;comp&lt;/code&gt; equals 0. Yes.&lt;/li&gt;
+  &lt;li&gt;The next instruction is ROM[1] because A is 1.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;We don’t need to remember all the possible values for the 3 registers. For details, check the &lt;a href=&quot;https://www.nand2tetris.org/&quot;&gt;website&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;hack-language-specification&quot;&gt;Hack language specification&lt;/h3&gt;
+
+&lt;p&gt;We have two ways of specifying machine language code, one in symbols and one in binary numbers. An &lt;em&gt;assembler&lt;/em&gt; can translate symbolic code into binary code.&lt;/p&gt;
+
+&lt;h4 id=&quot;a-instruction-specification&quot;&gt;A-instruction specification&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/ainst-binary.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;A-instruction has an “op code” (first bit in binary code) of 0 at the beginning of the binary code.&lt;/p&gt;
+
+&lt;h4 id=&quot;c-instruction-specification&quot;&gt;C-instruction specification&lt;/h4&gt;
+
+&lt;p&gt;C-instruction has an “op code” of 1, followed by 2 bits we don’t use. By convention we set them to 1.&lt;/p&gt;
+
+&lt;p&gt;Here is a table where we can convert symbols to binary codes.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/cinst-table.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For example, if we want to convert &lt;code class=&quot;highlighter-rouge&quot;&gt;D+1&lt;/code&gt;, we find the symbol, it’s in the column &lt;code class=&quot;highlighter-rouge&quot;&gt;a=0&lt;/code&gt;, and has a value of &lt;code class=&quot;highlighter-rouge&quot;&gt;011111&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;So the &lt;code class=&quot;highlighter-rouge&quot;&gt;comp&lt;/code&gt; field &lt;code class=&quot;highlighter-rouge&quot;&gt;D+1&lt;/code&gt; is &lt;code class=&quot;highlighter-rouge&quot;&gt;1110011111&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;We also have a table for &lt;code class=&quot;highlighter-rouge&quot;&gt;dest&lt;/code&gt; the destination field.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/cinst-dest-table.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Similarly, we have a table for &lt;code class=&quot;highlighter-rouge&quot;&gt;jump&lt;/code&gt; values. Altogether we have everything in one slide here:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/cinst-table-full.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Finally, here is an example of a small Hack program and its translation to binary.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hacklang-ex.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;working-with-registers-and-memory-using-machine-language&quot;&gt;Working with registers and memory using machine language&lt;/h3&gt;
+
+&lt;h4 id=&quot;some-examples&quot;&gt;Some examples&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// D=10
+@10     // There is no directive to directly set D=10. Set A=10 first
+D=A     // and set D=A
+
+// D++
+D=D+1   // This is easy
+
+// D = RAM[17]
+@17
+D=M
+
+// RAM[17] = D
+@17
+M=D
+
+// RAM[17] = 10
+@10
+D=A
+@17
+M=D
+
+// RAM[5] = RAM[3]
+@3
+D=M
+@5
+M=D
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Here’s another example:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackcode-ex.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Note that the white spaces are ignored, and each line of code has a line number in the background automatically.&lt;/p&gt;
+
+&lt;h4 id=&quot;how-to-terminate-the-program-properly&quot;&gt;How to terminate the program properly&lt;/h4&gt;
+
+&lt;p&gt;We haven’t talk about program termination. If we execute our code naively, a malicious hacker could add malicious code after our code to do bad things. It is called &lt;em&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/NOP_slide#:~:text=In%20computer%20security%2C%20a%20NOP,address%20anywhere%20on%20the%20slide.&quot;&gt;NOP slide&lt;/a&gt;&lt;/em&gt;, meaning they added null operations after the actual code and before the malicious code to hide the latter.&lt;/p&gt;
+
+&lt;p&gt;We use the fact that the computer never stands still and always executes something, &lt;strong&gt;we end the program with an infinite loop&lt;/strong&gt; so it is under our control. This is the best practice for program termination.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;...
+@6
+0; JMP
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;built-in-symbols&quot;&gt;Built-in symbols&lt;/h4&gt;
+
+&lt;p&gt;The Hack assembly language features &lt;em&gt;built-in symbols&lt;/em&gt; which are virtual registers, not real registers. The symbols are &lt;code class=&quot;highlighter-rouge&quot;&gt;R0, R1, R2, ... , R15&lt;/code&gt; and they correspond to values &lt;code class=&quot;highlighter-rouge&quot;&gt;0, 1, 2, ..., 15&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Why do we need these virtual registers?&lt;/p&gt;
+
+&lt;p&gt;It is purely for &lt;strong&gt;style and readability&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;For example,&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// RAM[5]=15
+@15
+D=A
+
+@5
+M=D
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The two &lt;code class=&quot;highlighter-rouge&quot;&gt;@x&lt;/code&gt; lines are intended to do completely different things. The first is to set A and then set D. The second is to get address 5 in RAM and store D there.&lt;/p&gt;
+
+&lt;p&gt;It means when we see &lt;code class=&quot;highlighter-rouge&quot;&gt;@x&lt;/code&gt; we don’t know what it wants to do until we see the next line of code. So we introduce &lt;code class=&quot;highlighter-rouge&quot;&gt;R5&lt;/code&gt;,&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// RAM[5]=15
+@15
+D=A
+
+@R5
+M=D
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;When we use &lt;code class=&quot;highlighter-rouge&quot;&gt;@R5&lt;/code&gt; it’s exactly the same as &lt;code class=&quot;highlighter-rouge&quot;&gt;@5&lt;/code&gt;, but it means finding the address 5 so that it’s more readable for people.&lt;/p&gt;
+
+&lt;p&gt;Here are all the built-in symbols:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/builtin-symbols.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;branching-variables-iteration-using-machine-language&quot;&gt;Branching, variables, iteration using machine language&lt;/h3&gt;
+
+&lt;h4 id=&quot;branching&quot;&gt;Branching&lt;/h4&gt;
+
+&lt;p&gt;In any high level language there are many branching mechanisms such as if-else, while, switch, etc. In machine language, there is only one: &lt;em&gt;goto&lt;/em&gt; using the &lt;code class=&quot;highlighter-rouge&quot;&gt;jump&lt;/code&gt; directives.&lt;/p&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Program: signum.asm
+// Computes:
+//   if R0 &amp;gt; 0:
+//       R1 = 1
+//   else:
+//       R1 = 0
+
+@R0
+D=M  // D = RAM[0]
+
+@8
+D; JGT  // if R0 &amp;gt; 0, goto 8
+
+@R1
+M=0  // RAM[1] = 0
+@10
+0; JMP  // end of program
+
+@R1
+M=1  // R1=1
+
+@10
+0; JMP  // end of program
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You can see this code is quite unreadable if there’s no comment or documentation. One thing we introduce to make it more readable is &lt;strong&gt;labels&lt;/strong&gt;. One example is shown below. &lt;code class=&quot;highlighter-rouge&quot;&gt;(POSITIVE)&lt;/code&gt; is a label that points to its next line. &lt;code class=&quot;highlighter-rouge&quot;&gt;@POSITIVE&lt;/code&gt; is using the label to &lt;em&gt;goto&lt;/em&gt; that line. This way we have a much more readable branching mechanism.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/goto-labels.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;variables&quot;&gt;Variables&lt;/h4&gt;
+
+&lt;p&gt;Say we want to exchange the values of R0 and R1:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Program: flip.asm
+// Flips the value of RAM[0] and RAM[1]
+
+// temp = R1
+// R1 = R0
+// R0 = temp
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The people who created the Assembler can define a contract: &lt;code class=&quot;highlighter-rouge&quot;&gt;@somevar&lt;/code&gt; with no label &lt;code class=&quot;highlighter-rouge&quot;&gt;(somevar)&lt;/code&gt; means it’s a variable, and it will use &lt;code class=&quot;highlighter-rouge&quot;&gt;RAM[program_base_address+16]&lt;/code&gt;. Any new variable will increment 16, i.e. use &lt;code class=&quot;highlighter-rouge&quot;&gt;+17&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;+18&lt;/code&gt;, etc.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/variables.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;iterations&quot;&gt;Iterations&lt;/h4&gt;
+
+&lt;p&gt;Suppose we want to compute &lt;code class=&quot;highlighter-rouge&quot;&gt;1+2+...+n&lt;/code&gt;, we need an accumulator variable and an iteration in a high level language. The machine code is shown below:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/iterations.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;pointers&quot;&gt;Pointers&lt;/h3&gt;
+
+&lt;p&gt;From the machine’s perspective, an array is just a block of memory that starts at a certain base memory location with a certain length. The following example is to set -1 into the array.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/array-1.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;First we set 2 variables, the base memory location &lt;code class=&quot;highlighter-rouge&quot;&gt;arr&lt;/code&gt; and length &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;. Then we set the variable &lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt;. To achieve &lt;code class=&quot;highlighter-rouge&quot;&gt;RAM[arr+i] = -1&lt;/code&gt;, we set register A to be &lt;code class=&quot;highlighter-rouge&quot;&gt;D+M&lt;/code&gt;. This is the first time we set A using an arithmetic operation.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/pointers.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Variables that store memory addresses like &lt;code class=&quot;highlighter-rouge&quot;&gt;arr&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt; are called &lt;em&gt;pointers&lt;/em&gt;&lt;/strong&gt;. When we need to access memory using a pointer, we need an instruction like &lt;code class=&quot;highlighter-rouge&quot;&gt;A=M&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Typical pointer semantics: “set the address register to the content of some memory register”.&lt;/p&gt;
+
+&lt;h3 id=&quot;inputoutput-using-machine-language&quot;&gt;Input/Output using machine language&lt;/h3&gt;
+
+&lt;p&gt;The computer gets data from humans via input devices like the keyboard, and outputs to output devices like the display.&lt;/p&gt;
+
+&lt;p&gt;In high level languages such as Java and Python, we write code using input devices and the output devices give us the high level results such as text, graphics, audio and video. This is in the realm of &lt;strong&gt;software hierarchy&lt;/strong&gt; and isn’t the focus now. Now we focus on the hardware hierarchy.&lt;/p&gt;
+
+&lt;p&gt;All the high level functionalities depend on the low level operations on bits.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/io-illustration.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;screen-output&quot;&gt;Screen output&lt;/h4&gt;
+
+&lt;p&gt;There is a part in RAM that’s called the &lt;strong&gt;Screen Memory Map&lt;/strong&gt; which refreshes many times per second. It directly controls the display on the screen. When we need to display something, we manipulate this part of the memory.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/screenmemomap.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The Hack computer assumes a physical screen of 256x512 pixels black and white. In the memory, we use a chunk of 16-bit registers to represent this pixel matrix.&lt;/p&gt;
+
+&lt;p&gt;Since one &lt;em&gt;word&lt;/em&gt; is 16-bit, and one row in the screen is 512 pixels, we need &lt;code class=&quot;highlighter-rouge&quot;&gt;512/16=32&lt;/code&gt; words to represent a row. Doing some math we can calculate the memory address of each pixel.&lt;/p&gt;
+
+&lt;p&gt;Note that the whole screen memory chunk resides inside the big RAM and it has a starting address. We use a chip &lt;code class=&quot;highlighter-rouge&quot;&gt;Screen[]&lt;/code&gt; to add the starting base address to the pixel coordinates to get the actual memory address.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/scrmap.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You might be shocked how much work we need to do just to manipulate one pixel. That’s the reality at low level!&lt;/p&gt;
+
+&lt;h4 id=&quot;keyboard-input&quot;&gt;Keyboard input&lt;/h4&gt;
+
+&lt;p&gt;A physical keyboard is connected to the Keyboard Memory Map in RAM. The good thing is that &lt;strong&gt;we only need one 16-bit register to represent the keyboard&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/keyboardmemmap.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Each key has a binary &lt;strong&gt;scan code&lt;/strong&gt; that goes into the keyboard memory map. If the keyboard is not pressed, the scan code is 0.&lt;/p&gt;
+
+&lt;p&gt;To see what key is pressed, just probe the keyboard chip. In the Hack computer, the keyboard memory map is at RAM[24576].&lt;/p&gt;
+
+&lt;p&gt;Here is a complete scan code mapping for the Hack computer keyboard:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/scancode.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Notice that the keyboard memory map has 16 bits, it can represent $2^{16}=65536$ different keys which is more than enough even for unicode characters.&lt;/p&gt;
+
+&lt;h4 id=&quot;draw-a-rectangle-with-hack-programming&quot;&gt;Draw a rectangle with Hack programming&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/inputoutputhack.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s consider the “hello world” program of computer graphics: drawing a rectangle.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/drawrec.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s focus on the pseudocode. The goal is to manipulate the Screen Memory Map to show the rectangle.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/recpseudo.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The following is the real Hack code&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/reccode.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;compiler-translates-high-level-language-to-machine-code&quot;&gt;Compiler: translates high level language to machine code&lt;/h3&gt;
+
+&lt;p&gt;This is &lt;em&gt;From NAND to TETRIS part I&lt;/em&gt; and we don’t concern ourselves with the compiler which translates a high level language to machine code. In part II, there’s material showing how to write a compiler and an operating system.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/cs4ds/compiler.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;comments&quot;&gt;Comments&lt;/h3&gt;
+
+&lt;p&gt;Hack is a simplified version of the machine language. The machine language that controls our day-to-day personal computers is more complex and has more features such as floating point arithmetic. However, we can always use software to expand the capabilities of the machine language, and that is in the part II of &lt;em&gt;From NAND to TETRIS&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://blog.logancyang.com/note/compsci/2020/07/04/computer-architecture-101-part-iii.html&quot;&gt;Go to Part III&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.coursera.org/learn/build-a-computer&quot;&gt;Coursera From NAND To TETRIS&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Continuing the discussion through abstraction level 1-3 in the last post, we look at level 4: machine language in detail in this post.</summary></entry><entry><title type="html">[Python Review] Part III: Generators and Advanced Topics</title><link href="http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html" rel="alternate" type="text/html" title="[Python Review] Part III: Generators and Advanced Topics" /><published>2020-07-02T00:00:00-05:00</published><updated>2020-07-02T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/02/python-basics-iii.html">&lt;h2 id=&quot;generators&quot;&gt;Generators&lt;/h2&gt;
 
 &lt;h3 id=&quot;iteration-protocol&quot;&gt;Iteration protocol&lt;/h3&gt;
 
@@ -2306,472 +2828,7 @@ To actually use it and setup the pipeline
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Generators</summary></entry><entry><title type="html">[From NAND to TETRIS] Computer Architecture 101 Part II: Machine Language</title><link href="http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html" rel="alternate" type="text/html" title="[From NAND to TETRIS] Computer Architecture 101 Part II: Machine Language" /><published>2020-07-02T00:00:00-05:00</published><updated>2020-07-02T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii</id><content type="html" xml:base="http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html">&lt;p&gt;Continuing the discussion through abstraction level 1-3 in the &lt;a href=&quot;http://blog.logancyang.com/note/compsci/2020/06/29/computer-architecture-101.html&quot;&gt;last post&lt;/a&gt;, we look at level 4: machine language in detail in this post.&lt;/p&gt;
-
-&lt;h2 id=&quot;level-4-machine-language&quot;&gt;Level 4: Machine language&lt;/h2&gt;
-
-&lt;p&gt;Before we build the computer, let’s understand what we want the computer to be able to do from a user point of view.&lt;/p&gt;
-
-&lt;p&gt;The reason that computers can do a lot of different tasks is because it is modeled based on Universal Turing Machine in theory, and Von Neumann Architecture in practice.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/turing-von.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/vonneumann.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The machine is designed to read binary instructions and perform different tasks. The binary instructions are called machine language. It is one of the most important elements of computer science because it is how software controls hardware.&lt;/p&gt;
-
-&lt;p&gt;Machine language consists of three conceptual parts:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Operations. It has a list of operations encoded in binary to go through. Each operation instructs it to do a different thing.&lt;/li&gt;
-  &lt;li&gt;Program counter. Let the computer know which operation to execute next.&lt;/li&gt;
-  &lt;li&gt;Address. Let the computer know what to operate on, where it can get it and where to put the output.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/machinelang.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;We humans don’t program in machine language. We write high level language and let the compiler to translate it to machine language. But since now we are learning how to build a computer, we need to understand machine language.&lt;/p&gt;
-
-&lt;p&gt;Machine language is just a sequence of bits. For example, the ADD operation is defined as &lt;code class=&quot;highlighter-rouge&quot;&gt;0100010&lt;/code&gt;, say a variable R3 is &lt;code class=&quot;highlighter-rouge&quot;&gt;0011&lt;/code&gt;, R2 is&lt;code class=&quot;highlighter-rouge&quot;&gt;0010&lt;/code&gt;, then &lt;code class=&quot;highlighter-rouge&quot;&gt;010001000110010&lt;/code&gt; means &lt;code class=&quot;highlighter-rouge&quot;&gt;ADD R3 R2&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;We allow humans to write machine language via Assemly language. In Level 6, we will build “Assembler” to convert it into bits.&lt;/p&gt;
-
-&lt;p&gt;Machine language is usually in close correspondence to actual hardware architecture. If we want more powerful machine language operations, we need more advanced hardware.&lt;/p&gt;
-
-&lt;p&gt;Common machine operations:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Arithmetic&lt;/li&gt;
-  &lt;li&gt;Logical operations&lt;/li&gt;
-  &lt;li&gt;Flow control: goto instruction Y, if A then goto instruction C&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Differences between machine languages:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Richness of operations (division? bulk copy?)&lt;/li&gt;
-  &lt;li&gt;Data types (width, floating point…)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;For example, some machines can only handle 8-bit arithmetic. To do a 64-bit addition, it can still do it by iterating through its 8 bits and relying on algorithm. But a 64-bit machine can do it much faster and more easily than the 8-bit machine.&lt;/p&gt;
-
-&lt;h3 id=&quot;memory-hierarchy&quot;&gt;Memory hierarchy&lt;/h3&gt;
-
-&lt;p&gt;Accessing a memory location is expensive.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;large memory has long addresses&lt;/li&gt;
-  &lt;li&gt;getting the memory content into CPU takes time (slow compared to CPU carrying out the operation)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The solution was introduced by Von Neumann when he built the first computer: memory hierarchy.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/mem-hier.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;We have CPU registers (smallest and fastest), then cache, main memory, and disk (biggest and slowest). Smaller memory is faster because there are only a few registers, the addresses are short, and they sit closer to CPU.&lt;/p&gt;
-
-&lt;h4 id=&quot;cpu-registers&quot;&gt;CPU registers&lt;/h4&gt;
-
-&lt;p&gt;CPU registers are built with the fastest technology. And since they sit inside the CPU, there’s almost no delay.&lt;/p&gt;
-
-&lt;p&gt;There are 2 types of registers in the CPU.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Data registers. We can put numbers in them directly.&lt;/li&gt;
-  &lt;li&gt;Pointer to main memory, e.g. put variable &lt;code class=&quot;highlighter-rouge&quot;&gt;X&lt;/code&gt; into &lt;code class=&quot;highlighter-rouge&quot;&gt;@A&lt;/code&gt; where &lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt; is an address in the main memory.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/addressing-modes.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;inputoutput&quot;&gt;Input/Output&lt;/h3&gt;
-
-&lt;p&gt;CPU needs some kind of protocol known as &lt;strong&gt;drivers&lt;/strong&gt; to talk to input/output devices, such as mouse, keyboard, camera, sensors, screen, printer, sound, etc.&lt;/p&gt;
-
-&lt;p&gt;One general method of interaction uses “memory mapping”, e.g.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Memory location 12345 holds the direction of the last mouse movement.&lt;/li&gt;
-  &lt;li&gt;Memory location 45678 is not a real memory location but a way to tell the printer which paper to use.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;flow-control&quot;&gt;Flow control&lt;/h3&gt;
-
-&lt;p&gt;Flow control is the way we tell the hardware which instruction to execute next.&lt;/p&gt;
-
-&lt;p&gt;There is unconditional jump so we can loop:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/uncond-jump.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;There is conditional jump if a condition is met:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/cond-jump.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;the-hack-computer-and-machine-language&quot;&gt;The Hack computer and machine language&lt;/h3&gt;
-
-&lt;p&gt;The Hack computer we are building is going to a 16-bit computer with an architecture shown below:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hack16bit.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;It has&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;a data memory (RAM)&lt;/li&gt;
-  &lt;li&gt;an instruction memory (ROM)&lt;/li&gt;
-  &lt;li&gt;a CPU consists of 16-bit ALUs that performs 16-bit instructions&lt;/li&gt;
-  &lt;li&gt;some buses to move data between them. Think of them as highways of 16 lanes moving 16-bit data around.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;hack-software&quot;&gt;Hack software&lt;/h4&gt;
-
-&lt;p&gt;We design the Hack machine language to have 2 types of instructions:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;16-bit A-instructions&lt;/li&gt;
-  &lt;li&gt;16-bit C-instructions&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Hack program = a sequence of instructions written in the Hack machine language.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The Hack program is loaded into the instruction memory (ROM), then the reset button is pushed to start the program. The reset button is pushed once for one program.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackreset.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The Hack machine language recognizes 3 registers:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;D register: holds a 16-bit value&lt;/li&gt;
-  &lt;li&gt;A register: holds a 16-bit value or an address&lt;/li&gt;
-  &lt;li&gt;M register: called the selected memory register, a 16-bit RAM register addressed by A.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/reg3.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Notice that ROM (which stores the instructions) isn’t included in the 3 registers!&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;a-instruction&quot;&gt;A-instruction&lt;/h4&gt;
-
-&lt;p&gt;Example: &lt;code class=&quot;highlighter-rouge&quot;&gt;@100&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;When this A-instruction is executed, the A register holds &lt;code class=&quot;highlighter-rouge&quot;&gt;100&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;RAM[100]&lt;/code&gt; is selected in the M register (RAM).&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Set RAM[100] to -1
-@100    // A=100, select RAM[100]
-M = -1  // RAM[100]=-1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The above Hack machine language means we select &lt;code class=&quot;highlighter-rouge&quot;&gt;RAM[100]&lt;/code&gt; by setting A register to 100. &lt;code class=&quot;highlighter-rouge&quot;&gt;M&lt;/code&gt; denotes the memory content of &lt;code class=&quot;highlighter-rouge&quot;&gt;RAM[100]&lt;/code&gt;, we assign -1 to it.&lt;/p&gt;
-
-&lt;h4 id=&quot;c-instruction&quot;&gt;C-instruction&lt;/h4&gt;
-
-&lt;p&gt;C-instruction is the work horse of the language. It has 3 fields: &lt;code class=&quot;highlighter-rouge&quot;&gt;dest = comp ; jump&lt;/code&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Computation. Consists of logical operations on A, D and M.&lt;/li&gt;
-  &lt;li&gt;Destination (optional)&lt;/li&gt;
-  &lt;li&gt;A jump directive (optional)&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/cinst-ex1.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Refer to the slide above for possible &lt;code class=&quot;highlighter-rouge&quot;&gt;comp&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;dest&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;jump&lt;/code&gt; values.&lt;/p&gt;
-
-&lt;p&gt;Example: set RAM[300] to D-1&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@300
-M = D-1  // D-1 is in the predefined comp as shown above
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Example: if D-1 == 0, jump to execute the instruction stored in ROM[56]&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@56         // A=56
-D-1; JEQ    // if D-1 == 0, goto 56
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JEQ&lt;/code&gt; checks if &lt;code class=&quot;highlighter-rouge&quot;&gt;comp&lt;/code&gt; equals 0, if yes then jump to address A (keep in mind that &lt;code class=&quot;highlighter-rouge&quot;&gt;jump&lt;/code&gt; aims at ROM addresses, not RAM). In this case, &lt;code class=&quot;highlighter-rouge&quot;&gt;comp&lt;/code&gt; is &lt;code class=&quot;highlighter-rouge&quot;&gt;D-1&lt;/code&gt;, so &lt;code class=&quot;highlighter-rouge&quot;&gt;JEQ&lt;/code&gt; checks if &lt;code class=&quot;highlighter-rouge&quot;&gt;D-1&lt;/code&gt; equals 0.&lt;/p&gt;
-
-&lt;p&gt;Example code:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@1
-M=A-1; JEQ
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;What does this do?&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@1&lt;/code&gt; sets A register to 1.&lt;/li&gt;
-  &lt;li&gt;Compute &lt;code class=&quot;highlighter-rouge&quot;&gt;comp&lt;/code&gt; which is &lt;code class=&quot;highlighter-rouge&quot;&gt;A-1&lt;/code&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;A-1&lt;/code&gt; equals 0.&lt;/li&gt;
-  &lt;li&gt;Then it stores the result 0 into the M register, RAM[1], because A is 1.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JEQ&lt;/code&gt; checks if &lt;code class=&quot;highlighter-rouge&quot;&gt;comp&lt;/code&gt; equals 0. Yes.&lt;/li&gt;
-  &lt;li&gt;The next instruction is ROM[1] because A is 1.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;We don’t need to remember all the possible values for the 3 registers. For details, check the &lt;a href=&quot;https://www.nand2tetris.org/&quot;&gt;website&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;hack-language-specification&quot;&gt;Hack language specification&lt;/h3&gt;
-
-&lt;p&gt;We have two ways of specifying machine language code, one in symbols and one in binary numbers. An &lt;em&gt;assembler&lt;/em&gt; can translate symbolic code into binary code.&lt;/p&gt;
-
-&lt;h4 id=&quot;a-instruction-specification&quot;&gt;A-instruction specification&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/ainst-binary.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;A-instruction has an “op code” (first bit in binary code) of 0 at the beginning of the binary code.&lt;/p&gt;
-
-&lt;h4 id=&quot;c-instruction-specification&quot;&gt;C-instruction specification&lt;/h4&gt;
-
-&lt;p&gt;C-instruction has an “op code” of 1, followed by 2 bits we don’t use. By convention we set them to 1.&lt;/p&gt;
-
-&lt;p&gt;Here is a table where we can convert symbols to binary codes.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/cinst-table.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;For example, if we want to convert &lt;code class=&quot;highlighter-rouge&quot;&gt;D+1&lt;/code&gt;, we find the symbol, it’s in the column &lt;code class=&quot;highlighter-rouge&quot;&gt;a=0&lt;/code&gt;, and has a value of &lt;code class=&quot;highlighter-rouge&quot;&gt;011111&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;So the &lt;code class=&quot;highlighter-rouge&quot;&gt;comp&lt;/code&gt; field &lt;code class=&quot;highlighter-rouge&quot;&gt;D+1&lt;/code&gt; is &lt;code class=&quot;highlighter-rouge&quot;&gt;1110011111&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;We also have a table for &lt;code class=&quot;highlighter-rouge&quot;&gt;dest&lt;/code&gt; the destination field.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/cinst-dest-table.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Similarly, we have a table for &lt;code class=&quot;highlighter-rouge&quot;&gt;jump&lt;/code&gt; values. Altogether we have everything in one slide here:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/cinst-table-full.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Finally, here is an example of a small Hack program and its translation to binary.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hacklang-ex.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;working-with-registers-and-memory-using-machine-language&quot;&gt;Working with registers and memory using machine language&lt;/h3&gt;
-
-&lt;h4 id=&quot;some-examples&quot;&gt;Some examples&lt;/h4&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// D=10
-@10     // There is no directive to directly set D=10. Set A=10 first
-D=A     // and set D=A
-
-// D++
-D=D+1   // This is easy
-
-// D = RAM[17]
-@17
-D=M
-
-// RAM[17] = D
-@17
-M=D
-
-// RAM[17] = 10
-@10
-D=A
-@17
-M=D
-
-// RAM[5] = RAM[3]
-@3
-D=M
-@5
-M=D
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Here’s another example:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackcode-ex.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Note that the white spaces are ignored, and each line of code has a line number in the background automatically.&lt;/p&gt;
-
-&lt;h4 id=&quot;how-to-terminate-the-program-properly&quot;&gt;How to terminate the program properly&lt;/h4&gt;
-
-&lt;p&gt;We haven’t talk about program termination. If we execute our code naively, a malicious hacker could add malicious code after our code to do bad things. It is called &lt;em&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/NOP_slide#:~:text=In%20computer%20security%2C%20a%20NOP,address%20anywhere%20on%20the%20slide.&quot;&gt;NOP slide&lt;/a&gt;&lt;/em&gt;, meaning they added null operations after the actual code and before the malicious code to hide the latter.&lt;/p&gt;
-
-&lt;p&gt;We use the fact that the computer never stands still and always executes something, &lt;strong&gt;we end the program with an infinite loop&lt;/strong&gt; so it is under our control. This is the best practice for program termination.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;...
-@6
-0; JMP
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;built-in-symbols&quot;&gt;Built-in symbols&lt;/h4&gt;
-
-&lt;p&gt;The Hack assembly language features &lt;em&gt;built-in symbols&lt;/em&gt; which are virtual registers, not real registers. The symbols are &lt;code class=&quot;highlighter-rouge&quot;&gt;R0, R1, R2, ... , R15&lt;/code&gt; and they correspond to values &lt;code class=&quot;highlighter-rouge&quot;&gt;0, 1, 2, ..., 15&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Why do we need these virtual registers?&lt;/p&gt;
-
-&lt;p&gt;It is purely for &lt;strong&gt;style and readability&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;For example,&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// RAM[5]=15
-@15
-D=A
-
-@5
-M=D
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The two &lt;code class=&quot;highlighter-rouge&quot;&gt;@x&lt;/code&gt; lines are intended to do completely different things. The first is to set A and then set D. The second is to get address 5 in RAM and store D there.&lt;/p&gt;
-
-&lt;p&gt;It means when we see &lt;code class=&quot;highlighter-rouge&quot;&gt;@x&lt;/code&gt; we don’t know what it wants to do until we see the next line of code. So we introduce &lt;code class=&quot;highlighter-rouge&quot;&gt;R5&lt;/code&gt;,&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// RAM[5]=15
-@15
-D=A
-
-@R5
-M=D
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;When we use &lt;code class=&quot;highlighter-rouge&quot;&gt;@R5&lt;/code&gt; it’s exactly the same as &lt;code class=&quot;highlighter-rouge&quot;&gt;@5&lt;/code&gt;, but it means finding the address 5 so that it’s more readable for people.&lt;/p&gt;
-
-&lt;p&gt;Here are all the built-in symbols:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/builtin-symbols.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;branching-variables-iteration-using-machine-language&quot;&gt;Branching, variables, iteration using machine language&lt;/h3&gt;
-
-&lt;h4 id=&quot;branching&quot;&gt;Branching&lt;/h4&gt;
-
-&lt;p&gt;In any high level language there are many branching mechanisms such as if-else, while, switch, etc. In machine language, there is only one: &lt;em&gt;goto&lt;/em&gt; using the &lt;code class=&quot;highlighter-rouge&quot;&gt;jump&lt;/code&gt; directives.&lt;/p&gt;
-
-&lt;p&gt;Example:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Program: signum.asm
-// Computes:
-//   if R0 &amp;gt; 0:
-//       R1 = 1
-//   else:
-//       R1 = 0
-
-@R0
-D=M  // D = RAM[0]
-
-@8
-D; JGT  // if R0 &amp;gt; 0, goto 8
-
-@R1
-M=0  // RAM[1] = 0
-@10
-0; JMP  // end of program
-
-@R1
-M=1  // R1=1
-
-@10
-0; JMP  // end of program
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;You can see this code is quite unreadable if there’s no comment or documentation. One thing we introduce to make it more readable is &lt;strong&gt;labels&lt;/strong&gt;. One example is shown below. &lt;code class=&quot;highlighter-rouge&quot;&gt;(POSITIVE)&lt;/code&gt; is a label that points to its next line. &lt;code class=&quot;highlighter-rouge&quot;&gt;@POSITIVE&lt;/code&gt; is using the label to &lt;em&gt;goto&lt;/em&gt; that line. This way we have a much more readable branching mechanism.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/goto-labels.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;variables&quot;&gt;Variables&lt;/h4&gt;
-
-&lt;p&gt;Say we want to exchange the values of R0 and R1:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Program: flip.asm
-// Flips the value of RAM[0] and RAM[1]
-
-// temp = R1
-// R1 = R0
-// R0 = temp
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The people who created the Assembler can define a contract: &lt;code class=&quot;highlighter-rouge&quot;&gt;@somevar&lt;/code&gt; with no label &lt;code class=&quot;highlighter-rouge&quot;&gt;(somevar)&lt;/code&gt; means it’s a variable, and it will use &lt;code class=&quot;highlighter-rouge&quot;&gt;RAM[program_base_address+16]&lt;/code&gt;. Any new variable will increment 16, i.e. use &lt;code class=&quot;highlighter-rouge&quot;&gt;+17&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;+18&lt;/code&gt;, etc.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/variables.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;iterations&quot;&gt;Iterations&lt;/h4&gt;
-
-&lt;p&gt;Suppose we want to compute &lt;code class=&quot;highlighter-rouge&quot;&gt;1+2+...+n&lt;/code&gt;, we need an accumulator variable and an iteration in a high level language. The machine code is shown below:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/iterations.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;pointers&quot;&gt;Pointers&lt;/h3&gt;
-
-&lt;p&gt;From the machine’s perspective, an array is just a block of memory that starts at a certain base memory location with a certain length. The following example is to set -1 into the array.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/array-1.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;First we set 2 variables, the base memory location &lt;code class=&quot;highlighter-rouge&quot;&gt;arr&lt;/code&gt; and length &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;. Then we set the variable &lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt;. To achieve &lt;code class=&quot;highlighter-rouge&quot;&gt;RAM[arr+i] = -1&lt;/code&gt;, we set register A to be &lt;code class=&quot;highlighter-rouge&quot;&gt;D+M&lt;/code&gt;. This is the first time we set A using an arithmetic operation.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/pointers.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Variables that store memory addresses like &lt;code class=&quot;highlighter-rouge&quot;&gt;arr&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt; are called &lt;em&gt;pointers&lt;/em&gt;&lt;/strong&gt;. When we need to access memory using a pointer, we need an instruction like &lt;code class=&quot;highlighter-rouge&quot;&gt;A=M&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Typical pointer semantics: “set the address register to the content of some memory register”.&lt;/p&gt;
-
-&lt;h3 id=&quot;inputoutput-using-machine-language&quot;&gt;Input/Output using machine language&lt;/h3&gt;
-
-&lt;p&gt;The computer gets data from humans via input devices like the keyboard, and outputs to output devices like the display.&lt;/p&gt;
-
-&lt;p&gt;In high level languages such as Java and Python, we write code using input devices and the output devices give us the high level results such as text, graphics, audio and video. This is in the realm of &lt;strong&gt;software hierarchy&lt;/strong&gt; and isn’t the focus now. Now we focus on the hardware hierarchy.&lt;/p&gt;
-
-&lt;p&gt;All the high level functionalities depend on the low level operations on bits.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/io-illustration.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;screen-output&quot;&gt;Screen output&lt;/h4&gt;
-
-&lt;p&gt;There is a part in RAM that’s called the &lt;strong&gt;Screen Memory Map&lt;/strong&gt; which refreshes many times per second. It directly controls the display on the screen. When we need to display something, we manipulate this part of the memory.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/screenmemomap.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The Hack computer assumes a physical screen of 256x512 pixels black and white. In the memory, we use a chunk of 16-bit registers to represent this pixel matrix.&lt;/p&gt;
-
-&lt;p&gt;Since one &lt;em&gt;word&lt;/em&gt; is 16-bit, and one row in the screen is 512 pixels, we need &lt;code class=&quot;highlighter-rouge&quot;&gt;512/16=32&lt;/code&gt; words to represent a row. Doing some math we can calculate the memory address of each pixel.&lt;/p&gt;
-
-&lt;p&gt;Note that the whole screen memory chunk resides inside the big RAM and it has a starting address. We use a chip &lt;code class=&quot;highlighter-rouge&quot;&gt;Screen[]&lt;/code&gt; to add the starting base address to the pixel coordinates to get the actual memory address.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/scrmap.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;You might be shocked how much work we need to do just to manipulate one pixel. That’s the reality at low level!&lt;/p&gt;
-
-&lt;h4 id=&quot;keyboard-input&quot;&gt;Keyboard input&lt;/h4&gt;
-
-&lt;p&gt;A physical keyboard is connected to the Keyboard Memory Map in RAM. The good thing is that &lt;strong&gt;we only need one 16-bit register to represent the keyboard&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/keyboardmemmap.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Each key has a binary &lt;strong&gt;scan code&lt;/strong&gt; that goes into the keyboard memory map. If the keyboard is not pressed, the scan code is 0.&lt;/p&gt;
-
-&lt;p&gt;To see what key is pressed, just probe the keyboard chip. In the Hack computer, the keyboard memory map is at RAM[24576].&lt;/p&gt;
-
-&lt;p&gt;Here is a complete scan code mapping for the Hack computer keyboard:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/scancode.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Notice that the keyboard memory map has 16 bits, it can represent $2^{16}=65536$ different keys which is more than enough even for unicode characters.&lt;/p&gt;
-
-&lt;h4 id=&quot;draw-a-rectangle-with-hack-programming&quot;&gt;Draw a rectangle with Hack programming&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/inputoutputhack.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Let’s consider the “hello world” program of computer graphics: drawing a rectangle.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/drawrec.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Let’s focus on the pseudocode. The goal is to manipulate the Screen Memory Map to show the rectangle.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/recpseudo.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The following is the real Hack code&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/reccode.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;compiler-translates-high-level-language-to-machine-code&quot;&gt;Compiler: translates high level language to machine code&lt;/h3&gt;
-
-&lt;p&gt;This is &lt;em&gt;From NAND to TETRIS part I&lt;/em&gt; and we don’t concern ourselves with the compiler which translates a high level language to machine code. In part II, there’s material showing how to write a compiler and an operating system.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/compiler.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;comments&quot;&gt;Comments&lt;/h3&gt;
-
-&lt;p&gt;Hack is a simplified version of the machine language. The machine language that controls our day-to-day personal computers is more complex and has more features such as floating point arithmetic. However, we can always use software to expand the capabilities of the machine language, and that is in the part II of &lt;em&gt;From NAND to TETRIS&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://blog.logancyang.com/note/compsci/2020/07/04/computer-architecture-101-part-iii.html&quot;&gt;Go to Part III&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.coursera.org/learn/build-a-computer&quot;&gt;Coursera From NAND To TETRIS&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Continuing the discussion through abstraction level 1-3 in the last post, we look at level 4: machine language in detail in this post.</summary></entry><entry><title type="html">[Python Review] Part II: Classes and Objects</title><link href="http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii.html" rel="alternate" type="text/html" title="[Python Review] Part II: Classes and Objects" /><published>2020-06-30T00:00:00-05:00</published><updated>2020-06-30T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii.html">&lt;h2 id=&quot;class-and-object-basics&quot;&gt;Class and object basics&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Generators</summary></entry><entry><title type="html">[Python Review] Part II: Classes and Objects</title><link href="http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii.html" rel="alternate" type="text/html" title="[Python Review] Part II: Classes and Objects" /><published>2020-06-30T00:00:00-05:00</published><updated>2020-06-30T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/06/30/python-basics-ii.html">&lt;h2 id=&quot;class-and-object-basics&quot;&gt;Class and object basics&lt;/h2&gt;
 
 &lt;h3 id=&quot;overriding&quot;&gt;Overriding&lt;/h3&gt;
 
@@ -3359,778 +3416,4 @@ Notice, s.cost does not need ()
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Class and object basics</summary></entry><entry><title type="html">[Python Review] Part I: The Basics</title><link href="http://blog.logancyang.com/note/python/2020/06/29/python-basics.html" rel="alternate" type="text/html" title="[Python Review] Part I: The Basics" /><published>2020-06-29T00:00:00-05:00</published><updated>2020-06-29T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/06/29/python-basics</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/06/29/python-basics.html">&lt;h2 id=&quot;string-methods&quot;&gt;String methods&lt;/h2&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endswith&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;suffix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;# Check if string ends with suffix
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;              &lt;span class=&quot;c1&quot;&gt;# First occurrence of t in s
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;             &lt;span class=&quot;c1&quot;&gt;# First occurrence of t in s
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isalpha&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;# Check if characters are alphabetic
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isdigit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;# Check if characters are numeric
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;islower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;# Check if characters are lower-case
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isupper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;# Check if characters are upper-case
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;slist&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;          &lt;span class=&quot;c1&quot;&gt;# Join a list of strings using s as delimiter
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;              &lt;span class=&quot;c1&quot;&gt;# Convert to lower case
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;old&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;# Replace text
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rfind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;             &lt;span class=&quot;c1&quot;&gt;# Search for t from end of string
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rindex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;# Search for t from end of string
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;delim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;       &lt;span class=&quot;c1&quot;&gt;# Split string into list of substrings
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;startswith&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prefix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;# Check if string starts with prefix
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;              &lt;span class=&quot;c1&quot;&gt;# Strip leading/trailing space
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;upper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;              &lt;span class=&quot;c1&quot;&gt;# Convert to upper case
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Strings are immutable. &lt;strong&gt;All operations and methods that manipulate string data, always create new strings.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;byte-strings&quot;&gt;Byte strings&lt;/h3&gt;
-
-&lt;p&gt;A string of 8-bit bytes, commonly encountered with low-level I/O:&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Hello World&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\r\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;                         &lt;span class=&quot;c1&quot;&gt;# 13
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;                         &lt;span class=&quot;c1&quot;&gt;# b'Hello'
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Hello'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Cruel'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# b'Cruel World\r\n'
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;# 72 (ASCII code for 'H')
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;decode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'utf-8'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# bytes -&amp;gt; text
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'utf-8'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# text -&amp;gt; bytes
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The ‘utf-8’ argument specifies a character encoding. Other common values include ‘ascii’ and ‘latin1’.&lt;/p&gt;
-
-&lt;p&gt;Another example for handling Chinese unicode characters:&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;u'好'&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# 好
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;utf-8&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# unicode str to byte str. &quot;utf-8&quot; is default
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# b'\xe5\xa5\xbd'
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;decode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# byte str to unicode str Chinese
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# 好
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;For full details. check out this &lt;a href=&quot;https://realpython.com/python-encodings-guide/#encoding-and-decoding-in-python-3&quot;&gt;article&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;raw-strings&quot;&gt;Raw strings&lt;/h3&gt;
-
-&lt;p&gt;Raw strings are string literals with an uninterpreted backslash.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;r'c:\newdata\test'&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# Raw (uninterpreted backslash)
-&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rs&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;'c:&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;newdata&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;test'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The string is the literal text enclosed inside, exactly as typed. This is useful in situations where the backslash has special significance. Example: filename, regular expressions, etc.&lt;/p&gt;
-
-&lt;h3 id=&quot;f-strings-python36-or-newer&quot;&gt;f-Strings (python3.6 or newer)&lt;/h3&gt;
-
-&lt;p&gt;A string with formatted expression substitution.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'IBM'&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shares&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;price&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;91.1&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'{name:&amp;gt;10s} {shares:10d} {price:10.2f}'&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;'       IBM        100      91.10'&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Cost = ${shares*price:0.2f}'&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
-&lt;span class=&quot;s&quot;&gt;'Cost = $9110.00'&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Formatting&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;d       Decimal integer
-b       Binary integer
-x       Hexadecimal integer
-f       Float as [-]m.dddddd
-e       Float as [-]m.dddddde+-xx
-g       Float, but selective use of E notation s String
-c       Character (from integer)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Common modifiers&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;:&amp;gt;10d   Integer right aligned in 10-character field
-:&amp;lt;10d   Integer left aligned in 10-character field
-:^10d   Integer centered in 10-character field
-:0.2f   Float with 2 digit precision
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;some-tips-on-lists&quot;&gt;Some tips on lists&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;l.sort()&lt;/code&gt; sorts &lt;code class=&quot;highlighter-rouge&quot;&gt;l&lt;/code&gt; in-place and doesn’t return anything. &lt;code class=&quot;highlighter-rouge&quot;&gt;sorted(l)&lt;/code&gt; keeps &lt;code class=&quot;highlighter-rouge&quot;&gt;l&lt;/code&gt; unchanged and returns a new list.&lt;/p&gt;
-
-&lt;p&gt;Sort by descending order: &lt;code class=&quot;highlighter-rouge&quot;&gt;l.sort(reverse=True)&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Lists have builtin method &lt;code class=&quot;highlighter-rouge&quot;&gt;l.count()&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Caution: Be cautious whenever doing something like &lt;code class=&quot;highlighter-rouge&quot;&gt;l = [obj] * 5&lt;/code&gt;. This means this list has 5 of the same object. Once &lt;code class=&quot;highlighter-rouge&quot;&gt;obj&lt;/code&gt; is updated, all the elements in the list are updated.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;enumerate&lt;/code&gt;: use &lt;code class=&quot;highlighter-rouge&quot;&gt;enumerate&lt;/code&gt; more in loops, it gets the index and the item.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;names&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Elwood'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'Jake'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'Curtis'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;enumerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# Loops with i = 0, name = 'Elwood'
-&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;# i = 1, name = 'Jake'
-&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;# i = 2, name = 'Curtis'
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;enumerate(sequence [, start = 0])&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;start&lt;/code&gt; is optional. Example: &lt;code class=&quot;highlighter-rouge&quot;&gt;for lineno, line in enumerate(f, start=1):...&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;files-common-idioms&quot;&gt;Files: common idioms&lt;/h2&gt;
-
-&lt;p&gt;Read an entire file all at once as a string.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'foo.txt'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'rt'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# `data` is a string with all the text in `foo.txt`
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Read a file line-by-line by iterating.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'rt'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;# Process the line
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Write a file,&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'outfile'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'wt'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Hello World&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Redirect the print function,&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'outfile'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'wt'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Hello World'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;catching-and-handling-exceptions&quot;&gt;Catching and handling exceptions&lt;/h2&gt;
-
-&lt;p&gt;Exceptions can be caught and handled.&lt;/p&gt;
-
-&lt;p&gt;To catch, use the &lt;code class=&quot;highlighter-rouge&quot;&gt;try - except&lt;/code&gt; statement.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;fields&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;shares&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fields&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;ValueError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Couldn't parse&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;It is often difficult to know exactly what kinds of errors might occur in advance depending on the operation being performed. For better or for worse, exception handling often gets added after a program has unexpectedly crashed (i.e., “oh, we forgot to catch that error. We should handle that!”).&lt;/p&gt;
-
-&lt;p&gt;To raise an exception, use the &lt;code class=&quot;highlighter-rouge&quot;&gt;raise&lt;/code&gt; statement.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;RuntimeError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'What a kerfuffle'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This will cause the program to abort with an exception traceback. Unless caught by a try-except block.&lt;/p&gt;
-
-&lt;h2 id=&quot;data-structures&quot;&gt;Data structures&lt;/h2&gt;
-
-&lt;p&gt;Tuples look like read-only lists. However, tuples are most often used for a single item consisting of multiple parts. Lists are usually a collection of distinct items, usually all of the same type.&lt;/p&gt;
-
-&lt;p&gt;A dictionary is mapping of keys to values. It’s also sometimes called a hash table or associative array.&lt;/p&gt;
-
-&lt;p&gt;To delete a value in a dictionary, use the &lt;code class=&quot;highlighter-rouge&quot;&gt;del&lt;/code&gt; statement. &lt;code class=&quot;highlighter-rouge&quot;&gt;del s['date']&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Set default value if key doesn’t exist.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;default&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Dict and set are both unordered.&lt;/p&gt;
-
-&lt;h2 id=&quot;collections&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;collections&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;There’s &lt;a href=&quot;https://docs.python.org/3/library/collections.html&quot;&gt;collections&lt;/a&gt; which has&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ChainMap, namedtuple, deque, Counter,
-OrderedDict, defaultdict, UserDict, UserList, UserString
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;counter-counting-into-buckets&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Counter&lt;/code&gt;: Counting into buckets&lt;/h3&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;portfolio&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'GOOG'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;490.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'IBM'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;91.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'CAT'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;150&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;83.44&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'IBM'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;45.23&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'GOOG'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;75&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;572.45&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'AA'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;23.15&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;collections&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Counter&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;total_shares&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Counter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shares&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;price&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;portfolio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;total_shares&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shares&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;total_shares&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'IBM'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;# 150
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;one-many-mapping-defaultdict&quot;&gt;One-many mapping: &lt;code class=&quot;highlighter-rouge&quot;&gt;defaultdict&lt;/code&gt;&lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;defaultdict&lt;/code&gt; ensures that every time you access a key you get a default value.&lt;/p&gt;
-
-&lt;p&gt;If we want to group the following list of tuples into key value pairs where key is &lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt; and value is a list of &lt;code class=&quot;highlighter-rouge&quot;&gt;(share, price)&lt;/code&gt; tuples and default to an empty list, we do the following.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;portfolio&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'GOOG'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;490.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'IBM'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;91.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'CAT'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;150&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;83.44&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'IBM'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;45.23&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'GOOG'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;75&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;572.45&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'AA'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;23.15&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;collections&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultdict&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;holdings&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultdict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shares&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;price&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;portfolio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;holdings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shares&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;price&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;holdings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'IBM'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# [ (50, 91.1), (100, 45.23) ]
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;deque-queue-and-stack&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;deque&lt;/code&gt;: queue and stack&lt;/h3&gt;
-
-&lt;p&gt;Problem: keep the last N elements.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;collections&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deque&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;history&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deque&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;maxlen&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;N&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;history&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;zip-function&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;zip&lt;/code&gt; function&lt;/h2&gt;
-
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;zip&lt;/code&gt; function takes &lt;strong&gt;multiple sequences&lt;/strong&gt; and makes an iterator that combines them.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;columns&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'name'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'shares'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'price'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'GOOG'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;490.1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;pairs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;zip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;columns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# ('name','GOOG'), ('shares',100), ('price',490.1)
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;To get the result you must iterate. You can use multiple variables to unpack the tuples as shown earlier.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;column&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pairs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;A common use of zip is to create key/value pairs for constructing dictionaries.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;zip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;columns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;object-model&quot;&gt;Object model&lt;/h2&gt;
-
-&lt;p&gt;In Python, everything is an object. There’s danger dealing with mutable objects.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Assignment operations never make a copy of the value being assigned. All assignments are merely reference copies (or pointer copies if you prefer).&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Remember: &lt;strong&gt;Variables are names, not memory locations&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;identity-and-references&quot;&gt;Identity and References&lt;/h3&gt;
-
-&lt;p&gt;Use the &lt;code class=&quot;highlighter-rouge&quot;&gt;is&lt;/code&gt; operator to check if two values are exactly the same object.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
-&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;is&lt;/code&gt; compares the object identity (an integer). The identity can be obtained using &lt;code class=&quot;highlighter-rouge&quot;&gt;id()&lt;/code&gt;.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;3588944&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;3588944&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;shallow-copies-beware&quot;&gt;Shallow copies: beware!&lt;/h3&gt;
-
-&lt;p&gt;Lists and dicts have methods for copying.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;101&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# Make a copy
-&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
-&lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;It’s a new list, but the list &lt;strong&gt;items are shared&lt;/strong&gt;!!&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;102&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;101&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;102&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/misc/pyshallowcopy.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;deep-copies&quot;&gt;Deep copies&lt;/h3&gt;
-
-&lt;p&gt;Sometimes you need to &lt;strong&gt;make a copy of an object and all the objects contained within it&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;You can use the &lt;code class=&quot;highlighter-rouge&quot;&gt;copy&lt;/code&gt; module for this: &lt;code class=&quot;highlighter-rouge&quot;&gt;copy.deepcopy()&lt;/code&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;101&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;copy&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;copy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deepcopy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;102&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;101&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;type-checking&quot;&gt;Type checking&lt;/h3&gt;
-
-&lt;p&gt;How to tell if an object is a specific type.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;isinstance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'a is a list'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Checking for one of many possible types.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;isinstance&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;tuple&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'a is a list or tuple'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;em&gt;Caution: Don’t go overboard with type checking. It can lead to excessive code complexity. Usually you’d only do it if doing so would prevent common mistakes made by others using your code.&lt;/em&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;everything-is-an-object&quot;&gt;Everything is an object&lt;/h3&gt;
-
-&lt;p&gt;Numbers, strings, lists, functions, exceptions, classes, instances, etc. are all objects.&lt;/p&gt;
-
-&lt;p&gt;It means that all objects that can be named can be passed around as data, placed in containers, etc., without any restrictions.&lt;/p&gt;
-
-&lt;p&gt;There are no special kinds of objects. Sometimes it is said that all objects are “first-class”.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;math&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;items&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;abs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;math&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;ValueError&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;built&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;abs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'math'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;builtin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'exceptions.ValueError'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;](&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;45&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;45&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sqrt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;mf&quot;&gt;1.4142135623730951&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'not a number'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Failed!'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Failed&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;!&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;program-organization&quot;&gt;Program organization&lt;/h2&gt;
-
-&lt;h3 id=&quot;function-best-practices&quot;&gt;Function best practices&lt;/h3&gt;
-
-&lt;p&gt;Define functions at the top of a script, put all of the code related to a single task all in one function.&lt;/p&gt;
-
-&lt;p&gt;Functions need to be modular and predictable.&lt;/p&gt;
-
-&lt;p&gt;Write docstring, describe what the function does in one sentence, and add information per argument.&lt;/p&gt;
-
-&lt;p&gt;Add optional &lt;strong&gt;type hints&lt;/strong&gt; to function definitions.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;read_prices&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;'''
-    Read prices from a CSV file of name,price data
-    '''&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;prices&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;f_csv&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;csv&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reader&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;row&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f_csv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;prices&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;float&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prices&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;These type hints do nothing operationally. Yet IDEs can use them to give hints.&lt;/p&gt;
-
-&lt;p&gt;When calling a function with optional arguments, use keywords instead of just True or False.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;parse_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# ????? NO
-&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;parse_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ignore_errors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;parse_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;debug&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;parse_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;debug&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ignore_errors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Always give short but meaningful names.&lt;/p&gt;
-
-&lt;p&gt;Regarding variable scope, &lt;strong&gt;remember: All assignments in functions are local.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;If you must update a global variable, use the &lt;code class=&quot;highlighter-rouge&quot;&gt;global&lt;/code&gt; keyword.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'Dave'&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;spam&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;global&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'Guido'&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# Changes the global name above
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;Actually, avoid global variable entirely if you can. If you want to modify a state outside of a function, use a class instead.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Arguments passed into functions are references. &lt;strong&gt;If a mutable object get passed in and you use its method to modify it, it will be modified in-place&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;But keep in mind, reassignment to an old variable name inside a function only modifies the name in the local scope, it doesn’t change the original object:&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;42&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;# Modifies the input object in-place because .append()
-&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;                &lt;span class=&quot;c1&quot;&gt;# [1, 2, 3, 42]
-&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# VS
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;items&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;# Changes local `items` variable to point to a different object
-&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;                &lt;span class=&quot;c1&quot;&gt;# [1, 2, 3]
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;error-handling&quot;&gt;Error handling&lt;/h3&gt;
-
-&lt;p&gt;Python doesn’t check data type or values, if there’s any error, it will appear at run time as an exception.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# raise
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;authenticate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authorized&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;RuntimeError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'{name} not authorized'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# try - except
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;authenticate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;RuntimeError&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# error msg f'{name} not authorized' is in `e`
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# HANDLE THE EXCEPTION HERE!!!
-&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;statements&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# Resumes execution here after handling exception
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;statements&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# And continues here
-&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Some Python builtin exceptions for indicating what is wrong:&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;ArithmeticError&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;AssertionError&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;EnvironmentError&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;EOFError&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;ImportError&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;IndexError&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;KeyboardInterrupt&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;KeyError&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;MemoryError&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;NameError&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;ReferenceError&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;RuntimeError&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;SyntaxError&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;SystemError&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;TypeError&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;ValueError&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Handling multiple errors in different ways:&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;LookupError&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;RuntimeError&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;IOError&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;KeyboardInterrupt&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Grouping them and handle the same way:&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;IOError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;LookupError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;RuntimeError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;To catch all errors:&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Exception&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;       &lt;span class=&quot;c1&quot;&gt;# DANGER. See below
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'An error occurred'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;This is a bad idea because you’ll have no idea why it failed.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Recommended approach: &lt;code class=&quot;highlighter-rouge&quot;&gt;as e&lt;/code&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;go_do_something&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SomeSpecificException&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Computer says no. Reason :'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Using &lt;code class=&quot;highlighter-rouge&quot;&gt;raise&lt;/code&gt; allows you to take action (e.g. logging) and pass the exception to the caller.&lt;/p&gt;
-
-&lt;p&gt;The finally clause:&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;lock&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Lock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;lock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;acquire&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;finally&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;lock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;release&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# this will ALWAYS be executed. With and w/o exception.
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Finally is commonly used to safely manage resources (especially locks, files, etc.).&lt;/p&gt;
-
-&lt;p&gt;However, the best practice is to use &lt;code class=&quot;highlighter-rouge&quot;&gt;with&lt;/code&gt; and avoid this approach.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;lock&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Lock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# lock acquired
-&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# lock released
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;modules&quot;&gt;Modules&lt;/h3&gt;
-
-&lt;p&gt;Any &lt;code class=&quot;highlighter-rouge&quot;&gt;.py&lt;/code&gt; file is a module. The &lt;code class=&quot;highlighter-rouge&quot;&gt;import&lt;/code&gt; statement loads and executes a module.&lt;/p&gt;
-
-&lt;p&gt;A module is a collection of named values and is sometimes said to be a &lt;strong&gt;namespace&lt;/strong&gt;. The names are all of the &lt;strong&gt;global variables&lt;/strong&gt; and &lt;strong&gt;functions&lt;/strong&gt; defined in the source file. After importing, the module name is used as a prefix. Hence the namespace.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;foo&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grok&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;spam&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Hello'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;The module name is directly tied to the file name (foo -&amp;gt; foo.py).&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Modules are isolated. &lt;code class=&quot;highlighter-rouge&quot;&gt;foo.x&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;bar.x&lt;/code&gt; are different:&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# foo.py
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;42&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# bar.py
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;37&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Global variables are always bound to the enclosing module (same file). Each source file is its own little universe.&lt;/p&gt;
-
-&lt;h4 id=&quot;module-execution&quot;&gt;Module execution&lt;/h4&gt;
-
-&lt;p&gt;When a module is imported, &lt;strong&gt;all of the statements in the module execute one after another until the end of the file is reached&lt;/strong&gt;. The contents of the module namespace are all of the global names that are still defined at the end of the execution process. &lt;strong&gt;If there are scripting statements that carry out tasks in the global scope (printing, creating files, etc.) you will see them run on import.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;module-loading&quot;&gt;Module Loading&lt;/h4&gt;
-
-&lt;p&gt;Each module loads and executes &lt;strong&gt;only once&lt;/strong&gt;. Note: &lt;strong&gt;Repeated imports just return a reference to the previously loaded module&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;sys.modules&lt;/code&gt; is a &lt;code class=&quot;highlighter-rouge&quot;&gt;dict&lt;/code&gt; of all loaded modules.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sys&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;modules&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;keys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'copy_reg'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'site'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__builtin__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'encodings'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'encodings.encodings'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'posixpath'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;Caution&lt;/strong&gt;: A common confusion arises if you repeat an import statement after changing the source code for a module. &lt;strong&gt;Because of the module cache sys.modules, repeated imports always return the previously loaded module – &lt;em&gt;even if a change was made&lt;/em&gt;! The safest way to load modified code into Python is to quit and restart the interpreter/kernel!!&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;locating-modules&quot;&gt;Locating modules&lt;/h4&gt;
-
-&lt;p&gt;Python consults a path list (sys.path) when looking for modules. The current working directory is usually first.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sys&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;''&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;'/usr/local/lib/python36/python36.zip'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;'/usr/local/lib/python36'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;sys.path&lt;/code&gt; contains the &lt;strong&gt;search paths&lt;/strong&gt;. You can manually adjust if you need to:&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sys&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'/project/foo/pyfiles'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Paths can also be added via environment variables.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PYTHONPATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;project&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pyfiles&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;python3&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Python&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;3.6.0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;default&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Feb&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2017&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;05&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;53&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;21&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GCC&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;4.2.1&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Compatible&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Apple&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LLVM&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;8.0.0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clang&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;800.0.38&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sys&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;''&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'/project/foo/pyfiles'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;As a general rule, it should not be necessary to manually adjust the module search path. However, it sometimes arises if you’re trying to import Python code that’s in an unusual location or not readily accessible from the current working directory.&lt;/p&gt;
-
-&lt;h4 id=&quot;main-module&quot;&gt;Main module&lt;/h4&gt;
-
-&lt;p&gt;In many programming languages, there is a concept of a &lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt; function or method. This is the first function that executes when an application is launched.&lt;/p&gt;
-
-&lt;p&gt;Python has no main function or method. Instead, there is a &lt;strong&gt;main module&lt;/strong&gt;. &lt;strong&gt;The main module is the source file that runs first&lt;/strong&gt;. Whatever file you give to the interpreter at startup becomes main. It doesn’t matter the name.&lt;/p&gt;
-
-&lt;p&gt;Any Python file can either run as main or as a library import:&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;bash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;python3&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;py&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# Running as main
-&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;prog&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;# Running as library import
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;In both cases, &lt;code class=&quot;highlighter-rouge&quot;&gt;__name__&lt;/code&gt; is the name of the module. However, it will only be set to &lt;code class=&quot;highlighter-rouge&quot;&gt;__main__&lt;/code&gt; if running as main.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Usually, you don’t want statements that are part of the main program to execute on a library import&lt;/strong&gt;. So, it’s common to have an &lt;code class=&quot;highlighter-rouge&quot;&gt;if&lt;/code&gt;-check in code that might be used either way.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# prog.py
-&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# Running as the main program ...
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;statements&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Here is common Python program template:&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# prog.py
-# Import statements (libraries)
-&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;modules&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# Functions
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;spam&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;blah&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# Main function
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;When used as a CLI tool, like &lt;code class=&quot;highlighter-rouge&quot;&gt;bash % python report.py portfolio.csv prices.csv&lt;/code&gt;, the list of arguments is in &lt;code class=&quot;highlighter-rouge&quot;&gt;sys.argv&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# In the previous bash command
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# ['report.py, 'portfolio.csv', 'prices.csv']
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;sys.stdout&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;sys.stderr&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;sys.stdin&lt;/code&gt; are files that work the same way as normal files. By default, print is directed to &lt;code class=&quot;highlighter-rouge&quot;&gt;sys.stdout&lt;/code&gt;. Input is read from &lt;code class=&quot;highlighter-rouge&quot;&gt;sys.stdin&lt;/code&gt;. Tracebacks and errors are directed to &lt;code class=&quot;highlighter-rouge&quot;&gt;sys.stderr&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;stdio&lt;/code&gt; could be connected to terminals, files, pipes, etc.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bash % python3 prog.py &amp;gt; results.txt
-# or
-bash % cmd1 | python3 prog.py | cmd2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;environment-variables&quot;&gt;Environment variables&lt;/h4&gt;
-
-&lt;p&gt;Environment variables are set in the shell.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bash % setenv NAME dave
-bash % setenv RSH ssh
-bash % python prog.py
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;os.environ&lt;/code&gt; is a dictionary that contains these values.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;os&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;environ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'NAME'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# 'dave'
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;program-exit&quot;&gt;Program Exit&lt;/h4&gt;
-
-&lt;p&gt;Program exit is handled through exceptions. A non-zero exit code indicates an error.&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;SystemExit&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;SystemExit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exitcode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;SystemExit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Informative message'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# Or
-&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sys&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exitcode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;the--line&quot;&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;!#&lt;/code&gt; line&lt;/h4&gt;
-
-&lt;p&gt;On Unix, the &lt;code class=&quot;highlighter-rouge&quot;&gt;#!&lt;/code&gt; shebang line can launch a script as Python. Add the following to the first line of your script file.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#!/usr/bin/env python3
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;It requires the executable permission.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bash % chmod +x prog.py
-# Then you can execute
-bash % prog.py
-... output ...
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;em&gt;Note: The Python Launcher on Windows also looks for the #! line to indicate language version.&lt;/em&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;design-generic-and-flexible-functions-duck-typing&quot;&gt;Design generic and flexible functions: Duck Typing&lt;/h3&gt;
-
-&lt;p&gt;Compare the following two versions of a function&lt;/p&gt;
-
-&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# VERSION 1
-# Provide a filename
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;read_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;records&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;records&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;records&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;read_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'file.csv'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# VERSION 2
-# Provide lines
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;read_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lines&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;records&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lines&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;records&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;records&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'file.csv'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;read_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Version 2 is better because it’s more generic, it takes in any iterable.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Duck_typing&quot;&gt;Duck Typing&lt;/a&gt; is a computer programming concept to determine whether an object can be used for a particular purpose. It is an application of the duck test.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Code libraries are often better served by embracing flexibility. Don’t restrict your options. With great flexibility comes great power.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">String methods</summary></entry></feed>
+&lt;p&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Class and object basics</summary></entry></feed>

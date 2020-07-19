@@ -169,7 +169,9 @@ window.onload = wrap_img;
 
 <p>Note: <code class="highlighter-rouge">CONTAINER_ID</code> can be <code class="highlighter-rouge">CONTAINER_NAME</code> in all the commands here.</p>
 
-<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run &lt;IMAGE_NAME&gt;:&lt;TAG&gt;  <span class="c"># run in foreground</span>
+<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build <span class="nb">.</span> <span class="nt">-t</span> &lt;IMAGE_NAME&gt;
+
+docker run &lt;IMAGE_NAME&gt;:&lt;TAG&gt;  <span class="c"># run in foreground</span>
 docker run <span class="nt">-d</span> &lt;IMAGE_NAME&gt;:&lt;TAG&gt;  <span class="c"># run in background</span>
 docker run <span class="nt">-it</span> &lt;IMAGE_NAME&gt;:&lt;TAG&gt;  <span class="c"># run in interactive mode</span>
 

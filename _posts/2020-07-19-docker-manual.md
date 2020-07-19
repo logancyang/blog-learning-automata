@@ -12,6 +12,8 @@ comments: true
 Note: `CONTAINER_ID` can be `CONTAINER_NAME` in all the commands here.
 
 ```zsh
+docker build . -t <IMAGE_NAME>
+
 docker run <IMAGE_NAME>:<TAG>  # run in foreground
 docker run -d <IMAGE_NAME>:<TAG>  # run in background
 docker run -it <IMAGE_NAME>:<TAG>  # run in interactive mode

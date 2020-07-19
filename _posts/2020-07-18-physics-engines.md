@@ -55,6 +55,101 @@ One weird thing that could happen is, if you have a very thin ground or boundary
 
 Another common pitfall with physics engine is that you can't assign a body's property such as angle directly, you can only set it at the time of instantiation. Because angle is a result of the laws of physics after you create the object. When you directly assign it, you violate the law of physics.
 
+Here's an example that lets you create dropping circles by dragging the mouse, written in ES5.
+
+```js
+function Boundary(x, y, w, h, a) {
+  var options = {
+    friction: 0,
+    restitution: 0.95,
+    angle: a,
+    isStatic: true
+  };
+  this.body = Bodies.rectangle(x, y, w, h, options);
+  this.w = w;
+  this.h = h;
+  World.add(world, this.body);
+  console.log(this.body);
+
+  this.show = function() {
+    var pos = this.body.position;
+    var angle = this.body.angle;
+    push();
+    translate(pos.x, pos.y);
+    rotate(angle);
+    rectMode(CENTER);
+    strokeWeight(1);
+    noStroke();
+    fill(0);
+    rect(0, 0, this.w, this.h);
+    pop();
+  };
+}
+
+function Circle(x, y, r) {
+  var options = {
+    friction: 0,
+    restitution: 0.95
+  };
+  this.body = Bodies.circle(x, y, r, options);
+  this.r = r;
+  World.add(world, this.body);
+
+  this.show = function() {
+    var pos = this.body.position;
+    var angle = this.body.angle;
+    push();
+    translate(pos.x, pos.y);
+    rotate(angle);
+    rectMode(CENTER);
+    strokeWeight(1);
+    stroke(255);
+    fill(127);
+    ellipse(0, 0, this.r * 2);
+    pop();
+  };
+}
+
+// sketch.js
+
+var Engine = Matter.Engine,
+  // Render = Matter.Render,
+  World = Matter.World,
+  Bodies = Matter.Bodies;
+
+var engine;
+var world;
+var circles = [];
+var boundaries = [];
+
+var ground;
+
+function setup() {
+  createCanvas(400, 400);
+  engine = Engine.create();
+  world = engine.world;
+  //Engine.run(engine);
+
+  boundaries.push(new Boundary(150, 100, width * 0.6, 20, 0.3));
+  boundaries.push(new Boundary(250, 300, width * 0.6, 20, -0.3));
+}
+
+function mouseDragged() {
+  circles.push(new Circle(mouseX, mouseY, random(5, 10)));
+}
+
+function draw() {
+  background(51);
+  Engine.update(engine);
+  for (var i = 0; i < circles.length; i++) {
+    circles[i].show();
+  }
+  for (var i = 0; i < boundaries.length; i++) {
+    boundaries[i].show();
+  }
+}
+```
+
 ## Reference
 
 - The Coding Train [videos](https://youtu.be/urR596FsU68)

@@ -1,7 +1,7 @@
 ---
 toc: true
 layout: post
-description: Nature of Code note series
+description: DevOps note series
 categories: [note, docker, devops]
 title: "Docker Manual"
 comments: true
@@ -176,7 +176,15 @@ In this case, `docker run ubuntu-sleeper 10` will override `5`. And without any 
 
 ## Docker Compose with YAML
 
-If we need to run multiple services (mutiple `docker run` commands at the same time and `--link` them together), we can use a `docker-compose.yml` file that looks something like:
+If we need to run multiple services (mutiple `docker run` commands at the same time and `--link` them together), we can use `docker-compose`.
+
+Using Compose is basically a three-step process:
+
+1. Define your app’s environment with a `Dockerfile` so it can be reproduced anywhere.
+2. Define the services that make up your app in `docker-compose.yml` so they can be run together in an isolated environment.
+3. Run `docker-compose up` and Compose starts and runs your entire app.
+
+A `docker-compose.yml` file that looks something like:
 
 ```
 services:
@@ -189,8 +197,6 @@ services:
     orchestration:
         image: "ansible"
 ```
-
-This way, instead of using Dockerfile, we use `docker-compose.yml` to build our images.
 
 Consider this app that has
 
@@ -221,3 +227,20 @@ For a more advanced setting, we can separate the front end and back end networks
 <img src="{{ site.baseurl }}/images/misc/docker-networks.png" alt="docker networks" align="middle"/>
 
 ([YAML course](https://kodekloud.com/p/json-path-quiz))
+
+## Docker registry
+
+
+## Docker engine, storage, and networking
+
+
+## Docker on Mac and Windows
+
+
+## Container orchestration - Docker Swarm and Kubernetes
+
+
+## Reference
+
+- [Udemy course](https://www.udemy.com/course/learn-docker/)
+

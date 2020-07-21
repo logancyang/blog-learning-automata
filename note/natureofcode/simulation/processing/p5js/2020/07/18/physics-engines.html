@@ -119,7 +119,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      3 min read
+      4 min read
     
 </span></p>
 
@@ -153,7 +153,12 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#when-to-use-a-physics-engine">When to use a physics engine</a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h2"><a href="#introduction-to-matterjs">Introduction to Matter.js</a></li>
+<li class="toc-entry toc-h2"><a href="#introduction-to-matterjs">Introduction to Matter.js</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#constraint">Constraint</a></li>
+<li class="toc-entry toc-h3"><a href="#mouseconstraint">MouseConstraint</a></li>
+</ul>
+</li>
 <li class="toc-entry toc-h2"><a href="#reference">Reference</a></li>
 </ul><p>This is the second note in the Nature of Code series. For how to create your own mini physics engine, checkout the previous <a href="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/03/13/nature-of-code-1.html">post</a>.</p>
 
@@ -211,48 +216,22 @@ etc.</li>
 
 <p>Another common pitfall with physics engine is that you can’t assign a body’s property such as angle directly, you can only set it at the time of instantiation. Because angle is a result of the laws of physics after you create the object. When you directly assign it, you violate the law of physics.</p>
 
-<p>Here’s an example that lets you create dropping circles by dragging the mouse, written in ES5.</p>
+<p>Here’s an example that lets you create dropping circles by dragging the mouse.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">Boundary</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="na">friction</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="na">restitution</span><span class="p">:</span> <span class="mf">0.95</span><span class="p">,</span>
-    <span class="na">angle</span><span class="p">:</span> <span class="nx">a</span><span class="p">,</span>
-    <span class="na">isStatic</span><span class="p">:</span> <span class="kc">true</span>
-  <span class="p">};</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">Bodies</span><span class="p">.</span><span class="nx">rectangle</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">w</span> <span class="o">=</span> <span class="nx">w</span><span class="p">;</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">h</span> <span class="o">=</span> <span class="nx">h</span><span class="p">;</span>
-  <span class="nx">World</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">world</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">Circle</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">friction</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="na">restitution</span><span class="p">:</span> <span class="mf">0.95</span>
+    <span class="p">};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">Bodies</span><span class="p">.</span><span class="nx">circle</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">r</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">r</span> <span class="o">=</span> <span class="nx">r</span><span class="p">;</span>
+    <span class="nx">World</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">world</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+  <span class="p">}</span>
 
-  <span class="k">this</span><span class="p">.</span><span class="nx">show</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">position</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">angle</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">angle</span><span class="p">;</span>
-    <span class="nx">push</span><span class="p">();</span>
-    <span class="nx">translate</span><span class="p">(</span><span class="nx">pos</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span>
-    <span class="nx">rotate</span><span class="p">(</span><span class="nx">angle</span><span class="p">);</span>
-    <span class="nx">rectMode</span><span class="p">(</span><span class="nx">CENTER</span><span class="p">);</span>
-    <span class="nx">strokeWeight</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-    <span class="nx">noStroke</span><span class="p">();</span>
-    <span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-    <span class="nx">rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">w</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">h</span><span class="p">);</span>
-    <span class="nx">pop</span><span class="p">();</span>
-  <span class="p">};</span>
-<span class="p">}</span>
-
-<span class="kd">function</span> <span class="nx">Circle</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="na">friction</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="na">restitution</span><span class="p">:</span> <span class="mf">0.95</span>
-  <span class="p">};</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">Bodies</span><span class="p">.</span><span class="nx">circle</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">r</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">r</span> <span class="o">=</span> <span class="nx">r</span><span class="p">;</span>
-  <span class="nx">World</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">world</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
-
-  <span class="k">this</span><span class="p">.</span><span class="nx">show</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">position</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">angle</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">angle</span><span class="p">;</span>
+  <span class="nx">show</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">pos</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">position</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">angle</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">angle</span><span class="p">;</span>
     <span class="nx">push</span><span class="p">();</span>
     <span class="nx">translate</span><span class="p">(</span><span class="nx">pos</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span>
     <span class="nx">rotate</span><span class="p">(</span><span class="nx">angle</span><span class="p">);</span>
@@ -262,28 +241,55 @@ etc.</li>
     <span class="nx">fill</span><span class="p">(</span><span class="mi">127</span><span class="p">);</span>
     <span class="nx">ellipse</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">r</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
     <span class="nx">pop</span><span class="p">();</span>
-  <span class="p">};</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nx">Boundary</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">friction</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="na">restitution</span><span class="p">:</span> <span class="mf">0.95</span><span class="p">,</span>
+      <span class="na">angle</span><span class="p">:</span> <span class="nx">a</span><span class="p">,</span>
+      <span class="na">isStatic</span><span class="p">:</span> <span class="kc">true</span>
+    <span class="p">};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">Bodies</span><span class="p">.</span><span class="nx">rectangle</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">w</span> <span class="o">=</span> <span class="nx">w</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">h</span> <span class="o">=</span> <span class="nx">h</span><span class="p">;</span>
+    <span class="nx">World</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">world</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="nx">show</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">pos</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">position</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">angle</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">angle</span><span class="p">;</span>
+    <span class="nx">push</span><span class="p">();</span>
+    <span class="nx">translate</span><span class="p">(</span><span class="nx">pos</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span>
+    <span class="nx">rotate</span><span class="p">(</span><span class="nx">angle</span><span class="p">);</span>
+    <span class="nx">rectMode</span><span class="p">(</span><span class="nx">CENTER</span><span class="p">);</span>
+    <span class="nx">strokeWeight</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="nx">noStroke</span><span class="p">();</span>
+    <span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="nx">rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">w</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">h</span><span class="p">);</span>
+    <span class="nx">pop</span><span class="p">();</span>
+  <span class="p">}</span>
 <span class="p">}</span>
 
 <span class="c1">// sketch.js</span>
 
-<span class="kd">var</span> <span class="nx">Engine</span> <span class="o">=</span> <span class="nx">Matter</span><span class="p">.</span><span class="nx">Engine</span><span class="p">,</span>
-  <span class="c1">// Render = Matter.Render,</span>
-  <span class="nx">World</span> <span class="o">=</span> <span class="nx">Matter</span><span class="p">.</span><span class="nx">World</span><span class="p">,</span>
-  <span class="nx">Bodies</span> <span class="o">=</span> <span class="nx">Matter</span><span class="p">.</span><span class="nx">Bodies</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">Engine</span> <span class="o">=</span> <span class="nx">Matter</span><span class="p">.</span><span class="nx">Engine</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">World</span> <span class="o">=</span> <span class="nx">Matter</span><span class="p">.</span><span class="nx">World</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">Bodies</span> <span class="o">=</span> <span class="nx">Matter</span><span class="p">.</span><span class="nx">Bodies</span><span class="p">;</span>
 
-<span class="kd">var</span> <span class="nx">engine</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">world</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">circles</span> <span class="o">=</span> <span class="p">[];</span>
-<span class="kd">var</span> <span class="nx">boundaries</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="kd">let</span> <span class="nx">engine</span><span class="p">;</span>
+<span class="kd">let</span> <span class="nx">world</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">circles</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="kd">const</span> <span class="nx">boundaries</span> <span class="o">=</span> <span class="p">[];</span>
 
-<span class="kd">var</span> <span class="nx">ground</span><span class="p">;</span>
+<span class="kd">let</span> <span class="nx">ground</span><span class="p">;</span>
 
 <span class="kd">function</span> <span class="nx">setup</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">createCanvas</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">);</span>
   <span class="nx">engine</span> <span class="o">=</span> <span class="nx">Engine</span><span class="p">.</span><span class="nx">create</span><span class="p">();</span>
   <span class="nx">world</span> <span class="o">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nx">world</span><span class="p">;</span>
-  <span class="c1">//Engine.run(engine);</span>
 
   <span class="nx">boundaries</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">Boundary</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="nx">width</span> <span class="o">*</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">));</span>
   <span class="nx">boundaries</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">new</span> <span class="nx">Boundary</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="nx">width</span> <span class="o">*</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3</span><span class="p">));</span>
@@ -295,15 +301,65 @@ etc.</li>
 
 <span class="kd">function</span> <span class="nx">draw</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">background</span><span class="p">(</span><span class="mi">51</span><span class="p">);</span>
+  <span class="c1">// Notice this line, Engine.update(engine) within draw loop</span>
   <span class="nx">Engine</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">engine</span><span class="p">);</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">circles</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">circles</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">show</span><span class="p">();</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">circle</span> <span class="k">of</span> <span class="nx">circles</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">circle</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span>
   <span class="p">}</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">boundaries</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">boundaries</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">show</span><span class="p">();</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">boundary</span> <span class="k">of</span> <span class="nx">boundaries</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">boundary</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span>
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
+
+<p>Check out this <a href="https://youtu.be/uITcoKpbQq4">video</a> for the effect.</p>
+
+<h3 id="constraint">
+<a class="anchor" href="#constraint" aria-hidden="true"><span class="octicon octicon-link"></span></a>Constraint</h3>
+
+<p>A <code class="highlighter-rouge">Constraint</code> is a connection between 2 bodies.</p>
+
+<p>To use it:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">Constraint</span> <span class="o">=</span> <span class="nx">Matter</span><span class="p">.</span><span class="nx">Constraint</span><span class="p">;</span>
+<span class="c1">// ... define particle and prev_particle ...</span>
+
+<span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">bodyA</span><span class="p">:</span> <span class="nx">particle</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span>
+    <span class="na">bodyB</span><span class="p">:</span> <span class="nx">prev_particle</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span>
+    <span class="na">length</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="na">stiffness</span><span class="p">:</span> <span class="mf">0.4</span>
+<span class="p">};</span>
+<span class="kd">const</span> <span class="nx">constraint</span> <span class="o">=</span> <span class="nx">Constraint</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+<span class="nx">World</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">world</span><span class="p">,</span> <span class="nx">constraint</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">length</code> is the resting length of the “spring”, stiffness ranges from 0 to 1, with 1 being very stiff.</p>
+
+<h3 id="mouseconstraint">
+<a class="anchor" href="#mouseconstraint" aria-hidden="true"><span class="octicon octicon-link"></span></a>MouseConstraint</h3>
+
+<p>A <code class="highlighter-rouge">MouseConstraint</code> is a constraint between the mouse position (drag) and the body it clicked on.</p>
+
+<p>The body a MouseConstraint clicked on is in a property <code class="highlighter-rouge">body</code> of its instance, <code class="highlighter-rouge">mouseConstraint.body</code>.</p>
+
+<p>To use it:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">MouseConstraint</span> <span class="o">=</span> <span class="nx">Matter</span><span class="p">.</span><span class="nx">MouseConstraint</span><span class="p">;</span>
+<span class="c1">// ...</span>
+
+<span class="kd">const</span> <span class="nx">canvasmouse</span> <span class="o">=</span> <span class="nx">Mouse</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">elt</span><span class="p">);</span>
+<span class="c1">// IMPORTANT: pixelDensity() gets the pixel density</span>
+<span class="c1">// of your display. If this is not set correctly mConstraint won't work</span>
+<span class="nx">canvasmouse</span><span class="p">.</span><span class="nx">pixelRatio</span> <span class="o">=</span> <span class="nx">pixelDensity</span><span class="p">();</span>
+<span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">mouse</span><span class="p">:</span> <span class="nx">canvasmouse</span>
+<span class="p">};</span>
+<span class="nx">mConstraint</span> <span class="o">=</span> <span class="nx">MouseConstraint</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">engine</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+<span class="nx">World</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">world</span><span class="p">,</span> <span class="nx">mConstraint</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Notice that we have to set <code class="highlighter-rouge">pixelRatio</code> correctly for it to work!</p>
 
 <h2 id="reference">
 <a class="anchor" href="#reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reference</h2>

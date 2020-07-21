@@ -55,49 +55,23 @@ One weird thing that could happen is, if you have a very thin ground or boundary
 
 Another common pitfall with physics engine is that you can't assign a body's property such as angle directly, you can only set it at the time of instantiation. Because angle is a result of the laws of physics after you create the object. When you directly assign it, you violate the law of physics.
 
-Here's an example that lets you create dropping circles by dragging the mouse, written in ES5.
+Here's an example that lets you create dropping circles by dragging the mouse.
 
 ```js
-function Boundary(x, y, w, h, a) {
-  var options = {
-    friction: 0,
-    restitution: 0.95,
-    angle: a,
-    isStatic: true
-  };
-  this.body = Bodies.rectangle(x, y, w, h, options);
-  this.w = w;
-  this.h = h;
-  World.add(world, this.body);
-  console.log(this.body);
+class Circle {
+  constructor(x, y, r) {
+    const options = {
+      friction: 0,
+      restitution: 0.95
+    };
+    this.body = Bodies.circle(x, y, r, options);
+    this.r = r;
+    World.add(world, this.body);
+  }
 
-  this.show = function() {
-    var pos = this.body.position;
-    var angle = this.body.angle;
-    push();
-    translate(pos.x, pos.y);
-    rotate(angle);
-    rectMode(CENTER);
-    strokeWeight(1);
-    noStroke();
-    fill(0);
-    rect(0, 0, this.w, this.h);
-    pop();
-  };
-}
-
-function Circle(x, y, r) {
-  var options = {
-    friction: 0,
-    restitution: 0.95
-  };
-  this.body = Bodies.circle(x, y, r, options);
-  this.r = r;
-  World.add(world, this.body);
-
-  this.show = function() {
-    var pos = this.body.position;
-    var angle = this.body.angle;
+  show() {
+    const pos = this.body.position;
+    const angle = this.body.angle;
     push();
     translate(pos.x, pos.y);
     rotate(angle);
@@ -107,28 +81,55 @@ function Circle(x, y, r) {
     fill(127);
     ellipse(0, 0, this.r * 2);
     pop();
-  };
+  }
+}
+
+class Boundary {
+  constructor(x, y, w, h, a) {
+    const options = {
+      friction: 0,
+      restitution: 0.95,
+      angle: a,
+      isStatic: true
+    };
+    this.body = Bodies.rectangle(x, y, w, h, options);
+    this.w = w;
+    this.h = h;
+    World.add(world, this.body);
+  }
+
+  show() {
+    const pos = this.body.position;
+    const angle = this.body.angle;
+    push();
+    translate(pos.x, pos.y);
+    rotate(angle);
+    rectMode(CENTER);
+    strokeWeight(1);
+    noStroke();
+    fill(0);
+    rect(0, 0, this.w, this.h);
+    pop();
+  }
 }
 
 // sketch.js
 
-var Engine = Matter.Engine,
-  // Render = Matter.Render,
-  World = Matter.World,
-  Bodies = Matter.Bodies;
+const Engine = Matter.Engine;
+const World = Matter.World;
+const Bodies = Matter.Bodies;
 
-var engine;
-var world;
-var circles = [];
-var boundaries = [];
+let engine;
+let world;
+const circles = [];
+const boundaries = [];
 
-var ground;
+let ground;
 
 function setup() {
   createCanvas(400, 400);
   engine = Engine.create();
   world = engine.world;
-  //Engine.run(engine);
 
   boundaries.push(new Boundary(150, 100, width * 0.6, 20, 0.3));
   boundaries.push(new Boundary(250, 300, width * 0.6, 20, -0.3));
@@ -140,15 +141,65 @@ function mouseDragged() {
 
 function draw() {
   background(51);
+  // Notice this line, Engine.update(engine) within draw loop
   Engine.update(engine);
-  for (var i = 0; i < circles.length; i++) {
-    circles[i].show();
+  for (const circle of circles) {
+    circle.show();
   }
-  for (var i = 0; i < boundaries.length; i++) {
-    boundaries[i].show();
+  for (const boundary of boundaries) {
+    boundary.show();
   }
 }
 ```
+
+Check out this [video](https://youtu.be/uITcoKpbQq4) for the effect.
+
+### Constraint
+
+A `Constraint` is a connection between 2 bodies.
+
+To use it:
+
+```js
+const Constraint = Matter.Constraint;
+// ... define particle and prev_particle ...
+
+const options = {
+    bodyA: particle.body,
+    bodyB: prev_particle.body,
+    length: 20,
+    stiffness: 0.4
+};
+const constraint = Constraint.create(options);
+World.add(world, constraint);
+```
+
+`length` is the resting length of the "spring", stiffness ranges from 0 to 1, with 1 being very stiff.
+
+### MouseConstraint
+
+A `MouseConstraint` is a constraint between the mouse position (drag) and the body it clicked on.
+
+The body a MouseConstraint clicked on is in a property `body` of its instance, `mouseConstraint.body`.
+
+To use it:
+
+```js
+const MouseConstraint = Matter.MouseConstraint;
+// ...
+
+const canvasmouse = Mouse.create(canvas.elt);
+// IMPORTANT: pixelDensity() gets the pixel density
+// of your display. If this is not set correctly mConstraint won't work
+canvasmouse.pixelRatio = pixelDensity();
+const options = {
+    mouse: canvasmouse
+};
+mConstraint = MouseConstraint.create(engine, options);
+World.add(world, mConstraint);
+```
+
+Notice that we have to set `pixelRatio` correctly for it to work!
 
 ## Reference
 

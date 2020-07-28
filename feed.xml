@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-07-23T10:00:57-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[Nature of Code] Part 2: Fractals, Cellular Automata, and Flocking</title><link href="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals.html" rel="alternate" type="text/html" title="[Nature of Code] Part 2: Fractals, Cellular Automata, and Flocking" /><published>2020-07-23T00:00:00-05:00</published><updated>2020-07-23T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals</id><content type="html" xml:base="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals.html">&lt;h2 id=&quot;fractals&quot;&gt;Fractals&lt;/h2&gt;
-
-&lt;p&gt;The term &lt;strong&gt;fractal&lt;/strong&gt; is coined by mathematician Benoit Mandelbrot in 1975. It means broken or fractured.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-07-27T21:30:13-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[Nature of Code] Part 2: Fractals</title><link href="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals.html" rel="alternate" type="text/html" title="[Nature of Code] Part 2: Fractals" /><published>2020-07-23T00:00:00-05:00</published><updated>2020-07-23T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals</id><content type="html" xml:base="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals.html">&lt;p&gt;The term &lt;strong&gt;fractal&lt;/strong&gt; is coined by mathematician Benoit Mandelbrot in 1975. It means broken or fractured.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;A structure needs to have two properties to be a fractal:&lt;/strong&gt;&lt;/p&gt;
 
@@ -16,7 +14,7 @@
 
 &lt;p&gt;A famous and extremely simple fractal pattern is the &lt;a href=&quot;https://en.wikipedia.org/wiki/Cantor_set&quot;&gt;Cantor Set&lt;/a&gt;. It divides a line into 3 equal segments and remove the middle one. You get the Cantor set by doing this to every segment recursively.&lt;/p&gt;
 
-&lt;h3 id=&quot;koch-curve-the-monster-curve&quot;&gt;Koch curve: the “monster curve”&lt;/h3&gt;
+&lt;h2 id=&quot;koch-curve-the-monster-curve&quot;&gt;Koch curve: the “monster curve”&lt;/h2&gt;
 
 &lt;p&gt;The generation rule of the Koch curve is very similar to the Cantor set:&lt;/p&gt;
 
@@ -46,7 +44,7 @@ while i &amp;lt; max_steps:
     i++
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;binary-fractal-tree&quot;&gt;Binary fractal tree&lt;/h3&gt;
+&lt;h2 id=&quot;binary-fractal-tree&quot;&gt;Binary fractal tree&lt;/h2&gt;
 
 &lt;p&gt;Generation rule:&lt;/p&gt;
 
@@ -78,7 +76,7 @@ while i &amp;lt; max_steps:
 
 &lt;p&gt;In each recursive step we call &lt;code class=&quot;highlighter-rouge&quot;&gt;branch()&lt;/code&gt;.&lt;/p&gt;
 
-&lt;h4 id=&quot;review-pushmatrix-and-popmatrix&quot;&gt;Review: &lt;code class=&quot;highlighter-rouge&quot;&gt;pushMatrix()&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;popMatrix()&lt;/code&gt;&lt;/h4&gt;
+&lt;h3 id=&quot;review-pushmatrix-and-popmatrix&quot;&gt;Review: &lt;code class=&quot;highlighter-rouge&quot;&gt;pushMatrix()&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;popMatrix()&lt;/code&gt;&lt;/h3&gt;
 
 &lt;p&gt;Notice that &lt;code class=&quot;highlighter-rouge&quot;&gt;pushMatrix()&lt;/code&gt; creates a new reference frame that saves the current transformation (the current translate and rotate state).&lt;/p&gt;
 
@@ -88,7 +86,7 @@ while i &amp;lt; max_steps:
 
 &lt;p&gt;These are Processing terminology. In P5.js they are called &lt;code class=&quot;highlighter-rouge&quot;&gt;push()&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;pop()&lt;/code&gt;.&lt;/p&gt;
 
-&lt;h3 id=&quot;l-systems-applying-recursion-to-text&quot;&gt;L-Systems: applying recursion to text&lt;/h3&gt;
+&lt;h2 id=&quot;l-systems-applying-recursion-to-text&quot;&gt;L-Systems: applying recursion to text&lt;/h2&gt;
 
 &lt;p&gt;An &lt;a href=&quot;https://en.wikipedia.org/wiki/L-system&quot;&gt;L-system&lt;/a&gt; or Lindenmayer system is a parallel rewriting system and a type of formal grammar. Lindenmayer introduced L-systems in 1968 to describe the behaviour of plant cells and to model the growth processes of plant development. L-systems have also been used to model the morphology of a variety of organisms and can be used to generate self-similar fractals.&lt;/p&gt;
 
@@ -138,11 +136,137 @@ Gen 3: - -   - -         - -   - -
 
 &lt;p&gt;&lt;strong&gt;This means that we can design L-systems that create fractal patterns&lt;/strong&gt;.&lt;/p&gt;
 
+&lt;h2 id=&quot;space-colonization&quot;&gt;Space Colonization&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://algorithmicbotany.org/papers/colonization.egwnp2007.html&quot;&gt;Space Colonization&lt;/a&gt; is an algorithm that creates a fractal tree that grows by capturing pre-generated “leaves”. These leaves are usually generated randomly to fill up the space, and they attract the branches to grow towards them.&lt;/p&gt;
+
+&lt;p&gt;Here’s the pseudocode of this algorithm for 2D space.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class Leaf:
+
+    constructor():
+
+        Create leaf with random 2D coordinates (x, y), and a boolean flag
+        `reached`.
+
+    show(): Render the leaf on canvas
+
+
+class Branch:
+
+    constructor(parent, position, direction):
+
+        A branch is represented by its position, its parent branch's position,
+        and a direction copied from its parent. This direction can be used to
+        create new directions for its children.
+
+        Properties of a Branch object:
+            parent, pos, dir, originDir (keep track of parent's direction),
+            count (# leaves that find this branch as closest),
+            stepSize (a parameter to tune to grow faster or slower)
+
+    reset(): Set the direction back to originDir (parent's direction),
+        and count to 0.
+
+    show(): If parent exists, render the line from parent position
+        to position
+
+
+class Tree:
+
+    constructor():
+
+        A Tree has properties: an array of leaves, # leaves, an array of
+        branches, a maxDistance, and a minDistance.
+
+        It needs to be initialized. The initialization contains several steps:
+
+        - It needs a root as the 1st element in branches. This root is a Branch
+        object with a position, direction and no parent.
+
+        - All leaves need to be generated in a loop.
+
+        - As a prerequisite of grow(), first the root needs to grow to the
+        vicinity of some leaves in order for the leaves to attract them later.
+        This process can use a while loop and a boolean variable `found`
+        initialized to false. Set current branch to root. While not found:
+
+            Loop through all leaves and check the distance to
+            the current branch, if it's less than maxDistance, set found to
+            true. If after all leaves, found is still false, grow a new branch
+            on the current branch that has the same direction as current branch,
+            and set this new branch to be the current branch.
+
+        This way we can grow the root to the vicinity of some leaves and keeping
+        its initial direction unchanged.
+
+    grow():
+
+        This is the key part of this space colonization algorithm.
+
+        Loop through all leaves. For each leaf, loop through all branches and
+        find its closest branch that is within the (minDistance, maxDistance)
+        interval. This closestBranch is the one this particular leaf attracts.
+
+        In the double for-loop, calculate the distance between the current pair
+        of branch and leaf. If it's less than minDistance, set leaf.reached to
+        true, and closestBranch to null. Else, compare this distance to the
+        previous record min distance, if (it's lower or closestBranch is null),
+        set closestBranch to current branch and update the record.
+
+        After looping over all branches for a leaf, IT IS THE PART THAT
+        GENERATES THE NEW BRANCH:
+
+        - Get the vector (closestBranch -&amp;gt; leaf), normalize it
+
+        - Add this normalized vector to closestBranch's direction which will be
+          used as the direction of its child branch. Note that this direction
+          is cumulative with all previous or future leaves that share this
+          closestBranch.
+
+        - Increment clostBranch's count which keeps track of the number of
+          leaves that share this closestBranch, in other words, influenced the
+          cumulative direction.
+
+        After the double for-loop that runs through all branches for all leaves,
+        check all leaves with one more pass. If it's reached, remove it from
+        the array. (JS Trick: to remove element while iterating on the same array,
+        iterate backward)
+
+        Next, iterate over all branches. If a branch has count &amp;gt; 0, make a
+        child branch from it using its updated direction. One trick to make the
+        tree better looking is to shorten the length of a new branch if it's
+        shared by a lot of leaves, by dividing its length by its count. Then,
+        don't forget to reset the branch!
+
+    show(): Call show() of all leaves and branches.
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;To help this tree reach more leaves, we can add a small random perturbation in direction whenever we grow a new branch.&lt;/p&gt;
+
+&lt;p&gt;You can check how this works in action &lt;a href=&quot;https://logancyang.com/simulations/fractals/space_colonization.html&quot;&gt;here on my website&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;a-variation-of-space-colonization&quot;&gt;A Variation of Space Colonization&lt;/h3&gt;
+
+&lt;p&gt;I find it satisfying to look at perpendicular lines in 3D space so I tweaked the above algorithm a bit to grow a fractal tree with branches in orthogonal directions, x, y and z. The place I tweaked is the new branch growing part.&lt;/p&gt;
+
+&lt;p&gt;The idea is simple. Here’s the pseudocode for the new branch generation part.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- Get the vector (closestBranch -&amp;gt; leaf) as before, normalize it.
+- Find the x, y, x component that has the largest magnitude, and set it to be
+  the new direction
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;That’s it. The way to make it 3D is even simpler. Just add a &lt;code class=&quot;highlighter-rouge&quot;&gt;z&lt;/code&gt; component to all geometry.&lt;/p&gt;
+
+&lt;p&gt;Check out the result &lt;a href=&quot;https://logancyang.com/simulations/charting/charting.html&quot;&gt;here&lt;/a&gt;. I added the logic that once all branches are grown, skip the &lt;code class=&quot;highlighter-rouge&quot;&gt;grow()&lt;/code&gt; method in the draw loop. However, since there are many branches in 3D space, the performance is still not very good. If you have suggestions to improve this, please let me know.&lt;/p&gt;
+
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;The Coding Train &lt;a href=&quot;https://www.youtube.com/playlist?list=PLRqwX-V7Uu6bXUJvjnMWGU5SmjhI-OXef&quot;&gt;videos&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Fractals</summary></entry><entry><title type="html">[Nature of Code] P5.js quick references</title><link href="http://blog.logancyang.com/note/natureofcode/simulation/p5js/2020/07/22/p5js.html" rel="alternate" type="text/html" title="[Nature of Code] P5.js quick references" /><published>2020-07-22T00:00:00-05:00</published><updated>2020-07-22T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/natureofcode/simulation/p5js/2020/07/22/p5js</id><content type="html" xml:base="http://blog.logancyang.com/note/natureofcode/simulation/p5js/2020/07/22/p5js.html">&lt;h2 id=&quot;basics-setup-draw&quot;&gt;Basics: setup(), draw()&lt;/h2&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">The term fractal is coined by mathematician Benoit Mandelbrot in 1975. It means broken or fractured.</summary></entry><entry><title type="html">[Nature of Code] P5.js quick references</title><link href="http://blog.logancyang.com/note/natureofcode/simulation/p5js/2020/07/22/p5js.html" rel="alternate" type="text/html" title="[Nature of Code] P5.js quick references" /><published>2020-07-22T00:00:00-05:00</published><updated>2020-07-22T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/natureofcode/simulation/p5js/2020/07/22/p5js</id><content type="html" xml:base="http://blog.logancyang.com/note/natureofcode/simulation/p5js/2020/07/22/p5js.html">&lt;h2 id=&quot;basics-setup-draw&quot;&gt;Basics: setup(), draw()&lt;/h2&gt;
 
 &lt;p&gt;All P5.js builtin functions and variables are available in the &lt;code class=&quot;highlighter-rouge&quot;&gt;setup()&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;draw()&lt;/code&gt; functions. It doesn’t work if you reference them outside without instance mode.&lt;/p&gt;
 

@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-07-28T19:39:18-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[Nature of Code] Part 2: Fractals</title><link href="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals.html" rel="alternate" type="text/html" title="[Nature of Code] Part 2: Fractals" /><published>2020-07-23T00:00:00-05:00</published><updated>2020-07-23T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals</id><content type="html" xml:base="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals.html">&lt;p&gt;The term &lt;strong&gt;fractal&lt;/strong&gt; is coined by mathematician Benoit Mandelbrot in 1975. It means broken or fractured.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-08-01T17:09:00-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[Nature of Code] Part 2: Fractals and Cellular Automata</title><link href="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals.html" rel="alternate" type="text/html" title="[Nature of Code] Part 2: Fractals and Cellular Automata" /><published>2020-07-23T00:00:00-05:00</published><updated>2020-07-23T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals</id><content type="html" xml:base="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals.html">&lt;h2 id=&quot;fractals&quot;&gt;Fractals&lt;/h2&gt;
+
+&lt;p&gt;The term &lt;strong&gt;fractal&lt;/strong&gt; is coined by mathematician Benoit Mandelbrot in 1975. It means broken or fractured.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;A structure needs to have two properties to be a fractal:&lt;/strong&gt;&lt;/p&gt;
 
@@ -14,7 +16,7 @@
 
 &lt;p&gt;A famous and extremely simple fractal pattern is the &lt;a href=&quot;https://en.wikipedia.org/wiki/Cantor_set&quot;&gt;Cantor Set&lt;/a&gt;. It divides a line into 3 equal segments and remove the middle one. You get the Cantor set by doing this to every segment recursively.&lt;/p&gt;
 
-&lt;h2 id=&quot;koch-curve-the-monster-curve&quot;&gt;Koch curve: the “monster curve”&lt;/h2&gt;
+&lt;h3 id=&quot;koch-curve-the-monster-curve&quot;&gt;Koch curve: the “monster curve”&lt;/h3&gt;
 
 &lt;p&gt;The generation rule of the Koch curve is very similar to the Cantor set:&lt;/p&gt;
 
@@ -44,7 +46,7 @@ while i &amp;lt; max_steps:
     i++
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;binary-fractal-tree&quot;&gt;Binary fractal tree&lt;/h2&gt;
+&lt;h3 id=&quot;binary-fractal-tree&quot;&gt;Binary fractal tree&lt;/h3&gt;
 
 &lt;p&gt;Generation rule:&lt;/p&gt;
 
@@ -76,7 +78,7 @@ while i &amp;lt; max_steps:
 
 &lt;p&gt;In each recursive step we call &lt;code class=&quot;highlighter-rouge&quot;&gt;branch()&lt;/code&gt;.&lt;/p&gt;
 
-&lt;h3 id=&quot;review-pushmatrix-and-popmatrix&quot;&gt;Review: &lt;code class=&quot;highlighter-rouge&quot;&gt;pushMatrix()&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;popMatrix()&lt;/code&gt;&lt;/h3&gt;
+&lt;h4 id=&quot;review-pushmatrix-and-popmatrix&quot;&gt;Review: &lt;code class=&quot;highlighter-rouge&quot;&gt;pushMatrix()&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;popMatrix()&lt;/code&gt;&lt;/h4&gt;
 
 &lt;p&gt;Notice that &lt;code class=&quot;highlighter-rouge&quot;&gt;pushMatrix()&lt;/code&gt; creates a new reference frame that saves the current transformation (the current translate and rotate state).&lt;/p&gt;
 
@@ -86,7 +88,7 @@ while i &amp;lt; max_steps:
 
 &lt;p&gt;These are Processing terminology. In P5.js they are called &lt;code class=&quot;highlighter-rouge&quot;&gt;push()&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;pop()&lt;/code&gt;.&lt;/p&gt;
 
-&lt;h2 id=&quot;l-systems-applying-recursion-to-text&quot;&gt;L-Systems: applying recursion to text&lt;/h2&gt;
+&lt;h3 id=&quot;l-systems-applying-recursion-to-text&quot;&gt;L-Systems: applying recursion to text&lt;/h3&gt;
 
 &lt;p&gt;An &lt;a href=&quot;https://en.wikipedia.org/wiki/L-system&quot;&gt;L-system&lt;/a&gt; or Lindenmayer system is a parallel rewriting system and a type of formal grammar. Lindenmayer introduced L-systems in 1968 to describe the behaviour of plant cells and to model the growth processes of plant development. L-systems have also been used to model the morphology of a variety of organisms and can be used to generate self-similar fractals.&lt;/p&gt;
 
@@ -136,7 +138,7 @@ Gen 3: - -   - -         - -   - -
 
 &lt;p&gt;&lt;strong&gt;This means that we can design L-systems that create fractal patterns&lt;/strong&gt;.&lt;/p&gt;
 
-&lt;h2 id=&quot;space-colonization&quot;&gt;Space Colonization&lt;/h2&gt;
+&lt;h3 id=&quot;space-colonization&quot;&gt;Space Colonization&lt;/h3&gt;
 
 &lt;p&gt;&lt;a href=&quot;http://algorithmicbotany.org/papers/colonization.egwnp2007.html&quot;&gt;Space Colonization&lt;/a&gt; is an algorithm that creates a fractal tree that grows by capturing pre-generated “leaves”. These leaves are usually generated randomly to fill up the space, and they attract the branches to grow towards them.&lt;/p&gt;
 
@@ -247,7 +249,7 @@ class Tree:
 
 &lt;p&gt;You can check how this works in action &lt;a href=&quot;https://logancyang.com/simulations/fractals/space_colonization.html&quot;&gt;here on my website&lt;/a&gt;.&lt;/p&gt;
 
-&lt;h3 id=&quot;a-variation-of-space-colonization&quot;&gt;A Variation of Space Colonization&lt;/h3&gt;
+&lt;h4 id=&quot;a-variation-of-space-colonization&quot;&gt;A Variation of Space Colonization&lt;/h4&gt;
 
 &lt;p&gt;I find it satisfying to look at perpendicular lines in 3D space so I tweaked the above algorithm a bit to grow a fractal tree with branches in orthogonal directions, x, y and z. The place I tweaked is the new branch growing part.&lt;/p&gt;
 
@@ -262,11 +264,78 @@ class Tree:
 
 &lt;p&gt;Check out the result &lt;a href=&quot;https://logancyang.com/simulations/charting/charting.html&quot;&gt;here&lt;/a&gt;. I added the logic that once all branches are grown, skip the &lt;code class=&quot;highlighter-rouge&quot;&gt;grow()&lt;/code&gt; method in the draw loop. However, since there are many branches in 3D space, the performance is still not very good. If you have suggestions to improve this, please let me know.&lt;/p&gt;
 
+&lt;h2 id=&quot;cellular-automata&quot;&gt;Cellular Automata&lt;/h2&gt;
+
+&lt;p&gt;The most famous cellular automata algorithm is the Game of Life. Let’s create it in P5.js.&lt;/p&gt;
+
+&lt;p&gt;A cellular automaton has a grid of cells, each cell has&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;a state: dead (0) or alive (1)&lt;/li&gt;
+  &lt;li&gt;a neighborhood: adjacent cells&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The state of a cell at time &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; depends on its neighbors in &lt;code class=&quot;highlighter-rouge&quot;&gt;t-1&lt;/code&gt;. So we have the concept of generations.&lt;/p&gt;
+
+&lt;p&gt;Wolfram classifies the possible outcomes of a cellular automaton into 4 types:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;uniformity&lt;/li&gt;
+  &lt;li&gt;oscillation (repetition)&lt;/li&gt;
+  &lt;li&gt;random&lt;/li&gt;
+  &lt;li&gt;complexity&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;With certains rules (such as &lt;a href=&quot;https://en.wikipedia.org/wiki/Rule_30&quot;&gt;rule 30&lt;/a&gt;), even a 1D Game of Life can be a pseudorandom number generator.&lt;/p&gt;
+
+&lt;p&gt;You can check out the artilce that lists the rules on &lt;a href=&quot;https://mathworld.wolfram.com/ElementaryCellularAutomaton.html&quot;&gt;Wolfram’s website&lt;/a&gt;. Some rules are particularly interesting. For example, rule 90 generates a Sierpinski Triangle which is a fractal!&lt;/p&gt;
+
+&lt;h3 id=&quot;game-of-life-2d&quot;&gt;Game of Life (2D)&lt;/h3&gt;
+
+&lt;p&gt;There are 3 scenarios in Game of Life&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Death
+    &lt;ol&gt;
+      &lt;li&gt;Overpopulation&lt;/li&gt;
+      &lt;li&gt;Loneliness&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Birth
+    &lt;ol&gt;
+      &lt;li&gt;Exactly 3 live neighbors&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Stasis
+    &lt;ol&gt;
+      &lt;li&gt;In all other cases, stay the same&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;For the edges, we can either ignore them or wrap them around, i.e. treat position &lt;code class=&quot;highlighter-rouge&quot;&gt;-1&lt;/code&gt; as position &lt;code class=&quot;highlighter-rouge&quot;&gt;length&lt;/code&gt; for each row.&lt;/p&gt;
+
+&lt;p&gt;If you think about it, &lt;strong&gt;every digital image processing algorithm is a cellular automaton!&lt;/strong&gt; Each pixel is essentially a cell. A convolution, for example, is a cellular automaton! So is a Gaussian blur, a ripple effect, and so on.&lt;/p&gt;
+
+&lt;p&gt;An interesting expansion to the simple black and white Game of Life is to make each cell an object and let it store its history. We can make it blue if it’s within N steps of birth, red if it’s within N steps of death, for instance.&lt;/p&gt;
+
+&lt;h3 id=&quot;some-more-possibilities&quot;&gt;Some more possibilities&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;The cell could be non-rectangular, could be hexagonal, triangular, etc.&lt;/li&gt;
+  &lt;li&gt;Add probability, e.g. a rule of 80% of dying.&lt;/li&gt;
+  &lt;li&gt;Continuous states&lt;/li&gt;
+  &lt;li&gt;Image processing: an application to Cellular Automata, say, a water ripple effect.&lt;/li&gt;
+  &lt;li&gt;State history&lt;/li&gt;
+  &lt;li&gt;Moving cells. Change movement based on neighboring cells (flocking)&lt;/li&gt;
+  &lt;li&gt;Nested complex systems, say a cell is another CA.&lt;/li&gt;
+&lt;/ol&gt;
+
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;The Coding Train &lt;a href=&quot;https://www.youtube.com/playlist?list=PLRqwX-V7Uu6bXUJvjnMWGU5SmjhI-OXef&quot;&gt;videos&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">The term fractal is coined by mathematician Benoit Mandelbrot in 1975. It means broken or fractured.</summary></entry><entry><title type="html">[Nature of Code] P5.js quick references</title><link href="http://blog.logancyang.com/note/natureofcode/simulation/p5js/2020/07/22/p5js.html" rel="alternate" type="text/html" title="[Nature of Code] P5.js quick references" /><published>2020-07-22T00:00:00-05:00</published><updated>2020-07-22T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/natureofcode/simulation/p5js/2020/07/22/p5js</id><content type="html" xml:base="http://blog.logancyang.com/note/natureofcode/simulation/p5js/2020/07/22/p5js.html">&lt;h2 id=&quot;basics-setup-draw&quot;&gt;Basics: setup(), draw()&lt;/h2&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Fractals</summary></entry><entry><title type="html">[Nature of Code] P5.js quick references</title><link href="http://blog.logancyang.com/note/natureofcode/simulation/p5js/2020/07/22/p5js.html" rel="alternate" type="text/html" title="[Nature of Code] P5.js quick references" /><published>2020-07-22T00:00:00-05:00</published><updated>2020-07-22T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/natureofcode/simulation/p5js/2020/07/22/p5js</id><content type="html" xml:base="http://blog.logancyang.com/note/natureofcode/simulation/p5js/2020/07/22/p5js.html">&lt;h2 id=&quot;basics-setup-draw&quot;&gt;Basics: setup(), draw()&lt;/h2&gt;
 
 &lt;p&gt;All P5.js builtin functions and variables are available in the &lt;code class=&quot;highlighter-rouge&quot;&gt;setup()&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;draw()&lt;/code&gt; functions. It doesn’t work if you reference them outside without instance mode.&lt;/p&gt;
 

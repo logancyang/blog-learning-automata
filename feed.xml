@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-08-01T17:09:00-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[Nature of Code] Part 2: Fractals and Cellular Automata</title><link href="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals.html" rel="alternate" type="text/html" title="[Nature of Code] Part 2: Fractals and Cellular Automata" /><published>2020-07-23T00:00:00-05:00</published><updated>2020-07-23T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals</id><content type="html" xml:base="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals.html">&lt;h2 id=&quot;fractals&quot;&gt;Fractals&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-08-02T06:45:56-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[Nature of Code] Part 2: Fractals and Cellular Automata</title><link href="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals.html" rel="alternate" type="text/html" title="[Nature of Code] Part 2: Fractals and Cellular Automata" /><published>2020-07-23T00:00:00-05:00</published><updated>2020-07-23T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals</id><content type="html" xml:base="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals.html">&lt;h2 id=&quot;fractals&quot;&gt;Fractals&lt;/h2&gt;
 
 &lt;p&gt;The term &lt;strong&gt;fractal&lt;/strong&gt; is coined by mathematician Benoit Mandelbrot in 1975. It means broken or fractured.&lt;/p&gt;
 
@@ -266,7 +266,7 @@ class Tree:
 
 &lt;h2 id=&quot;cellular-automata&quot;&gt;Cellular Automata&lt;/h2&gt;
 
-&lt;p&gt;The most famous cellular automata algorithm is the Game of Life. Let’s create it in P5.js.&lt;/p&gt;
+&lt;p&gt;The most famous cellular automata algorithm is the Game of Life.&lt;/p&gt;
 
 &lt;p&gt;A cellular automaton has a grid of cells, each cell has&lt;/p&gt;
 

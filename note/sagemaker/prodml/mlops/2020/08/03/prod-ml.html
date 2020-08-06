@@ -3,9 +3,9 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>[Production Machine Learning] Amazon SageMaker Part I | Learning Automata</title>
+<title>[ProdML] Amazon SageMaker Part I: Overview, SageMaker Studio, and Model Training | Learning Automata</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="[Production Machine Learning] Amazon SageMaker Part I" />
+<meta property="og:title" content="[ProdML] Amazon SageMaker Part I: Overview, SageMaker Studio, and Model Training" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="ProdML SageMaker note series" />
 <meta property="og:description" content="ProdML SageMaker note series" />
@@ -15,7 +15,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-08-03T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"ProdML SageMaker note series","@type":"BlogPosting","headline":"[Production Machine Learning] Amazon SageMaker Part I","dateModified":"2020-08-03T00:00:00-05:00","datePublished":"2020-08-03T00:00:00-05:00","url":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/03/prod-ml.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/03/prod-ml.html"},"@context":"https://schema.org"}</script>
+{"description":"ProdML SageMaker note series","@type":"BlogPosting","headline":"[ProdML] Amazon SageMaker Part I: Overview, SageMaker Studio, and Model Training","dateModified":"2020-08-03T00:00:00-05:00","datePublished":"2020-08-03T00:00:00-05:00","url":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/03/prod-ml.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/03/prod-ml.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -24,9 +24,9 @@
 <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
 
 <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>[Production Machine Learning] Amazon SageMaker Part I | Learning Automata</title>
+<title>[ProdML] Amazon SageMaker Part I: Overview, SageMaker Studio, and Model Training | Learning Automata</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="[Production Machine Learning] Amazon SageMaker Part I" />
+<meta property="og:title" content="[ProdML] Amazon SageMaker Part I: Overview, SageMaker Studio, and Model Training" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="ProdML SageMaker note series" />
 <meta property="og:description" content="ProdML SageMaker note series" />
@@ -36,7 +36,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-08-03T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"ProdML SageMaker note series","@type":"BlogPosting","headline":"[Production Machine Learning] Amazon SageMaker Part I","dateModified":"2020-08-03T00:00:00-05:00","datePublished":"2020-08-03T00:00:00-05:00","url":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/03/prod-ml.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/03/prod-ml.html"},"@context":"https://schema.org"}</script>
+{"description":"ProdML SageMaker note series","@type":"BlogPosting","headline":"[ProdML] Amazon SageMaker Part I: Overview, SageMaker Studio, and Model Training","dateModified":"2020-08-03T00:00:00-05:00","datePublished":"2020-08-03T00:00:00-05:00","url":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/03/prod-ml.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/03/prod-ml.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -113,13 +113,13 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">[Production Machine Learning] Amazon SageMaker Part I</h1><p class="page-description">ProdML SageMaker note series</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-08-03T00:00:00-05:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">[ProdML] Amazon SageMaker Part I: Overview, SageMaker Studio, and Model Training</h1><p class="page-description">ProdML SageMaker note series</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-08-03T00:00:00-05:00" itemprop="datePublished">
         Aug 3, 2020
       </time>
        • <span class="read-time" title="Estimated read time">
     
     
-      4 min read
+      15 min read
     
 </span></p>
 
@@ -150,15 +150,29 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#challenges-of-running-production-ml-systems">Challenges of running production ML systems</a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h2"><a href="#1-intro-to-amazon-sagemaker">1. Intro to Amazon SageMaker</a></li>
-<li class="toc-entry toc-h2"><a href="#sagemaker-architecture-overview">SageMaker architecture overview</a></li>
+<li class="toc-entry toc-h2"><a href="#1-intro-to-amazon-sagemaker">1. Intro to Amazon SageMaker</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#11-sagemaker-architecture-overview">1.1 SageMaker architecture overview</a></li>
+</ul>
+</li>
 <li class="toc-entry toc-h2"><a href="#2-sagemaker-studio">2. SageMaker Studio</a>
 <ul>
 <li class="toc-entry toc-h3"><a href="#21-create-a-studio-instance">2.1 Create a Studio instance</a></li>
 <li class="toc-entry toc-h3"><a href="#22-create-a-notebook">2.2 Create a notebook</a></li>
-<li class="toc-entry toc-h3"><a href="#connect-to-a-git-repo-in-studio">Connect to a git repo in Studio</a></li>
+<li class="toc-entry toc-h3"><a href="#23-connect-to-a-git-repo-in-studio">2.3 Connect to a git repo in Studio</a></li>
+<li class="toc-entry toc-h3"><a href="#24-install-libraries">2.4 Install libraries</a></li>
+<li class="toc-entry toc-h3"><a href="#25-demo-in-notebook-create-s3-bucket">2.5 Demo in Notebook: Create S3 bucket</a></li>
 </ul>
 </li>
+<li class="toc-entry toc-h2"><a href="#3-training-models-in-sagemaker">3. Training models in SageMaker</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#31-train-an-xgboost-model-with-builtin-algorithms">3.1 Train an XGBoost model with builtin algorithms</a></li>
+<li class="toc-entry toc-h3"><a href="#32-train-an-sklearn-model-using-prebuilt-docker-images-and-custom-code">3.2 Train an sklearn model using prebuilt Docker images and custom code</a></li>
+<li class="toc-entry toc-h3"><a href="#33-install-additional-dependencies-when-using-pre-built-docker-images">3.3 Install additional dependencies when using pre-built Docker images</a></li>
+<li class="toc-entry toc-h3"><a href="#34-data-preprocessing-example">3.4 Data preprocessing example</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#reference">Reference</a></li>
 </ul><h2 id="overview">
 <a class="anchor" href="#overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overview</h2>
 
@@ -232,8 +246,8 @@ window.onload = wrap_img;
 <strong>Model monitor</strong> - monitor model quality</li>
 </ul>
 
-<h2 id="sagemaker-architecture-overview">
-<a class="anchor" href="#sagemaker-architecture-overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>SageMaker architecture overview</h2>
+<h3 id="11-sagemaker-architecture-overview">
+<a class="anchor" href="#11-sagemaker-architecture-overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>1.1 SageMaker architecture overview</h3>
 
 <p>SageMaker consists of several services.</p>
 
@@ -294,14 +308,429 @@ window.onload = wrap_img;
 
 <p><img src="/images/prodml/ds-kernel.png" alt="Kernel DS" align="middle"></p>
 
-<p><strong>Don’t forget to stop the kernel when you are done!</strong></p>
+<p><strong>IMPORTANT: Don’t forget to stop the kernel when you are done! You get billed by the hour for active kernels based on the EC2 instance type.</strong> Find the pricing details <a href="https://aws.amazon.com/sagemaker/pricing/">here</a>.</p>
 
-<h3 id="connect-to-a-git-repo-in-studio">
-<a class="anchor" href="#connect-to-a-git-repo-in-studio" aria-hidden="true"><span class="octicon octicon-link"></span></a>Connect to a git repo in Studio</h3>
+<h3 id="23-connect-to-a-git-repo-in-studio">
+<a class="anchor" href="#23-connect-to-a-git-repo-in-studio" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.3 Connect to a git repo in Studio</h3>
 
 <p>Click file -&gt; new -&gt; terminal, it opens a bash terminal for us. <code class="highlighter-rouge">git clone</code> your desired repo from Github.</p>
 
 <p>Now you should see your repo’s directory in the file browser in the left sidebar. You can also check the git history and status in the git tab in the sidebar.</p>
+
+<h3 id="24-install-libraries">
+<a class="anchor" href="#24-install-libraries" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.4 Install libraries</h3>
+
+<p>To install additional libraries to the kernel, just do it in the notebook like this</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>!{sys.executable} -m pip install sagemaker-experiments
+!{sys.executable} -m pip install torch
+!{sys.executable} -m pip install torchvision
+</code></pre></div></div>
+
+<h3 id="25-demo-in-notebook-create-s3-bucket">
+<a class="anchor" href="#25-demo-in-notebook-create-s3-bucket" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.5 Demo in Notebook: Create S3 bucket</h3>
+
+<p>Running the following code in the notebook:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">BUCKET</span> <span class="o">=</span> <span class="s">'sagemaker-course-20200804'</span>
+
+<span class="n">boto_session</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">boto_session</span><span class="o">.</span><span class="n">region_name</span> <span class="o">==</span> <span class="s">"us-east-1"</span><span class="p">:</span>
+        <span class="n">boto_session</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s">'s3'</span><span class="p">)</span><span class="o">.</span><span class="n">create_bucket</span><span class="p">(</span><span class="n">Bucket</span><span class="o">=</span><span class="n">BUCKET</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">boto_session</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s">'s3'</span><span class="p">)</span><span class="o">.</span><span class="n">create_bucket</span><span class="p">(</span>
+            <span class="n">Bucket</span><span class="o">=</span><span class="n">BUCKET</span><span class="p">,</span>
+            <span class="n">CreateBucketConfiguration</span><span class="o">=</span><span class="p">{</span><span class="s">'LocationConstraint'</span><span class="p">:</span> <span class="n">boto_session</span><span class="o">.</span><span class="n">region_name</span><span class="p">})</span>
+<span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>It should run without any error. I went to the S3 console and verified, it worked.</p>
+
+<h2 id="3-training-models-in-sagemaker">
+<a class="anchor" href="#3-training-models-in-sagemaker" aria-hidden="true"><span class="octicon octicon-link"></span></a>3. Training models in SageMaker</h2>
+
+<p>We can either</p>
+
+<ul>
+  <li>use builtin models, or</li>
+  <li>write custom code and use a predefined Docker image to run it, or</li>
+  <li>build our own Docker image and our own code to train customized solution (requires Docker knowledge, more advanced, not covered here)</li>
+</ul>
+
+<p>The first two approaches will be demonstrated. Refer to the code in notebook <a href="https://github.com/lpatruno/sagemaker-course/blob/master/notebooks/ch03_interactive_model_training.ipynb">here</a>.</p>
+
+<h3 id="31-train-an-xgboost-model-with-builtin-algorithms">
+<a class="anchor" href="#31-train-an-xgboost-model-with-builtin-algorithms" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.1 Train an XGBoost model with builtin algorithms</h3>
+
+<p>We can use the builtin XGBoost algorithm to train our model. To train the model, we need to first <strong>upload the training data to S3</strong>. We can use the SageMaker Python SDK to create a SageMaker Session object and a boto session object for S3 upload.</p>
+
+<p>After uploading the data, we need to <strong>create pointers to the data</strong> in order to feed into the train function later.</p>
+
+<p>Next, to train the model, we need to create a <strong>training job</strong>. It needs some info: the url of the S3 bucket (pointer), compute resource for training, url of s3 bucket to store the output, the Docker image for the predefined algorithm, etc.</p>
+
+<p><img src="/images/prodml/sagemaker-xgboost.png" alt="sagemaker xgboost" align="middle"></p>
+
+<p>Be sure to familiarize yourself with the XGBoost algorithm because we set the hyperparameters assuming you know how this works.</p>
+
+<p>Note that <code class="highlighter-rouge">get_image_uri</code> with <code class="highlighter-rouge">xgboost</code> and <code class="highlighter-rouge">repo_version</code> gets the correct Docker image for the builtin XGBoost algorithm. We then create the <code class="highlighter-rouge">Estimator</code> object necessary to launch the training job. We specify <code class="highlighter-rouge">image_name</code>, <code class="highlighter-rouge">role</code>, <code class="highlighter-rouge">train_instance_type</code> and count, <code class="highlighter-rouge">output_path</code>, a custom <code class="highlighter-rouge">base_job_name</code> of your choosing which is later used as the identifier for the trained model in S3, and <code class="highlighter-rouge">sagemaker_session</code>.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sagemaker.amazon.amazon_estimator</span> <span class="kn">import</span> <span class="n">get_image_uri</span>
+<span class="kn">from</span> <span class="nn">sagemaker</span> <span class="kn">import</span> <span class="n">estimator</span>
+
+<span class="n">xgboost_image_name</span> <span class="o">=</span> <span class="n">get_image_uri</span><span class="p">(</span><span class="n">boto_session</span><span class="o">.</span><span class="n">region_name</span><span class="p">,</span> <span class="s">'xgboost'</span><span class="p">,</span> <span class="n">repo_version</span><span class="o">=</span><span class="s">'0.90-2'</span><span class="p">)</span>
+
+<span class="n">xgb_model</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">Estimator</span><span class="p">(</span><span class="n">image_name</span><span class="o">=</span><span class="n">xgboost_image_name</span><span class="p">,</span>
+                                <span class="n">role</span><span class="o">=</span><span class="n">role</span><span class="p">,</span>
+                                <span class="n">train_instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                <span class="n">train_instance_type</span><span class="o">=</span><span class="s">'ml.m4.xlarge'</span><span class="p">,</span>
+                                <span class="n">output_path</span><span class="o">=</span><span class="n">f</span><span class="s">"s3://{BUCKET}/{PREFIX}"</span><span class="p">,</span>
+                                <span class="n">base_job_name</span><span class="o">=</span><span class="s">"builtin-xgboost"</span><span class="p">,</span>
+                                <span class="n">sagemaker_session</span><span class="o">=</span><span class="n">sagemaker_session</span><span class="p">)</span>
+
+<span class="n">xgb_model</span><span class="o">.</span><span class="n">set_hyperparameters</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                              <span class="n">subsample</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+                              <span class="n">num_round</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span>
+                              <span class="n">eta</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                              <span class="n">gamma</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                              <span class="n">min_child_weight</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                              <span class="n">silent</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                              <span class="n">objective</span><span class="o">=</span><span class="s">'binary:logistic'</span><span class="p">)</span>
+
+<span class="n">xgb_model</span><span class="o">.</span><span class="n">fit</span><span class="p">({</span><span class="s">'train'</span><span class="p">:</span> <span class="n">s3_input_train</span><span class="p">,</span>
+               <span class="s">'validation'</span><span class="p">:</span> <span class="n">s3_input_validation</span><span class="p">})</span>
+
+<span class="s">"""
+2020-08-05 19:20:32 Starting - Starting the training job...
+2020-08-05 19:20:34 Starting - Launching requested ML instances......
+2020-08-05 19:21:51 Starting - Preparing the instances for training......
+2020-08-05 19:23:00 Downloading - Downloading input data......
+2020-08-05 19:23:46 Training - Downloading the training image..INFO:sagemaker-containers:Imported framework sagemaker_xgboost_container.training
+INFO:sagemaker-containers:Failed to parse hyperparameter objective value binary:logistic to Json.
+Returning the value itself
+INFO:sagemaker-containers:No GPUs detected (normal if no gpus installed)
+INFO:sagemaker_xgboost_container.training:Running XGBoost Sagemaker in algorithm mode
+INFO:root:Determined delimiter of CSV input is ','
+INFO:root:Determined delimiter of CSV input is ','
+INFO:root:Determined delimiter of CSV input is ','
+[19:24:09] 2333x69 matrix with 160977 entries loaded from /opt/ml/input/data/train?format=csv&amp;label_column=0&amp;delimiter=,
+INFO:root:Determined delimiter of CSV input is ','
+[19:24:09] 666x69 matrix with 45954 entries loaded from /opt/ml/input/data/validation?format=csv&amp;label_column=0&amp;delimiter=,
+INFO:root:Single node training.
+INFO:root:Train matrix has 2333 rows
+INFO:root:Validation matrix has 666 rows
+[0]#011train-error:0.077154#011validation-error:0.099099
+[1]#011train-error:0.050579#011validation-error:0.081081
+[2]#011train-error:0.048864#011validation-error:0.075075
+
+...
+...
+
+[594]#011train-error:0.020574#011validation-error:0.061562
+[595]#011train-error:0.020574#011validation-error:0.061562
+[596]#011train-error:0.020574#011validation-error:0.061562
+[597]#011train-error:0.020574#011validation-error:0.061562
+[598]#011train-error:0.020574#011validation-error:0.061562
+[599]#011train-error:0.021003#011validation-error:0.061562
+
+2020-08-05 19:24:24 Uploading - Uploading generated training model
+2020-08-05 19:24:24 Completed - Training job completed
+Training seconds: 84
+Billable seconds: 84
+"""</span>
+</code></pre></div></div>
+
+<p>AWS bills the training based on the time and compute used. After this step, we have trained our first SageMaker model! Go to S3 and check the bucket we created, we can see there is a directory called <code class="highlighter-rouge">/builtin-xgboost-&lt;date-ran&gt;</code>, an <code class="highlighter-rouge">/output</code> directory inside it, and the serialized model file <code class="highlighter-rouge">model.tar.gz</code> in <code class="highlighter-rouge">/output</code>.</p>
+
+<h3 id="32-train-an-sklearn-model-using-prebuilt-docker-images-and-custom-code">
+<a class="anchor" href="#32-train-an-sklearn-model-using-prebuilt-docker-images-and-custom-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.2 Train an sklearn model using prebuilt Docker images and custom code</h3>
+
+<p>For a complete list of training environment variables used by SageMaker Docker images, check out the <a href="https://github.com/aws/sagemaker-training-toolkit/blob/master/ENVIRONMENT_VARIABLES.md">SageMaker training toolkit</a> repo.</p>
+
+<p>Here is an example of a training script. It’s a command line tool that takes in the environment variables and the model hyperparameters needed.</p>
+
+<p><code class="highlighter-rouge">joblib</code> is used to serialize the model.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">ensemble</span>
+<span class="kn">from</span> <span class="nn">sklearn.externals</span> <span class="kn">import</span> <span class="n">joblib</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+
+    <span class="c1"># Hyperparameters are described here. In this simple example we are just including one hyperparameter.
+</span>    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">'--n_estimators'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+    <span class="c1"># Sagemaker specific arguments. Defaults are set in the environment variables.
+</span>    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">'--output-data-dir'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'SM_OUTPUT_DATA_DIR'</span><span class="p">])</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">'--model-dir'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'SM_MODEL_DIR'</span><span class="p">])</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">'--train'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'SM_CHANNEL_TRAIN'</span><span class="p">])</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="c1"># Take the set of files and read them all into a single pandas dataframe
+</span>    <span class="n">input_files</span> <span class="o">=</span> <span class="p">[</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="nb">file</span><span class="p">)</span> <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">train</span><span class="p">)</span> <span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_files</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nb">ValueError</span><span class="p">((</span><span class="s">'There are no files in {}.</span><span class="se">\n</span><span class="s">'</span> <span class="o">+</span>
+                          <span class="s">'This usually indicates that the channel ({}) was incorrectly specified,</span><span class="se">\n</span><span class="s">'</span> <span class="o">+</span>
+                          <span class="s">'the data specification in S3 was incorrectly specified or the role specified</span><span class="se">\n</span><span class="s">'</span> <span class="o">+</span>
+                          <span class="s">'does not have permission to access the data.'</span><span class="p">)</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">train</span><span class="p">,</span> <span class="s">"train"</span><span class="p">))</span>
+    <span class="n">raw_data</span> <span class="o">=</span> <span class="p">[</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s">"python"</span><span class="p">)</span> <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">input_files</span> <span class="p">]</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
+
+    <span class="c1"># labels are in the first column
+</span>    <span class="n">train_y</span> <span class="o">=</span> <span class="n">train_data</span><span class="o">.</span><span class="n">ix</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">train_X</span> <span class="o">=</span> <span class="n">train_data</span><span class="o">.</span><span class="n">ix</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:]</span>
+
+    <span class="c1"># Here we support a single hyperparameter, 'n_estimators'. Note that you can add as many
+</span>    <span class="c1"># as your training my require in the ArgumentParser above.
+</span>    <span class="n">n_estimators</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">n_estimators</span>
+
+    <span class="c1"># Now use scikit-learn's random forest classifier to train the model.
+</span>    <span class="n">clf</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="n">n_estimators</span><span class="p">)</span>
+    <span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_X</span><span class="p">,</span> <span class="n">train_y</span><span class="p">)</span>
+
+    <span class="c1"># Serialize the model.
+</span>    <span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">model_dir</span><span class="p">,</span> <span class="s">"model.joblib"</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">model_fn</span><span class="p">(</span><span class="n">model_dir</span><span class="p">):</span>
+    <span class="s">"""Deserialize and return fitted model
+
+    Note that this should have the same name as the serialized model in the main method
+    """</span>
+    <span class="n">clf</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_dir</span><span class="p">,</span> <span class="s">"model.joblib"</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">clf</span>
+</code></pre></div></div>
+
+<p>To use this custom training script, we need the <code class="highlighter-rouge">Estimator</code> object similar to the one for the builtin algorithm case.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sagemaker.sklearn.estimator</span> <span class="kn">import</span> <span class="n">SKLearn</span>
+
+<span class="n">sklearn_estimator</span> <span class="o">=</span> <span class="n">SKLearn</span><span class="p">(</span>
+    <span class="n">entry_point</span><span class="o">=</span><span class="s">'../scripts/sklearn/sklearn_rf.py'</span><span class="p">,</span>
+    <span class="n">code_location</span><span class="o">=</span><span class="n">f</span><span class="s">'s3://{BUCKET}/{PREFIX}'</span><span class="p">,</span>
+    <span class="n">hyperparameters</span><span class="o">=</span><span class="p">{</span><span class="s">'n_estimators'</span><span class="p">:</span> <span class="mi">50</span><span class="p">},</span>
+    <span class="n">role</span><span class="o">=</span><span class="n">role</span><span class="p">,</span>
+    <span class="n">train_instance_type</span><span class="o">=</span><span class="s">'ml.c4.xlarge'</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="o">=</span><span class="n">f</span><span class="s">'s3://{BUCKET}/{PREFIX}'</span><span class="p">,</span>
+    <span class="n">base_job_name</span><span class="o">=</span><span class="s">"custom-code-sklearn"</span><span class="p">,</span>
+    <span class="n">sagemaker_session</span><span class="o">=</span><span class="n">sagemaker_session</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Note that <code class="highlighter-rouge">entry_point</code> is the local path to the training script. It is the <em>relative</em> path of where we are (the current notebook). <code class="highlighter-rouge">code_location</code> is the S3 URI to which SageMaker will upload our custom training code.</p>
+
+<p>To train, run</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sklearn_estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">({</span><span class="s">'train'</span><span class="p">:</span> <span class="n">s3_input_train</span><span class="p">})</span>
+</code></pre></div></div>
+
+<p>In the background, it starts the compute resources, downloads the training script to them, run training, store the result artifacts in S3, and shutdown the instances.</p>
+
+<p>This <code class="highlighter-rouge">fit</code> line is blocking in the notebook, meaning we can’t do anything else until it’s done. It prints the messages from the training job. To view the details about this training job, we can run the following code and go to the output url in the browser:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">f</span><span class="s">"https://{boto_session.region_name}.console.aws.amazon.com/sagemaker/home?region={boto_session.region_name}#/jobs/{sklearn_estimator.jobs[0].job_name}"</span>
+</code></pre></div></div>
+
+<p>Or we can navigate to this page from the SageMaker home page -&gt; Training -&gt; Training jobs -&gt; the job id.</p>
+
+<p>Go to S3, we can find the model artifacts under <code class="highlighter-rouge">custom-code-sklearn-&lt;timestamp&gt;</code> directory (because we called it <code class="highlighter-rouge">custom-code-sklearn</code> in our <code class="highlighter-rouge">base_job_name</code> property of the <code class="highlighter-rouge">Estimator</code> constructor). Unlike the previous builtin case, we not only have <code class="highlighter-rouge">/output</code> with the serialized model in it, we also have <code class="highlighter-rouge">/debug-output</code> and <code class="highlighter-rouge">/source</code>.</p>
+
+<p>The powerful thing is that <code class="highlighter-rouge">/source</code> has the version of the code we used to train this model with, so we can have versioned code and model together. <strong>This is extremely important for versioning and reproducibility</strong>.</p>
+
+<p><img src="/images/prodml/s3-model-path.png" alt="s3 model path" align="middle"></p>
+
+<p>Notice that we didn’t provide a Docker image pointer to the <code class="highlighter-rouge">Estimator</code> object. SageMaker uses a default image based on the framework version and python version arguments.</p>
+
+<p>We can check the image name by</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sklearn_estimator</span> <span class="o">=</span> <span class="n">SKLearn</span><span class="p">(</span>
+    <span class="n">entry_point</span><span class="o">=</span><span class="s">'../scripts/sklearn/sklearn_rf.py'</span><span class="p">,</span>
+    <span class="n">code_location</span><span class="o">=</span><span class="n">f</span><span class="s">'s3://{BUCKET}/{PREFIX}'</span><span class="p">,</span>
+    <span class="n">hyperparameters</span><span class="o">=</span><span class="p">{</span><span class="s">'n_estimators'</span><span class="p">:</span> <span class="mi">50</span><span class="p">},</span>
+    <span class="n">role</span><span class="o">=</span><span class="n">role</span><span class="p">,</span>
+    <span class="n">train_instance_type</span><span class="o">=</span><span class="s">'ml.c4.xlarge'</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="o">=</span><span class="n">f</span><span class="s">'s3://{BUCKET}/{PREFIX}'</span><span class="p">,</span>
+    <span class="n">base_job_name</span><span class="o">=</span><span class="s">"custom-code-sklearn"</span><span class="p">,</span>
+    <span class="n">sagemaker_session</span><span class="o">=</span><span class="n">sagemaker_session</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">sklearn_estimator</span><span class="o">.</span><span class="n">image_name</span><span class="p">)</span>
+<span class="s">"""
+683313688378.dkr.ecr.us-east-1.amazonaws.com/sagemaker-scikit-learn:0.20.0-cpu-py3
+"""</span>
+</code></pre></div></div>
+
+<p>We see it returns a ECR URI that points to the default sklearn Docker image.</p>
+
+<p>For reference, the <a href="https://github.com/aws/sagemaker-scikit-learn-container/">sagemaker-scikit-learn-container</a> repo contains the source code, including the Dockerfile, for creating this image.</p>
+
+<h3 id="33-install-additional-dependencies-when-using-pre-built-docker-images">
+<a class="anchor" href="#33-install-additional-dependencies-when-using-pre-built-docker-images" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.3 Install additional dependencies when using pre-built Docker images</h3>
+
+<p>We don’t need to create a new Docker image just for some additional dependencies we need. We can include a <code class="highlighter-rouge">requirements.txt</code> file with those additional packages <strong>in the same directory as the training script (entry_point)</strong>. In this case, that directory is <code class="highlighter-rouge">../scripts/sklearn/</code>.</p>
+
+<p>Say, we want the Python package <code class="highlighter-rouge">eli5</code> (outputs the feature importance for a trained model). We just have a <code class="highlighter-rouge">requirements.txt</code> file with one line <code class="highlighter-rouge">eli5</code>, and put it in <code class="highlighter-rouge">../scripts/sklearn/</code> along with the training script.</p>
+
+<p>The way to let SageMaker install it for the training job is to change the <code class="highlighter-rouge">Estimator</code> constructor in the following way.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sklearn_estimator</span> <span class="o">=</span> <span class="n">SKLearn</span><span class="p">(</span>
+    <span class="n">entry_point</span><span class="o">=</span><span class="s">'sklearn_rf.py'</span><span class="p">,</span>
+    <span class="n">source_dir</span><span class="o">=</span><span class="s">'../scripts/sklearn'</span><span class="p">,</span>
+    <span class="n">code_location</span><span class="o">=</span><span class="n">f</span><span class="s">'s3://{BUCKET}/{PREFIX}'</span><span class="p">,</span>
+    <span class="n">hyperparameters</span><span class="o">=</span><span class="p">{</span><span class="s">'n_estimators'</span><span class="p">:</span> <span class="mi">50</span><span class="p">},</span>
+    <span class="n">role</span><span class="o">=</span><span class="n">role</span><span class="p">,</span>
+    <span class="n">train_instance_type</span><span class="o">=</span><span class="s">'ml.c4.xlarge'</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="o">=</span><span class="n">f</span><span class="s">'s3://{BUCKET}/{PREFIX}'</span><span class="p">,</span>
+    <span class="n">base_job_name</span><span class="o">=</span><span class="s">"install-libs-sklearn"</span><span class="p">,</span>
+    <span class="n">sagemaker_session</span><span class="o">=</span><span class="n">sagemaker_session</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Notice that we added <code class="highlighter-rouge">source_dir</code> as a relative path. SageMaker knows to install dependencies from <code class="highlighter-rouge">requirements.txt</code> in that directory implicitly. We also change the <code class="highlighter-rouge">base_job_name</code> to have a different directory in S3 to check the difference vs. the previous job.</p>
+
+<h3 id="34-data-preprocessing-example">
+<a class="anchor" href="#34-data-preprocessing-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.4 Data preprocessing example</h3>
+
+<p>Anyone who works with models knows that data preprocessing and feature engineering is a huge part of building models. Now we’ll demonstrate how to use the SageMaker Python SDK to use <code class="highlighter-rouge">sklearn</code> to preprocess the data.</p>
+
+<p>First, upload the raw data to S3. Then import <code class="highlighter-rouge">SKLearnProcessor</code> from <code class="highlighter-rouge">sagemaker.sklearn.processing</code> to create the processor object. If you don’t need <code class="highlighter-rouge">sklearn</code>’s preprocessor, you can use the more general <code class="highlighter-rouge">sagemaker.processing.scriptprocessor</code> to run arbitrary script to do preprocessing.</p>
+
+<p>The following is the preprocessing script. The main steps are:</p>
+
+<ul>
+  <li>read in the data, use the <code class="highlighter-rouge">LabelBinarizer</code> class to encode the target column</li>
+  <li>do the train-test split</li>
+  <li>create 2 pipelines. The first pipeline imputes the missing values for numerical columns. The second pipeline imputes the categorical columns and one-hot encode them</li>
+  <li>fit the processor on the training data, and transform the training and test datasets</li>
+  <li>serialize the train and test dataframes to csv files</li>
+</ul>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># This line lets the notebook write the file to the right location
+</span><span class="o">%%</span><span class="n">writefile</span> <span class="o">../</span><span class="n">scripts</span><span class="o">/</span><span class="n">sklearn</span><span class="o">/</span><span class="n">preprocessing</span><span class="o">.</span><span class="n">py</span>
+
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.compose</span> <span class="kn">import</span> <span class="n">make_column_transformer</span>
+<span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="kn">import</span> <span class="n">SimpleImputer</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">make_pipeline</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span><span class="p">,</span> <span class="n">LabelBinarizer</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">'--train-test-split-ratio'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">args</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_known_args</span><span class="p">()</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">'Received arguments {}'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+
+    <span class="n">input_data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">'/opt/ml/processing/input'</span><span class="p">,</span> <span class="s">'raw_churn.csv'</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">'Reading input data from {}'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">input_data_path</span><span class="p">))</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_data_path</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+
+    <span class="c1"># Encode target
+</span>    <span class="n">lb</span> <span class="o">=</span> <span class="n">LabelBinarizer</span><span class="p">()</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">lb</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'Churn?'</span><span class="p">])</span>
+    <span class="n">df</span><span class="p">[</span><span class="s">'Churn?'</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+    <span class="n">negative_examples</span><span class="p">,</span> <span class="n">positive_examples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'Churn?'</span><span class="p">])</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'Data after cleaning: {}, {} positive examples, {} negative examples'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">positive_examples</span><span class="p">,</span> <span class="n">negative_examples</span><span class="p">))</span>
+
+    <span class="n">split_ratio</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">train_test_split_ratio</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'Splitting data into train and test sets with ratio {}'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">split_ratio</span><span class="p">))</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s">'Churn?'</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">df</span><span class="p">[</span><span class="s">'Churn?'</span><span class="p">],</span> <span class="n">test_size</span><span class="o">=</span><span class="n">split_ratio</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+
+    <span class="n">numerical_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s">'Account Length'</span><span class="p">,</span> <span class="s">'VMail Message'</span><span class="p">,</span> <span class="s">'Day Mins'</span><span class="p">,</span> <span class="s">'Day Calls'</span><span class="p">,</span> <span class="s">'Eve Mins'</span><span class="p">,</span>
+                      <span class="s">'Eve Calls'</span><span class="p">,</span> <span class="s">'Night Mins'</span><span class="p">,</span> <span class="s">'Night Calls'</span><span class="p">,</span> <span class="s">'Intl Mins'</span><span class="p">,</span> <span class="s">'Intl Calls'</span><span class="p">,</span>
+                      <span class="s">'CustServ Calls'</span><span class="p">]</span>
+    <span class="n">categorical_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s">"State"</span><span class="p">,</span> <span class="s">"Int'l Plan"</span><span class="p">,</span> <span class="s">"VMail Plan"</span><span class="p">]</span>
+
+    <span class="n">num_proc</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s">'median'</span><span class="p">))</span>
+    <span class="n">cat_proc</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span>
+        <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s">'constant'</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="s">'missing'</span><span class="p">),</span>
+        <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">handle_unknown</span><span class="o">=</span><span class="s">'ignore'</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span>
+    <span class="n">preprocessor</span> <span class="o">=</span> <span class="n">make_column_transformer</span><span class="p">((</span><span class="n">numerical_cols</span><span class="p">,</span> <span class="n">num_proc</span><span class="p">),</span>
+                                           <span class="p">(</span><span class="n">categorical_cols</span><span class="p">,</span> <span class="n">cat_proc</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'Running preprocessing and feature engineering transformations'</span><span class="p">)</span>
+    <span class="n">train_features</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+    <span class="n">test_features</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">'Train data shape after preprocessing: {}'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">train_features</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'Test data shape after preprocessing: {}'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">test_features</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+
+    <span class="n">one_hot_encoder</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">named_transformers_</span><span class="p">[</span><span class="s">'pipeline-2'</span><span class="p">]</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s">'onehotencoder'</span><span class="p">]</span>
+    <span class="n">encoded_cat_cols</span> <span class="o">=</span> <span class="n">one_hot_encoder</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">(</span><span class="n">input_features</span><span class="o">=</span><span class="n">categorical_cols</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">processed_cols</span> <span class="o">=</span> <span class="n">numerical_cols</span> <span class="o">+</span> <span class="n">encoded_cat_cols</span>
+
+    <span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">train_features</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">processed_cols</span><span class="p">)</span>
+    <span class="n">train_df</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">'churn'</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+    <span class="n">test_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">test_features</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">processed_cols</span><span class="p">)</span>
+    <span class="n">test_df</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">'churn'</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+
+    <span class="n">train_output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">'/opt/ml/processing/train'</span><span class="p">,</span> <span class="s">'train.csv'</span><span class="p">)</span>
+    <span class="n">test_output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">'/opt/ml/processing/test'</span><span class="p">,</span> <span class="s">'test.csv'</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">'Saving training features to {}'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">train_output_path</span><span class="p">))</span>
+    <span class="n">train_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">train_output_path</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">'Saving test features to {}'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">test_output_path</span><span class="p">))</span>
+    <span class="n">test_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">test_output_path</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>We need to create <code class="highlighter-rouge">processing_input</code> and <code class="highlighter-rouge">processing_output</code> objects to set the paths for the input and output files. They make sure that both the S3 location and the file path in the filesystem of the worker instances are valid.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sagemaker.processing</span> <span class="kn">import</span> <span class="n">ProcessingInput</span><span class="p">,</span> <span class="n">ProcessingOutput</span>
+
+<span class="n">processing_input</span> <span class="o">=</span> <span class="n">ProcessingInput</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">s3_raw_data</span><span class="p">,</span> <span class="n">destination</span><span class="o">=</span><span class="s">'/opt/ml/processing/input'</span><span class="p">)</span>
+
+<span class="n">processing_output_train</span> <span class="o">=</span> <span class="n">ProcessingOutput</span><span class="p">(</span><span class="n">output_name</span><span class="o">=</span><span class="s">'train.csv'</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s">'/opt/ml/processing/train'</span><span class="p">,</span>
+                                           <span class="n">destination</span><span class="o">=</span><span class="n">f</span><span class="s">'s3://{BUCKET}/{PREFIX}/processing/'</span><span class="p">)</span>
+<span class="n">processing_output_test</span> <span class="o">=</span> <span class="n">ProcessingOutput</span><span class="p">(</span><span class="n">output_name</span><span class="o">=</span><span class="s">'test.csv'</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s">'/opt/ml/processing/test'</span><span class="p">,</span>
+                                          <span class="n">destination</span><span class="o">=</span><span class="n">f</span><span class="s">'s3://{BUCKET}/{PREFIX}/processing/'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Next, we can create and run the processing job as follows.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sklearn_processor</span> <span class="o">=</span> <span class="n">SKLearnProcessor</span><span class="p">(</span><span class="n">framework_version</span><span class="o">=</span><span class="s">'0.20.0'</span><span class="p">,</span>
+                                     <span class="n">role</span><span class="o">=</span><span class="n">role</span><span class="p">,</span>
+                                     <span class="n">instance_type</span><span class="o">=</span><span class="s">'ml.m4.xlarge'</span><span class="p">,</span>
+                                     <span class="n">instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                     <span class="n">sagemaker_session</span><span class="o">=</span><span class="n">sagemaker_session</span><span class="p">)</span>
+
+<span class="n">sklearn_processor</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="s">'../scripts/sklearn/preprocessing.py'</span><span class="p">,</span>
+                      <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">processing_input</span><span class="p">],</span>
+                      <span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="n">processing_output_train</span><span class="p">,</span> <span class="n">processing_output_test</span><span class="p">],</span>
+                      <span class="n">arguments</span><span class="o">=</span><span class="p">[</span><span class="s">'--train-test-split-ratio'</span><span class="p">,</span> <span class="s">'0.2'</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p>We can inspect the input and output files with the following code. It shows their metadata on S3.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">preprocessing_job_description</span> <span class="o">=</span> <span class="n">sklearn_processor</span><span class="o">.</span><span class="n">jobs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+
+<span class="n">preprocessing_job_description</span><span class="p">[</span><span class="s">'ProcessingInputs'</span><span class="p">]</span>
+
+<span class="n">preprocessing_job_description</span><span class="p">[</span><span class="s">'ProcessingOutputConfig'</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h2 id="reference">
+<a class="anchor" href="#reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reference</h2>
+
+<ul>
+  <li>Luigi’s SageMaker course</li>
+</ul>
 
 
   </div><!-- from https://github.com/utterance/utterances -->

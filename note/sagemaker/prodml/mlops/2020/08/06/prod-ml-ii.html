@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="ProdML SageMaker note series" />
+<meta property="og:description" content="ProdML SageMaker note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-06T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"ProdML SageMaker note series","@type":"BlogPosting","headline":"[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring","dateModified":"2020-08-06T00:00:00-05:00","datePublished":"2020-08-06T00:00:00-05:00","url":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring | Learning Automata</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="ProdML SageMaker note series" />
+<meta property="og:description" content="ProdML SageMaker note series" />
+<link rel="canonical" href="http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html" />
+<meta property="og:url" content="http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html" />
+<meta property="og:site_name" content="Learning Automata" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-06T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"ProdML SageMaker note series","@type":"BlogPosting","headline":"[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring","dateModified":"2020-08-06T00:00:00-05:00","datePublished":"2020-08-06T00:00:00-05:00","url":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Learning Automata</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring</h1><p class="page-description">ProdML SageMaker note series</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-08-06T00:00:00-05:00" itemprop="datePublished">
+        Aug 6, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      6 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#note">note</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#sagemaker">sagemaker</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#prodml">prodml</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#mlops">mlops</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#4-experiments">4. Experiments</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#41-an-experiment-example-using-tensorflow-2">4.1 An Experiment Example using TensorFlow 2</a></li>
+<li class="toc-entry toc-h3"><a href="#42-an-experiment-example-using-pytorch">4.2 An Experiment Example using PyTorch</a></li>
+<li class="toc-entry toc-h3"><a href="#43-tracking-lineage-finding-the-best-model">4.3 Tracking lineage: finding the best model</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#5-deployment">5. Deployment</a></li>
+<li class="toc-entry toc-h2"><a href="#reference">Reference</a></li>
+</ul><p>Previous post: <a href="https://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/03/prod-ml.html">part I</a></p>
+
+<h2 id="4-experiments">
+<a class="anchor" href="#4-experiments" aria-hidden="true"><span class="octicon octicon-link"></span></a>4. Experiments</h2>
+
+<p>In the previous section we went through the training process. In reality, the model needs a series of experiments to find the best set of hyperparameters. It is very important to properly keep track of the experiment results in a reproducible manner, and setup unified practice among team members. SageMaker Experiments solves this problem.</p>
+
+<p>SageMaker Experiments has its own Python package you can import with:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">smexperiments.experiment</span> <span class="kn">import</span> <span class="n">Experiment</span>
+</code></pre></div></div>
+
+<p>An <code class="highlighter-rouge">experiment</code> should be the outer most group for a collections of <code class="highlighter-rouge">trial</code>s. Each trial can map to a specific algorithm you use, such as a Random Forest, XGBoost, Logistic Regression, etc.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">smexperiments.trial</span> <span class="kn">import</span> <span class="n">Trial</span>
+</code></pre></div></div>
+
+<p>A trial is a series of steps, each step is called a <code class="highlighter-rouge">trial_component</code>.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">smexperiments.trial_component</span> <span class="kn">import</span> <span class="n">TrialComponent</span>
+</code></pre></div></div>
+
+<p>Each trial component can have a combination of inputs such as datasets, algorithm and parameters. You can produce desired outputs such as models, datasets, metrics and checkpoints.</p>
+
+<p>Examples of trial components are</p>
+
+<ul>
+  <li>data preprocessing jobs</li>
+  <li>training jobs</li>
+  <li>batch transform jobs</li>
+</ul>
+
+<p>A trial component can be, e.g. the full preprocessing logic, or each step within it such as imputing missing values, one-hot encoding, etc. Each trial component (a trial step) can store information such as mean and standard deviation or the metric you care about during the experiments so you can compare them.</p>
+
+<p>Next let’s look at examples for training MNIST classifiers using TensorFlow and PyTorch.</p>
+
+<h3 id="41-an-experiment-example-using-tensorflow-2">
+<a class="anchor" href="#41-an-experiment-example-using-tensorflow-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>4.1 An Experiment Example using TensorFlow 2</h3>
+
+<p>We use a custom training script provided by TensorFlow for this use case. Check out the script <a href="https://github.com/lpatruno/sagemaker-course/blob/master/scripts/tf/tensorflow_mnist.py">here</a>.</p>
+
+<p>Note that in <code class="highlighter-rouge">_parse_args()</code>, <code class="highlighter-rouge">model_dir</code> is passed from SageMaker and the others are from SageMaker environment variables.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">_parse_args</span><span class="p">():</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+
+    <span class="c1"># Data, model, and output directories
+</span>    <span class="c1"># model_dir is always passed in from SageMaker. By default this is a S3 path under the default bucket.
+</span>    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">'--model_dir'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">'--sm-model-dir'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'SM_MODEL_DIR'</span><span class="p">))</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">'--train'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'SM_CHANNEL_TRAINING'</span><span class="p">))</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">'--hosts'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'SM_HOSTS'</span><span class="p">)))</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">'--current-host'</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'SM_CURRENT_HOST'</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_known_args</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Here is the main block which is very simple:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+    <span class="n">args</span><span class="p">,</span> <span class="n">unknown</span> <span class="o">=</span> <span class="n">_parse_args</span><span class="p">()</span>
+
+    <span class="n">train_data</span><span class="p">,</span> <span class="n">train_labels</span> <span class="o">=</span> <span class="n">_load_training_data</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">train</span><span class="p">)</span>
+    <span class="n">eval_data</span><span class="p">,</span> <span class="n">eval_labels</span> <span class="o">=</span> <span class="n">_load_testing_data</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">train</span><span class="p">)</span>
+
+    <span class="n">mnist_classifier</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">train_labels</span><span class="p">,</span> <span class="n">eval_data</span><span class="p">,</span> <span class="n">eval_labels</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">current_host</span> <span class="o">==</span> <span class="n">args</span><span class="o">.</span><span class="n">hosts</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="c1"># save model to an S3 directory with version number '00000001'
+</span>        <span class="n">mnist_classifier</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">sm_model_dir</span><span class="p">,</span> <span class="s">'000000001'</span><span class="p">),</span> <span class="s">'my_model.h5'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Note: the sample data from S3 is in <code class="highlighter-rouge">.npy</code> format which is much more performant than csv format.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Create the Experiment
+</span><span class="n">experiment_name</span> <span class="o">=</span> <span class="n">f</span><span class="s">"tf-mnist-{datetime.datetime.now().strftime('</span><span class="si">%</span><span class="s">Y</span><span class="si">%</span><span class="s">m</span><span class="si">%</span><span class="s">d</span><span class="si">%</span><span class="s">H</span><span class="si">%</span><span class="s">M')}"</span>
+<span class="n">description</span> <span class="o">=</span> <span class="s">"Classification of mnist hand-written digits using tensorflow 2"</span>
+
+<span class="n">tf_experiment</span> <span class="o">=</span> <span class="n">Experiment</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">experiment_name</span><span class="o">=</span><span class="n">experiment_name</span><span class="p">,</span>
+                                  <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+                                  <span class="n">sagemaker_boto_client</span><span class="o">=</span><span class="n">sagemaker_client</span><span class="p">)</span>
+
+<span class="c1"># Create the Trial
+</span><span class="n">trial_name</span> <span class="o">=</span> <span class="n">f</span><span class="s">"tf-trial-{datetime.datetime.now().strftime('</span><span class="si">%</span><span class="s">Y</span><span class="si">%</span><span class="s">m</span><span class="si">%</span><span class="s">d</span><span class="si">%</span><span class="s">H</span><span class="si">%</span><span class="s">M')}"</span>
+
+<span class="n">tf_trial</span> <span class="o">=</span> <span class="n">Trial</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">trial_name</span><span class="o">=</span><span class="n">trial_name</span><span class="p">,</span>
+                        <span class="n">experiment_name</span><span class="o">=</span><span class="n">tf_experiment</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span>
+                        <span class="n">sagemaker_boto_client</span><span class="o">=</span><span class="n">sagemaker_client</span><span class="p">)</span>
+
+
+<span class="kn">from</span> <span class="nn">sagemaker.tensorflow</span> <span class="kn">import</span> <span class="n">TensorFlow</span>
+
+<span class="c1"># Create the training job. This takes 3-5 min
+</span><span class="n">tf_estimator</span> <span class="o">=</span> <span class="n">TensorFlow</span><span class="p">(</span>
+    <span class="n">entry_point</span><span class="o">=</span><span class="s">'../scripts/tf/tensorflow_mnist.py'</span><span class="p">,</span>
+    <span class="n">role</span><span class="o">=</span><span class="n">role</span><span class="p">,</span>
+    <span class="n">train_instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">train_instance_type</span><span class="o">=</span><span class="s">'ml.p2.xlarge'</span><span class="p">,</span>
+    <span class="n">code_location</span><span class="o">=</span><span class="n">f</span><span class="s">"s3://{BUCKET}/{PREFIX}"</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="o">=</span><span class="n">f</span><span class="s">"s3://{BUCKET}/{PREFIX}"</span><span class="p">,</span>
+    <span class="n">base_job_name</span><span class="o">=</span><span class="s">'tf-mnist'</span><span class="p">,</span>
+    <span class="n">py_version</span><span class="o">=</span><span class="s">'py3'</span><span class="p">,</span>
+    <span class="n">framework_version</span><span class="o">=</span><span class="s">'2.1.0'</span><span class="p">,</span>
+    <span class="n">enable_sagemaker_metrics</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">experiment_config</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">"TrialName"</span><span class="p">:</span> <span class="n">tf_trial</span><span class="o">.</span><span class="n">trial_name</span><span class="p">,</span>
+        <span class="s">"TrialComponentDisplayName"</span><span class="p">:</span> <span class="s">"Training"</span><span class="p">,</span>
+    <span class="p">}</span>
+
+<span class="c1"># Now associate the estimator with the Experiment and Trial
+</span><span class="n">tf_estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s">'training'</span><span class="p">:</span> <span class="n">training_data_uri</span><span class="p">},</span>
+                 <span class="n">experiment_config</span><span class="o">=</span><span class="n">experiment_config</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Notice that the <code class="highlighter-rouge">TensorFlow</code> constructor takes in some additional parameters compared to the previous training jobs: <code class="highlighter-rouge">py_version</code>, <code class="highlighter-rouge">framework_version</code>, and <code class="highlighter-rouge">enable_sagemaker_metrics</code>.</p>
+
+<p>The SageMaker TensorFlow object has legacy mode and script mode, <code class="highlighter-rouge">py_version='py3'</code> indicates that we are using script mode. Legacy mode only supports Python 2. <code class="highlighter-rouge">framework_version</code> is the actual TensorFlow version we want to use.</p>
+
+<p><code class="highlighter-rouge">enable_sagemaker_metrics=True</code> enables logging of metrics such as accuracy over time, so that we can see the visualization outside the notebook in SageMaker Studio.</p>
+
+<p>After executing the code above, you can view your experiment metadata by clicking on the beaker on the sidebar! It shows a two-column table: experiment name and last modified time. First, click on the refresh button in this panel, then you’ll see the experiment you just ran. You can also search by experiment name in its search bar.</p>
+
+<p>Double click on the experiment, it shows the trials under it. Double click on the trial, it then shows the trial components. It looks like this:</p>
+
+<p><img src="/images/prodml/trial-component.png" alt="SageMaker trial component" align="middle"></p>
+
+<p>The <strong>Metrics</strong> tab shows the metrics it automatically scraped from the log of our training job. It’s configured by the TensorFlow estimator object and the Docker image used. You can explore other tabs for more metadata.</p>
+
+<h3 id="42-an-experiment-example-using-pytorch">
+<a class="anchor" href="#42-an-experiment-example-using-pytorch" aria-hidden="true"><span class="octicon octicon-link"></span></a>4.2 An Experiment Example using PyTorch</h3>
+
+<p>Now let’s switch to PyTorch and demonstrate how to run multiple trials with different hyperparameters.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">transforms</span>
+
+<span class="o">%</span><span class="n">config</span> <span class="n">InlineBackend</span><span class="o">.</span><span class="n">figure_format</span> <span class="o">=</span> <span class="s">'retina'</span>
+
+<span class="n">transform</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span><span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+                                <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">((</span><span class="mf">0.1307</span><span class="p">,),</span> <span class="p">(</span><span class="mf">0.3081</span><span class="p">,))])</span>
+
+<span class="c1"># Download, load, and transform the data.
+</span><span class="n">train_set</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">LOCAL_DATA_DIRECTORY</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">test_set</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">LOCAL_DATA_DIRECTORY</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">sagemaker_session</span><span class="o">.</span><span class="n">upload_data</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">LOCAL_DATA_DIRECTORY</span><span class="p">,</span>
+    <span class="n">bucket</span><span class="o">=</span><span class="n">BUCKET</span><span class="p">,</span>
+    <span class="n">key_prefix</span><span class="o">=</span><span class="n">PREFIX</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">smexperiments.tracker</span> <span class="kn">import</span> <span class="n">Tracker</span>
+
+<span class="k">with</span> <span class="n">Tracker</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">display_name</span><span class="o">=</span><span class="s">"Preprocessing"</span><span class="p">,</span> <span class="n">sagemaker_boto_client</span><span class="o">=</span><span class="n">sagemaker_client</span><span class="p">)</span> <span class="k">as</span> <span class="n">tracker</span><span class="p">:</span>
+    <span class="n">tracker</span><span class="o">.</span><span class="n">log_parameters</span><span class="p">({</span>
+        <span class="s">"normalization_mean"</span><span class="p">:</span> <span class="mf">0.1307</span><span class="p">,</span>
+        <span class="s">"normalization_std"</span><span class="p">:</span> <span class="mf">0.3081</span><span class="p">,</span>
+    <span class="p">})</span>
+
+    <span class="n">tracker</span><span class="o">.</span><span class="n">log_input</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"mnist-dataset"</span><span class="p">,</span> <span class="n">media_type</span><span class="o">=</span><span class="s">"s3/uri"</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
+
+
+<span class="n">experiment_name</span> <span class="o">=</span> <span class="n">f</span><span class="s">"torch-mnist-{datetime.datetime.now().strftime('</span><span class="si">%</span><span class="s">Y</span><span class="si">%</span><span class="s">m</span><span class="si">%</span><span class="s">d</span><span class="si">%</span><span class="s">H</span><span class="si">%</span><span class="s">M')}"</span>
+<span class="n">description</span> <span class="o">=</span> <span class="s">"Classification of mnist hand-written digits with pytorch."</span>
+
+<span class="n">mnist_experiment</span> <span class="o">=</span> <span class="n">Experiment</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">experiment_name</span><span class="o">=</span><span class="n">experiment_name</span><span class="p">,</span>
+                                     <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+                                     <span class="n">sagemaker_boto_client</span><span class="o">=</span><span class="n">sagemaker_client</span><span class="p">)</span>
+
+
+<span class="c1"># %%
+</span><span class="kn">from</span> <span class="nn">sagemaker.pytorch</span> <span class="kn">import</span> <span class="n">PyTorch</span>
+
+<span class="n">hidden_channel_trial_name_map</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># Keep references to each Trial object
+</span>
+<span class="c1"># If you want to run the following training jobs asynchronously, you may need to increase
+# your resource limit. Otherwise, you can run them sequentially.
+</span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">num_hidden_channel</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">]):</span>
+
+    <span class="c1"># create Trial object
+</span>    <span class="n">trial_name</span> <span class="o">=</span> <span class="n">f</span><span class="s">"torch-{num_hidden_channel}-hidden-channels-{datetime.datetime.now().strftime('</span><span class="si">%</span><span class="s">Y</span><span class="si">%</span><span class="s">m</span><span class="si">%</span><span class="s">d</span><span class="si">%</span><span class="s">H</span><span class="si">%</span><span class="s">M')}"</span>
+    <span class="n">cnn_trial</span> <span class="o">=</span> <span class="n">Trial</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">trial_name</span><span class="o">=</span><span class="n">trial_name</span><span class="p">,</span>
+        <span class="n">experiment_name</span><span class="o">=</span><span class="n">mnist_experiment</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span>
+        <span class="n">sagemaker_boto_client</span><span class="o">=</span><span class="n">sagemaker_client</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># Have a dict for variable references to the trial names
+</span>    <span class="n">hidden_channel_trial_name_map</span><span class="p">[</span><span class="n">num_hidden_channel</span><span class="p">]</span> <span class="o">=</span> <span class="n">trial_name</span>
+
+    <span class="c1"># Associate the proprocessing trial component with the current trial
+</span>    <span class="n">cnn_trial</span><span class="o">.</span><span class="n">add_trial_component</span><span class="p">(</span><span class="n">tracker</span><span class="o">.</span><span class="n">trial_component</span><span class="p">)</span>
+
+    <span class="c1"># all input configurations, parameters, and metrics specified in estimator
+</span>    <span class="c1"># definition are automatically tracked
+</span>    <span class="n">estimator</span> <span class="o">=</span> <span class="n">PyTorch</span><span class="p">(</span>
+        <span class="n">entry_point</span><span class="o">=</span><span class="s">'../scripts/torch/pytorch_mnist.py'</span><span class="p">,</span>
+        <span class="n">role</span><span class="o">=</span><span class="n">role</span><span class="p">,</span>
+        <span class="n">sagemaker_session</span><span class="o">=</span><span class="n">sagemaker_session</span><span class="p">,</span>
+        <span class="n">framework_version</span><span class="o">=</span><span class="s">'1.1.0'</span><span class="p">,</span>
+        <span class="n">train_instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">train_instance_type</span><span class="o">=</span><span class="s">'ml.c4.xlarge'</span><span class="p">,</span>
+        <span class="n">code_location</span><span class="o">=</span><span class="n">f</span><span class="s">"s3://{BUCKET}/{PREFIX}"</span><span class="p">,</span>
+        <span class="n">output_path</span><span class="o">=</span><span class="n">f</span><span class="s">"s3://{BUCKET}/{PREFIX}"</span><span class="p">,</span>
+        <span class="n">base_job_name</span><span class="o">=</span><span class="s">'torch-mnist'</span><span class="p">,</span>
+        <span class="n">hyperparameters</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">'epochs'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="s">'backend'</span><span class="p">:</span> <span class="s">'gloo'</span><span class="p">,</span>
+            <span class="s">'hidden_channels'</span><span class="p">:</span> <span class="n">num_hidden_channel</span><span class="p">,</span>
+            <span class="s">'dropout'</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+            <span class="s">'optimizer'</span><span class="p">:</span> <span class="s">'sgd'</span>
+        <span class="p">},</span>
+        <span class="n">metric_definitions</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">{</span><span class="s">'Name'</span><span class="p">:</span><span class="s">'train:loss'</span><span class="p">,</span> <span class="s">'Regex'</span><span class="p">:</span><span class="s">'Train Loss: (.*?);'</span><span class="p">},</span>
+            <span class="p">{</span><span class="s">'Name'</span><span class="p">:</span><span class="s">'test:loss'</span><span class="p">,</span> <span class="s">'Regex'</span><span class="p">:</span><span class="s">'Test Average loss: (.*?),'</span><span class="p">},</span>
+            <span class="p">{</span><span class="s">'Name'</span><span class="p">:</span><span class="s">'test:accuracy'</span><span class="p">,</span> <span class="s">'Regex'</span><span class="p">:</span><span class="s">'Test Accuracy: (.*?)</span><span class="si">%</span><span class="s">;'</span><span class="p">}</span>
+        <span class="p">],</span>
+        <span class="n">enable_sagemaker_metrics</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Now associate the estimator with the Experiment and Trial
+</span>    <span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+        <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s">'training'</span><span class="p">:</span> <span class="n">inputs</span><span class="p">},</span>
+        <span class="n">experiment_config</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">"TrialName"</span><span class="p">:</span> <span class="n">cnn_trial</span><span class="o">.</span><span class="n">trial_name</span><span class="p">,</span>
+            <span class="s">"TrialComponentDisplayName"</span><span class="p">:</span> <span class="s">"Training"</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="n">wait</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># give it a while before dispatching the next training job
+</span>    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The core of the code above is to loop through <code class="highlighter-rouge">num_hidden_channel</code> and create a trial for each value of it. We can specify other hyperparameters and a custom regex for metric definition we care about in the <code class="highlighter-rouge">PyTorch</code> object.</p>
+
+<p>This can take 15 minutes to run. After completion, we can click on the beaker icon in the left bar. We can either inspect each individual trial and look at the charts for training over time, or we can look at all trial components in one chart by selecting them and right clicking to open then in a list, select add chart with Summary Statistics and Scatter Plot. It’s quite powerful to create such visualization in the browser without having to write any code.</p>
+
+<p>Experiment is extremely important. For a team, it is good practice to use SageMaker Experiments for storing and grouping results for easy access.</p>
+
+<h3 id="43-tracking-lineage-finding-the-best-model">
+<a class="anchor" href="#43-tracking-lineage-finding-the-best-model" aria-hidden="true"><span class="octicon octicon-link"></span></a>4.3 Tracking lineage: finding the best model</h3>
+
+<p>We’ve run our experiments, now we can find the best model simply by running some code in the notebook.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sagemaker.analytics</span> <span class="kn">import</span> <span class="n">ExperimentAnalytics</span>
+
+<span class="n">search_expression</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">"Filters"</span><span class="p">:[</span>
+        <span class="p">{</span>
+            <span class="s">"Name"</span><span class="p">:</span> <span class="s">"DisplayName"</span><span class="p">,</span>
+            <span class="s">"Operator"</span><span class="p">:</span> <span class="s">"Equals"</span><span class="p">,</span>
+            <span class="s">"Value"</span><span class="p">:</span> <span class="s">"Training"</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">trial_component_analytics</span> <span class="o">=</span> <span class="n">ExperimentAnalytics</span><span class="p">(</span>
+    <span class="n">sagemaker_session</span><span class="o">=</span><span class="n">sagemaker_session</span><span class="p">,</span>
+    <span class="n">experiment_name</span><span class="o">=</span><span class="n">mnist_experiment</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span>
+    <span class="n">search_expression</span><span class="o">=</span><span class="n">search_expression</span><span class="p">,</span>
+    <span class="n">sort_by</span><span class="o">=</span><span class="s">"metrics.test:accuracy.max"</span><span class="p">,</span>
+    <span class="n">sort_order</span><span class="o">=</span><span class="s">"Descending"</span><span class="p">,</span>
+    <span class="n">metric_names</span><span class="o">=</span><span class="p">[</span><span class="s">'test:accuracy'</span><span class="p">],</span>
+    <span class="n">parameter_names</span><span class="o">=</span><span class="p">[</span><span class="s">'hidden_channels'</span><span class="p">,</span> <span class="s">'epochs'</span><span class="p">,</span> <span class="s">'dropout'</span><span class="p">,</span> <span class="s">'optimizer'</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">trial_component_analytics</span><span class="o">.</span><span class="n">dataframe</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>We will see the dataframe as the one below</p>
+
+<p><img src="/images/prodml/trial-comps.png" alt="trial comps" align="middle"></p>
+
+<p>Recall that we have a dictionary <code class="highlighter-rouge">hidden_channel_trial_name_map</code> for variable references to the trials, we can use it to look at the best trial,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">lineage_table</span> <span class="o">=</span> <span class="n">ExperimentAnalytics</span><span class="p">(</span>
+    <span class="n">sagemaker_session</span><span class="o">=</span><span class="n">sagemaker_session</span><span class="p">,</span>
+    <span class="n">search_expression</span><span class="o">=</span><span class="p">{</span>
+        <span class="s">"Filters"</span><span class="p">:[{</span>
+            <span class="s">"Name"</span><span class="p">:</span> <span class="s">"Parents.TrialName"</span><span class="p">,</span>
+            <span class="s">"Operator"</span><span class="p">:</span> <span class="s">"Equals"</span><span class="p">,</span>
+            <span class="s">"Value"</span><span class="p">:</span> <span class="n">hidden_channel_trial_name_map</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="p">}]</span>
+    <span class="p">},</span>
+    <span class="n">sort_by</span><span class="o">=</span><span class="s">"CreationTime"</span><span class="p">,</span>
+    <span class="n">sort_order</span><span class="o">=</span><span class="s">"Ascending"</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">lineage_table</span><span class="o">.</span><span class="n">dataframe</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Now we see a lot more information about it:</p>
+
+<p><img src="/images/prodml/lineage.png" alt="lineage" align="middle"></p>
+
+<p>SageMaker has more advanced hyperparameter tuning capabilities. You can dig in to learn more.</p>
+
+<h2 id="5-deployment">
+<a class="anchor" href="#5-deployment" aria-hidden="true"><span class="octicon octicon-link"></span></a>5. Deployment</h2>
+
+<p>tbd</p>
+
+<h2 id="reference">
+<a class="anchor" href="#reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reference</h2>
+
+<ul>
+  <li>Luigi’s SageMaker course</li>
+</ul>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="logancyang/blog-learning-automata"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notes, code and essays by Logan Yang.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/logancyang" title="logancyang"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

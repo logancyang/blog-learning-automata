@@ -119,7 +119,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      6 min read
+      13 min read
     
 </span></p>
 
@@ -152,7 +152,14 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#43-tracking-lineage-finding-the-best-model">4.3 Tracking lineage: finding the best model</a></li>
 </ul>
 </li>
-<li class="toc-entry toc-h2"><a href="#5-deployment">5. Deployment</a></li>
+<li class="toc-entry toc-h2"><a href="#5-deployment">5. Deployment</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#51-batch-inference">5.1 Batch inference</a></li>
+<li class="toc-entry toc-h3"><a href="#52-online-inference">5.2 Online inference</a></li>
+<li class="toc-entry toc-h3"><a href="#53-autoscaling-according-to-demand">5.3 Autoscaling according to demand</a></li>
+<li class="toc-entry toc-h3"><a href="#54-delete-the-endpoint">5.4 Delete the endpoint</a></li>
+</ul>
+</li>
 <li class="toc-entry toc-h2"><a href="#reference">Reference</a></li>
 </ul><p>Previous post: <a href="https://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/03/prod-ml.html">part I</a></p>
 
@@ -455,7 +462,196 @@ window.onload = wrap_img;
 <h2 id="5-deployment">
 <a class="anchor" href="#5-deployment" aria-hidden="true"><span class="octicon octicon-link"></span></a>5. Deployment</h2>
 
-<p>tbd</p>
+<p>Deployment is an area that’s usually outside the expertise of most data scientists. SageMaker makes it easy to deploy both <strong>batch</strong> and <strong>online</strong> inference as APIs.</p>
+
+<p>In order to deploy, we first need to instantiate a <code class="highlighter-rouge">sagemaker.model.Model</code> object. <code class="highlighter-rouge">model_data</code> is the serialized model.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># See the `sagemaker.model.Model`
+# [API reference](https://sagemaker.readthedocs.io/en/stable/model.html) for more details.
+</span><span class="kn">from</span> <span class="nn">sagemaker</span> <span class="kn">import</span> <span class="n">model</span>
+
+<span class="n">model_data</span> <span class="o">=</span> <span class="s">'s3://.../model.tar.gz'</span>
+<span class="n">image</span> <span class="o">=</span> <span class="s">'...dkr.ecr.us-east-1.amazonaws.com/sagemaker-xgboost:0.90-2-cpu-py3'</span>
+
+<span class="n">churn_model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">model_data</span><span class="o">=</span><span class="n">model_data</span><span class="p">,</span>
+                          <span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">,</span>
+                          <span class="n">role</span><span class="o">=</span><span class="n">role</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>To find the right <code class="highlighter-rouge">model_data</code> and <code class="highlighter-rouge">image</code> pair for the model you want to deploy, find that training job in SageMaker console -&gt; Training Jobs, once you find the right job by name, click into it, and you can find the image uri under the Algorithm panel. For the s3 location of that serialized model, scroll to the bottom of the page and find the Output panel, it’s under <code class="highlighter-rouge">S3 model artifact</code>.</p>
+
+<h3 id="51-batch-inference">
+<a class="anchor" href="#51-batch-inference" aria-hidden="true"><span class="octicon octicon-link"></span></a>5.1 Batch inference</h3>
+
+<p>To make a batch inference endpoint, we need <code class="highlighter-rouge">sagemaker.transformer.Transformer</code> object.</p>
+
+<p>See the <code class="highlighter-rouge">sagemaker.transformer.Transformer</code> <a href="https://sagemaker.readthedocs.io/en/stable/transformer.html">API reference</a> for more details.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">churn_transformer</span> <span class="o">=</span> <span class="n">churn_model</span><span class="o">.</span><span class="n">transformer</span><span class="p">(</span><span class="n">instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                            <span class="n">instance_type</span><span class="o">=</span><span class="s">'ml.m4.xlarge'</span><span class="p">,</span>
+                                            <span class="n">strategy</span><span class="o">=</span><span class="s">'MultiRecord'</span><span class="p">,</span>
+                                            <span class="n">assemble_with</span><span class="o">=</span><span class="s">'Line'</span><span class="p">,</span>
+                                            <span class="n">output_path</span><span class="o">=</span><span class="n">f</span><span class="s">"s3://{BUCKET}/{PREFIX}/transform"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">strategy</code> can be <code class="highlighter-rouge">SingleRecord</code> or <code class="highlighter-rouge">MultiRecord</code>. <code class="highlighter-rouge">assemble_with</code> can be <code class="highlighter-rouge">None</code> or <code class="highlighter-rouge">Line</code>.</p>
+
+<p>To run the transform batch job,</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Start a transform job and wait for it to finish
+# Takes around 3-5 minutes
+</span><span class="n">churn_transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">inference_data</span><span class="p">,</span>
+                            <span class="n">content_type</span><span class="o">=</span><span class="s">'text/csv'</span><span class="p">,</span>
+                            <span class="n">split_type</span><span class="o">=</span><span class="s">'Line'</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">'Waiting for transform job: '</span> <span class="o">+</span> <span class="n">churn_transformer</span><span class="o">.</span><span class="n">latest_transform_job</span><span class="o">.</span><span class="n">job_name</span><span class="p">)</span>
+<span class="n">churn_transformer</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">content_type</code> is set to <code class="highlighter-rouge">'text/csv'</code> because we have csv data, <code class="highlighter-rouge">split_type</code> set to <code class="highlighter-rouge">'Line'</code> following the <code class="highlighter-rouge">transformer</code> object so it outputs one line at a time.</p>
+
+<p><strong>This job is asynchronous by default</strong>. The <code class="highlighter-rouge">.wait()</code> method makes it blocking the notebook until it returns.</p>
+
+<p>In the log outputs in the notebook, we can see the job actually starts a gunicorn web server.</p>
+
+<p>To get the location of the output data, run</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">churn_transformer</span><span class="o">.</span><span class="n">output_path</span>
+</code></pre></div></div>
+
+<p>For each input file we get a corresponding <code class="highlighter-rouge">.out</code> file that contains the predicted labels.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># List files in S3 bucket
+</span><span class="n">s3_client</span> <span class="o">=</span> <span class="n">boto_session</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s">'s3'</span><span class="p">)</span>
+<span class="n">s3_client</span><span class="o">.</span><span class="n">list_objects</span><span class="p">(</span><span class="n">Bucket</span> <span class="o">=</span> <span class="n">BUCKET</span><span class="p">,</span> <span class="n">Prefix</span> <span class="o">=</span> <span class="n">f</span><span class="s">'{PREFIX}/transform'</span><span class="p">)</span>
+<span class="c1"># Download the output data from S3 to local filesystem
+</span><span class="n">s3_client</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span>
+    <span class="n">Bucket</span><span class="o">=</span><span class="n">BUCKET</span><span class="p">,</span>
+    <span class="n">Key</span><span class="o">=</span><span class="n">f</span><span class="s">"{PREFIX}/transform/test-batch.csv.out"</span><span class="p">,</span>
+    <span class="n">Filename</span><span class="o">=</span><span class="n">f</span><span class="s">'{LOCAL_DATA_DIRECTORY}/test-batch.csv.out'</span><span class="p">)</span>
+
+<span class="c1"># Show a few lines of this file
+</span><span class="err">!</span><span class="n">head</span> <span class="o">-</span><span class="mi">5</span> <span class="o">../</span><span class="n">data</span><span class="o">/</span><span class="n">churn</span><span class="o">/</span><span class="n">test</span><span class="o">-</span><span class="n">batch</span><span class="o">.</span><span class="n">csv</span><span class="o">.</span><span class="n">out</span>
+<span class="s">"""
+0.010853796266019344
+0.005068291909992695
+0.008791499771177769
+0.16663919389247894
+0.004287515766918659
+"""</span>
+</code></pre></div></div>
+
+<p>The output file has one prediction per line corresponding to the input file.</p>
+
+<p>Note that when we created the transformer object, we can find some new things in the SageMaker console. One thing is the model object. Find it in the console under Inference -&gt; Models. Inside, we can see the model name, the ARN role, creation time, container info, Docker image used, training job, and the location of the serialized model on S3.</p>
+
+<p>In that GUI, we can add tag or delete the model under Actions, or Create batch tranform job, or Create endpoint, directly from the console.</p>
+
+<p>We can also find the previous batch transform jobs under Inference. You can inspect the metadata and audit the entire process of these jobs if you click into them.</p>
+
+<h3 id="52-online-inference">
+<a class="anchor" href="#52-online-inference" aria-hidden="true"><span class="octicon octicon-link"></span></a>5.2 Online inference</h3>
+
+<p>SageMaker abstracts away all the API code, network and routing logic and makes it extremely easy to deploy the model as an endpoint.</p>
+
+<p>Here we demonstrate using a custom trained sklearn model. Instead of <code class="highlighter-rouge">sagemaker.model.Model</code>, we use its subclass <code class="highlighter-rouge">sagemaker.sklearn.SKLearnModel</code>. See the <code class="highlighter-rouge">sagemaker.sklearn.SKLearnModel</code> <a href="https://sagemaker.readthedocs.io/en/stable/sagemaker.sklearn.html#sagemaker.sklearn.model.SKLearnModel">API reference</a> for more details.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sagemaker</span> <span class="kn">import</span> <span class="n">sklearn</span>
+
+<span class="n">model_data</span> <span class="o">=</span> <span class="s">'s3://.../output/model.tar.gz'</span>
+
+<span class="n">sklearn_model</span> <span class="o">=</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">SKLearnModel</span><span class="p">(</span><span class="n">model_data</span><span class="o">=</span><span class="n">model_data</span><span class="p">,</span>
+                                     <span class="n">role</span><span class="o">=</span><span class="n">role</span><span class="p">,</span>
+                                     <span class="n">entry_point</span><span class="o">=</span><span class="s">'../scripts/sklearn/sklearn_rf.py'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Again, <code class="highlighter-rouge">model_data</code> is the serialized model in S3 which can be found in the Training job section from the SageMaker console. We also need the same custom script that we used to train the model as <code class="highlighter-rouge">entry_point</code>. It contains the code to deserialize the model.</p>
+
+<p>See the <code class="highlighter-rouge">sagemaker.predictor.RealTimePredictor</code> <a href="https://sagemaker.readthedocs.io/en/stable/predictors.html">API reference</a> for more details.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sklearn_predictor</span> <span class="o">=</span> <span class="n">sklearn_model</span><span class="o">.</span><span class="n">deploy</span><span class="p">(</span><span class="n">initial_instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                         <span class="n">instance_type</span><span class="o">=</span><span class="s">"ml.m4.xlarge"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>NOTE: This takes about 6-8 minutes to return. And an endpoint will be ready.</strong></p>
+
+<p>Now we can click on the Endpoint List in the sidebar and refresh to see the new endpoint. Right click on it and click <code class="highlighter-rouge">Describe Endpoint</code>, a new tab is opened. There are three sub tabs:</p>
+
+<ul>
+  <li>Monitoring results</li>
+  <li>Monitoring job history</li>
+  <li>AWS settings</li>
+</ul>
+
+<p>Click on AWS settings, we get the following view.</p>
+
+<p><img src="/images/prodml/endpoint-aws-settings.png" alt="SageMaker endpoint" align="middle"></p>
+
+<p>Under <code class="highlighter-rouge">Production variants</code>, there is a table for different models deployed. We only have one model now – our sklearn random forest, so it gets all the traffic. <strong>If we have multiple models, this feature here is good for running A/B testing, or different deployment strategies such as canary deployment, or blue/green deployment.</strong></p>
+
+<p>Now we can test the endpoint within the notebook as if we are just calling an sklearn object locally. The code below actually makes an HTTP request and gets the response.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">f</span><span class="s">'{LOCAL_DATA_DIRECTORY}/test-dataset.csv'</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+
+<span class="c1"># Remove first column which contains labels
+</span><span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">X</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+
+<span class="n">preds</span> <span class="o">=</span> <span class="n">sklearn_predictor</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">preds</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>This endpoint can handle multiple records at the same time, no need to send a single row each time!</strong></p>
+
+<p>Here are two interesting articles for further information on using the endpoint.</p>
+
+<ul>
+  <li><a href="https://aws.amazon.com/blogs/machine-learning/creating-a-machine-learning-powered-rest-api-with-amazon-api-gateway-mapping-templates-and-amazon-sagemaker/">How to use API Gateway to create a PUBLIC RESTful endpoint for an Amazon SageMaker inference</a></li>
+  <li><a href="https://aws.amazon.com/blogs/machine-learning/call-an-amazon-sagemaker-model-endpoint-using-amazon-api-gateway-and-aws-lambda/">Calling a SageMaker API Using Serverless Technology</a></li>
+</ul>
+
+<h3 id="53-autoscaling-according-to-demand">
+<a class="anchor" href="#53-autoscaling-according-to-demand" aria-hidden="true"><span class="octicon octicon-link"></span></a>5.3 Autoscaling according to demand</h3>
+
+<p>For the batch inference case, SageMaker spins up an instance, perform the computation and shuts it down. For online inference, it spins up an instance an keeps it alive. SageMaker supports autoscaling the number of instances according to your workload.</p>
+
+<p><strong>To configure autoscaling for a model using the console</strong>:</p>
+
+<ol>
+  <li>Open the Amazon SageMaker console at https://console.aws.amazon.com/sagemaker/.</li>
+  <li>In the navigation pane, choose <strong>Endpoints</strong>.</li>
+  <li>Choose the endpoint that you want to configure.</li>
+  <li>Under the <strong>Endpoint runtime settings</strong> heading, select the radio button corresponding to the model variant that you want to configure and click <strong>Configure autoscaling</strong>. The <strong>Configure variant automatic scaling</strong> page appears.</li>
+  <li>The <strong>Variant automatic scaling</strong> section lets us configure the min/max number of instances.
+    <ul>
+      <li>For <strong>Minimum instance count</strong>, type the minimum number of instances that you want the scaling policy to maintain. At least 1 instance is required.</li>
+      <li>For <strong>Maximum instance count</strong>, type the maximum number of instances that you want the scaling policy to maintain.</li>
+    </ul>
+  </li>
+  <li>The <strong>Built-in scaling policy</strong> section lets us configure the conditions under which to scale the instances.
+    <ul>
+      <li>For the <strong>Target value</strong>, type the average number of invocations per instance per minute for the model. To determine this value, follow the guidelines in Load testing. Application Auto Scaling adds or removes instances to keep the metric close to the value that you specify.</li>
+      <li>For <strong>Scale-in cool down</strong> and <strong>Scale-out cool down</strong> type the number seconds for each cool down period. Assuming that the order in the list is based on either most important to less important of first applied to last applied.</li>
+      <li>Select <strong>Disable scale in</strong> to prevent the scaling policy from deleting variant instances if you want to ensure that your variant scales out to address increased traffic, but are not concerned with removing instances to reduce costs when traffic decreases. Scale-out activities are always enabled so that the scaling policy can create endpoint instances as needed.</li>
+    </ul>
+  </li>
+  <li>Choose <strong>Save</strong>.</li>
+</ol>
+
+<p>More details, including how to define a custom scaling policy, can be found in the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-add-console.html">Developer Guide</a>.</p>
+
+<p><strong>There is no silver bullet for defining the auto scaling policy for your use case. Just come up with an estimate and iteratively find what works for you.</strong></p>
+
+<h3 id="54-delete-the-endpoint">
+<a class="anchor" href="#54-delete-the-endpoint" aria-hidden="true"><span class="octicon octicon-link"></span></a>5.4 Delete the endpoint</h3>
+
+<p>Note that you will be charged by the resources you created in this section: models and the endpoint. They are under Inference in the SageMaker console. You can either delete them in the GUI, or run the code below in the notebook:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">churn_model</span><span class="o">.</span><span class="n">delete_model</span><span class="p">()</span>
+
+<span class="n">sklearn_predictor</span><span class="o">.</span><span class="n">delete_endpoint</span><span class="p">()</span>
+<span class="n">sklearn_model</span><span class="o">.</span><span class="n">delete_model</span><span class="p">()</span>
+</code></pre></div></div>
 
 <h2 id="reference">
 <a class="anchor" href="#reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reference</h2>

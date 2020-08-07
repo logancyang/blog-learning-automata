@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-08-06T22:43:01-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring</title><link href="http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html" rel="alternate" type="text/html" title="[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring" /><published>2020-08-06T00:00:00-05:00</published><updated>2020-08-06T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii</id><content type="html" xml:base="http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html">&lt;p&gt;Previous post: &lt;a href=&quot;https://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/03/prod-ml.html&quot;&gt;part I&lt;/a&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-08-07T17:33:08-05:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring</title><link href="http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html" rel="alternate" type="text/html" title="[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring" /><published>2020-08-06T00:00:00-05:00</published><updated>2020-08-06T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii</id><content type="html" xml:base="http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html">&lt;p&gt;Previous post: &lt;a href=&quot;https://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/03/prod-ml.html&quot;&gt;part I&lt;/a&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;4-experiments&quot;&gt;4. Experiments&lt;/h2&gt;
 
@@ -294,7 +294,192 @@
 
 &lt;h2 id=&quot;5-deployment&quot;&gt;5. Deployment&lt;/h2&gt;
 
-&lt;p&gt;tbd&lt;/p&gt;
+&lt;p&gt;Deployment is an area that’s usually outside the expertise of most data scientists. SageMaker makes it easy to deploy both &lt;strong&gt;batch&lt;/strong&gt; and &lt;strong&gt;online&lt;/strong&gt; inference as APIs.&lt;/p&gt;
+
+&lt;p&gt;In order to deploy, we first need to instantiate a &lt;code class=&quot;highlighter-rouge&quot;&gt;sagemaker.model.Model&lt;/code&gt; object. &lt;code class=&quot;highlighter-rouge&quot;&gt;model_data&lt;/code&gt; is the serialized model.&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# See the `sagemaker.model.Model`
+# [API reference](https://sagemaker.readthedocs.io/en/stable/model.html) for more details.
+&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sagemaker&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;model_data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'s3://.../model.tar.gz'&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;image&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'...dkr.ecr.us-east-1.amazonaws.com/sagemaker-xgboost:0.90-2-cpu-py3'&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;churn_model&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Model&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model_data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                          &lt;span class=&quot;n&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                          &lt;span class=&quot;n&quot;&gt;role&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;role&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;To find the right &lt;code class=&quot;highlighter-rouge&quot;&gt;model_data&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;image&lt;/code&gt; pair for the model you want to deploy, find that training job in SageMaker console -&amp;gt; Training Jobs, once you find the right job by name, click into it, and you can find the image uri under the Algorithm panel. For the s3 location of that serialized model, scroll to the bottom of the page and find the Output panel, it’s under &lt;code class=&quot;highlighter-rouge&quot;&gt;S3 model artifact&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;51-batch-inference&quot;&gt;5.1 Batch inference&lt;/h3&gt;
+
+&lt;p&gt;To make a batch inference endpoint, we need &lt;code class=&quot;highlighter-rouge&quot;&gt;sagemaker.transformer.Transformer&lt;/code&gt; object.&lt;/p&gt;
+
+&lt;p&gt;See the &lt;code class=&quot;highlighter-rouge&quot;&gt;sagemaker.transformer.Transformer&lt;/code&gt; &lt;a href=&quot;https://sagemaker.readthedocs.io/en/stable/transformer.html&quot;&gt;API reference&lt;/a&gt; for more details.&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;churn_transformer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;churn_model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;transformer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instance_count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                                            &lt;span class=&quot;n&quot;&gt;instance_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'ml.m4.xlarge'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                                            &lt;span class=&quot;n&quot;&gt;strategy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'MultiRecord'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                                            &lt;span class=&quot;n&quot;&gt;assemble_with&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Line'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                                            &lt;span class=&quot;n&quot;&gt;output_path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;s3://{BUCKET}/{PREFIX}/transform&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;strategy&lt;/code&gt; can be &lt;code class=&quot;highlighter-rouge&quot;&gt;SingleRecord&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;MultiRecord&lt;/code&gt;. &lt;code class=&quot;highlighter-rouge&quot;&gt;assemble_with&lt;/code&gt; can be &lt;code class=&quot;highlighter-rouge&quot;&gt;None&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;Line&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;To run the transform batch job,&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Start a transform job and wait for it to finish
+# Takes around 3-5 minutes
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;churn_transformer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;transform&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;inference_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                            &lt;span class=&quot;n&quot;&gt;content_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'text/csv'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                            &lt;span class=&quot;n&quot;&gt;split_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Line'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Waiting for transform job: '&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;churn_transformer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;latest_transform_job&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;job_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;churn_transformer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wait&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;content_type&lt;/code&gt; is set to &lt;code class=&quot;highlighter-rouge&quot;&gt;'text/csv'&lt;/code&gt; because we have csv data, &lt;code class=&quot;highlighter-rouge&quot;&gt;split_type&lt;/code&gt; set to &lt;code class=&quot;highlighter-rouge&quot;&gt;'Line'&lt;/code&gt; following the &lt;code class=&quot;highlighter-rouge&quot;&gt;transformer&lt;/code&gt; object so it outputs one line at a time.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;This job is asynchronous by default&lt;/strong&gt;. The &lt;code class=&quot;highlighter-rouge&quot;&gt;.wait()&lt;/code&gt; method makes it blocking the notebook until it returns.&lt;/p&gt;
+
+&lt;p&gt;In the log outputs in the notebook, we can see the job actually starts a gunicorn web server.&lt;/p&gt;
+
+&lt;p&gt;To get the location of the output data, run&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;churn_transformer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;output_path&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;For each input file we get a corresponding &lt;code class=&quot;highlighter-rouge&quot;&gt;.out&lt;/code&gt; file that contains the predicted labels.&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# List files in S3 bucket
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s3_client&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;boto_session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'s3'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;s3_client&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;list_objects&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bucket&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BUCKET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Prefix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'{PREFIX}/transform'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# Download the output data from S3 to local filesystem
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s3_client&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;download_file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Bucket&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BUCKET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{PREFIX}/transform/test-batch.csv.out&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Filename&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'{LOCAL_DATA_DIRECTORY}/test-batch.csv.out'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Show a few lines of this file
+&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;../&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;churn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;batch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;csv&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;out&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
+0.010853796266019344
+0.005068291909992695
+0.008791499771177769
+0.16663919389247894
+0.004287515766918659
+&quot;&quot;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The output file has one prediction per line corresponding to the input file.&lt;/p&gt;
+
+&lt;p&gt;Note that when we created the transformer object, we can find some new things in the SageMaker console. One thing is the model object. Find it in the console under Inference -&amp;gt; Models. Inside, we can see the model name, the ARN role, creation time, container info, Docker image used, training job, and the location of the serialized model on S3.&lt;/p&gt;
+
+&lt;p&gt;In that GUI, we can add tag or delete the model under Actions, or Create batch tranform job, or Create endpoint, directly from the console.&lt;/p&gt;
+
+&lt;p&gt;We can also find the previous batch transform jobs under Inference. You can inspect the metadata and audit the entire process of these jobs if you click into them.&lt;/p&gt;
+
+&lt;h3 id=&quot;52-online-inference&quot;&gt;5.2 Online inference&lt;/h3&gt;
+
+&lt;p&gt;SageMaker abstracts away all the API code, network and routing logic and makes it extremely easy to deploy the model as an endpoint.&lt;/p&gt;
+
+&lt;p&gt;Here we demonstrate using a custom trained sklearn model. Instead of &lt;code class=&quot;highlighter-rouge&quot;&gt;sagemaker.model.Model&lt;/code&gt;, we use its subclass &lt;code class=&quot;highlighter-rouge&quot;&gt;sagemaker.sklearn.SKLearnModel&lt;/code&gt;. See the &lt;code class=&quot;highlighter-rouge&quot;&gt;sagemaker.sklearn.SKLearnModel&lt;/code&gt; &lt;a href=&quot;https://sagemaker.readthedocs.io/en/stable/sagemaker.sklearn.html#sagemaker.sklearn.model.SKLearnModel&quot;&gt;API reference&lt;/a&gt; for more details.&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sagemaker&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sklearn&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;model_data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'s3://.../output/model.tar.gz'&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;sklearn_model&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sklearn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SKLearnModel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model_data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                                     &lt;span class=&quot;n&quot;&gt;role&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;role&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                                     &lt;span class=&quot;n&quot;&gt;entry_point&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'../scripts/sklearn/sklearn_rf.py'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Again, &lt;code class=&quot;highlighter-rouge&quot;&gt;model_data&lt;/code&gt; is the serialized model in S3 which can be found in the Training job section from the SageMaker console. We also need the same custom script that we used to train the model as &lt;code class=&quot;highlighter-rouge&quot;&gt;entry_point&lt;/code&gt;. It contains the code to deserialize the model.&lt;/p&gt;
+
+&lt;p&gt;See the &lt;code class=&quot;highlighter-rouge&quot;&gt;sagemaker.predictor.RealTimePredictor&lt;/code&gt; &lt;a href=&quot;https://sagemaker.readthedocs.io/en/stable/predictors.html&quot;&gt;API reference&lt;/a&gt; for more details.&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;sklearn_predictor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sklearn_model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;initial_instance_count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                                         &lt;span class=&quot;n&quot;&gt;instance_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ml.m4.xlarge&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE: This takes about 6-8 minutes to return. And an endpoint will be ready.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Now we can click on the Endpoint List in the sidebar and refresh to see the new endpoint. Right click on it and click &lt;code class=&quot;highlighter-rouge&quot;&gt;Describe Endpoint&lt;/code&gt;, a new tab is opened. There are three sub tabs:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Monitoring results&lt;/li&gt;
+  &lt;li&gt;Monitoring job history&lt;/li&gt;
+  &lt;li&gt;AWS settings&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Click on AWS settings, we get the following view.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/prodml/endpoint-aws-settings.png&quot; alt=&quot;SageMaker endpoint&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Under &lt;code class=&quot;highlighter-rouge&quot;&gt;Production variants&lt;/code&gt;, there is a table for different models deployed. We only have one model now – our sklearn random forest, so it gets all the traffic. &lt;strong&gt;If we have multiple models, this feature here is good for running A/B testing, or different deployment strategies such as canary deployment, or blue/green deployment.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Now we can test the endpoint within the notebook as if we are just calling an sklearn object locally. The code below actually makes an HTTP request and gets the response.&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read_csv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'{LOCAL_DATA_DIRECTORY}/test-dataset.csv'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Remove first column which contains labels
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;drop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;axis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;preds&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sklearn_predictor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;predict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;preds&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;This endpoint can handle multiple records at the same time, no need to send a single row each time!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Here are two interesting articles for further information on using the endpoint.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://aws.amazon.com/blogs/machine-learning/creating-a-machine-learning-powered-rest-api-with-amazon-api-gateway-mapping-templates-and-amazon-sagemaker/&quot;&gt;How to use API Gateway to create a PUBLIC RESTful endpoint for an Amazon SageMaker inference&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://aws.amazon.com/blogs/machine-learning/call-an-amazon-sagemaker-model-endpoint-using-amazon-api-gateway-and-aws-lambda/&quot;&gt;Calling a SageMaker API Using Serverless Technology&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;53-autoscaling-according-to-demand&quot;&gt;5.3 Autoscaling according to demand&lt;/h3&gt;
+
+&lt;p&gt;For the batch inference case, SageMaker spins up an instance, perform the computation and shuts it down. For online inference, it spins up an instance an keeps it alive. SageMaker supports autoscaling the number of instances according to your workload.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;To configure autoscaling for a model using the console&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Open the Amazon SageMaker console at https://console.aws.amazon.com/sagemaker/.&lt;/li&gt;
+  &lt;li&gt;In the navigation pane, choose &lt;strong&gt;Endpoints&lt;/strong&gt;.&lt;/li&gt;
+  &lt;li&gt;Choose the endpoint that you want to configure.&lt;/li&gt;
+  &lt;li&gt;Under the &lt;strong&gt;Endpoint runtime settings&lt;/strong&gt; heading, select the radio button corresponding to the model variant that you want to configure and click &lt;strong&gt;Configure autoscaling&lt;/strong&gt;. The &lt;strong&gt;Configure variant automatic scaling&lt;/strong&gt; page appears.&lt;/li&gt;
+  &lt;li&gt;The &lt;strong&gt;Variant automatic scaling&lt;/strong&gt; section lets us configure the min/max number of instances.
+    &lt;ul&gt;
+      &lt;li&gt;For &lt;strong&gt;Minimum instance count&lt;/strong&gt;, type the minimum number of instances that you want the scaling policy to maintain. At least 1 instance is required.&lt;/li&gt;
+      &lt;li&gt;For &lt;strong&gt;Maximum instance count&lt;/strong&gt;, type the maximum number of instances that you want the scaling policy to maintain.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;The &lt;strong&gt;Built-in scaling policy&lt;/strong&gt; section lets us configure the conditions under which to scale the instances.
+    &lt;ul&gt;
+      &lt;li&gt;For the &lt;strong&gt;Target value&lt;/strong&gt;, type the average number of invocations per instance per minute for the model. To determine this value, follow the guidelines in Load testing. Application Auto Scaling adds or removes instances to keep the metric close to the value that you specify.&lt;/li&gt;
+      &lt;li&gt;For &lt;strong&gt;Scale-in cool down&lt;/strong&gt; and &lt;strong&gt;Scale-out cool down&lt;/strong&gt; type the number seconds for each cool down period. Assuming that the order in the list is based on either most important to less important of first applied to last applied.&lt;/li&gt;
+      &lt;li&gt;Select &lt;strong&gt;Disable scale in&lt;/strong&gt; to prevent the scaling policy from deleting variant instances if you want to ensure that your variant scales out to address increased traffic, but are not concerned with removing instances to reduce costs when traffic decreases. Scale-out activities are always enabled so that the scaling policy can create endpoint instances as needed.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Choose &lt;strong&gt;Save&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;More details, including how to define a custom scaling policy, can be found in the &lt;a href=&quot;https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-add-console.html&quot;&gt;Developer Guide&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;There is no silver bullet for defining the auto scaling policy for your use case. Just come up with an estimate and iteratively find what works for you.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;54-delete-the-endpoint&quot;&gt;5.4 Delete the endpoint&lt;/h3&gt;
+
+&lt;p&gt;Note that you will be charged by the resources you created in this section: models and the endpoint. They are under Inference in the SageMaker console. You can either delete them in the GUI, or run the code below in the notebook:&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;churn_model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;delete_model&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;sklearn_predictor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;delete_endpoint&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;sklearn_model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;delete_model&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 

@@ -3,9 +3,9 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring | Learning Automata</title>
+<title>[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Model Monitoring | Learning Automata</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring" />
+<meta property="og:title" content="[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Model Monitoring" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="ProdML SageMaker note series" />
 <meta property="og:description" content="ProdML SageMaker note series" />
@@ -15,7 +15,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-08-06T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"ProdML SageMaker note series","@type":"BlogPosting","headline":"[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring","dateModified":"2020-08-06T00:00:00-05:00","datePublished":"2020-08-06T00:00:00-05:00","url":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html"},"@context":"https://schema.org"}</script>
+{"description":"ProdML SageMaker note series","@type":"BlogPosting","headline":"[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Model Monitoring","dateModified":"2020-08-06T00:00:00-05:00","datePublished":"2020-08-06T00:00:00-05:00","url":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://blog.logancyang.com/feed.xml" title="Learning Automata" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -24,9 +24,9 @@
 <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-164976898-2','auto');ga('require','displayfeatures');ga('send','pageview');</script>
 
 <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring | Learning Automata</title>
+<title>[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Model Monitoring | Learning Automata</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring" />
+<meta property="og:title" content="[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Model Monitoring" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="ProdML SageMaker note series" />
 <meta property="og:description" content="ProdML SageMaker note series" />
@@ -36,7 +36,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-08-06T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"ProdML SageMaker note series","@type":"BlogPosting","headline":"[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring","dateModified":"2020-08-06T00:00:00-05:00","datePublished":"2020-08-06T00:00:00-05:00","url":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html"},"@context":"https://schema.org"}</script>
+{"description":"ProdML SageMaker note series","@type":"BlogPosting","headline":"[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Model Monitoring","dateModified":"2020-08-06T00:00:00-05:00","datePublished":"2020-08-06T00:00:00-05:00","url":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/06/prod-ml-ii.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -113,13 +113,13 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Monitoring</h1><p class="page-description">ProdML SageMaker note series</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-08-06T00:00:00-05:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">[ProdML] Amazon SageMaker Part II: Experiments, Deployment, and Model Monitoring</h1><p class="page-description">ProdML SageMaker note series</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-08-06T00:00:00-05:00" itemprop="datePublished">
         Aug 6, 2020
       </time>
        • <span class="read-time" title="Estimated read time">
     
     
-      13 min read
+      23 min read
     
 </span></p>
 
@@ -160,6 +160,16 @@ window.onload = wrap_img;
 <li class="toc-entry toc-h3"><a href="#54-delete-the-endpoint">5.4 Delete the endpoint</a></li>
 </ul>
 </li>
+<li class="toc-entry toc-h2"><a href="#6-model-monitoring">6. Model Monitoring</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#61-enable-live-data-capture-for-a-model-endpoint">6.1 Enable live data capture for a model endpoint</a></li>
+<li class="toc-entry toc-h3"><a href="#62-generating-constraints-and-suggestions-from-a-baseline-dataset">6.2 Generating constraints and suggestions from a baseline dataset</a></li>
+<li class="toc-entry toc-h3"><a href="#63-creating-a-monitoring-schedule">6.3 Creating a monitoring schedule</a></li>
+<li class="toc-entry toc-h3"><a href="#64-visualizing-drift-by-comparing-data-distributions">6.4 Visualizing drift by comparing data distributions</a></li>
+<li class="toc-entry toc-h3"><a href="#65-delete-resources">6.5 Delete resources</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#other-sagemaker-features">Other SageMaker features</a></li>
 <li class="toc-entry toc-h2"><a href="#reference">Reference</a></li>
 </ul><p>Previous post: <a href="https://blog.logancyang.com/note/sagemaker/prodml/mlops/2020/08/03/prod-ml.html">part I</a></p>
 
@@ -652,6 +662,444 @@ window.onload = wrap_img;
 <span class="n">sklearn_predictor</span><span class="o">.</span><span class="n">delete_endpoint</span><span class="p">()</span>
 <span class="n">sklearn_model</span><span class="o">.</span><span class="n">delete_model</span><span class="p">()</span>
 </code></pre></div></div>
+
+<h2 id="6-model-monitoring">
+<a class="anchor" href="#6-model-monitoring" aria-hidden="true"><span class="octicon octicon-link"></span></a>6. Model Monitoring</h2>
+
+<p><strong>Note: monitoring is only available after the live endpoint is up for at least 1 hour.</strong></p>
+
+<p>A machine learning model may perform well at the beginning but start to degrade over time. One big cause is data <strong>drift</strong>: the input data distribution changed over time. In SageMaker, we can setup monitoring for endpoints to log and store live data. With the capability, we can compare live data with historical data to identify drift or data quality issues.</p>
+
+<h3 id="61-enable-live-data-capture-for-a-model-endpoint">
+<a class="anchor" href="#61-enable-live-data-capture-for-a-model-endpoint" aria-hidden="true"><span class="octicon octicon-link"></span></a>6.1 Enable live data capture for a model endpoint</h3>
+
+<p>First of all, get the prerequisites setup just like the previous section.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">%</span><span class="n">cd</span> <span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">sagemaker</span><span class="o">-</span><span class="n">course</span><span class="o">/</span><span class="n">notebooks</span><span class="o">/</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">boto3</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="nn">sagemaker</span>
+<span class="kn">from</span> <span class="nn">sagemaker</span> <span class="kn">import</span> <span class="n">get_execution_role</span><span class="p">,</span> <span class="n">model</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s">'display.max_colwidth'</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s">'display.max_columns'</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s">'display.max_rows'</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span>
+
+<span class="c1"># S3 bucket information
+</span><span class="n">BUCKET</span> <span class="o">=</span> <span class="s">'&lt;bucketname&gt;'</span>
+<span class="n">PREFIX</span> <span class="o">=</span> <span class="s">'churn'</span>
+<span class="n">LOCAL_DATA_DIRECTORY</span> <span class="o">=</span> <span class="n">f</span><span class="s">'../data/{PREFIX}'</span>
+<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Artifacts will be written to s3://{BUCKET}/{PREFIX}"</span><span class="p">)</span>
+
+<span class="c1"># Session variables we'll use throughout the notebook
+</span><span class="n">sagemaker_session</span> <span class="o">=</span> <span class="n">sagemaker</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+<span class="n">boto_session</span> <span class="o">=</span> <span class="n">sagemaker_session</span><span class="o">.</span><span class="n">boto_session</span>
+<span class="n">sagemaker_client</span> <span class="o">=</span> <span class="n">boto_session</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s">'sagemaker'</span><span class="p">)</span>
+<span class="n">role</span> <span class="o">=</span> <span class="n">get_execution_role</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">'Role ARN: {role}'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Before we can setup the monitoring, we need a live endpoint. The previous section showed that, but let’s do it again for the XGBoost model.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model_data</span> <span class="o">=</span> <span class="s">'s3://&lt;bucket&gt;/churn/.../output/model.tar.gz'</span>
+<span class="n">image</span> <span class="o">=</span> <span class="s">'...'</span>
+
+<span class="n">churn_model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">model_data</span><span class="o">=</span><span class="n">model_data</span><span class="p">,</span>
+                          <span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">,</span>
+                          <span class="n">role</span><span class="o">=</span><span class="n">role</span><span class="p">,</span>
+                          <span class="n">sagemaker_session</span><span class="o">=</span><span class="n">sagemaker_session</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Again, <code class="highlighter-rouge">model_data</code> and <code class="highlighter-rouge">image</code> can be found in SageMaker console -&gt; Training jobs -&gt; the xgboost model we trained.</p>
+
+<p>To setup the monitoring, we need to configure a <code class="highlighter-rouge">sagemaker.model_monitor.DataCaptureConfig</code> object. Set <code class="highlighter-rouge">enable_capture</code> to true, and the percentage of the data to be capured to 100%, then set the s3 path for the captured data where it should be stored.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sagemaker</span> <span class="kn">import</span> <span class="n">model_monitor</span><span class="p">,</span> <span class="n">predictor</span>
+
+<span class="n">captured_data_s3_uri</span> <span class="o">=</span> <span class="n">f</span><span class="s">'s3://{BUCKET}/{PREFIX}/model-monitor/data-capture'</span>
+<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">'Captured data stored in bucket: {captured_data_s3_uri}'</span><span class="p">)</span>
+
+<span class="n">data_capture_config</span> <span class="o">=</span> <span class="n">model_monitor</span><span class="o">.</span><span class="n">DataCaptureConfig</span><span class="p">(</span>
+    <span class="n">enable_capture</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">sampling_percentage</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">destination_s3_uri</span><span class="o">=</span><span class="n">captured_data_s3_uri</span><span class="p">,</span>
+    <span class="n">sagemaker_session</span><span class="o">=</span><span class="n">sagemaker_session</span><span class="p">)</span>
+
+<span class="c1"># Deploy the endpoint if you don't have one yet. Takes a while
+# Note that data_capture_config is passed in
+</span><span class="n">churn_model</span><span class="o">.</span><span class="n">deploy</span><span class="p">(</span><span class="n">initial_instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                   <span class="n">instance_type</span><span class="o">=</span><span class="s">'ml.t2.medium'</span><span class="p">,</span>
+                   <span class="n">data_capture_config</span><span class="o">=</span><span class="n">data_capture_config</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Notice that <code class="highlighter-rouge">data_capture_config</code> is passed into the model deployment for monitoring to work.</p>
+
+<p>To call this endpoint in code, we need <code class="highlighter-rouge">predictor.RealTimePredictor</code>. It encapsulates the HTTP request.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">churn_predictor</span> <span class="o">=</span> <span class="n">predictor</span><span class="o">.</span><span class="n">RealTimePredictor</span><span class="p">(</span>
+    <span class="n">endpoint</span><span class="o">=</span><span class="n">churn_model</span><span class="o">.</span><span class="n">endpoint_name</span><span class="p">,</span>
+    <span class="n">sagemaker_session</span><span class="o">=</span><span class="n">sagemaker_session</span><span class="p">,</span>
+    <span class="n">serializer</span> <span class="o">=</span> <span class="n">predictor</span><span class="o">.</span><span class="n">csv_serializer</span><span class="p">,</span>
+    <span class="n">content_type</span><span class="o">=</span><span class="s">'text/csv'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The part <code class="highlighter-rouge">serializer = predictor.csv_serializer</code> means that the predictor serializes the csv data into bytes BEFORE sending it over the wire to the endpoint via an HTTP request.</p>
+
+<p>Here is the example to fake some live data using a csv file.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="s">"Sending test traffic to the endpoint {}. </span><span class="se">\n</span><span class="s">Please wait for a minute..."</span>
+        <span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">churn_model</span><span class="o">.</span><span class="n">endpoint_name</span><span class="p">))</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="s">'{LOCAL_DATA_DIRECTORY}/test_sample.csv'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">churn_predictor</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>We can check if the data is capture in S3 by checking the output location. The format of the Amazon S3 output path is:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>s3://{destination-bucket-prefix}/{endpoint-name}/{variant-name}/yyyy/mm/dd/hh/filename.jsonl
+</code></pre></div></div>
+
+<p>We can inpsect this file by downloading it and print out its content:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">sagemaker.s3</span> <span class="kn">import</span> <span class="n">S3Uploader</span><span class="p">,</span> <span class="n">S3Downloader</span>
+
+<span class="n">current_endpoint_capture_prefix</span> <span class="o">=</span> <span class="n">f</span><span class="s">'{PREFIX}/model-monitor/data-capture/{churn_model.endpoint_name}'</span>
+<span class="n">capture_files</span> <span class="o">=</span> <span class="n">S3Downloader</span><span class="o">.</span><span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="s">"s3://{BUCKET}/{current_endpoint_capture_prefix}"</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"Found Data Capture Files:"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">capture_files</span><span class="p">)</span>
+
+<span class="n">capture_file</span> <span class="o">=</span> <span class="n">S3Downloader</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">capture_files</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"=====Single Data Capture===="</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">capture_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)[:</span><span class="mi">2000</span><span class="p">])</span>
+
+<span class="s">"""
+=====Single Data Capture====
+{
+  "captureData": {
+    "endpointInput": {
+      "observedContentType": "text/csv",
+      "mode": "INPUT",
+      "data": "186,0.1,137.8,97,187.7,118,146.4,85,8.7,6,1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,0.10,0.11,0.12,0.13,0.14,0.15,0.16,0.17,1.1,0.18,0.19,0.20,0.21,0.22,0.23,0.24,0.25,0.26,0.27,0.28,0.29,0.30,0.31,0.32,0.33,0.34,0.35,0.36,0.37,0.38,0.39,0.40,0.41,0.42,0.43,0.44,0.45,0.46,0.47,0.48,0.49,0.50,0.51,0.52,0.53,1.2,1.3,0.54,1.4,0.55",
+      "encoding": "CSV"
+    },
+    "endpointOutput": {
+      "observedContentType": "text/csv; charset=utf-8",
+      "mode": "OUTPUT",
+      "data": "0.014719205908477306",
+      "encoding": "CSV"
+    }
+  },
+  "eventMetadata": {
+    "eventId": "f38dfc73-c631-4396-bffc-3313a7157be7",
+    "inferenceTime": "2020-05-20T14:08:54Z"
+  },
+  "eventVersion": "0"
+}
+"""</span>
+</code></pre></div></div>
+
+<p>In the printed file content we see that our input data is under <code class="highlighter-rouge">captureData:endpointInput:data</code>, and the endpoint gives back the prediction in <code class="highlighter-rouge">endpointOutput:data</code>.</p>
+
+<p><strong>By simply passing in a <code class="highlighter-rouge">model_monitor.DataCaptureConfig</code>, we have enabled model montoring!</strong> This way we can have all the live data and their predictions nicely logged in S3!</p>
+
+<h3 id="62-generating-constraints-and-suggestions-from-a-baseline-dataset">
+<a class="anchor" href="#62-generating-constraints-and-suggestions-from-a-baseline-dataset" aria-hidden="true"><span class="octicon octicon-link"></span></a>6.2 Generating constraints and suggestions from a baseline dataset</h3>
+
+<p>We use our training data as baseline for comparison. First, upload the training data to S3.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">baseline_prefix</span> <span class="o">=</span> <span class="n">f</span><span class="s">'{PREFIX}/baselining'</span>
+<span class="n">baseline_data_prefix</span> <span class="o">=</span> <span class="n">f</span><span class="s">'{baseline_prefix}/data'</span>
+<span class="n">baseline_results_prefix</span> <span class="o">=</span> <span class="n">f</span><span class="s">'{baseline_prefix}/results'</span>
+
+<span class="c1"># Store the training data
+</span><span class="n">baseline_data_uri</span> <span class="o">=</span> <span class="n">f</span><span class="s">'s3://{BUCKET}/{baseline_data_prefix}'</span>
+<span class="c1"># Store the results of our baseline job
+</span><span class="n">baseline_results_uri</span> <span class="o">=</span> <span class="n">f</span><span class="s">'s3://{BUCKET}/{baseline_results_prefix}'</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">'Baseline data URI: {baseline_data_uri}'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">'Baseline results URI: {baseline_results_uri}'</span><span class="p">)</span>
+
+<span class="n">baseline_data_path</span> <span class="o">=</span> <span class="n">S3Uploader</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span>
+    <span class="n">f</span><span class="s">"{LOCAL_DATA_DIRECTORY}/training-dataset-with-header.csv"</span><span class="p">,</span>
+    <span class="n">baseline_data_uri</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">model_monitor.DefaultModelMonitor</code> is a plug-and-play tool that only needs the dataset and some pre and post processing scripts. There’s a more advanced and customized option that is <code class="highlighter-rouge">sagemaker.model_monitor.ModelMonitor</code> if you need more control.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_default_monitor</span> <span class="o">=</span> <span class="n">model_monitor</span><span class="o">.</span><span class="n">DefaultModelMonitor</span><span class="p">(</span>
+    <span class="n">role</span><span class="o">=</span><span class="n">role</span><span class="p">,</span>
+    <span class="n">instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">instance_type</span><span class="o">=</span><span class="s">'ml.m5.xlarge'</span><span class="p">,</span>
+    <span class="n">volume_size_in_gb</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">max_runtime_in_seconds</span><span class="o">=</span><span class="mi">3600</span><span class="p">)</span>
+
+<span class="n">my_default_monitor</span><span class="o">.</span><span class="n">suggest_baseline</span><span class="p">(</span>
+    <span class="n">baseline_dataset</span><span class="o">=</span><span class="n">baseline_data_path</span><span class="p">,</span>
+    <span class="n">dataset_format</span><span class="o">=</span><span class="n">model_monitor</span><span class="o">.</span><span class="n">DatasetFormat</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="n">header</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+    <span class="n">output_s3_uri</span><span class="o">=</span><span class="n">baseline_results_uri</span><span class="p">,</span>
+    <span class="n">wait</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Set <code class="highlighter-rouge">wait=True</code> to make it a blocking call. The baseline dataset must have the exact same schema as the live data, or the comparison will fail.</p>
+
+<p>The log printed out after this cell is quite long because this is actually a Spark job SageMaker runs. Skip through all the Hadoop/Yarn stuff we focus on <code class="highlighter-rouge">Constraints</code> which is the thing we want from the monitor.</p>
+
+<p><img src="/images/prodml/sm-constraints.png" alt="SageMaker monitor constraints" align="middle"></p>
+
+<p>Then there is the <code class="highlighter-rouge">stats</code> part in the log. It has some summary statistics of each feature.</p>
+
+<p>This particular processing job takes about 6-8 minutes to run.</p>
+
+<p>The log is very long and hard to read. To better read it we can load the json files into pandas dataframes.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">S3Downloader</span><span class="o">.</span><span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="s">'s3://{BUCKET}/{baseline_results_prefix}'</span><span class="p">)</span>
+<span class="s">"""
+['s3://&lt;bucketname&gt;/churn/baselining/results/constraints.json',
+ 's3://&lt;bucketname&gt;/churn/baselining/results/statistics.json']
+"""</span>
+
+<span class="n">constraints_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">json_normalize</span><span class="p">(</span>
+    <span class="n">my_default_monitor</span><span class="o">.</span><span class="n">suggested_constraints</span><span class="p">()</span><span class="o">.</span><span class="n">body_dict</span><span class="p">[</span><span class="s">"features"</span><span class="p">])</span>
+<span class="n">constraints_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="s">"""
+name	inferred_type	completeness	num_constraints.is_non_negative
+0	Churn	Integral	1.0	True
+1	Account Length	Integral	1.0	True
+2	VMail Message	Integral	1.0	True
+3	Day Mins	Fractional	1.0	True
+4	Day Calls	Integral	1.0	True
+"""</span>
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">statistics.json</code> file contains statistical information about the data in the baseline. We can view these constraints by calling the <code class="highlighter-rouge">baseline_statistics</code> method.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">baseline_job</span> <span class="o">=</span> <span class="n">my_default_monitor</span><span class="o">.</span><span class="n">latest_baselining_job</span>
+<span class="n">schema_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">json_normalize</span><span class="p">(</span><span class="n">my_default_monitor</span><span class="o">.</span><span class="n">baseline_statistics</span><span class="p">()</span><span class="o">.</span><span class="n">body_dict</span><span class="p">[</span><span class="s">"features"</span><span class="p">])</span>
+<span class="n">schema_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="s">"""
+name	inferred_type	numerical_statistics.common.num_present	numerical_statistics.common.num_missing	numerical_statistics.mean	numerical_statistics.sum	numerical_statistics.std_dev	numerical_statistics.min	numerical_statistics.max	numerical_statistics.distribution.kll.buckets	numerical_statistics.distribution.kll.sketch.parameters.c	numerical_statistics.distribution.kll.sketch.parameters.k	numerical_statistics.distribution.kll.sketch.data
+0	Churn	Integral	2333	0	0.139306	325.0	0.346265	0.0	1.0	[{'lower_bound': 0.0, 'upper_bound': 0.1, 'cou...	0.64	2048.0	[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,...
+"""</span>
+</code></pre></div></div>
+
+<p>The above is just to show what columns (statistics) are available.</p>
+
+<p>The most important columns that will be used to detect drift are <code class="highlighter-rouge">numerical_statistics.distribution.kll.&lt;something&gt;</code>. It is a compressed way to describe the distribution.</p>
+
+<h3 id="63-creating-a-monitoring-schedule">
+<a class="anchor" href="#63-creating-a-monitoring-schedule" aria-hidden="true"><span class="octicon octicon-link"></span></a>6.3 Creating a monitoring schedule</h3>
+
+<p>Now we have the statistics to monitor drift, we can setup a periodic schedule to run the check.</p>
+
+<p>Note that it takes at least 1 hour to run the code in this section. It’s because the most frequent rate for the SageMaker monitoring job is <strong>hourly</strong>.</p>
+
+<p>To create the monitoring schedule, we use <code class="highlighter-rouge">create_monitoring_schedule</code> method in the default monitoring object. We specify the endpoint, the desired S3 location for the report which captures the violations in live data given the constraints, then we pass in statistics and constraints in the default monitor object, the desired schedule name, and a cron expression that’s generated by SageMaker SDK, and CloudWatch metrics for visualization later.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">gmtime</span><span class="p">,</span> <span class="n">strftime</span>
+
+<span class="n">reports_prefix</span> <span class="o">=</span> <span class="n">f</span><span class="s">'{PREFIX}/reports'</span>
+<span class="n">s3_report_path</span> <span class="o">=</span> <span class="n">f</span><span class="s">'s3://{BUCKET}/{reports_prefix}'</span>
+
+<span class="n">mon_schedule_name</span> <span class="o">=</span> <span class="s">'xgb-churn-model-schedule-'</span> <span class="o">+</span> <span class="n">strftime</span><span class="p">(</span><span class="s">"</span><span class="si">%</span><span class="s">Y-</span><span class="si">%</span><span class="s">m-</span><span class="si">%</span><span class="s">d-</span><span class="si">%</span><span class="s">H-</span><span class="si">%</span><span class="s">M-</span><span class="si">%</span><span class="s">S"</span><span class="p">,</span> <span class="n">gmtime</span><span class="p">())</span>
+
+<span class="n">my_default_monitor</span><span class="o">.</span><span class="n">create_monitoring_schedule</span><span class="p">(</span>
+    <span class="n">endpoint_input</span><span class="o">=</span><span class="n">churn_predictor</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span>
+    <span class="n">output_s3_uri</span><span class="o">=</span><span class="n">s3_report_path</span><span class="p">,</span>
+    <span class="n">statistics</span><span class="o">=</span><span class="n">my_default_monitor</span><span class="o">.</span><span class="n">baseline_statistics</span><span class="p">(),</span>
+    <span class="n">constraints</span><span class="o">=</span><span class="n">my_default_monitor</span><span class="o">.</span><span class="n">suggested_constraints</span><span class="p">(),</span>
+    <span class="n">monitor_schedule_name</span><span class="o">=</span><span class="n">mon_schedule_name</span><span class="p">,</span>
+    <span class="n">schedule_cron_expression</span><span class="o">=</span><span class="n">model_monitor</span><span class="o">.</span><span class="n">CronExpressionGenerator</span><span class="o">.</span><span class="n">hourly</span><span class="p">(),</span>
+    <span class="n">enable_cloudwatch_metrics</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>We can use a background thread to mimic live data.</p>
+
+<p><strong>If there’s no live data coming into the endpoint, the monitoring job will fail later on.</strong></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">runtime_client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s">'runtime.sagemaker'</span><span class="p">)</span>
+
+<span class="c1"># (just repeating code from above for convenience/ able to run this section independently)
+</span><span class="k">def</span> <span class="nf">invoke_endpoint</span><span class="p">(</span><span class="n">ep_name</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">runtime_client</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">payload</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">runtime_client</span><span class="o">.</span><span class="n">invoke_endpoint</span><span class="p">(</span><span class="n">EndpointName</span><span class="o">=</span><span class="n">ep_name</span><span class="p">,</span>
+                                                      <span class="n">ContentType</span><span class="o">=</span><span class="s">'text/csv'</span><span class="p">,</span>
+                                                      <span class="n">Body</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">invoke_endpoint_forever</span><span class="p">():</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">invoke_endpoint</span><span class="p">(</span><span class="n">churn_model</span><span class="o">.</span><span class="n">endpoint_name</span><span class="p">,</span> <span class="n">f</span><span class="s">'{LOCAL_DATA_DIRECTORY}/test-dataset-input-cols.csv'</span><span class="p">,</span> <span class="n">runtime_client</span><span class="p">)</span>
+
+<span class="n">thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span> <span class="o">=</span> <span class="n">invoke_endpoint_forever</span><span class="p">)</span>
+<span class="n">thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Note that you need to stop the kernel to stop the endpoint invocations by the thread.</p>
+
+<p>Now we can wait for the first monitoring output. The first one will come in on the hour.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mon_executions</span> <span class="o">=</span> <span class="n">my_default_monitor</span><span class="o">.</span><span class="n">list_executions</span><span class="p">()</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mon_executions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"We created a hourly schedule above and it will kick off executions ON the hour.</span><span class="se">\n</span><span class="s">"</span>
+        <span class="s">"We will have to wait till we hit the hour...</span><span class="se">\n\n</span><span class="s">"</span><span class="p">)</span>
+
+<span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">mon_executions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Waiting for the 1st execution to happen..."</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+    <span class="n">mon_executions</span> <span class="o">=</span> <span class="n">my_default_monitor</span><span class="o">.</span><span class="n">list_executions</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>If we go to the GUI and click on Endpoints in the left sidebar, right click on the endpoint,</p>
+
+<h3 id="64-visualizing-drift-by-comparing-data-distributions">
+<a class="anchor" href="#64-visualizing-drift-by-comparing-data-distributions" aria-hidden="true"><span class="octicon octicon-link"></span></a>6.4 Visualizing drift by comparing data distributions</h3>
+
+<p>After the monitoring job run, we see it produces 3 files:</p>
+
+<ul>
+  <li>constraint_violations.json</li>
+  <li>constraints.json</li>
+  <li>statistics.json</li>
+</ul>
+
+<p>We can download them from S3, or put them into a dataframe like this:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">violations</span> <span class="o">=</span> <span class="n">my_default_monitor</span><span class="o">.</span><span class="n">latest_monitoring_constraint_violations</span><span class="p">()</span>
+<span class="n">constraints_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">json_normalize</span><span class="p">(</span><span class="n">violations</span><span class="o">.</span><span class="n">body_dict</span><span class="p">[</span><span class="s">"violations"</span><span class="p">])</span>
+<span class="n">constraints_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="s">"""
+feature_name	constraint_check_type	description
+0	State_OR	data_type_check	Data type match requirement is not met. Expected data type: Integral, Expected match: 100.0</span><span class="si">%</span><span class="s">. Observed: Only 99.30555555555556</span><span class="si">% </span><span class="s">of data is Integral.
+1	State_WV	data_type_check	Data type match requirement is not met. Expected data type: Integral, Expected match: 100.0</span><span class="si">%</span><span class="s">. Observed: Only 99.30555555555556</span><span class="si">% </span><span class="s">of data is Integral.
+2	State_UT	data_type_check	Data type match requirement is not met. Expected data type: Integral, Expected match: 100.0</span><span class="si">%</span><span class="s">. Observed: Only 99.30555555555556</span><span class="si">% </span><span class="s">of data is Integral.
+3	State_SC	data_type_check	Data type match requirement is not met. Expected data type: Integral, Expected match: 100.0</span><span class="si">%</span><span class="s">. Observed: Only 99.30555555555556</span><span class="si">% </span><span class="s">of data is Integral.
+...
+"""</span>
+
+<span class="n">latest_monitoring_violations</span> <span class="o">=</span> <span class="n">my_default_monitor</span><span class="o">.</span><span class="n">latest_monitoring_constraint_violations</span><span class="p">()</span>
+<span class="n">latest_monitoring_statistics</span> <span class="o">=</span> <span class="n">my_default_monitor</span><span class="o">.</span><span class="n">latest_monitoring_statistics</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><strong>Next, we get Execution and Baseline details from Processing Job Arn.</strong></p>
+
+<p>Enter the ProcessingJob arn for an execution of a MonitoringSchedule below to get the result files associated with that execution</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">processing_job_arn</span> <span class="o">=</span> <span class="n">latest_execution</span><span class="o">.</span><span class="n">describe</span><span class="p">()[</span><span class="s">'ProcessingJobArn'</span><span class="p">]</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">sagemaker.model_monitor</span> <span class="kn">import</span> <span class="n">MonitoringExecution</span>
+
+<span class="n">execution</span> <span class="o">=</span> <span class="n">MonitoringExecution</span><span class="o">.</span><span class="n">from_processing_arn</span><span class="p">(</span>
+    <span class="n">sagemaker_session</span><span class="o">=</span><span class="n">sagemaker_session</span><span class="p">,</span>
+    <span class="n">processing_job_arn</span><span class="o">=</span><span class="n">processing_job_arn</span><span class="p">)</span>
+
+<span class="n">exec_inputs</span> <span class="o">=</span> <span class="p">{</span><span class="n">inp</span><span class="p">[</span><span class="s">'InputName'</span><span class="p">]:</span> <span class="n">inp</span> <span class="k">for</span> <span class="n">inp</span> <span class="ow">in</span> <span class="n">execution</span><span class="o">.</span><span class="n">describe</span><span class="p">()[</span><span class="s">'ProcessingInputs'</span><span class="p">]}</span>
+<span class="n">exec_results</span> <span class="o">=</span> <span class="n">execution</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">destination</span>
+
+<span class="n">baseline_statistics_filepath</span> <span class="o">=</span> <span class="n">exec_inputs</span><span class="p">[</span><span class="s">'baseline'</span><span class="p">][</span><span class="s">'S3Input'</span><span class="p">][</span><span class="s">'S3Uri'</span><span class="p">]</span> <span class="k">if</span> <span class="s">'baseline'</span> <span class="ow">in</span> <span class="n">exec_inputs</span> <span class="k">else</span> <span class="bp">None</span>
+<span class="n">execution_statistics_filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">exec_results</span><span class="p">,</span> <span class="s">'statistics.json'</span><span class="p">)</span>
+<span class="n">violations_filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">exec_results</span><span class="p">,</span> <span class="s">'constraint_violations.json'</span><span class="p">)</span>
+
+<span class="n">baseline_statistics</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">S3Downloader</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">baseline_statistics_filepath</span><span class="p">))</span> <span class="k">if</span> <span class="n">baseline_statistics_filepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+<span class="n">execution_statistics</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">S3Downloader</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">execution_statistics_filepath</span><span class="p">))</span>
+<span class="n">violations</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">S3Downloader</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">violations_filepath</span><span class="p">))[</span><span class="s">'violations'</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>We need to download a utility file from SageMaker to plot the distributions:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">!</span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">raw</span><span class="o">.</span><span class="n">githubusercontent</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">awslabs</span><span class="o">/</span><span class="n">amazon</span><span class="o">-</span><span class="n">sagemaker</span><span class="o">-</span><span class="n">examples</span><span class="o">/</span><span class="n">master</span><span class="o">/</span><span class="n">sagemaker_model_monitor</span><span class="o">/</span><span class="n">visualization</span><span class="o">/</span><span class="n">utils</span><span class="o">.</span><span class="n">py</span>
+
+<span class="kn">import</span> <span class="nn">utils</span> <span class="k">as</span> <span class="n">mu</span>
+
+<span class="n">mu</span><span class="o">.</span><span class="n">show_violation_df</span><span class="p">(</span><span class="n">baseline_statistics</span><span class="o">=</span><span class="n">baseline_statistics</span><span class="p">,</span>
+                     <span class="n">latest_statistics</span><span class="o">=</span><span class="n">execution_statistics</span><span class="p">,</span>
+                     <span class="n">violations</span><span class="o">=</span><span class="n">violations</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>SageMaker infers the data types from the baseline dataset we provided. It knows what features are integral and which are fractional.</p>
+
+<p>We can also look at the summary statistics of each feature:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">features</span> <span class="o">=</span> <span class="n">mu</span><span class="o">.</span><span class="n">get_features</span><span class="p">(</span><span class="n">execution_statistics</span><span class="p">)</span>
+<span class="n">feature_baselines</span> <span class="o">=</span> <span class="n">mu</span><span class="o">.</span><span class="n">get_features</span><span class="p">(</span><span class="n">baseline_statistics</span><span class="p">)</span>
+<span class="n">mu</span><span class="o">.</span><span class="n">show_distributions</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+
+<span class="s">"""
+	num_present	num_missing	mean	sum	std_dev	min	max
+Churn	288	0	0.121015	34.85218	0.246669	0.002989	0.993593
+Account Length	288	0	99.760417	28731.00000	40.589513	10.000000	232.000000
+VMail Message	288	0	6.702083	1930.20000	12.276850	0.000000	43.000000
+Day Mins	288	0	178.247222	51335.20000	54.363873	46.500000	328.100000
+...
+
+&lt;IT ALSO PLOTS THE DISTRIBUTION FOR EACH FEATURE&gt;
+"""</span>
+</code></pre></div></div>
+
+<p>A very handy feature is to plot the live data distribution against baseline:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mu</span><span class="o">.</span><span class="n">show_distributions</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">feature_baselines</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="/images/prodml/live-vs-baseline.png" alt="Live vs Baseline" align="middle"></p>
+
+<p>We can quickly see some of the baseline data are integers and some from the the live data are fractions. Overlaying them together gives us a great view to look for drift.</p>
+
+<p>Note that there are other useful information and visualization available in</p>
+
+<ul>
+  <li>“Describe endpoint” in sidebar’s endpoint tab</li>
+  <li>SageMaker console -&gt; Inference -&gt; Endpoints</li>
+</ul>
+
+<p>Check them out as well!</p>
+
+<h3 id="65-delete-resources">
+<a class="anchor" href="#65-delete-resources" aria-hidden="true"><span class="octicon octicon-link"></span></a>6.5 Delete resources</h3>
+
+<p>If we don’t delete the resources created, we will get charged. We now have 3 kinds of resources:</p>
+
+<ul>
+  <li>endpoint</li>
+  <li>model</li>
+  <li>monitoring schedule job</li>
+</ul>
+
+<p>To delete all of them:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sagemaker_session</span><span class="o">.</span><span class="n">delete_monitoring_schedule</span><span class="p">(</span><span class="n">mon_schedule_name</span><span class="p">)</span>
+<span class="n">sagemaker_session</span><span class="o">.</span><span class="n">delete_endpoint</span><span class="p">(</span><span class="n">churn_model</span><span class="o">.</span><span class="n">endpoint_name</span><span class="p">)</span>
+<span class="n">sagemaker_session</span><span class="o">.</span><span class="n">delete_model</span><span class="p">(</span><span class="n">churn_model</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="other-sagemaker-features">
+<a class="anchor" href="#other-sagemaker-features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Other SageMaker features</h2>
+
+<ul>
+  <li>SageMaker Ground Truth: build and manage training datasets, like Figure 8</li>
+  <li>SageMaker Autopilot: build foolproof models for us</li>
+  <li>SageMaker Neo: deploy models on different hardware</li>
+  <li>SageMaker Marketplace: buy and sell model packages</li>
+</ul>
 
 <h2 id="reference">
 <a class="anchor" href="#reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reference</h2>

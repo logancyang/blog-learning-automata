@@ -1,4 +1,42 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-12-08T13:16:39-06:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">[Nature of Code] Part 2: Fractals and Cellular Automata</title><link href="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals.html" rel="alternate" type="text/html" title="[Nature of Code] Part 2: Fractals and Cellular Automata" /><published>2020-07-23T00:00:00-05:00</published><updated>2020-07-23T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals</id><content type="html" xml:base="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals.html">&lt;h2 id=&quot;fractals&quot;&gt;Fractals&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-12-21T14:09:13-06:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">How to Setup Local Debugging for Alexa Skills</title><link href="http://blog.logancyang.com/note/alexa/2020/12/20/local-debugging-alexa-skill.html" rel="alternate" type="text/html" title="How to Setup Local Debugging for Alexa Skills" /><published>2020-12-20T00:00:00-06:00</published><updated>2020-12-20T00:00:00-06:00</updated><id>http://blog.logancyang.com/note/alexa/2020/12/20/local-debugging-alexa-skill</id><content type="html" xml:base="http://blog.logancyang.com/note/alexa/2020/12/20/local-debugging-alexa-skill.html">&lt;ul&gt;
+  &lt;li&gt;Make sure you open the root directory of your Alexa skill in the workspace&lt;/li&gt;
+  &lt;li&gt;Make sure you set the right interpreter in VS Code&lt;/li&gt;
+  &lt;li&gt;Add the following code to your Lambda function where &lt;code class=&quot;highlighter-rouge&quot;&gt;...&lt;/code&gt; is your original code:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Dev
+&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;flask&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Flask&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;flask_ask_sdk.skill_adapter&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SkillAdapter&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Flask&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;sb&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SkillBuilder&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# ...
+&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# Dev
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;home&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Hello, Flask!&quot;&lt;/span&gt;
+
+
+&lt;span class=&quot;n&quot;&gt;skill_adapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SkillAdapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;skill&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;skill_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;skill_adapter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;register&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'__main__'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Use &lt;code class=&quot;highlighter-rouge&quot;&gt;ngrok&lt;/code&gt; and paste its url in &lt;strong&gt;Endpoint-&amp;gt;HTTPS-&amp;gt;default region&lt;/strong&gt; in Alexa console&lt;/li&gt;
+  &lt;li&gt;In debugging tab on the left panel, setup the &lt;code class=&quot;highlighter-rouge&quot;&gt;launch.json&lt;/code&gt; for flask.&lt;/li&gt;
+  &lt;li&gt;Click the green play button in debug panel to start the flask server in VS Code and start the debugger&lt;/li&gt;
+  &lt;li&gt;Go to the Alexa Simulator in VS Code’s Alexa Skills Toolkit, start the conversation, it will communicate with the Alexa HTTPS endpoint in AWS via the local flask server and ngrok, and enable breakpoints in my code.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Make sure you open the root directory of your Alexa skill in the workspace Make sure you set the right interpreter in VS Code Add the following code to your Lambda function where ... is your original code:</summary></entry><entry><title type="html">[Nature of Code] Part 2: Fractals and Cellular Automata</title><link href="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals.html" rel="alternate" type="text/html" title="[Nature of Code] Part 2: Fractals and Cellular Automata" /><published>2020-07-23T00:00:00-05:00</published><updated>2020-07-23T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals</id><content type="html" xml:base="http://blog.logancyang.com/note/natureofcode/simulation/processing/p5js/2020/07/23/fractals.html">&lt;h2 id=&quot;fractals&quot;&gt;Fractals&lt;/h2&gt;
 
 &lt;p&gt;The term &lt;strong&gt;fractal&lt;/strong&gt; is coined by mathematician Benoit Mandelbrot in 1975. It means broken or fractured.&lt;/p&gt;
 
@@ -1621,284 +1659,7 @@ include &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.csv
   &lt;li&gt;&lt;a href=&quot;https://dabeaz-course.github.io/practical-python/Notes&quot;&gt;https://dabeaz-course.github.io/practical-python/Notes&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://packaging.python.org/tutorials/packaging-projects/&quot;&gt;https://packaging.python.org/tutorials/packaging-projects/&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html&quot;&gt;http://blog.logancyang.com/note/python/2020/06/17/pip-vs-conda.html&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Packages</summary></entry><entry><title type="html">[From NAND to TETRIS] Computer Architecture 101 Part III: Computer Architecture and Assembler</title><link href="http://blog.logancyang.com/note/compsci/2020/07/04/computer-architecture-101-part-iii.html" rel="alternate" type="text/html" title="[From NAND to TETRIS] Computer Architecture 101 Part III: Computer Architecture and Assembler" /><published>2020-07-04T00:00:00-05:00</published><updated>2020-07-04T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/compsci/2020/07/04/computer-architecture-101-part-iii</id><content type="html" xml:base="http://blog.logancyang.com/note/compsci/2020/07/04/computer-architecture-101-part-iii.html">&lt;p&gt;Continuing the discussion through abstraction level 4 in the &lt;a href=&quot;http://blog.logancyang.com/note/compsci/2020/07/02/computer-architecture-101-part-ii.html&quot;&gt;last post&lt;/a&gt;, we look at level 5 and level 6 in this post.&lt;/p&gt;
-
-&lt;h2 id=&quot;level-5-computer-architecture&quot;&gt;Level 5: Computer Architecture&lt;/h2&gt;
-
-&lt;p&gt;We are going to build the Von Neumann Architecture that is capable of executing any program.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/vonneumann.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;von-neumann-architecture&quot;&gt;Von Neumann Architecture&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/infoflow.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The CPU has ALUs and registers. The ALUs do the arithmetic and logical operations.&lt;/p&gt;
-
-&lt;p&gt;The memory holds the data and the program.&lt;/p&gt;
-
-&lt;p&gt;To move data around, there are 3 kinds of buses: the data bus, address bus, and control bus (or control wires).&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;The ALU loads information from the Data bus and manipulates it using the Control bits.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;We need a two-way connection between the CPU registers and the data bus for intermediate results. We also need to connect CPU registers to the address bus (one way) because we access the memory by the memory address in the registers. So &lt;strong&gt;the CPU registers have both data and addresses&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;For the memory, we need to connect the data memory to the data bus, and the program memory to the control bus.&lt;/p&gt;
-
-&lt;h3 id=&quot;the-fetch-execute-cycle&quot;&gt;The Fetch-Execute Cycle&lt;/h3&gt;
-
-&lt;p&gt;All that the CPU does is fetch an instruction and execute it, and repeat. This is the CPU loop.&lt;/p&gt;
-
-&lt;p&gt;Fetch:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;put the &lt;strong&gt;location&lt;/strong&gt; of the next instruction (available from the program counter) into the &lt;strong&gt;address&lt;/strong&gt; of the &lt;strong&gt;program memory&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;and then get the instruction code itself by reading the memory content at that location.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/fetch.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;In the execute cycle, we use the bits from the control bus and access the registers and/or the data memory to manipulate the data.&lt;/p&gt;
-
-&lt;p&gt;There is clash between fetch and execute because they access the program and data memory which are in the same physical memory. Usually, we use a multiplexor to do the fetch cycle first and remember the content of the instruction in the register, and then access the data memory. There’s a variant of the Von Neumann Architecture which is the Harvard Architecture. It physically separate the program and data memory to avoid this complication.&lt;/p&gt;
-
-&lt;h3 id=&quot;the-hack-cpu&quot;&gt;The Hack CPU&lt;/h3&gt;
-
-&lt;p&gt;The hack CPU is the brain of the computer, it decides which instruction to execute next and how.&lt;/p&gt;
-
-&lt;p&gt;It has 3 inputs:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Data value&lt;/li&gt;
-  &lt;li&gt;Instruction&lt;/li&gt;
-  &lt;li&gt;Reset bit&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackcpuinput.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;And 4 outputs:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Data value&lt;/li&gt;
-  &lt;li&gt;Write to memory (Y/N)&lt;/li&gt;
-  &lt;li&gt;Memory address&lt;/li&gt;
-  &lt;li&gt;Address of the next instruction&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackcpuoutput.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Here’s the Hack CPU architecture:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackcpu.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;All the chips used are the ones we have built before. We just need to assemble them together in this way. The &lt;code class=&quot;highlighter-rouge&quot;&gt;C&lt;/code&gt; bits are control bits.&lt;/p&gt;
-
-&lt;p&gt;Here is how the CPU recognizes and handles an A-instruction:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/insthandling.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Here is how the CPU recognizes and handles a C-instruction:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/insthandling-c.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Looking at ALU:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/alu-inputs.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/alu-outputs.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Reset bit: program starts/restarts when reset is 1.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Here is the control implementation and program counter logic:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/cpucontrol.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/controlimpl.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;data-memory&quot;&gt;Data memory&lt;/h3&gt;
-
-&lt;p&gt;Recall the overall Hack architecture:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/hackoverall.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Now that we have the CPU implementation, we look at the memory. It has 3 parts: the RAM part that is the data memory, plus the Screen Memory Map, and the kernel memory map.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/ram.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The fist part, RAM16, is already implemented in our previous sections.&lt;/p&gt;
-
-&lt;p&gt;We also went through Screen Memory Map and Keyboard Memory Map in detail before. One special feature of the Screen chip is that it can refresh the display at a frequency.&lt;/p&gt;
-
-&lt;h3 id=&quot;rom32k-instruction-memory&quot;&gt;ROM32K: Instruction memory&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/rom.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;To put a program into ROM, there are 2 ways&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Burn the program onto a ROM chip, such as a CD, and run the program with the CD.&lt;/li&gt;
-  &lt;li&gt;Load the program which is written in a text file using &lt;strong&gt;hardware simulation&lt;/strong&gt; by the built-in ROM chip.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;putting-it-all-together&quot;&gt;Putting it all together&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/arch.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;comments&quot;&gt;Comments&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;We can have a chip that tracks the state the computer is in to make sure it performs the right set of instructions given its state. We use the concept of Finite State Machine to organize the states and their transitions.&lt;/li&gt;
-  &lt;li&gt;To add more peripheral input/output devices, we can allocate more segments in the memory for them.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;level-6-assembler&quot;&gt;Level 6. Assembler&lt;/h2&gt;
-
-&lt;p&gt;For the first time in this series, this part is software. The Assembler translates the machine language to binary code that can be executed. It is the first software layer above the hardware.&lt;/p&gt;
-
-&lt;p&gt;But where do we run the Assembler if it is not already in 0s and 1s itself?&lt;/p&gt;
-
-&lt;p&gt;Since we are not building the first computer in the world, we can write the Assembler on another computer, compile it down to binary, transfer the binary to the Hack computer we are building, and use the binary directly.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/assembler.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The Assembler reads a line of Hack code into an character array. It ignores comments and whitespaces when breaking down the line into fields.&lt;/p&gt;
-
-&lt;p&gt;The Assember also supports symbols (variable names). The way it supports that is to store the symbol name at an address.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/symbol-addr.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Essentially, a symbol is just an alias for an address location.&lt;/p&gt;
-
-&lt;p&gt;It is possible in the Assembly (Hack) machine language that a “jump” symbol is used before it is declared using the &lt;code class=&quot;highlighter-rouge&quot;&gt;@&lt;/code&gt; operator. One solution is to do 2 passes for the code, the first pass builds the symbol table, and the second pass uses it to correctly executes the program.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/symbols.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;the-translator-perspective&quot;&gt;The translator perspective&lt;/h3&gt;
-
-&lt;p&gt;We have already seen the tables that map A and C instructions to binary code. Along with user symbols that are constructed by the declarations, we have all we need to do the translation.&lt;/p&gt;
-
-&lt;p&gt;We take care of&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;White spaces, empty line, indentation&lt;/li&gt;
-  &lt;li&gt;Comments, inline comments&lt;/li&gt;
-  &lt;li&gt;A, C instructions&lt;/li&gt;
-  &lt;li&gt;Symbols&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;step-1-handling-whitespaces&quot;&gt;Step 1: Handling whitespaces&lt;/h4&gt;
-
-&lt;p&gt;Let’s focus on them one by one. First we handle whitespaces for a simplified Hack program with no symbols.&lt;/p&gt;
-
-&lt;p&gt;This is the easiest one. We simply &lt;strong&gt;strip all whitespaces, so the program after this step has no whitespace&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h4 id=&quot;step-2-translating-a-instructions&quot;&gt;Step 2: Translating A-instructions&lt;/h4&gt;
-
-&lt;p&gt;An A-instruction is just &lt;code class=&quot;highlighter-rouge&quot;&gt;@value&lt;/code&gt;. In binary, we prepend the op code &lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt; for A-instruction, and convert the value in decimal to binary, add 0 paddings accordingly.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/trans-a.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;step-3-translating-c-instructions&quot;&gt;Step 3: Translating C-instructions&lt;/h4&gt;
-
-&lt;p&gt;Consider &lt;code class=&quot;highlighter-rouge&quot;&gt;MD=D+1&lt;/code&gt;. This C-instruction has a &lt;code class=&quot;highlighter-rouge&quot;&gt;dest: MD&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;comp: D+1&lt;/code&gt;, with no &lt;code class=&quot;highlighter-rouge&quot;&gt;jump&lt;/code&gt; field.&lt;/p&gt;
-
-&lt;p&gt;The binary syntax for C-instructions is&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1 1 1 a c1 c2 c3 c4 c5 c6 d1 d2 d3 j1 j2 j3
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;3 1s at the beginning, and fill in the &lt;code class=&quot;highlighter-rouge&quot;&gt;a, c, d, j&lt;/code&gt; bits according to the table below&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/trans-c.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;step-4-handling-symbols&quot;&gt;Step 4: Handling symbols&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/handle-symbol.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;For pre-defined symbols, we can simply replace them with their values based on the table below&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/pre-symbols.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;For the label symbols, they are used for &lt;code class=&quot;highlighter-rouge&quot;&gt;jump&lt;/code&gt; commands.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;The program uses the label to “goto” another instruction&lt;/li&gt;
-  &lt;li&gt;Declared with &lt;code class=&quot;highlighter-rouge&quot;&gt;()&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;A label symbol points to the memory location of its next instruction. &lt;code class=&quot;highlighter-rouge&quot;&gt;label -&amp;gt; mem_index_of_next_instruction&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;When translating a label symbol, simply replace it with the value &lt;code class=&quot;highlighter-rouge&quot;&gt;mem_index_of_next_instruction&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;For the variable symbols, they are assigned to memory locations starting from address 16 (a designer’s decision).&lt;/p&gt;
-
-&lt;p&gt;We need a &lt;strong&gt;symbol table&lt;/strong&gt; to keep track of the new and old variable symbols. It has key-value pairs of symbol name and symbol address.&lt;/p&gt;
-
-&lt;p&gt;The symbol table is initialized with all the predefined symbols and their addresses.&lt;/p&gt;
-
-&lt;p&gt;The Assembler performs &lt;strong&gt;2 passes&lt;/strong&gt;. In the first pass adds the &lt;strong&gt;label symbols&lt;/strong&gt; to the symbol table. The second pass adds the variable symbols to the symbol table.&lt;/p&gt;
-
-&lt;p&gt;The symbol table is an auxilary data structure that the Assembler needs to process the program. Once the processing completes, the symbol table can be tossed away.&lt;/p&gt;
-
-&lt;h3 id=&quot;overall-assembler-logic&quot;&gt;Overall Assembler logic&lt;/h3&gt;
-
-&lt;p&gt;Keep in mind, the Assembler is just a &lt;strong&gt;text processor&lt;/strong&gt; that takes in the Assembly/Hack language and returns a file containing only two types of characters, 0 and 1. These 0s and 1s are still ASCII characters. When the computer loads it into memory it then becomes &lt;em&gt;real&lt;/em&gt; 0s and 1s.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Although we say we are not building the world’s first computer and resort to a high level language to write this Assembler text processor, all that matters is the resulting translation directive text file. One &lt;em&gt;can&lt;/em&gt; write it from scratch with hardware logic, but it’s cumbersome. It’s not that we are not able to produce this text processor without the help of a high level language. We already have all the logic we need.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/assembler-overall.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The overall Assembler process:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/assembler-proc.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;To implement the Assembler in a high level language like Python or Java, here’s the pseudocode:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/cs4ds/assembler-pseudo.png&quot; alt=&quot;&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;macro-assembler-and-macro-commands&quot;&gt;Macro assembler and macro commands&lt;/h3&gt;
-
-&lt;p&gt;We can make the Hack language more user friendly by adding &lt;em&gt;macro commands&lt;/em&gt;. For example, we can convert&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@100
-D=M
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;to&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;D=M[100]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;To achieve this, simply add the translation logic into the Assembler.&lt;/p&gt;
-
-&lt;h3 id=&quot;how-was-the-first-assembler-created-in-history-without-the-assistance-of-high-level-languages&quot;&gt;How was the first Assembler created in history without the assistance of high level languages?&lt;/h3&gt;
-
-&lt;p&gt;The first Assembler was built &lt;strong&gt;by hand&lt;/strong&gt;. People write the binary code for the translation process. However, we only needed to do it &lt;strong&gt;once&lt;/strong&gt;. Once it’s created, people can build on it and create new Assemblers by programming.&lt;/p&gt;
-
-&lt;h2 id=&quot;from-nand-to-tetris-part-i-last-words&quot;&gt;From NAND to TETRIS Part I: Last words&lt;/h2&gt;
-
-&lt;p&gt;Now we have built the entire Hack computer from NAND gates!&lt;/p&gt;
-
-&lt;p&gt;Outside the classroom, it is rare that people need to work with the Assemly language. People only work with high level languages in programming unless they really need to optimize a piece of code for a specialized device.&lt;/p&gt;
-
-&lt;p&gt;The most important concept introduced here is that &lt;strong&gt;why computers are programmable&lt;/strong&gt; and can do all kinds of tasks.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;We bridged the gap from hardware to software&lt;/strong&gt;. This is the key idea we learned!&lt;/p&gt;
-
-&lt;p&gt;In &lt;em&gt;&lt;a href=&quot;https://www.coursera.org/learn/nand2tetris2&quot;&gt;From NAND to TETRIS Part II&lt;/a&gt;&lt;/em&gt;, the material will cover the software layers such as the virtual machine, the compiler, operating system, etc.&lt;/p&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.coursera.org/learn/build-a-computer&quot;&gt;Coursera From NAND To TETRIS&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;The amazing lecturers:
-    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;https://www.coursera.org/instructor/shimon&quot;&gt;Shimon Schocken&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;https://www.coursera.org/instructor/noamnisan&quot;&gt;Noam Nisan&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Continuing the discussion through abstraction level 4 in the last post, we look at level 5 and level 6 in this post.</summary></entry><entry><title type="html">[Python Review] Part IV: Testing, Logging and Debugging</title><link href="http://blog.logancyang.com/note/python/2020/07/04/python-basics-iv.html" rel="alternate" type="text/html" title="[Python Review] Part IV: Testing, Logging and Debugging" /><published>2020-07-04T00:00:00-05:00</published><updated>2020-07-04T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/04/python-basics-iv</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/04/python-basics-iv.html">&lt;h2 id=&quot;testing&quot;&gt;Testing&lt;/h2&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Packages</summary></entry><entry><title type="html">[Python Review] Part IV: Testing, Logging and Debugging</title><link href="http://blog.logancyang.com/note/python/2020/07/04/python-basics-iv.html" rel="alternate" type="text/html" title="[Python Review] Part IV: Testing, Logging and Debugging" /><published>2020-07-04T00:00:00-05:00</published><updated>2020-07-04T00:00:00-05:00</updated><id>http://blog.logancyang.com/note/python/2020/07/04/python-basics-iv</id><content type="html" xml:base="http://blog.logancyang.com/note/python/2020/07/04/python-basics-iv.html">&lt;h2 id=&quot;testing&quot;&gt;Testing&lt;/h2&gt;
 
 &lt;p&gt;The dynamic nature of Python makes testing critically important to most applications. There is no compiler to find your bugs. The only way to find bugs is to run the code and make sure you try out all of its features.&lt;/p&gt;
 

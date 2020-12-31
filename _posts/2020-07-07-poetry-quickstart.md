@@ -39,6 +39,9 @@ $ pyenv global 3.7.4
 
 to set the global default Python version to 3.7.4.
 
+Note: if `pyenv local <version>` was used before in a certain directory,
+there is a `.python_version` file with the version inside. Then `pyenv global` can't affect and override it!
+
 ### Install `poetry`
 
 Run the following command to install
@@ -124,7 +127,13 @@ Run the following command to activate the virtual environment.
 $ poetry shell
 ```
 
+Note: the preferred way to create the virtual environment is to put it inside the project directory. Here is how to do it:
+
+- Set `poetry config virtualenvs.in-project true` to create the `.venv` in the project folder instead of `~/Library/Caches/pypoetry/...` the central location
+
 ### Set the interpreter in VSCode
+
+(This is for the case where the virtual environment is not created in the project folder, but in the central location. This is discouraged.)
 
 As of June 2020, the Python extension in VSCode doesn't support automatic discovery of poetry environments. Refer to this [issue](https://github.com/microsoft/vscode-python/issues/8372).
 

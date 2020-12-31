@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-12-21T14:09:13-06:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">How to Setup Local Debugging for Alexa Skills</title><link href="http://blog.logancyang.com/note/alexa/2020/12/20/local-debugging-alexa-skill.html" rel="alternate" type="text/html" title="How to Setup Local Debugging for Alexa Skills" /><published>2020-12-20T00:00:00-06:00</published><updated>2020-12-20T00:00:00-06:00</updated><id>http://blog.logancyang.com/note/alexa/2020/12/20/local-debugging-alexa-skill</id><content type="html" xml:base="http://blog.logancyang.com/note/alexa/2020/12/20/local-debugging-alexa-skill.html">&lt;ul&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://blog.logancyang.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://blog.logancyang.com/" rel="alternate" type="text/html" /><updated>2020-12-31T17:57:37-06:00</updated><id>http://blog.logancyang.com/feed.xml</id><title type="html">Learning Automata</title><subtitle>Notes, code and essays by Logan Yang.</subtitle><entry><title type="html">How to Setup Local Debugging for Alexa Skills</title><link href="http://blog.logancyang.com/note/alexa/2020/12/20/local-debugging-alexa-skill.html" rel="alternate" type="text/html" title="How to Setup Local Debugging for Alexa Skills" /><published>2020-12-20T00:00:00-06:00</published><updated>2020-12-20T00:00:00-06:00</updated><id>http://blog.logancyang.com/note/alexa/2020/12/20/local-debugging-alexa-skill</id><content type="html" xml:base="http://blog.logancyang.com/note/alexa/2020/12/20/local-debugging-alexa-skill.html">&lt;ul&gt;
   &lt;li&gt;Make sure you open the root directory of your Alexa skill in the workspace&lt;/li&gt;
   &lt;li&gt;Make sure you set the right interpreter in VS Code&lt;/li&gt;
   &lt;li&gt;Add the following code to your Lambda function where &lt;code class=&quot;highlighter-rouge&quot;&gt;...&lt;/code&gt; is your original code:&lt;/li&gt;
@@ -1205,6 +1205,9 @@ etc.&lt;/li&gt;
 
 &lt;p&gt;to set the global default Python version to 3.7.4.&lt;/p&gt;
 
+&lt;p&gt;Note: if &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv local &amp;lt;version&amp;gt;&lt;/code&gt; was used before in a certain directory,
+there is a &lt;code class=&quot;highlighter-rouge&quot;&gt;.python_version&lt;/code&gt; file with the version inside. Then &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv global&lt;/code&gt; can’t affect and override it!&lt;/p&gt;
+
 &lt;h3 id=&quot;install-poetry&quot;&gt;Install &lt;code class=&quot;highlighter-rouge&quot;&gt;poetry&lt;/code&gt;&lt;/h3&gt;
 
 &lt;p&gt;Run the following command to install&lt;/p&gt;
@@ -1282,7 +1285,15 @@ build-backend = &quot;poetry.masonry.api&quot;
 &lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;poetry shell
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
+&lt;p&gt;Note: the preferred way to create the virtual environment is to put it inside the project directory. Here is how to do it:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Set &lt;code class=&quot;highlighter-rouge&quot;&gt;poetry config virtualenvs.in-project true&lt;/code&gt; to create the &lt;code class=&quot;highlighter-rouge&quot;&gt;.venv&lt;/code&gt; in the project folder instead of &lt;code class=&quot;highlighter-rouge&quot;&gt;~/Library/Caches/pypoetry/...&lt;/code&gt; the central location&lt;/li&gt;
+&lt;/ul&gt;
+
 &lt;h3 id=&quot;set-the-interpreter-in-vscode&quot;&gt;Set the interpreter in VSCode&lt;/h3&gt;
+
+&lt;p&gt;(This is for the case where the virtual environment is not created in the project folder, but in the central location. This is discouraged.)&lt;/p&gt;
 
 &lt;p&gt;As of June 2020, the Python extension in VSCode doesn’t support automatic discovery of poetry environments. Refer to this &lt;a href=&quot;https://github.com/microsoft/vscode-python/issues/8372&quot;&gt;issue&lt;/a&gt;.&lt;/p&gt;
 
